@@ -4,13 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        tinte: '#1F2A44',
-        pergament: '#FEFCF7',
-        anthrazit: '#2D2D2D',
-        kupfer: '#C97B3F',
-        salbei: '#8FA98A',
-        quellwasser: '#6FA3B5',
-        holzsand: '#D9C7A8',
+        // V03 — Pine Sage Monochrome (palette inspired by ziga reference)
+        // Token names preserved (tinte/kupfer/salbei/...) so components don't need code changes
+        tinte: '#2C3E36',        // Pine Dark — Headlines, Footer, dunkler Anker
+        pergament: '#FEFCF7',    // Off-White — Grundton (unverändert)
+        anthrazit: '#2A2E2C',    // Pine Anthracite — Fließtext, leicht grün-gestimmt
+        kupfer: '#3A574A',       // Pine Medium — Wirkungsakzent / Buttons, monochrom grün
+        salbei: '#B6CFB0',       // Sage Mint — Marker, Punkte, Akzentdetails
+        quellwasser: '#86A89A',  // Sage Teal — Resonanz, Hover, analytisches Signal
+        holzsand: '#D2D3BB',     // Sage Beige — Hairlines, Card-Borders
       },
       fontFamily: {
         serif: ['"Fraunces Variable"', 'Fraunces', 'ui-serif', 'Georgia', 'serif'],
@@ -34,8 +36,8 @@ export default {
         eyebrow: '0.18em',
       },
       boxShadow: {
-        'card': '0 1px 4px 0 rgba(31, 42, 68, 0.05)',
-        'card-hover': '0 4px 12px 0 rgba(31, 42, 68, 0.08)',
+        'card': '0 1px 4px 0 rgba(44, 62, 54, 0.05)',
+        'card-hover': '0 4px 12px 0 rgba(44, 62, 54, 0.08)',
       },
       transitionTimingFunction: {
         'quiet': 'cubic-bezier(0.32, 0.72, 0, 1)',
