@@ -1,0 +1,94 @@
+---
+// V04 — Persönliche Intro-Sektion im Tina-Stil
+// Links: Headline, Subtitle, thin divider, kurzer Text, dark pill CTA
+// Rechts: Portrait-Platzhalter mit Resonanz-Symbol als dekorativer Kreis
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="relative w-full bg-pergament pt-10 md:pt-12 lg:pt-16 pb-20 md:pb-28 lg:pb-32">
+  <div class="container-wide">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+
+      <!-- LEFT — Text -->
+      <div class="lg:col-span-5 order-2 lg:order-1">
+
+        <h2 class="font-serif text-tinte font-medium leading-[1.05] tracking-[-0.015em]
+                   text-[clamp(2.25rem,4vw,3.25rem)]">
+          Hi. Ich bin Gabriel.
+        </h2>
+
+        <p class="mt-4 font-sans text-[0.78rem] tracking-[0.18em] uppercase text-anthrazit/60 font-medium">
+          Wirtschaftsingenieur · Mentaltrainer · TÜV-KI-Experte
+        </p>
+
+        <!-- Thin kupfer divider -->
+        <div class="mt-6 h-px w-12 bg-kupfer/80" aria-hidden="true"></div>
+
+        <p class="mt-6 font-sans text-[1.0625rem] text-anthrazit leading-[1.65] max-w-md">
+          Coach-DNA, Ingenieurs-Denken und KI-Praxis in einer Person. Ich verstärke das, was deine Arbeit ausmacht — ohne dass deine Stimme dabei generisch wird.
+        </p>
+
+        <div class="mt-9">
+          <a href={`${base}#kontakt`} class="hero-pill-cta">
+            Audit anfragen
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT — Portrait placeholder + Resonance overlay -->
+      <div class="lg:col-span-7 order-1 lg:order-2 relative">
+
+        <!-- Portrait placeholder block (will be replaced with real photo later) -->
+        <div class="relative aspect-[5/4] max-w-[600px] mx-auto rounded-[4px] overflow-hidden portrait-block">
+          <!-- Soft gradient ground -->
+          <div class="absolute inset-0" style="background: linear-gradient(135deg, #EFE6D2 0%, #DCD4BC 55%, #C9C2A8 100%);"></div>
+
+          <!-- Geometric placeholder mark (suggests a head/shoulders without being a real photo) -->
+          <svg viewBox="0 0 600 480" class="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <!-- Soft horizon line -->
+            <rect x="0" y="320" width="600" height="160" fill="rgba(31, 42, 68, 0.06)" />
+            <!-- Abstract head silhouette -->
+            <ellipse cx="380" cy="220" rx="90" ry="110" fill="rgba(31, 42, 68, 0.08)" />
+            <path d="M 240 480 Q 270 360 380 360 Q 490 360 520 480 Z" fill="rgba(31, 42, 68, 0.10)" />
+          </svg>
+
+          <!-- Caption corner -->
+          <div class="absolute bottom-3 right-4 font-sans text-[0.72rem] tracking-[0.10em] uppercase text-tinte/45 italic">
+            Foto folgt
+          </div>
+        </div>
+
+        <!-- Decorative resonance circle (overlapping bottom-left of portrait) -->
+        <div class="absolute -bottom-6 left-4 md:left-8 lg:-left-4 lg:bottom-8 portrait-circle pointer-events-none" aria-hidden="true">
+          <div class="rounded-full bg-pergament p-4 shadow-[0_8px_24px_-12px_rgba(31,42,68,0.18)]">
+            <svg viewBox="0 0 160 160" width="120" height="120" class="block" fill="none">
+              <!-- Outer concentric rings -->
+              <circle cx="80" cy="80" r="72" stroke="#6FA3B5" stroke-width="1" opacity="0.55" />
+              <circle cx="80" cy="80" r="58" stroke="#6FA3B5" stroke-width="1" opacity="0.75" />
+              <circle cx="80" cy="80" r="42" stroke="#6FA3B5" stroke-width="1.2" opacity="0.9" />
+              <circle cx="80" cy="80" r="26" stroke="#1F2A44" stroke-width="1" opacity="0.55" />
+              <!-- Tick marks at cardinal points -->
+              <g stroke="#1F2A44" stroke-width="1" opacity="0.7">
+                <line x1="80" y1="2" x2="80" y2="12" />
+                <line x1="80" y1="148" x2="80" y2="158" />
+                <line x1="2" y1="80" x2="12" y2="80" />
+                <line x1="148" y1="80" x2="158" y2="80" />
+              </g>
+              <!-- Center pulse -->
+              <circle cx="80" cy="80" r="7" fill="#C97B3F" opacity="0.9" />
+              <circle cx="80" cy="80" r="3" fill="#C97B3F" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .portrait-block {
+    box-shadow: 0 14px 36px -18px rgba(31, 42, 68, 0.22);
+  }
+</style>

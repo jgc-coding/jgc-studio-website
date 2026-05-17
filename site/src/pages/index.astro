@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
+import PersoenlicherIntro from '../components/PersoenlicherIntro.astro';
 import KiIstWerkzeug from '../components/KiIstWerkzeug.astro';
 import VorherNachher from '../components/VorherNachher.astro';
 import BogenTrenner from '../components/BogenTrenner.astro';
@@ -21,10 +22,13 @@ import Footer from '../components/Footer.astro';
 
   <main id="main">
 
-    <!-- 2. Hero -->
+    <!-- 2. Hero (V04: zentriert, Floating Cards) -->
     <Hero />
 
-    <!-- 3. KI ist ein Werkzeug — receives hero photo overlap on lg+ -->
+    <!-- 2b. Persönliche Intro (V04: Tina-Stil, „Hi. Ich bin Gabriel.") -->
+    <PersoenlicherIntro />
+
+    <!-- 3. KI ist ein Werkzeug -->
     <KiIstWerkzeug />
 
     <!-- 4. Vorher-Nachher -->
