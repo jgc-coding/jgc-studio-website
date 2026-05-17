@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Impressum — JGC Studio" description="Impressum von JGC Studio, KI-Beratung für Coaches und Trainer.">
@@ -24,7 +25,7 @@ import Footer from '../components/Footer.astro';
         </p>
       </div>
 
-      <a href="/" class="btn-tertiary mt-12 inline-flex">
+      <a href={base} class="btn-tertiary mt-12 inline-flex">
         <span aria-hidden="true">←</span>
         Zurück zur Startseite
       </a>

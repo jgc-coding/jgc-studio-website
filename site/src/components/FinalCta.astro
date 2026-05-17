@@ -2,6 +2,7 @@
 // Sektion 7.11 — Final-CTA
 // Salbei-Block volle Breite, innere Box mit Kupfer-Rahmen.
 // Kleines statisches Resonanz-Echo oben mittig.
+const base = import.meta.env.BASE_URL;
 ---
 
 <section id="kontakt" class="relative w-full" style="background-color: var(--bg-salbei-final);">
@@ -33,14 +34,14 @@
         </p>
 
         <div class="mt-9 md:mt-10 flex flex-col items-center gap-5">
-          <a href="#kontakt" class="btn-primary !px-7 !py-3.5 !text-[1rem]">
+          <a href={`${base}#kontakt`} class="btn-primary !px-7 !py-3.5 !text-[1rem]">
             Audit anfragen
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 8 L13 8" />
               <path d="M8.5 3.5 L13 8 L8.5 12.5" />
             </svg>
           </a>
-          <a href="#angebote" class="btn-tertiary text-[0.95rem]">
+          <a href={`${base}#angebote`} class="btn-tertiary text-[0.95rem]">
             oder Demo-Workflow ansehen
             <span aria-hidden="true">→</span>
           </a>

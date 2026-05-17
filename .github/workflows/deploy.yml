@@ -1,0 +1,123 @@
+name: Deploy alle Varianten zu GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - 'variant/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main (für Action-Definition + Galerie-Generator)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Discover variant branches
+        id: discover
+        run: |
+          git fetch --all --prune
+          BRANCHES=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin/variant/ \
+            | sed 's|^origin/||' \
+            | sort -u)
+          echo "Found variant branches:"
+          echo "$BRANCHES"
+          echo "branches<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$BRANCHES" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare output structure
+        run: |
+          mkdir -p _site/variants/screenshots
+
+      - name: Copy screenshots from main (if present)
+        run: |
+          if [ -d variants/screenshots ]; then
+            cp -r variants/screenshots/* _site/variants/screenshots/ 2>/dev/null || true
+            echo "Copied screenshots:"
+            ls -la _site/variants/screenshots/ || true
+          else
+            echo "No screenshots dir found on main"
+          fi
+
+      - name: Build main branch → /main/
+        run: |
+          git checkout main -- site/
+          cd site
+          npm ci --no-audit --no-fund
+          BASE_PATH="/jgc-studio-website/main/" \
+          SITE_URL="https://jgc-coding.github.io/jgc-studio-website/main/" \
+            npm run build
+          mkdir -p ../_site/main
+          cp -r dist/* ../_site/main/
+          cd ..
+
+      - name: Build each variant branch → /variants/<slug>/
+        run: |
+          BRANCHES="${{ steps.discover.outputs.branches }}"
+          if [ -z "$BRANCHES" ]; then
+            echo "No variant branches to build."
+            exit 0
+          fi
+          echo "$BRANCHES" | while read -r branch; do
+            if [ -z "$branch" ]; then continue; fi
+            slug="${branch#variant/}"
+            echo ""
+            echo "===== Building $branch → /variants/$slug/ ====="
+            # Wipe site/ and re-checkout from this branch
+            rm -rf site
+            git checkout "origin/$branch" -- site/
+            cd site
+            npm ci --no-audit --no-fund
+            BASE_PATH="/jgc-studio-website/variants/$slug/" \
+            SITE_URL="https://jgc-coding.github.io/jgc-studio-website/variants/$slug/" \
+              npm run build
+            mkdir -p "../_site/variants/$slug"
+            cp -r dist/* "../_site/variants/$slug/"
+            cd ..
+          done
+
+      - name: Generate gallery landing page
+        run: |
+          # Use main's gallery generator
+          git checkout main -- scripts/generate-gallery.mjs
+          node scripts/generate-gallery.mjs _site /jgc-studio-website/
+
+      - name: List final output
+        run: |
+          echo "Final _site structure (depth 3):"
+          find _site -maxdepth 3 -type d | sort
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

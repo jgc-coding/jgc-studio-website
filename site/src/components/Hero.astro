@@ -1,5 +1,6 @@
 ---
 import ResonanceAnimation from './ResonanceAnimation.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <section class="relative w-full">
@@ -34,14 +35,14 @@ import ResonanceAnimation from './ResonanceAnimation.astro';
 
         <!-- CTAs -->
         <div class="mt-9 md:mt-11 flex flex-col sm:flex-row gap-3.5 sm:items-center">
-          <a href="#kontakt" class="btn-primary">
+          <a href={`${base}#kontakt`} class="btn-primary">
             Audit anfragen
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 8 L13 8" />
               <path d="M8.5 3.5 L13 8 L8.5 12.5" />
             </svg>
           </a>
-          <a href="#angebote" class="btn-secondary">
+          <a href={`${base}#angebote`} class="btn-secondary">
             Angebote ansehen
           </a>
         </div>
@@ -67,7 +68,7 @@ import ResonanceAnimation from './ResonanceAnimation.astro';
       <div class="order-1 lg:order-2 relative">
         <div class="hero-photo-frame relative overflow-hidden rounded-[6px] bg-holzsand/30">
           <img
-            src="/images/hero-placeholder.png"
+            src={`${base}images/hero-placeholder.png`}
             alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
             class="w-full h-full object-cover aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] xl:aspect-[5/6] block"
             width="1200"
