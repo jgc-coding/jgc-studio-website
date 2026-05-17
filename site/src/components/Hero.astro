@@ -3,103 +3,95 @@ import ResonanceAnimation from './ResonanceAnimation.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
-<section class="relative w-full pt-4 md:pt-6 lg:pt-8">
-  <div class="container-wide">
+<!-- Full-bleed cinematic hero: edge-to-edge, no rounding, flush to nav above and next section below -->
+<section class="hero-cinema relative w-full overflow-hidden bg-tinte">
 
-    <!-- Cinematic full-bleed hero card -->
-    <div class="hero-cinema relative overflow-hidden rounded-[10px] md:rounded-[12px] bg-tinte">
+  <!-- Background image -->
+  <img
+    src={`${base}images/hero-placeholder.png`}
+    alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
+    class="absolute inset-0 w-full h-full object-cover"
+    width="2400"
+    height="1500"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+  />
 
-      <!-- Background image -->
-      <img
-        src={`${base}images/hero-placeholder.png`}
-        alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
-        class="absolute inset-0 w-full h-full object-cover"
-        width="2400"
-        height="1500"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
+  <!-- Brand gradient — Tinte-Tiefblau, leicht fade-out nach rechts -->
+  <div class="absolute inset-0 hero-gradient-desktop hidden md:block" aria-hidden="true"></div>
+  <div class="absolute inset-0 hero-gradient-mobile md:hidden" aria-hidden="true"></div>
 
-      <!-- Brand gradient — Tinte-Tiefblau, leicht fade-out nach rechts -->
-      <div class="absolute inset-0 hero-gradient-desktop hidden md:block" aria-hidden="true"></div>
-      <div class="absolute inset-0 hero-gradient-mobile md:hidden" aria-hidden="true"></div>
+  <!-- Content layer — constrained to container-wide so text aligns with rest of site -->
+  <div class="relative z-10 container-wide">
+    <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[640px] sm:min-h-[700px] md:min-h-[760px] lg:min-h-[82vh] xl:min-h-[86vh]">
 
-      <!-- Content layer -->
-      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 min-h-[640px] sm:min-h-[680px] md:min-h-[720px] lg:min-h-[78vh] xl:min-h-[82vh]">
+      <!-- LEFT — Text -->
+      <div class="lg:col-span-7 xl:col-span-6 flex flex-col justify-center py-20 md:py-24 lg:py-28 lg:pr-12">
 
-        <!-- LEFT — Text -->
-        <div class="lg:col-span-7 xl:col-span-6 flex flex-col justify-center px-7 sm:px-12 md:px-14 lg:px-16 xl:px-20 py-16 md:py-20 lg:py-24">
-
-          <!-- Eyebrow marker -->
-          <div class="flex items-center gap-3 mb-7 md:mb-10">
-            <span class="block h-px w-9 bg-kupfer/90"></span>
-            <span class="eyebrow" style="color: #E8A572; letter-spacing: 0.18em;">Freiburg im Breisgau</span>
-          </div>
-
-          <!-- Headline -->
-          <h1 class="font-serif text-hero" style="color: #FEFCF7;">
-            Mehr Raum für<br class="hidden sm:block" />
-            das <em
-              class="italic font-medium"
-              style="font-variation-settings: 'opsz' 144, 'SOFT' 100; color: #FEFCF7;"
-            >Wesentliche</em>.
-          </h1>
-
-          <!-- Sub-Headline -->
-          <p class="mt-7 md:mt-8 font-sans text-sub font-medium max-w-xl" style="color: rgba(254, 252, 247, 0.96);">
-            KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren.
-          </p>
-
-          <!-- Sub-Sub-Claim -->
-          <p class="mt-3.5 font-sans text-[1.0625rem] max-w-xl leading-relaxed" style="color: rgba(254, 252, 247, 0.78);">
-            Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.
-          </p>
-
-          <!-- CTAs -->
-          <div class="mt-9 md:mt-11 flex flex-col sm:flex-row gap-3.5 sm:items-center">
-            <a href={`${base}#kontakt`} class="btn-primary">
-              Audit anfragen
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 8 L13 8" />
-                <path d="M8.5 3.5 L13 8 L8.5 12.5" />
-              </svg>
-            </a>
-            <a href={`${base}#angebote`} class="btn-secondary-on-dark">
-              Angebote ansehen
-            </a>
-          </div>
-
-          <!-- Trust hairline -->
-          <div class="mt-12 md:mt-16 flex flex-wrap gap-x-7 gap-y-2 items-center text-[0.84rem] font-sans" style="color: rgba(254, 252, 247, 0.68);">
-            <span class="inline-flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-salbei"></span>
-              EU-gehostet
-            </span>
-            <span class="inline-flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-kupfer"></span>
-              TÜV-zertifiziert
-            </span>
-            <span class="inline-flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-quellwasser"></span>
-              EU AI Act-konform
-            </span>
-          </div>
+        <!-- Eyebrow marker -->
+        <div class="flex items-center gap-3 mb-7 md:mb-10">
+          <span class="block h-px w-9 bg-kupfer/90"></span>
+          <span class="eyebrow" style="color: #E8A572; letter-spacing: 0.18em;">Freiburg im Breisgau</span>
         </div>
 
-        <!-- RIGHT — Resonance animation, lower right corner (Desktop only) -->
-        <div class="hidden lg:flex lg:col-span-5 xl:col-span-6 items-end justify-end pointer-events-none px-10 lg:px-14 pb-10 lg:pb-14">
-          <div class="hero-resonance-wrap">
-            <ResonanceAnimation size={220} />
-          </div>
+        <!-- Headline -->
+        <h1 class="font-serif text-hero" style="color: #FEFCF7;">
+          Mehr Raum für<br class="hidden sm:block" />
+          das <em
+            class="italic font-medium"
+            style="font-variation-settings: 'opsz' 144, 'SOFT' 100; color: #FEFCF7;"
+          >Wesentliche</em>.
+        </h1>
+
+        <!-- Sub-Headline -->
+        <p class="mt-7 md:mt-8 font-sans text-sub font-medium max-w-xl" style="color: rgba(254, 252, 247, 0.96);">
+          KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren.
+        </p>
+
+        <!-- Sub-Sub-Claim -->
+        <p class="mt-3.5 font-sans text-[1.0625rem] max-w-xl leading-relaxed" style="color: rgba(254, 252, 247, 0.78);">
+          Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-9 md:mt-11 flex flex-col sm:flex-row gap-3.5 sm:items-center">
+          <a href={`${base}#kontakt`} class="btn-primary">
+            Audit anfragen
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 8 L13 8" />
+              <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+            </svg>
+          </a>
+          <a href={`${base}#angebote`} class="btn-secondary-on-dark">
+            Angebote ansehen
+          </a>
+        </div>
+
+        <!-- Trust hairline -->
+        <div class="mt-12 md:mt-16 flex flex-wrap gap-x-7 gap-y-2 items-center text-[0.84rem] font-sans" style="color: rgba(254, 252, 247, 0.68);">
+          <span class="inline-flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-salbei"></span>
+            EU-gehostet
+          </span>
+          <span class="inline-flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-kupfer"></span>
+            TÜV-zertifiziert
+          </span>
+          <span class="inline-flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-quellwasser"></span>
+            EU AI Act-konform
+          </span>
+        </div>
+      </div>
+
+      <!-- RIGHT — Resonance animation, lower right (Desktop only) -->
+      <div class="hidden lg:flex lg:col-span-5 xl:col-span-6 items-end justify-end pointer-events-none pb-10 lg:pb-14">
+        <div class="hero-resonance-wrap">
+          <ResonanceAnimation size={220} />
         </div>
       </div>
     </div>
-
-    <!-- Photo caption -->
-    <p class="mt-4 ml-2 font-sans text-[0.82rem] text-anthrazit/55 italic max-w-[28ch]">
-      Mein Arbeitsplatz, Freiburg im Breisgau.
-    </p>
   </div>
 </section>
 
@@ -107,7 +99,6 @@ const base = import.meta.env.BASE_URL;
   /* Desktop — gradient from left (dark, where text sits) to transparent right */
   .hero-gradient-desktop {
     background:
-      /* Vertical lift so bottom doesn't get over-darkened */
       linear-gradient(
         to right,
         rgba(31, 42, 68, 0.86) 0%,
@@ -119,7 +110,7 @@ const base = import.meta.env.BASE_URL;
       );
   }
 
-  /* Mobile — gradient from bottom-up (text now stacks bottom of image) */
+  /* Mobile — gradient from bottom-up (text stacks bottom of image) */
   .hero-gradient-mobile {
     background:
       linear-gradient(
@@ -134,13 +125,6 @@ const base = import.meta.env.BASE_URL;
   /* Resonance animation gets a soft halo on dark so it stays visible */
   .hero-resonance-wrap {
     filter: drop-shadow(0 0 24px rgba(254, 252, 247, 0.10));
-  }
-
-  /* Cinematic card shadow */
-  .hero-cinema {
-    box-shadow:
-      0 1px 0 rgba(31, 42, 68, 0.04),
-      0 24px 48px -24px rgba(31, 42, 68, 0.20);
   }
 
   /* Secondary button on dark hero — light outline + light text */
