@@ -14,8 +14,6 @@ permissions:
 
 concurrency:
   group: 'pages'
-  # Cancel ueberlappende Runs, damit der neuere Push immer gewinnt
-  # (verhindert spurious-failure-Mails bei mehreren Branch-Pushes in Folge)
   cancel-in-progress: true
 
 jobs:

@@ -1,5 +1,4 @@
 ---
-import ResonanceAnimation from './ResonanceAnimation.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -85,12 +84,6 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
 
-      <!-- RIGHT — Resonance animation, lower right (Desktop only) -->
-      <div class="hidden lg:flex lg:col-span-5 xl:col-span-6 items-end justify-end pointer-events-none pb-10 lg:pb-14">
-        <div class="hero-resonance-wrap">
-          <ResonanceAnimation size={220} />
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -120,11 +113,6 @@ const base = import.meta.env.BASE_URL;
         rgba(31, 42, 68, 0.82) 75%,
         rgba(31, 42, 68, 0.92) 100%
       );
-  }
-
-  /* Resonance animation gets a soft halo on dark so it stays visible */
-  .hero-resonance-wrap {
-    filter: drop-shadow(0 0 24px rgba(254, 252, 247, 0.10));
   }
 
   /* Secondary button on dark hero — light outline + light text */
