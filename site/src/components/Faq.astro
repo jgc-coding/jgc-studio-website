@@ -1,68 +1,42 @@
 ---
-// Sektion 7.10 — FAQ
 const items = [
-  {
-    q: 'Wie läuft die Zusammenarbeit ab?',
-    a: 'Drei Schritte. Erstens, Audit anfragen: Wir buchen ein 60-Minuten-Gespräch. Du zeigst mir deine Praxis, deine Tools, deine drängendsten Themen. Ich höre zu, frage nach. Zweitens, Audit-Report: Innerhalb einer Woche bekommst du einen schriftlichen Report mit drei bis fünf priorisierten Quick Wins, einer Bewertung deiner aktuellen Tools und einer klaren Empfehlung für den nächsten Schritt. Drittens, Entscheidung: Du entscheidest in Ruhe. Wenn der Report alles ist, was du brauchst — auch gut. Wenn wir gemeinsam weitergehen, wird der Audit-Preis voll auf das Folgeprojekt angerechnet.',
-  },
-  {
-    q: 'Wie hältst du es mit DSGVO und EU AI Act?',
-    a: 'Beides ist bei mir Fundament, kein Anhang. Seit Februar 2025 verpflichtet der EU AI Act jeden, der KI in seiner Arbeit einsetzt, zur KI-Kompetenz. Ab August 2026 drohen Bußgelder bis 30 Millionen Euro. Jede Implementierung kommt deshalb mit EU-gehosteten Modellen (Mistral, Aleph Alpha, Azure OpenAI Frankfurt) als Standard, mit Auftragsverarbeitungsverträgen als Basis und mit einer integrierten Schulung, die deine Pflicht aus Artikel 4 abdeckt. Wenn du als Heilpraktikerin, Therapeutin oder mit anderer Doppelqualifikation arbeitest, kommen zusätzliche Vorkehrungen dazu, weil Paragraf 203 StGB greift — das beraten wir individuell.',
-  },
-  {
-    q: 'Was passiert mit den Aufnahmen und Daten meiner Klienten?',
-    a: 'Sitzungs-Transkriptionen laufen über lokal gehostetes Whisper, also auf einem Server, den ich für dich einrichte. Die Aufnahmen verlassen niemals den europäischen Rechtsraum. Bei besonders sensiblen Inhalten arbeiten wir mit Open-Weight-Modellen (Llama, Mistral) komplett auf deiner eigenen Infrastruktur. Klienten werden vorab informiert, dass KI in der Nachbereitung eingesetzt wird — das ist Teil der Transparenz, die zur Sache gehört.',
-  },
-  {
-    q: 'Wie viel Zeit musst du selbst investieren?',
-    a: 'Im KI-Praxis-Check rechnest du mit zwei bis drei Stunden insgesamt — Gespräch und Report-Lektüre. In der KI-Implementierung über sechs bis acht Wochen mit etwa vier bis sechs Stunden pro Woche, vor allem in den ersten beiden Wochen für das Voice-Profil und die Methodik-Aufnahme. Danach wird es deutlich weniger. Im Methodik-Assistent-Projekt sind es in der Aufbauphase intensiver, etwa sechs bis acht Stunden pro Woche, später deutlich weniger.',
-  },
-  {
-    q: 'Funktioniert das auch, wenn ich noch kein Buch oder kein Programm habe?',
-    a: 'Für den Methodik-Assistent (Schritt 3) brauchst du substanzielle eigene Inhalte — Bücher, Modelle, ausgearbeitete Programme. Für den KI-Praxis-Check und die KI-Implementierung reichen deine bisherigen Texte, Posts, Podcast-Folgen und Sitzungs-Notizen. Daraus lässt sich dein Voice-Profil aufbauen. Wenn deine Methode noch nicht steht, ist der Implementierungs-Schritt eher früh — dann hilft erst einmal Klarheit über dein Angebot.',
-  },
-  {
-    q: 'Was unterscheidet das von einem Online-Kurs zu KI für Coaches?',
-    a: 'Ich liefere keine Lektionen, sondern fertige Workflows in deine Praxis. Du musst nichts lernen, was du nicht willst. Die Schulung, die du bekommst, betrifft die Bedienung deines konkreten Setups — nicht KI im Allgemeinen. Wenn du einen Kurs willst, gibt es gute Anbieter dafür. Wenn du Werkzeuge willst, die in deiner Praxis greifen, bist du hier richtig.',
-  },
-  {
-    q: 'Was ist, wenn die Tools sich in einem Jahr geändert haben?',
-    a: 'Tools ändern sich, das gehört dazu. Mein Setup ist so gebaut, dass die Logik bleibt, auch wenn einzelne Komponenten getauscht werden. Im optionalen Resonanzraum (300 Euro pro Monat) bekommst du regelmäßige Updates auf neue Modelle und Templates. Ohne diese Anbindung ist die Implementierung trotzdem stabil — du bist nicht abhängig.',
-  },
-  {
-    q: 'Brauche ich eine technische Vorbildung?',
-    a: 'Nein. Wenn du E-Mail, Notion oder ein Buchungstool wie Calendly bedienen kannst, reicht das. Die Schulung am Ende der Implementierung deckt genau das ab, was du brauchst, um dein Setup zu pflegen.',
-  },
-  {
-    q: 'Geht das auch, wenn ich nicht in Freiburg bin?',
-    a: 'Ja. Die meiste Arbeit läuft remote, mit regelmäßigen Videoanrufen. Wenn du in Freiburg oder Umgebung bist und Wert auf persönliche Treffen legst, machen wir das gerne. In jedem Fall arbeite ich mit Coaches und Trainern im gesamten DACH-Raum.',
-  },
+  { q: 'Wie läuft die Zusammenarbeit ab?', a: 'Drei Schritte. Erstens, Audit anfragen: Wir buchen ein 60-Minuten-Gespräch. Du zeigst mir deine Praxis, deine Tools, deine drängendsten Themen. Ich höre zu, frage nach. Zweitens, Audit-Report: Innerhalb einer Woche bekommst du einen schriftlichen Report mit drei bis fünf priorisierten Quick Wins, einer Bewertung deiner aktuellen Tools und einer klaren Empfehlung für den nächsten Schritt. Drittens, Entscheidung: Du entscheidest in Ruhe. Wenn der Report alles ist, was du brauchst — auch gut. Wenn wir gemeinsam weitergehen, wird der Audit-Preis voll auf das Folgeprojekt angerechnet.' },
+  { q: 'Wie hältst du es mit DSGVO und EU AI Act?', a: 'Beides ist bei mir Fundament, kein Anhang. Seit Februar 2025 verpflichtet der EU AI Act jeden, der KI in seiner Arbeit einsetzt, zur KI-Kompetenz. Ab August 2026 drohen Bußgelder bis 30 Millionen Euro. Jede Implementierung kommt deshalb mit EU-gehosteten Modellen (Mistral, Aleph Alpha, Azure OpenAI Frankfurt) als Standard, mit Auftragsverarbeitungsverträgen als Basis und mit einer integrierten Schulung, die deine Pflicht aus Artikel 4 abdeckt. Wenn du als Heilpraktikerin, Therapeutin oder mit anderer Doppelqualifikation arbeitest, kommen zusätzliche Vorkehrungen dazu, weil Paragraf 203 StGB greift — das beraten wir individuell.' },
+  { q: 'Was passiert mit den Aufnahmen und Daten meiner Klienten?', a: 'Sitzungs-Transkriptionen laufen über lokal gehostetes Whisper, also auf einem Server, den ich für dich einrichte. Die Aufnahmen verlassen niemals den europäischen Rechtsraum. Bei besonders sensiblen Inhalten arbeiten wir mit Open-Weight-Modellen (Llama, Mistral) komplett auf deiner eigenen Infrastruktur. Klienten werden vorab informiert, dass KI in der Nachbereitung eingesetzt wird — das ist Teil der Transparenz, die zur Sache gehört.' },
+  { q: 'Wie viel Zeit musst du selbst investieren?', a: 'Im KI-Praxis-Check rechnest du mit zwei bis drei Stunden insgesamt — Gespräch und Report-Lektüre. In der KI-Implementierung über sechs bis acht Wochen mit etwa vier bis sechs Stunden pro Woche, vor allem in den ersten beiden Wochen für das Voice-Profil und die Methodik-Aufnahme. Danach wird es deutlich weniger. Im Methodik-Assistent-Projekt ist es in der Aufbauphase intensiver, etwa sechs bis acht Stunden pro Woche, später deutlich weniger.' },
+  { q: 'Funktioniert das auch, wenn ich noch kein Buch oder kein Programm habe?', a: 'Für den Methodik-Assistent (Schritt 3) brauchst du substanzielle eigene Inhalte — Bücher, Modelle, ausgearbeitete Programme. Für den KI-Praxis-Check und die KI-Implementierung reichen deine bisherigen Texte, Posts, Podcast-Folgen und Sitzungs-Notizen. Daraus lässt sich dein Voice-Profil aufbauen. Wenn deine Methode noch nicht steht, ist der Implementierungs-Schritt eher früh — dann hilft erst einmal Klarheit über dein Angebot.' },
+  { q: 'Was unterscheidet das von einem Online-Kurs zu KI für Coaches?', a: 'Ich liefere keine Lektionen, sondern fertige Workflows in deine Praxis. Du musst nichts lernen, was du nicht willst. Die Schulung, die du bekommst, betrifft die Bedienung deines konkreten Setups — nicht KI im Allgemeinen. Wenn du einen Kurs willst, gibt es gute Anbieter dafür. Wenn du Werkzeuge willst, die in deiner Praxis greifen, bist du hier richtig.' },
+  { q: 'Was ist, wenn die Tools sich in einem Jahr geändert haben?', a: 'Tools ändern sich, das gehört dazu. Mein Setup ist so gebaut, dass die Logik bleibt, auch wenn einzelne Komponenten getauscht werden. Im optionalen Resonanzraum (300 Euro pro Monat) bekommst du regelmäßige Updates auf neue Modelle und Templates. Ohne diese Anbindung ist die Implementierung trotzdem stabil — du bist nicht abhängig.' },
+  { q: 'Brauche ich eine technische Vorbildung?', a: 'Nein. Wenn du E-Mail, Notion oder ein Buchungstool wie Calendly bedienen kannst, reicht das. Die Schulung am Ende der Implementierung deckt genau das ab, was du brauchst, um dein Setup zu pflegen.' },
+  { q: 'Geht das auch, wenn ich nicht in Freiburg bin?', a: 'Ja. Die meiste Arbeit läuft remote, mit regelmäßigen Videoanrufen. Wenn du in Freiburg oder Umgebung bist und Wert auf persönliche Treffen legst, machen wir das gerne. In jedem Fall arbeite ich mit Coaches und Trainern im gesamten DACH-Raum.' },
 ];
 ---
 
-<section class="section bg-pergament">
+<section class="section bg-cream">
   <div class="container-prose">
 
-    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18">
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18 reveal">
+      <p class="section-marker mb-5">ix.  Häufige Fragen</p>
       <p class="eyebrow eyebrow-kupfer mb-5">Was du sonst noch wissen willst</p>
-      <h2 class="font-serif text-section text-tinte">
-        Häufige Fragen.
+      <h2 class="font-serif text-section text-ink" style="font-variation-settings: 'opsz' 144;">
+        <em class="italic" style="font-weight: 350;">Häufige</em> Fragen.
       </h2>
     </div>
 
-    <div class="border-t border-holzsand">
+    <div class="border-t border-linen reveal">
       {items.map((item, i) => (
         <details class="faq-item" {...(i === 0 ? { open: true } : {})}>
-          <summary class="font-sans">
-            <span class="text-[1.05rem] md:text-[1.1rem]">
-              <span class="inline-block w-7 text-anthrazit/40 font-medium tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-              {item.q}
+          <summary>
+            <span class="flex items-baseline gap-5 flex-1">
+              <span class="numeral text-[1.2rem] flex-shrink-0 w-7" style="color: var(--color-ink); opacity: 0.4; font-style: italic;">{String(i + 1).padStart(2, '0')}</span>
+              <span>{item.q}</span>
             </span>
-            <svg class="chev" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 7 L9 12 L14 7" />
+            <svg class="chev" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 4 L9 14" />
+              <path d="M4 9 L14 9" />
             </svg>
           </summary>
-          <div class="faq-body font-sans text-[1rem] pl-7">
+          <div class="faq-body pl-12">
             {item.a}
           </div>
         </details>

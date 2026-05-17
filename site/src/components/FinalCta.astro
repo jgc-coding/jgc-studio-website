@@ -1,55 +1,36 @@
 ---
-// Sektion 7.11 — Final-CTA
-// Salbei-Block volle Breite, innere Box mit Kupfer-Rahmen.
-// Kleines statisches Resonanz-Echo oben mittig.
 const base = import.meta.env.BASE_URL;
 ---
 
 <section id="kontakt" class="relative w-full" style="background-color: var(--bg-salbei-final);">
-  <div class="container-wide py-24 md:py-32 lg:py-36">
+  <div class="container-wide py-28 md:py-36 lg:py-40 relative">
 
-    <div
-      class="relative mx-auto bg-pergament rounded-[6px] px-7 md:px-12 lg:px-16 py-14 md:py-20"
-      style="max-width: 760px; border: 1.5px solid rgba(201, 123, 63, 0.85); box-shadow: 0 2px 12px -4px rgba(31,42,68,0.08);"
-    >
+    <div class="max-w-3xl mx-auto text-center reveal">
 
-      <!-- Resonance echo -->
-      <div class="absolute left-1/2 -translate-x-1/2 -top-9 md:-top-11">
-        <div class="bg-pergament rounded-full p-2.5">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#C97B3F" stroke-width="1.3" opacity="0.55">
-            <circle cx="32" cy="32" r="10" />
-            <circle cx="32" cy="32" r="18" opacity="0.7" />
-            <circle cx="32" cy="32" r="26" opacity="0.45" />
-            <circle cx="32" cy="32" r="3.5" fill="#C97B3F" opacity="1" stroke="none" />
+      <p class="section-marker mb-5">x.  Schluss</p>
+      <p class="eyebrow eyebrow-kupfer mb-7">Ein Gespräch</p>
+
+      <h2 class="font-serif text-ink leading-[1.0] tracking-tight" style="font-variation-settings: 'opsz' 144; font-weight: 400; font-size: clamp(2.5rem, 5vw, 4rem);">
+        Lass uns<br /><em class="italic" style="font-weight: 350; color: var(--color-terracotta);">60 Minuten</em> reden.
+      </h2>
+
+      <p class="mt-9 font-serif italic text-[1.15rem] md:text-[1.2rem] text-ink/75 max-w-lg mx-auto leading-relaxed" style="font-weight: 400;">
+        Kostenfreies Erstgespräch. Kein Verkaufsgespräch, keine Verpflichtung.
+      </p>
+
+      <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-5">
+        <a href={`${base}#kontakt`} class="btn-primary !px-8 !py-4 !text-[0.98rem]">
+          Audit anfragen
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8 L13 8" />
+            <path d="M8.5 3.5 L13 8 L8.5 12.5" />
           </svg>
-        </div>
-      </div>
-
-      <div class="text-center">
-        <h2 class="font-serif text-[clamp(1.8rem,2.5vw+0.5rem,2.65rem)] leading-[1.15] text-tinte">
-          Lass uns 60 Minuten reden.
-        </h2>
-        <p class="mt-5 font-sans text-[1.0625rem] md:text-[1.125rem] text-anthrazit/75 leading-relaxed max-w-md mx-auto">
-          Kostenfreies Erstgespräch. Kein Verkaufsgespräch, keine Verpflichtung.
-        </p>
-
-        <div class="mt-9 md:mt-10 flex flex-col items-center gap-5">
-          <a href={`${base}#kontakt`} class="btn-primary !px-7 !py-3.5 !text-[1rem]">
-            Audit anfragen
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 8 L13 8" />
-              <path d="M8.5 3.5 L13 8 L8.5 12.5" />
-            </svg>
-          </a>
-          <a href={`${base}#angebote`} class="btn-tertiary text-[0.95rem]">
-            oder Demo-Workflow ansehen
-            <span aria-hidden="true">→</span>
-          </a>
-        </div>
+        </a>
+        <a href={`${base}#angebote`} class="btn-tertiary text-[0.95rem]">
+          oder Demo-Workflow ansehen
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </div>
-
-  <!-- Atemraum-Pause vor dem Footer -->
-  <div class="h-20 bg-pergament" aria-hidden="true"></div>
 </section>

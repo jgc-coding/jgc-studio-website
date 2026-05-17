@@ -2,23 +2,24 @@
 import AngebotKarte from './AngebotKarte.astro';
 ---
 
-<section id="angebote" class="section bg-pergament">
+<section id="angebote" class="section bg-cream">
   <div class="container-wide">
 
-    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+    <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20 reveal">
+      <p class="section-marker mb-5">iv.  Wege</p>
       <p class="eyebrow eyebrow-kupfer mb-5">Drei Wege ineinander</p>
-      <h2 class="font-serif text-section text-tinte text-balance">
-        Vom ersten Befund bis zum laufenden Verstärker.
+      <h2 class="font-serif text-section text-ink" style="font-variation-settings: 'opsz' 144;">
+        Vom ersten Befund<br /><em class="italic" style="font-weight: 350;">bis zum laufenden Verstärker.</em>
       </h2>
-      <p class="mt-5 font-sans text-[1.0625rem] text-anthrazit/70 leading-relaxed">
+      <p class="mt-5 font-sans text-[1.05rem] text-charcoal/75 leading-relaxed">
         Du steigst dort ein, wo du gerade stehst. Jedes Angebot funktioniert für sich — und gemeinsam ergeben sie eine Linie.
       </p>
     </div>
 
-    <!-- 3 cards, middle card lifted on lg+ -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7 items-stretch max-w-6xl mx-auto md:[&>*:last-child]:md:col-span-2 lg:[&>*:last-child]:lg:col-span-1">
+    <div class="reveal-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7 items-stretch max-w-6xl mx-auto md:[&>*:last-child]:md:col-span-2 lg:[&>*:last-child]:lg:col-span-1">
 
       <AngebotKarte
+        number="01"
         eyebrow="Schritt 1 — Klarheit"
         title="KI-Praxis-Check"
         price="600 €"
@@ -33,28 +34,28 @@ import AngebotKarte from './AngebotKarte.astro';
         cta="Audit anfragen"
       />
 
-      <div class="lg:-translate-y-5">
-        <AngebotKarte
-          eyebrow="Schritt 2 — Aufbau"
-          title="KI-Implementierung für deine Praxis"
-          price="6.500 €"
-          duration="6 bis 8 Wochen"
-          outcome="Du hast ein KI-System, das in deiner Sprache schreibt, deine Sitzungen nachbereitet und dein Klienten-Follow-up automatisch anstößt. Inklusive der Schulung, die deine EU-AI-Act-Pflicht erfüllt."
-          deliverables={[
-            'Voice-Profil aus deinen Texten, Podcasts und Sitzungs-Aufnahmen',
-            'Content-System für LinkedIn, Newsletter und Reels-Skripte',
-            'DSGVO-konforme Sitzungs-Transkription mit automatischer Zusammenfassung',
-            'Automatisches Klienten-Follow-up nach Sitzungen',
-            'Lead-Funnel mit personalisiertem Onboarding',
-            'Drei Schulungs-Sessions zur eigenständigen Bedienung',
-            'Integrierte EU-AI-Act-Schulung',
-          ]}
-          cta="Projekt anfragen"
-          highlighted
-        />
-      </div>
+      <AngebotKarte
+        number="02"
+        eyebrow="Schritt 2 — Aufbau"
+        title="KI-Implementierung für deine Praxis"
+        price="6.500 €"
+        duration="6 bis 8 Wochen"
+        outcome="Du hast ein KI-System, das in deiner Sprache schreibt, deine Sitzungen nachbereitet und dein Klienten-Follow-up automatisch anstößt. Inklusive der Schulung, die deine EU-AI-Act-Pflicht erfüllt."
+        deliverables={[
+          'Voice-Profil aus deinen Texten, Podcasts und Sitzungs-Aufnahmen',
+          'Content-System für LinkedIn, Newsletter und Reels-Skripte',
+          'DSGVO-konforme Sitzungs-Transkription mit automatischer Zusammenfassung',
+          'Automatisches Klienten-Follow-up nach Sitzungen',
+          'Lead-Funnel mit personalisiertem Onboarding',
+          'Drei Schulungs-Sessions zur eigenständigen Bedienung',
+          'Integrierte EU-AI-Act-Schulung',
+        ]}
+        cta="Projekt anfragen"
+        highlighted
+      />
 
       <AngebotKarte
+        number="03"
         eyebrow="Schritt 3 — Tiefe"
         title="Methodik-Assistent und KI-Verstärker"
         price="14.000 €"

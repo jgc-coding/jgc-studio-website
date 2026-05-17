@@ -1,50 +1,40 @@
 ---
-const base = import.meta.env.BASE_URL;
 const links = [
-  { label: 'Angebote', href: `${base}#angebote` },
-  { label: 'Grundwerte', href: `${base}#grundwerte` },
-  { label: 'Wer mit dir arbeitet', href: `${base}#wer` },
-  { label: 'Audit anfragen', href: `${base}#kontakt` },
+  { label: 'Angebote', href: '/#angebote' },
+  { label: 'Grundwerte', href: '/#grundwerte' },
+  { label: 'Wer mit dir arbeitet', href: '/#wer' },
+  { label: 'Audit anfragen', href: '/#kontakt' },
 ];
 ---
 
-<footer class="bg-tinte text-pergament">
-  <div class="container-wide py-16 md:py-20">
+<footer class="bg-ink text-cream">
+  <div class="container-wide pt-20 md:pt-24 pb-12">
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+    <!-- Colophon-Header: groß gesetzte Wortmarke -->
+    <div class="border-b border-cream/15 pb-12 mb-12">
+      <p class="font-serif italic text-cream/50 text-[0.95rem] mb-4">— Kolophon</p>
+      <p class="font-serif text-cream text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] tracking-tight max-w-3xl">
+        JGC Studio. KI, die deine Handschrift trägt.
+      </p>
+    </div>
 
-      <!-- Brand -->
-      <div>
-        <div class="flex items-center gap-3 mb-5">
-          <img
-            src={`${base}images/logo-sigel.png`}
-            alt=""
-            width="36"
-            height="46"
-            class="h-10 w-auto invert-0 brightness-100"
-            style="filter: brightness(1.05);"
-          />
-          <span class="font-serif text-[1.4rem] font-medium tracking-tight">
-            JGC Studio
-          </span>
-        </div>
-        <p class="font-sans text-pergament/75 text-[0.95rem] leading-relaxed max-w-xs">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+
+      <div class="md:col-span-5">
+        <p class="font-sans text-cream/75 text-[0.95rem] leading-relaxed max-w-md">
           KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise, DSGVO-konform.
         </p>
-        <p class="font-sans text-pergament/55 text-[0.875rem] mt-4">
+        <p class="font-sans text-cream/55 text-[0.875rem] mt-5">
           Freiburg im Breisgau · DACH-Raum
         </p>
       </div>
 
-      <!-- Nav -->
-      <div>
-        <h3 class="font-sans uppercase text-[0.72rem] tracking-[0.18em] text-pergament/55 mb-5">
-          Seite
-        </h3>
+      <div class="md:col-span-3">
+        <p class="font-serif italic text-cream/45 text-[0.85rem] mb-4">Seite</p>
         <ul class="space-y-3">
           {links.map((l) => (
             <li>
-              <a href={l.href} class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">
+              <a href={l.href} class="font-sans text-[0.95rem] text-cream/85 hover:text-terracotta transition-colors duration-240">
                 {l.label}
               </a>
             </li>
@@ -52,24 +42,13 @@ const links = [
         </ul>
       </div>
 
-      <!-- Legal -->
-      <div>
-        <h3 class="font-sans uppercase text-[0.72rem] tracking-[0.18em] text-pergament/55 mb-5">
-          Rechtliches
-        </h3>
+      <div class="md:col-span-4">
+        <p class="font-serif italic text-cream/45 text-[0.85rem] mb-4">Rechtliches</p>
         <ul class="space-y-3">
+          <li><a href="/impressum" class="font-sans text-[0.95rem] text-cream/85 hover:text-terracotta transition-colors duration-240">Impressum</a></li>
+          <li><a href="/datenschutz" class="font-sans text-[0.95rem] text-cream/85 hover:text-terracotta transition-colors duration-240">Datenschutz</a></li>
           <li>
-            <a href={`${base}impressum`} class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">
-              Impressum
-            </a>
-          </li>
-          <li>
-            <a href={`${base}datenschutz`} class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">
-              Datenschutz
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com" rel="noopener noreferrer" target="_blank" class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200 inline-flex items-center gap-1.5">
+            <a href="https://www.linkedin.com" rel="noopener noreferrer" target="_blank" class="font-sans text-[0.95rem] text-cream/85 hover:text-terracotta transition-colors duration-240 inline-flex items-center gap-1.5">
               LinkedIn
               <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9 L9 3" />
@@ -81,14 +60,13 @@ const links = [
       </div>
     </div>
 
-    <!-- Hairline divider -->
-    <div class="mt-14 pt-6 border-t border-pergament/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-      <p class="font-sans text-[0.825rem] text-pergament/55">
+    <div class="mt-16 pt-6 border-t border-cream/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <p class="font-sans text-[0.825rem] text-cream/55">
         © 2026 · JGC Studio · Freiburg im Breisgau · DSGVO-konform
       </p>
-      <a href={`${base}#grundwerte`} class="font-sans text-[0.825rem] text-pergament/55 hover:text-kupfer transition-colors duration-200">
-        Haltung vor Technik →
-      </a>
+      <p class="font-serif italic text-[0.825rem] text-cream/55">
+        Gesetzt in Newsreader &amp; Manrope.
+      </p>
     </div>
   </div>
 </footer>

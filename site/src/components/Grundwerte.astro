@@ -1,11 +1,8 @@
 ---
-// Sektion 7.9 — Meine Grundwerte, wenn ich mit KI arbeite
-const links = [
+const punkte = [
   'KI ersetzt keine echte Beziehung. Begegnung bleibt menschlich.',
   'Klienten wissen, wo KI eingesetzt wird. Transparenz ist Standard.',
   'Ich baue für dich, nicht für die Masse. Jedes Setup wird auf deine Methode und deinen Stil zugeschnitten.',
-];
-const rechts = [
   'Sensible Daten werden geschützt. EU-Hosting, Auftragsverarbeitungsverträge, lokale Modelle bei Bedarf.',
   'Du bleibst Entscheider. KI macht Vorschläge, du wählst aus. Nichts geht raus, ohne dass du es gesehen hast.',
   'Deine Stimme und deine Methode bleiben erkennbar. KI verstärkt, sie ersetzt nicht.',
@@ -13,20 +10,23 @@ const rechts = [
 ---
 
 <section id="grundwerte" class="relative w-full" style="background-color: var(--bg-salbei-medium);">
-  <div class="container-wide py-24 md:py-28 lg:py-32">
+  <div class="container-wide py-28 md:py-32 lg:py-36">
 
-    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18">
+    <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20 reveal">
+      <p class="section-marker mb-5">viii.  Haltung</p>
       <p class="eyebrow eyebrow-tinte mb-5">Haltung vor Technik</p>
-      <h2 class="font-serif text-section text-tinte">
-        Meine Grundwerte, wenn ich mit KI arbeite.
+      <h2 class="font-serif text-section text-ink" style="font-variation-settings: 'opsz' 144;">
+        Meine Grundwerte,<br /><em class="italic" style="font-weight: 350;">wenn ich mit KI arbeite.</em>
       </h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-7 md:gap-y-9 max-w-4xl mx-auto">
-      {[...links, ...rechts].map((punkt) => (
-        <div class="flex gap-4 items-start">
-          <span class="block mt-[0.6rem] flex-shrink-0 w-3 h-px bg-kupfer"></span>
-          <p class="font-sans text-[1.025rem] text-anthrazit leading-[1.65]">
+    <div class="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-10 max-w-5xl mx-auto">
+      {punkte.map((punkt, i) => (
+        <div class="flex gap-6 items-start">
+          <span class="numeral text-[2.5rem] md:text-[2.75rem] flex-shrink-0 leading-[0.85]" style="color: var(--color-ink); opacity: 0.5; min-width: 3rem;">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <p class="font-serif text-[1.075rem] md:text-[1.125rem] text-ink leading-[1.55] pt-1" style="font-variation-settings: 'opsz' 144; font-weight: 400;">
             {punkt}
           </p>
         </div>
