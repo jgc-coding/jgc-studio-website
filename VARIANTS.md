@@ -31,7 +31,7 @@ sind eingefrorene Snapshots, die du jederzeit zurückholen kannst.
 
 | Nr. | Branch | Charakter | Farbpalette | Typografie | Stand | Screenshots |
 |---|---|---|---|---|---|---|
-| **01** | `variant/01-briefing-v5-naturwarm-restraint` | Ruhig, präzise, warme Naturtöne. Strikte Umsetzung des Briefings v5. Pergament-Hintergrund, Salbei-Akzentblöcke, Kupfer-Ocker als Wirkungsakzent. Layout-Brüche (3×) und Resonanz-Motiv-Auftritte (5×) wie spezifiziert. | Tinte-Tiefblau `#1F2A44`, Pergament `#FEFCF7`, Anthrazit `#2D2D2D`, Kupfer-Ocker `#C97B3F`, Salbei `#8FA98A`, Quellwasser `#6FA3B5`, Holzsand `#D9C7A8` | Fraunces (Display) + Inter (Body) | Live | [Desktop](variants/screenshots/01-desktop.jpg) · [Mobile](variants/screenshots/01-mobile.jpg) |
+| **01** | `variant/01-briefing-v5-naturwarm-restraint` | Ruhig, präzise, warme Naturtöne. Strikte Umsetzung des Briefings v5. Pergament-Hintergrund, Salbei-Akzentblöcke, Kupfer-Ocker als Wirkungsakzent. Layout-Brüche (3×) und Resonanz-Motiv-Auftritte (5×) wie spezifiziert. | Tinte-Tiefblau `#1F2A44`, Pergament `#FEFCF7`, Anthrazit `#2D2D2D`, Kupfer-Ocker `#C97B3F`, Salbei `#8FA98A`, Quellwasser `#6FA3B5`, Holzsand `#D9C7A8` | Fraunces (Display) + Inter (Body) | Live | [Desktop](variants/screenshots/01-desktop.png) · [Mobile](variants/screenshots/01-mobile.png) |
 
 ---
 
