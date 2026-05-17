@@ -32,6 +32,7 @@ sind eingefrorene Snapshots, die du jederzeit zurückholen kannst.
 | Nr. | Branch | Charakter | Farbpalette | Typografie | Stand | Screenshots |
 |---|---|---|---|---|---|---|
 | **01** | `variant/01-briefing-v5-naturwarm-restraint` | Ruhig, präzise, warme Naturtöne. Strikte Umsetzung des Briefings v5. Pergament-Hintergrund, Salbei-Akzentblöcke, Kupfer-Ocker als Wirkungsakzent. Layout-Brüche (3×) und Resonanz-Motiv-Auftritte (5×) wie spezifiziert. | Tinte-Tiefblau `#1F2A44`, Pergament `#FEFCF7`, Anthrazit `#2D2D2D`, Kupfer-Ocker `#C97B3F`, Salbei `#8FA98A`, Quellwasser `#6FA3B5`, Holzsand `#D9C7A8` | Fraunces (Display) + Inter (Body) | Live | [Desktop](variants/screenshots/01-desktop.png) · [Mobile](variants/screenshots/01-mobile.png) |
+| **02** | `variant/02-cinematic-hero-overlay` | Wie V01 — **nur Hero anders**: Cinematic Full-Bleed. Foto füllt die ganze Hero-Sektion, Text liegt links auf einem Tinte-Tiefblau-Gradient der nach rechts transparent ausblendet. Text in Pergament (hell) statt Tinte. Resonanz-Animation wandert in die untere rechte Ecke. Layout-Bruch in den Salbei-Block fällt weg. Alle weiteren Sektionen identisch zu V01. | Wie V01, Gradient: Tinte-Tiefblau `#1F2A44` mit 86 % Opacity links, fade auf 0 % nach rechts | Wie V01 | Live | [Desktop](variants/screenshots/02-desktop.png) · [Mobile](variants/screenshots/02-mobile.png) |
 
 ---
 
