@@ -1,115 +1,90 @@
 ---
-import ResonanceAnimation from './ResonanceAnimation.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
-<section class="relative w-full">
-  <div class="container-wide pt-10 md:pt-16 lg:pt-20">
+<!-- V06 Hero: Editorial Split — massive Typo links, ruhiges Bild rechts, viel Atem -->
+<section class="relative w-full bg-cream pt-12 md:pt-20 lg:pt-24 pb-20 md:pb-28 lg:pb-36 overflow-clip">
+  <div class="container-wide">
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-stretch">
+    <!-- Magazin-Header oben -->
+    <div class="flex items-baseline justify-between mb-14 md:mb-24 pb-5 border-b border-linen reveal">
+      <p class="font-sans uppercase text-eyebrow font-medium text-ink/70" style="letter-spacing: 0.22em;">
+        Sales-Page Nº 01
+      </p>
+      <p class="hidden md:block font-serif italic text-marine text-[1rem]">
+        Freiburg im Breisgau, 2026
+      </p>
+    </div>
 
-      <!-- LEFT — Text -->
-      <div class="flex flex-col justify-center order-2 lg:order-1 lg:pr-6 xl:pr-12 lg:py-6 xl:py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-14 lg:gap-y-0 items-start">
 
-        <!-- Small eyebrow line — quiet positioning marker -->
-        <div class="flex items-center gap-3 mb-7 md:mb-10">
-          <span class="block h-px w-8 bg-kupfer"></span>
-          <span class="eyebrow eyebrow-kupfer">Freiburg im Breisgau</span>
-        </div>
+      <!-- LEFT — Editorial Massive Typo (Editorial Split per Taste-Skill) -->
+      <div class="lg:col-span-7 xl:col-span-7">
 
-        <!-- Headline -->
-        <h1 class="font-serif text-hero text-tinte">
-          Mehr Raum für<br class="hidden sm:block" />
-          das <em class="italic font-medium" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">Wesentliche</em>.
+        <p class="section-marker mb-7 reveal">Ankunft</p>
+
+        <h1 class="font-serif text-hero text-ink reveal">
+          Mehr Raum<br />
+          für das <em class="italic" style="color: var(--color-terracotta);">Wesentliche.</em>
         </h1>
 
-        <!-- Sub-Headline -->
-        <p class="mt-7 md:mt-8 font-sans text-sub text-tinte font-medium max-w-xl">
+        <p class="mt-10 md:mt-12 font-serif italic text-sub text-ink/90 max-w-xl reveal">
           KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren.
         </p>
 
-        <!-- Sub-Sub-Claim -->
-        <p class="mt-3.5 font-sans text-[1.0625rem] text-anthrazit/75 max-w-xl leading-relaxed">
-          Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.
+        <p class="mt-5 font-sans text-[1.05rem] text-charcoal/75 max-w-md leading-[1.65] reveal">
+          Ich verstärke, was dich auszeichnet: DSGVO-konform und maßgeschneidert.
         </p>
 
-        <!-- CTAs -->
-        <div class="mt-9 md:mt-11 flex flex-col sm:flex-row gap-3.5 sm:items-center">
+        <div class="mt-12 flex flex-col sm:flex-row gap-3.5 sm:items-center reveal">
           <a href={`${base}#kontakt`} class="btn-primary">
             Audit anfragen
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 8 L13 8" />
-              <path d="M8.5 3.5 L13 8 L8.5 12.5" />
-            </svg>
+            <span class="btn-icon">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8 L13 8" />
+                <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+              </svg>
+            </span>
           </a>
           <a href={`${base}#angebote`} class="btn-secondary">
             Angebote ansehen
           </a>
         </div>
 
-        <!-- Trust hairline -->
-        <div class="mt-12 md:mt-14 flex flex-wrap gap-x-7 gap-y-2 items-center text-[0.84rem] font-sans text-anthrazit/60">
-          <span class="inline-flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-salbei"></span>
-            EU-gehostet
-          </span>
-          <span class="inline-flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-kupfer"></span>
-            TÜV-zertifiziert
-          </span>
-          <span class="inline-flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-quellwasser"></span>
-            EU AI Act-konform
-          </span>
+        <div class="mt-16 pt-5 border-t border-linen flex flex-wrap gap-x-7 gap-y-2 items-center font-serif italic text-[0.95rem] text-ink/65 reveal">
+          <span>EU-gehostet</span>
+          <span class="text-linen">·</span>
+          <span>TÜV-zertifiziert</span>
+          <span class="text-linen">·</span>
+          <span>EU-AI-Act-konform</span>
         </div>
       </div>
 
-      <!-- RIGHT — Photo + Resonance -->
-      <div class="order-1 lg:order-2 relative">
-        <div class="hero-photo-frame relative overflow-hidden rounded-[6px] bg-holzsand/30">
-          <img
-            src={`${base}images/hero-placeholder.png`}
-            alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
-            class="w-full h-full object-cover aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] xl:aspect-[5/6] block"
-            width="1200"
-            height="1500"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
+      <!-- RIGHT — Foto in editorial Treatment (kleiner, ruhiger, dünnem Rahmen) -->
+      <div class="lg:col-span-5 xl:col-span-5 lg:pt-8 reveal">
+        <div class="relative">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linen/40 rounded-[2px]" style="box-shadow: 0 32px 64px -36px oklch(0.27 0.04 248 / 0.22);">
+            <img
+              src={`${base}images/hero-placeholder.png`}
+              alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
+              class="absolute inset-0 w-full h-full object-cover"
+              width="1200"
+              height="1500"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </div>
 
-          <!-- Soft fade on left edge (toward text column) -->
-          <div
-            class="hidden lg:block absolute inset-y-0 left-0 w-[60px] pointer-events-none"
-            style="background: linear-gradient(to right, rgba(254,252,247,0.75), rgba(254,252,247,0));"
-            aria-hidden="true"
-          ></div>
-
-          <!-- Resonance animation overlaid on lower-right of photo -->
-          <ResonanceAnimation class="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8" size={280} />
+          <!-- Editorial Bildunterschrift mit Fig.-Label -->
+          <div class="mt-5 flex items-baseline gap-3">
+            <span class="font-sans text-[0.7rem] uppercase tracking-[0.24em] text-ink/45">Fig. 01</span>
+            <span class="font-serif italic text-[0.95rem] text-ink/65">
+              Mein Arbeitsplatz, Freiburg.
+            </span>
+          </div>
         </div>
-
-        <!-- Photo caption micro-line -->
-        <p class="mt-4 font-sans text-[0.82rem] text-anthrazit/55 italic max-w-[28ch]">
-          Mein Arbeitsplatz, Freiburg im Breisgau.
-        </p>
       </div>
-
     </div>
   </div>
-
-  <!-- Layout-Bruch: ensure photo overlaps next section
-       (handled via z-index + negative margin on the parent in index) -->
 </section>
-
-<style>
-  /* Layout-Bruch: Foto ragt in den Salbei-Block — Desktop only */
-  @media (min-width: 1024px) {
-    .hero-photo-frame {
-      margin-bottom: -54px;
-      position: relative;
-      z-index: 10;
-      box-shadow: 0 10px 32px -16px rgba(31, 42, 68, 0.18);
-    }
-  }
-</style>

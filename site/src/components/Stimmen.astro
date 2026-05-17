@@ -1,47 +1,50 @@
 ---
-// Sektion 7.7 — Stimmen aus der Praxis
-// Platzhalter-Karten — werden später ersetzt.
 const stimmen = [
   {
-    quote: 'Was vorher zwei Abende pro Woche fraß, läuft jetzt im Hintergrund. Und das Beste: meine Klienten merken keinen Unterschied — außer, dass ich präsenter bin.',
-    name: 'Platzhalter — Pilotkundin',
-    role: 'Mental-Coach, München (Beispiel-Stimme)',
+    quote: 'Was vorher zwei Abende pro Woche fraß, läuft jetzt im Hintergrund. Und das Beste: meine Klienten merken keinen Unterschied, außer, dass ich präsenter bin.',
+    name: 'Pilotkundin (Platzhalter)',
+    role: 'Mental-Coach, München',
   },
   {
     quote: 'Ich war skeptisch, ob ein KI-Setup wirklich „nach mir" klingen kann. Tut es. Das war der Punkt, an dem aus Werkzeug Verstärker wurde.',
-    name: 'Platzhalter — Pilotkunde',
-    role: 'Trainer für Führungskräfte, Wien (Beispiel-Stimme)',
+    name: 'Pilotkunde (Platzhalter)',
+    role: 'Trainer für Führungskräfte, Wien',
   },
   {
-    quote: 'Der Audit allein war den Preis schon wert. Drei konkrete Schritte, mit denen ich sofort weiterkam — kein Tech-Sprech, einfach klare Empfehlungen.',
-    name: 'Platzhalter — Pilotkundin',
-    role: 'Mentorin, Hamburg (Beispiel-Stimme)',
+    quote: 'Der Audit allein war den Preis schon wert. Drei konkrete Schritte, mit denen ich sofort weiterkam: kein Tech-Sprech, einfach klare Empfehlungen.',
+    name: 'Pilotkundin (Platzhalter)',
+    role: 'Mentorin, Hamburg',
   },
 ];
 ---
 
-<section class="section bg-pergament">
+<section class="section bg-cream">
   <div class="container-wide">
 
-    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+    <div class="text-center max-w-2xl mx-auto mb-20 md:mb-24 reveal">
+      <p class="section-marker mb-5">Stimmen</p>
       <p class="eyebrow eyebrow-kupfer mb-5">Stimmen aus der Praxis</p>
-      <h2 class="font-serif text-section text-tinte">
-        Was Kunden über die Arbeit sagen.
+      <h2 class="font-serif text-section text-ink">
+        Was Kunden<br />
+        <em class="italic" style="color: var(--color-terracotta);">über die Arbeit sagen.</em>
       </h2>
-      <p class="mt-4 font-sans text-[0.92rem] text-anthrazit/55 italic">
-        Pilotkunden-Zitate folgen. Die hier gezeigten Karten sind klar als Platzhalter gekennzeichnet.
+      <p class="mt-4 font-serif italic text-[0.98rem] text-ink/55">
+        Pilotkunden-Zitate folgen. Die gezeigten Karten sind Platzhalter.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-7 max-w-6xl mx-auto">
+    <div class="reveal-stagger grid grid-cols-1 md:grid-cols-3 gap-x-10 lg:gap-x-14 gap-y-14 max-w-6xl mx-auto">
       {stimmen.map((s) => (
-        <figure class="card p-7 md:p-8 flex flex-col h-full">
-          <blockquote class="pull-quote font-serif italic text-[1.1rem] md:text-[1.125rem] flex-grow">
-            <span class="text-kupfer/80 mr-0.5" aria-hidden="true">„</span>{s.quote}<span class="text-kupfer/80 ml-0.5" aria-hidden="true">"</span>
+        <figure>
+          <span class="font-serif italic block text-[5.5rem] leading-[0.6] text-terracotta/65 mb-3" aria-hidden="true">
+            "
+          </span>
+          <blockquote class="pull-quote text-[1.15rem] md:text-[1.2rem] mb-7 leading-[1.45]">
+            {s.quote}
           </blockquote>
-          <figcaption class="mt-7 pt-5 border-t border-holzsand/50">
-            <p class="font-sans text-[0.98rem] text-tinte font-medium">{s.name}</p>
-            <p class="font-sans text-[0.86rem] text-anthrazit/60 mt-0.5">{s.role}</p>
+          <figcaption class="pt-5 border-t border-linen">
+            <p class="font-sans text-[0.98rem] text-ink font-medium">{s.name}</p>
+            <p class="font-serif italic text-[0.94rem] text-ink/55 mt-0.5">{s.role}</p>
           </figcaption>
         </figure>
       ))}

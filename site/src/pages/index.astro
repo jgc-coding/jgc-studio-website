@@ -4,11 +4,9 @@ import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
 import KiIstWerkzeug from '../components/KiIstWerkzeug.astro';
 import VorherNachher from '../components/VorherNachher.astro';
-import BogenTrenner from '../components/BogenTrenner.astro';
 import DreiAngebote from '../components/DreiAngebote.astro';
 import WerMitDirArbeitet from '../components/WerMitDirArbeitet.astro';
 import Stimmen from '../components/Stimmen.astro';
-import HintergrundResonanz from '../components/HintergrundResonanz.astro';
 import FuerWenFuerWenNicht from '../components/FuerWenFuerWenNicht.astro';
 import Grundwerte from '../components/Grundwerte.astro';
 import Faq from '../components/Faq.astro';
@@ -20,47 +18,48 @@ import Footer from '../components/Footer.astro';
   <Nav />
 
   <main id="main">
-
-    <!-- 2. Hero -->
     <Hero />
-
-    <!-- 3. KI ist ein Werkzeug — receives hero photo overlap on lg+ -->
     <KiIstWerkzeug />
-
-    <!-- 4. Vorher-Nachher -->
     <VorherNachher />
-
-    <!-- Bogen-Trenner #1 -->
-    <BogenTrenner />
-
-    <!-- 5. Drei Angebote -->
     <DreiAngebote />
-
-    <!-- 6. Wer mit dir arbeitet -->
     <WerMitDirArbeitet />
-
-    <!-- 7. Stimmen -->
     <Stimmen />
-
-    <!-- Bogen-Trenner #2 -->
-    <BogenTrenner />
-
-    <!-- 8. Für wen / für wen nicht — with background resonance presence -->
-    <div class="relative overflow-clip">
-      <HintergrundResonanz side="left" vertical="top" />
-      <FuerWenFuerWenNicht />
-    </div>
-
-    <!-- 9. Grundwerte -->
+    <FuerWenFuerWenNicht />
     <Grundwerte />
-
-    <!-- 10. FAQ -->
     <Faq />
-
-    <!-- 11. Final-CTA -->
     <FinalCta />
   </main>
 
-  <!-- 12. Footer -->
   <Footer />
 </BaseLayout>
+
+<!-- Phase 2 Animationen: Reveals via IntersectionObserver.
+     Default-CSS = visible. Wir markieren nur Below-the-fold-Items als pending
+     → CSS versteckt sie → Observer revealt sie wieder.
+     SSR, no-JS und tall-viewport Screenshots zeigen damit immer Inhalt. -->
+<script>
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduce) {
+    document.documentElement.setAttribute('data-anim-ready', '');
+    const targets = document.querySelectorAll('.reveal, .reveal-stagger');
+    // Below-the-fold (mit 15% Puffer) markieren, alles oberhalb bleibt sofort sichtbar
+    const foldLine = window.innerHeight * 0.85;
+    targets.forEach((t) => {
+      const rect = t.getBoundingClientRect();
+      if (rect.top > foldLine) t.setAttribute('data-pending', '');
+    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.removeAttribute('data-pending');
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    );
+    targets.forEach((t) => observer.observe(t));
+  }
+</script>

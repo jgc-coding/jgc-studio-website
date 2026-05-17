@@ -1,251 +1,317 @@
-/* Google Fonts via @fontsource — self-hosted, no external fetch */
-@import '@fontsource-variable/fraunces/index.css';
-@import '@fontsource-variable/fraunces/wght-italic.css';
-@import '@fontsource-variable/inter/index.css';
+/* ===========================================================================
+   V06 - Editorial Luxury (Polished) - applies Taste + Emil + Impeccable
+   Schriften self-hosted via @fontsource, kein CDN.
+   =========================================================================== */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/geist/index.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- Design Tokens (mirror Tailwind theme for SVG / custom CSS) ---------- */
+/* ---- Design-Tokens (OKLCH, mirror Tailwind) ---- */
 :root {
-  --color-tinte: #1F2A44;
-  --color-pergament: #FEFCF7;
-  --color-anthrazit: #2D2D2D;
-  --color-kupfer: #C97B3F;
-  --color-salbei: #8FA98A;
-  --color-quellwasser: #6FA3B5;
-  --color-holzsand: #D9C7A8;
+  --color-ink:        oklch(0.27 0.04 248);
+  --color-cream:      oklch(0.97 0.018 78);
+  --color-charcoal:   oklch(0.32 0.012 60);
+  --color-terracotta: oklch(0.62 0.135 52);
+  --color-sage:       oklch(0.72 0.04 145);
+  --color-marine:     oklch(0.62 0.07 220);
+  --color-linen:      oklch(0.87 0.02 78);
 
-  /* Salbei block backgrounds at the prescribed opacities */
-  --bg-salbei-soft: rgba(143, 169, 138, 0.16);
-  --bg-salbei-medium: rgba(143, 169, 138, 0.20);
-  --bg-salbei-final: rgba(143, 169, 138, 0.22);
-  --bg-holzsand-soft: rgba(217, 199, 168, 0.20);
+  /* Alias-Variablen für bestehende Komponenten-Referenzen */
+  --color-tinte: var(--color-ink);
+  --color-pergament: var(--color-cream);
+  --color-anthrazit: var(--color-charcoal);
+  --color-kupfer: var(--color-terracotta);
+  --color-salbei: var(--color-sage);
+  --color-quellwasser: var(--color-marine);
+  --color-holzsand: var(--color-linen);
 
-  /* Type ramps */
-  --leading-body: 1.65;
+  /* Sage-Block-Hintergründe als direkte OKLCH-Werte */
+  --bg-salbei-soft:   oklch(0.94 0.025 130);
+  --bg-salbei-medium: oklch(0.92 0.030 130);
+  --bg-salbei-final:  oklch(0.90 0.035 130);
+  --bg-holzsand-soft: oklch(0.94 0.022 78);
+
+  /* Custom easings (Emil Kowalski) */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-inout-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --leading-body: 1.55;
 }
 
-/* ---------- Base ---------- */
+/* ---- Base ---- */
 html {
-  background-color: var(--color-pergament);
-  color: var(--color-anthrazit);
-  font-family: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
   font-size: 17px;
   line-height: var(--leading-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss01' 1;
 }
-
 @media (min-width: 1024px) {
   html { font-size: 18px; }
 }
 
 body {
-  background-color: var(--color-pergament);
+  background-color: var(--color-cream);
   min-height: 100vh;
   overflow-x: clip;
+  /* Subtile Film-Grain-Anmutung über Pseudo-Element (Taste-Skill Editorial Luxury) */
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
-/* Headlines */
 h1, h2, h3 {
-  font-family: 'Fraunces Variable', Fraunces, ui-serif, Georgia, serif;
-  color: var(--color-tinte);
-  font-weight: 500;
-  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  font-family: 'Instrument Serif', Cormorant Garamond, ui-serif, Georgia, serif;
+  color: var(--color-ink);
+  font-weight: 400;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'dlig' 1;
 }
 
-/* Selection */
 ::selection {
-  background-color: rgba(201, 123, 63, 0.22);
-  color: var(--color-tinte);
+  background-color: oklch(0.62 0.135 52 / 0.20);
+  color: var(--color-ink);
 }
 
-/* Focus ring */
 :focus-visible {
-  outline: 2px solid var(--color-kupfer);
+  outline: 2px solid var(--color-terracotta);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
-/* Smooth scroll for anchor nav */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
 }
 
-/* ---------- Reusable component classes ---------- */
+body, p, li, span {
+  text-wrap: pretty;
+}
+
+/* ===== Reusable Komponentenklassen ===== */
 @layer components {
 
-  /* Eyebrow label */
   .eyebrow {
     @apply font-sans uppercase text-eyebrow font-medium;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
   }
-  .eyebrow-kupfer { color: var(--color-kupfer); }
-  .eyebrow-tinte { color: var(--color-tinte); }
+  .eyebrow-kupfer { color: var(--color-terracotta); }
+  .eyebrow-tinte  { color: var(--color-ink); opacity: 0.65; }
 
-  /* Buttons */
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 font-sans font-medium;
-    padding: 0.875rem 1.625rem;
-    background-color: var(--color-kupfer);
-    color: var(--color-pergament);
-    border-radius: 5px;
-    font-size: 0.98rem;
-    letter-spacing: 0.005em;
-    transition: background-color 200ms ease, transform 300ms ease;
-    will-change: background-color;
+  /* Editorial Section Marker (italic) */
+  .section-marker {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--color-marine);
+    font-size: 1.05rem;
+    font-weight: 400;
   }
-  .btn-primary:hover { background-color: #B96D34; }
-  .btn-primary:active { transform: translateY(1px); }
+
+  /* ---- Buttons mit Emil-Kowalski-Polish ---- */
+  .btn-primary {
+    @apply inline-flex items-center font-sans font-medium;
+    padding: 0.85rem 0.85rem 0.85rem 1.4rem;
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 999px;
+    font-size: 0.92rem;
+    letter-spacing: 0.005em;
+    gap: 0.85rem;
+    transition: background-color 240ms var(--ease-out-strong),
+                border-color 240ms var(--ease-out-strong),
+                transform 160ms var(--ease-out-strong);
+  }
+  .btn-primary .btn-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 999px;
+    background-color: oklch(0.97 0.018 78 / 0.16);
+    transition: background-color 240ms var(--ease-out-strong),
+                transform 240ms var(--ease-out-strong);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-terracotta);
+    border-color: var(--color-terracotta);
+  }
+  .btn-primary:hover .btn-icon {
+    background-color: oklch(0.97 0.018 78 / 0.22);
+    transform: translateX(2px) translateY(-1px);
+  }
+  .btn-primary:active { transform: scale(0.97); }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 font-sans font-medium;
-    padding: 0.8125rem 1.5625rem;
-    background-color: var(--color-pergament);
-    color: var(--color-tinte);
-    border: 1.5px solid var(--color-tinte);
-    border-radius: 5px;
-    font-size: 0.98rem;
-    transition: background-color 220ms ease;
+    @apply inline-flex items-center justify-center font-sans font-medium;
+    padding: 0.85rem 1.5rem;
+    background-color: transparent;
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 999px;
+    font-size: 0.92rem;
+    transition: background-color 240ms var(--ease-out-strong),
+                color 240ms var(--ease-out-strong),
+                transform 160ms var(--ease-out-strong);
   }
-  .btn-secondary:hover { background-color: rgba(111, 163, 181, 0.15); }
+  .btn-secondary:hover {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+  }
+  .btn-secondary:active { transform: scale(0.97); }
 
   .btn-tertiary {
     @apply inline-flex items-center gap-1.5 font-sans font-medium;
-    color: var(--color-tinte);
-    border-bottom: 1.5px solid var(--color-kupfer);
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-terracotta);
     padding-bottom: 2px;
-    transition: color 200ms ease;
+    transition: color 200ms var(--ease-out-strong),
+                border-bottom-color 200ms var(--ease-out-strong);
   }
-  .btn-tertiary:hover { color: var(--color-kupfer); }
+  .btn-tertiary:hover {
+    color: var(--color-terracotta);
+    border-bottom-color: var(--color-ink);
+  }
 
-  /* Section wrapper */
+  /* ---- Section + Container ---- */
   .section {
     @apply relative w-full;
-    padding-top: clamp(4rem, 6vw, 6rem);
-    padding-bottom: clamp(4rem, 6vw, 6rem);
+    padding-top: clamp(6rem, 10vw, 10rem);
+    padding-bottom: clamp(6rem, 10vw, 10rem);
   }
-  .section-tight { padding-top: clamp(3.5rem, 5vw, 5rem); padding-bottom: clamp(3.5rem, 5vw, 5rem); }
-  .container-wide { @apply mx-auto px-6 sm:px-10; max-width: 80rem; }
-  .container-narrow { @apply mx-auto px-6 sm:px-10; max-width: 45rem; }
-  .container-prose { @apply mx-auto px-6 sm:px-10; max-width: 56rem; }
+  .section-tight { padding-top: clamp(4.5rem, 7vw, 7rem); padding-bottom: clamp(4.5rem, 7vw, 7rem); }
+  .container-wide   { @apply mx-auto px-6 sm:px-10; max-width: 86rem; }
+  .container-narrow { @apply mx-auto px-6 sm:px-10; max-width: 42rem; }
+  .container-prose  { @apply mx-auto px-6 sm:px-10; max-width: 60rem; }
 
-  /* Card */
+  /* ---- Editorial Card (double-bezel inspired but quieter) ---- */
   .card {
-    background-color: var(--color-pergament);
-    border: 1px solid var(--color-holzsand);
-    border-radius: 6px;
-    transition: transform 350ms cubic-bezier(0.32, 0.72, 0, 1),
-                box-shadow 350ms cubic-bezier(0.32, 0.72, 0, 1);
+    background-color: var(--color-cream);
+    border: 1px solid var(--color-linen);
+    border-radius: 4px;
+    transition: border-color 360ms var(--ease-out-strong),
+                box-shadow 360ms var(--ease-out-strong),
+                transform 360ms var(--ease-out-strong);
   }
   .card:hover {
-    box-shadow: 0 4px 16px 0 rgba(31, 42, 68, 0.07);
+    border-color: var(--color-ink);
+    box-shadow: 0 24px 48px -28px oklch(0.27 0.04 248 / 0.20);
   }
 
-  /* Quote with copper rule */
   .pull-quote {
-    @apply font-serif italic;
-    color: var(--color-tinte);
-    padding-left: 1.25rem;
-    border-left: 3px solid var(--color-kupfer);
-    line-height: 1.5;
-  }
-
-  /* Trennlinie — Kupfer mit Lücke */
-  .rule-kupfer {
-    display: block;
-    height: 1.5px;
-    background: linear-gradient(
-      to right,
-      var(--color-kupfer) 0,
-      var(--color-kupfer) calc(50% - 4px),
-      transparent calc(50% - 4px),
-      transparent calc(50% + 4px),
-      var(--color-kupfer) calc(50% + 4px),
-      var(--color-kupfer) 100%
-    );
-    width: 80px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--color-ink);
+    line-height: 1.4;
+    font-weight: 400;
   }
 }
 
-/* ---------- Resonance animation ---------- */
-.resonance-svg .wave {
-  transform-origin: center;
-  transform-box: fill-box;
-  animation: resonance-pulse 7s linear infinite;
-  opacity: 0;
-}
-.resonance-svg .wave-1 { animation-delay: 0s; }
-.resonance-svg .wave-2 { animation-delay: 2.4s; }
-.resonance-svg .wave-3 { animation-delay: 4.8s; }
-
-@keyframes resonance-pulse {
-  0%   { transform: scale(0.35); opacity: 0; }
-  12%  { opacity: 0.45; }
-  100% { transform: scale(1.45); opacity: 0; }
+/* ===== Numerale (große italic Display-Zahlen) ===== */
+.numeral {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-terracotta);
+  line-height: 0.85;
+  letter-spacing: -0.045em;
 }
 
-/* Säulen-Symbole: reveal on scroll-in */
-.pillar-symbol {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 700ms cubic-bezier(0.32, 0.72, 0, 1),
-              transform 700ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-.pillars-revealed .pillar-symbol { opacity: 1; transform: translateY(0); }
-.pillars-revealed .pillar-symbol-1 { transition-delay: 0ms; }
-.pillars-revealed .pillar-symbol-2 { transition-delay: 280ms; }
-.pillars-revealed .pillar-symbol-3 { transition-delay: 560ms; }
-
-/* FAQ accordion */
+/* ===== FAQ Accordion ===== */
 details.faq-item {
-  border-bottom: 1px solid var(--color-holzsand);
+  border-bottom: 1px solid var(--color-linen);
 }
 details.faq-item summary {
   cursor: pointer;
   list-style: none;
-  padding: 1.25rem 0;
+  padding: 1.75rem 0;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
-  font-weight: 500;
-  color: var(--color-tinte);
-  transition: color 180ms ease;
+  gap: 1.25rem;
+  color: var(--color-ink);
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  transition: color 200ms var(--ease-out-strong);
 }
 details.faq-item summary::-webkit-details-marker { display: none; }
-details.faq-item summary:hover { color: var(--color-kupfer); }
+details.faq-item summary:hover { color: var(--color-terracotta); }
 details.faq-item summary .chev {
   flex: 0 0 auto;
-  transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
-  color: var(--color-kupfer);
+  width: 20px; height: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--color-marine);
+  transition: transform 300ms var(--ease-out-strong);
 }
-details.faq-item[open] summary .chev { transform: rotate(180deg); }
+details.faq-item[open] summary .chev { transform: rotate(45deg); }
 details.faq-item .faq-body {
-  padding: 0 0 1.5rem 0;
-  color: var(--color-anthrazit);
+  padding: 0 0 1.75rem 0;
+  color: var(--color-charcoal);
   line-height: 1.7;
-  max-width: 50rem;
+  max-width: 56rem;
+  font-size: 1.02rem;
 }
 
-/* Nav backdrop */
+/* ===== Nav (Fluid Island per Taste) ===== */
 .site-nav {
-  background-color: rgba(254, 252, 247, 0.88);
-  -webkit-backdrop-filter: saturate(160%) blur(10px);
-  backdrop-filter: saturate(160%) blur(10px);
+  background-color: oklch(0.97 0.018 78 / 0.86);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  backdrop-filter: saturate(160%) blur(12px);
   border-bottom: 1px solid transparent;
-  transition: border-color 280ms ease, background-color 280ms ease;
+  transition: border-color 280ms var(--ease-out-strong),
+              background-color 280ms var(--ease-out-strong);
 }
 .site-nav.scrolled {
-  border-bottom-color: rgba(217, 199, 168, 0.6);
-  background-color: rgba(254, 252, 247, 0.95);
+  border-bottom-color: var(--color-linen);
+  background-color: oklch(0.97 0.018 78 / 0.94);
 }
 
-/* Reduced motion */
+/* ===== Scroll-Reveal Animationen (Emil + Taste) =====
+   Default: visible (graceful für SSR, no-JS, Screenshots).
+   Nur Below-the-fold-Elemente bekommen via JS data-pending → werden versteckt → Observer revealt sie. */
+.reveal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 720ms var(--ease-out-strong),
+              transform 720ms var(--ease-out-strong);
+}
+html[data-anim-ready] .reveal[data-pending] {
+  opacity: 0;
+  transform: translateY(20px) scale(0.985);
+}
+
+.reveal-stagger > * {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 600ms var(--ease-out-strong),
+              transform 600ms var(--ease-out-strong);
+}
+html[data-anim-ready] .reveal-stagger[data-pending] > * {
+  opacity: 0;
+  transform: translateY(16px) scale(0.985);
+}
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay:   0ms; }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay:  60ms; }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 120ms; }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 180ms; }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 240ms; }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 300ms; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -253,11 +319,11 @@ details.faq-item .faq-body {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .resonance-svg .wave {
-    opacity: 0.25;
-    transform: scale(0.9);
-  }
-  .resonance-svg .wave-2 { transform: scale(1.1); opacity: 0.18; }
-  .resonance-svg .wave-3 { transform: scale(1.3); opacity: 0.10; }
-  .pillar-symbol { opacity: 1; transform: none; }
+  .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
+  body::before { opacity: 0; }
+}
+
+@media (hover: none) {
+  .btn-primary:hover { background-color: var(--color-ink); border-color: var(--color-ink); }
+  .btn-primary:hover .btn-icon { background-color: oklch(0.97 0.018 78 / 0.16); transform: none; }
 }

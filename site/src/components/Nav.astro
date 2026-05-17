@@ -12,38 +12,32 @@ const ctaHref = `${base}#kontakt`;
 <header class="site-nav fixed inset-x-0 top-0 z-40">
   <div class="container-wide flex items-center justify-between h-[68px] md:h-[76px]">
 
-    <!-- Sigel + Wortmarke -->
-    <a href={homeHref} class="flex items-center gap-3 group" aria-label="JGC Studio – zurück zum Anfang">
-      <img
-        src={`${base}images/logo-sigel.png`}
-        alt=""
-        width="36"
-        height="46"
-        class="h-9 w-auto md:h-10 transition-transform duration-500 ease-quiet group-hover:rotate-[4deg]"
-        loading="eager"
-        decoding="async"
-      />
-      <span class="font-serif text-tinte text-[1.35rem] md:text-[1.45rem] font-medium tracking-tight leading-none">
+    <a href={homeHref} class="flex items-baseline gap-2.5 group" aria-label="JGC Studio – zurück zum Anfang">
+      <span class="font-serif text-ink text-[1.55rem] md:text-[1.7rem] font-normal tracking-tight leading-none">
         JGC Studio
+      </span>
+      <span class="hidden sm:inline font-serif italic text-marine text-[0.82rem] tracking-tight leading-none">
+        Freiburg
       </span>
     </a>
 
-    <!-- Desktop Nav -->
     <nav class="hidden lg:flex items-center gap-9" aria-label="Hauptnavigation">
       {links.map((l) => (
-        <a
-          href={l.href}
-          class="font-sans text-[0.95rem] text-tinte/85 hover:text-kupfer transition-colors duration-200 relative"
-        >
+        <a href={l.href} class="font-sans text-[0.92rem] text-ink/80 hover:text-terracotta transition-colors duration-240 ease-out-strong">
           {l.label}
         </a>
       ))}
-      <a href={ctaHref} class="btn-primary text-[0.95rem] !py-2.5 !px-5">
+      <a href={ctaHref} class="btn-primary !text-[0.88rem]">
         Audit anfragen
+        <span class="btn-icon">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 L13 8" />
+            <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+          </svg>
+        </span>
       </a>
     </nav>
 
-    <!-- Mobile toggle -->
     <button
       id="mobile-menu-btn"
       class="lg:hidden inline-flex flex-col items-end justify-center w-10 h-10 gap-[5px] -mr-1"
@@ -51,39 +45,35 @@ const ctaHref = `${base}#kontakt`;
       aria-expanded="false"
       aria-controls="mobile-menu"
     >
-      <span class="block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-right"></span>
-      <span class="block h-[1.5px] w-4 bg-tinte transition-all duration-300 origin-right"></span>
-      <span class="block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-right"></span>
+      <span class="block h-[1.5px] w-6 bg-ink"></span>
+      <span class="block h-[1.5px] w-4 bg-ink"></span>
+      <span class="block h-[1.5px] w-6 bg-ink"></span>
     </button>
   </div>
 
-  <!-- Mobile menu -->
-  <div
-    id="mobile-menu"
-    class="lg:hidden hidden border-t border-holzsand/40 bg-pergament/98 backdrop-blur-md"
-  >
+  <div id="mobile-menu" class="lg:hidden hidden border-t border-linen bg-cream/98 backdrop-blur-md">
     <nav class="container-wide py-6 flex flex-col gap-1" aria-label="Mobilnavigation">
       {links.map((l) => (
-        <a
-          href={l.href}
-          class="font-sans text-tinte text-[1.05rem] py-3 border-b border-holzsand/30 last:border-b-0"
-          data-mobile-link
-        >
+        <a href={l.href} class="font-sans text-ink text-[1.05rem] py-3 border-b border-linen/60 last:border-b-0" data-mobile-link>
           {l.label}
         </a>
       ))}
-      <a href={ctaHref} class="btn-primary mt-4 w-full" data-mobile-link>
+      <a href={ctaHref} class="btn-primary mt-4 w-full justify-center" data-mobile-link>
         Audit anfragen
+        <span class="btn-icon">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 L13 8" />
+            <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+          </svg>
+        </span>
       </a>
     </nav>
   </div>
 </header>
 
-<!-- Spacer for fixed header -->
 <div class="h-[68px] md:h-[76px]" aria-hidden="true" id="top"></div>
 
 <script>
-  // Sticky nav border on scroll
   const nav = document.querySelector('.site-nav');
   if (nav) {
     const onScroll = () => {
@@ -93,21 +83,14 @@ const ctaHref = `${base}#kontakt`;
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
-
-  // Mobile menu toggle
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
   if (btn && menu) {
-    const close = () => {
-      menu.classList.add('hidden');
-      btn.setAttribute('aria-expanded', 'false');
-    };
+    const close = () => { menu.classList.add('hidden'); btn.setAttribute('aria-expanded', 'false'); };
     btn.addEventListener('click', () => {
       const open = menu.classList.toggle('hidden');
       btn.setAttribute('aria-expanded', open ? 'false' : 'true');
     });
-    menu.querySelectorAll('[data-mobile-link]').forEach((a) =>
-      a.addEventListener('click', close)
-    );
+    menu.querySelectorAll('[data-mobile-link]').forEach((a) => a.addEventListener('click', close));
   }
 </script>
