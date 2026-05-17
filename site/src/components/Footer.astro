@@ -1,0 +1,93 @@
+---
+const links = [
+  { label: 'Angebote', href: '/#angebote' },
+  { label: 'Grundwerte', href: '/#grundwerte' },
+  { label: 'Wer mit dir arbeitet', href: '/#wer' },
+  { label: 'Audit anfragen', href: '/#kontakt' },
+];
+---
+
+<footer class="bg-tinte text-pergament">
+  <div class="container-wide py-16 md:py-20">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-3 mb-5">
+          <img
+            src="/images/logo-sigel.png"
+            alt=""
+            width="36"
+            height="46"
+            class="h-10 w-auto invert-0 brightness-100"
+            style="filter: brightness(1.05);"
+          />
+          <span class="font-serif text-[1.4rem] font-medium tracking-tight">
+            JGC Studio
+          </span>
+        </div>
+        <p class="font-sans text-pergament/75 text-[0.95rem] leading-relaxed max-w-xs">
+          KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise, DSGVO-konform.
+        </p>
+        <p class="font-sans text-pergament/55 text-[0.875rem] mt-4">
+          Freiburg im Breisgau · DACH-Raum
+        </p>
+      </div>
+
+      <!-- Nav -->
+      <div>
+        <h3 class="font-sans uppercase text-[0.72rem] tracking-[0.18em] text-pergament/55 mb-5">
+          Seite
+        </h3>
+        <ul class="space-y-3">
+          {links.map((l) => (
+            <li>
+              <a href={l.href} class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h3 class="font-sans uppercase text-[0.72rem] tracking-[0.18em] text-pergament/55 mb-5">
+          Rechtliches
+        </h3>
+        <ul class="space-y-3">
+          <li>
+            <a href="/impressum" class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">
+              Impressum
+            </a>
+          </li>
+          <li>
+            <a href="/datenschutz" class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">
+              Datenschutz
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com" rel="noopener noreferrer" target="_blank" class="font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200 inline-flex items-center gap-1.5">
+              LinkedIn
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9 L9 3" />
+                <path d="M4 3 L9 3 L9 8" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Hairline divider -->
+    <div class="mt-14 pt-6 border-t border-pergament/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <p class="font-sans text-[0.825rem] text-pergament/55">
+        © 2026 · JGC Studio · Freiburg im Breisgau · DSGVO-konform
+      </p>
+      <a href="/#grundwerte" class="font-sans text-[0.825rem] text-pergament/55 hover:text-kupfer transition-colors duration-200">
+        Haltung vor Technik →
+      </a>
+    </div>
+  </div>
+</footer>

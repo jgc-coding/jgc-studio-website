@@ -1,0 +1,110 @@
+---
+const links = [
+  { label: 'Angebote', href: '#angebote' },
+  { label: 'Grundwerte', href: '#grundwerte' },
+  { label: 'Wer mit dir arbeitet', href: '#wer' },
+];
+---
+
+<header class="site-nav fixed inset-x-0 top-0 z-40">
+  <div class="container-wide flex items-center justify-between h-[68px] md:h-[76px]">
+
+    <!-- Sigel + Wortmarke -->
+    <a href="#top" class="flex items-center gap-3 group" aria-label="JGC Studio – zurück zum Anfang">
+      <img
+        src="/images/logo-sigel.png"
+        alt=""
+        width="36"
+        height="46"
+        class="h-9 w-auto md:h-10 transition-transform duration-500 ease-quiet group-hover:rotate-[4deg]"
+        loading="eager"
+        decoding="async"
+      />
+      <span class="font-serif text-tinte text-[1.35rem] md:text-[1.45rem] font-medium tracking-tight leading-none">
+        JGC Studio
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-9" aria-label="Hauptnavigation">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="font-sans text-[0.95rem] text-tinte/85 hover:text-kupfer transition-colors duration-200 relative"
+        >
+          {l.label}
+        </a>
+      ))}
+      <a href="#kontakt" class="btn-primary text-[0.95rem] !py-2.5 !px-5">
+        Audit anfragen
+      </a>
+    </nav>
+
+    <!-- Mobile toggle -->
+    <button
+      id="mobile-menu-btn"
+      class="lg:hidden inline-flex flex-col items-end justify-center w-10 h-10 gap-[5px] -mr-1"
+      aria-label="Menü öffnen"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class="block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-right"></span>
+      <span class="block h-[1.5px] w-4 bg-tinte transition-all duration-300 origin-right"></span>
+      <span class="block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-right"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden hidden border-t border-holzsand/40 bg-pergament/98 backdrop-blur-md"
+  >
+    <nav class="container-wide py-6 flex flex-col gap-1" aria-label="Mobilnavigation">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="font-sans text-tinte text-[1.05rem] py-3 border-b border-holzsand/30 last:border-b-0"
+          data-mobile-link
+        >
+          {l.label}
+        </a>
+      ))}
+      <a href="#kontakt" class="btn-primary mt-4 w-full" data-mobile-link>
+        Audit anfragen
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Spacer for fixed header -->
+<div class="h-[68px] md:h-[76px]" aria-hidden="true" id="top"></div>
+
+<script>
+  // Sticky nav border on scroll
+  const nav = document.querySelector('.site-nav');
+  if (nav) {
+    const onScroll = () => {
+      if (window.scrollY > 8) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // Mobile menu toggle
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  if (btn && menu) {
+    const close = () => {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+    };
+    btn.addEventListener('click', () => {
+      const open = menu.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+    menu.querySelectorAll('[data-mobile-link]').forEach((a) =>
+      a.addEventListener('click', close)
+    );
+  }
+</script>

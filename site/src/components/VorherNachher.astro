@@ -1,0 +1,65 @@
+---
+// Sektion 7.4 — Deine Woche, zwei Versionen
+const heute = [
+  'Sitzungsnotizen liegen verstreut in Notion, auf Zetteln, in Voice-Memos.',
+  'Klienten-Follow-ups schiebst du auf den Abend, der nicht ruhig wird.',
+  'Der Newsletter wartet seit drei Wochen auf den Sonntag, der nicht kommt.',
+];
+const verstaerker = [
+  'Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.',
+  'Das Follow-up an deine Klientin geht heraus, in deiner Sprache.',
+  'Der nächste Newsletter liegt im Entwurf, aus echten Themen deiner Woche.',
+];
+---
+
+<section class="section bg-pergament">
+  <div class="container-wide">
+
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+      <p class="eyebrow eyebrow-kupfer mb-5">Deine Woche, zwei Versionen</p>
+      <h2 class="font-serif text-section text-tinte text-balance">
+        Was sich verändert, wenn KI deine Sprache spricht.
+      </h2>
+    </div>
+
+    <!-- Two columns -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-12 max-w-5xl mx-auto">
+
+      <!-- Heute -->
+      <div class="card p-7 md:p-10 lg:p-12 bg-pergament" style="border-color: var(--color-holzsand);">
+        <p class="font-serif italic text-[1.4rem] md:text-[1.55rem] text-tinte/85 mb-7 md:mb-9">
+          Heute
+        </p>
+        <ul class="space-y-5 md:space-y-6">
+          {heute.map((line) => (
+            <li class="flex gap-4 items-start font-sans text-[1.0625rem] text-anthrazit leading-[1.65]">
+              <span class="block mt-[0.55rem] flex-shrink-0 w-2 h-2 rounded-full bg-holzsand"></span>
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Verstärker -->
+      <div class="card p-7 md:p-10 lg:p-12" style="border-color: rgba(143,169,138,0.4); background: linear-gradient(180deg, var(--color-pergament) 0%, rgba(143,169,138,0.06) 100%);">
+        <p class="font-serif italic text-[1.4rem] md:text-[1.55rem] text-tinte mb-7 md:mb-9">
+          Mit deinem KI-Verstärker
+        </p>
+        <ul class="space-y-5 md:space-y-6">
+          {verstaerker.map((line) => (
+            <li class="flex gap-4 items-start font-sans text-[1.0625rem] text-anthrazit leading-[1.65]">
+              <span class="block mt-[0.55rem] flex-shrink-0 w-2 h-2 rounded-full bg-salbei"></span>
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Closing line -->
+    <p class="mt-12 md:mt-14 text-center font-sans text-[0.98rem] md:text-[1.0625rem] text-anthrazit/70 max-w-2xl mx-auto leading-relaxed">
+      Du bekommst keine Tool-Liste und keinen Online-Kurs. Du bekommst eine Begleitung, in der wir gemeinsam herausarbeiten, wo KI in deiner Arbeit Substanz hat — und sie genau dort einbauen.
+    </p>
+  </div>
+</section>

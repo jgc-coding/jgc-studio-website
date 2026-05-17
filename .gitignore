@@ -1,0 +1,23 @@
+# Astro build artifacts
+site/node_modules/
+site/dist/
+site/.astro/
+
+# Logs
+site/npm-debug.log*
+site/yarn-debug.log*
+site/yarn-error.log*
+site/pnpm-debug.log*
+
+# Environment
+site/.env
+site/.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

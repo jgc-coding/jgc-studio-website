@@ -1,0 +1,114 @@
+---
+import ResonanceAnimation from './ResonanceAnimation.astro';
+---
+
+<section class="relative w-full">
+  <div class="container-wide pt-10 md:pt-16 lg:pt-20">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-stretch">
+
+      <!-- LEFT — Text -->
+      <div class="flex flex-col justify-center order-2 lg:order-1 lg:pr-6 xl:pr-12 lg:py-6 xl:py-10">
+
+        <!-- Small eyebrow line — quiet positioning marker -->
+        <div class="flex items-center gap-3 mb-7 md:mb-10">
+          <span class="block h-px w-8 bg-kupfer"></span>
+          <span class="eyebrow eyebrow-kupfer">Freiburg im Breisgau</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-serif text-hero text-tinte">
+          Mehr Raum für<br class="hidden sm:block" />
+          das <em class="italic font-medium" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">Wesentliche</em>.
+        </h1>
+
+        <!-- Sub-Headline -->
+        <p class="mt-7 md:mt-8 font-sans text-sub text-tinte font-medium max-w-xl">
+          KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren.
+        </p>
+
+        <!-- Sub-Sub-Claim -->
+        <p class="mt-3.5 font-sans text-[1.0625rem] text-anthrazit/75 max-w-xl leading-relaxed">
+          Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-9 md:mt-11 flex flex-col sm:flex-row gap-3.5 sm:items-center">
+          <a href="#kontakt" class="btn-primary">
+            Audit anfragen
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 8 L13 8" />
+              <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+            </svg>
+          </a>
+          <a href="#angebote" class="btn-secondary">
+            Angebote ansehen
+          </a>
+        </div>
+
+        <!-- Trust hairline -->
+        <div class="mt-12 md:mt-14 flex flex-wrap gap-x-7 gap-y-2 items-center text-[0.84rem] font-sans text-anthrazit/60">
+          <span class="inline-flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-salbei"></span>
+            EU-gehostet
+          </span>
+          <span class="inline-flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-kupfer"></span>
+            TÜV-zertifiziert
+          </span>
+          <span class="inline-flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-quellwasser"></span>
+            EU AI Act-konform
+          </span>
+        </div>
+      </div>
+
+      <!-- RIGHT — Photo + Resonance -->
+      <div class="order-1 lg:order-2 relative">
+        <div class="hero-photo-frame relative overflow-hidden rounded-[6px] bg-holzsand/30">
+          <img
+            src="/images/hero-placeholder.png"
+            alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
+            class="w-full h-full object-cover aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] xl:aspect-[5/6] block"
+            width="1200"
+            height="1500"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+
+          <!-- Soft fade on left edge (toward text column) -->
+          <div
+            class="hidden lg:block absolute inset-y-0 left-0 w-[60px] pointer-events-none"
+            style="background: linear-gradient(to right, rgba(254,252,247,0.75), rgba(254,252,247,0));"
+            aria-hidden="true"
+          ></div>
+
+          <!-- Resonance animation overlaid on lower-right of photo -->
+          <ResonanceAnimation class="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8" size={280} />
+        </div>
+
+        <!-- Photo caption micro-line -->
+        <p class="mt-4 font-sans text-[0.82rem] text-anthrazit/55 italic max-w-[28ch]">
+          Mein Arbeitsplatz, Freiburg im Breisgau.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Layout-Bruch: ensure photo overlaps next section
+       (handled via z-index + negative margin on the parent in index) -->
+</section>
+
+<style>
+  /* Layout-Bruch: Foto ragt in den Salbei-Block — Desktop only */
+  @media (min-width: 1024px) {
+    .hero-photo-frame {
+      margin-bottom: -54px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 10px 32px -16px rgba(31, 42, 68, 0.18);
+    }
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import AngebotKarte from './AngebotKarte.astro';
+---
+
+<section id="angebote" class="section bg-pergament">
+  <div class="container-wide">
+
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+      <p class="eyebrow eyebrow-kupfer mb-5">Drei Wege ineinander</p>
+      <h2 class="font-serif text-section text-tinte text-balance">
+        Vom ersten Befund bis zum laufenden Verstärker.
+      </h2>
+      <p class="mt-5 font-sans text-[1.0625rem] text-anthrazit/70 leading-relaxed">
+        Du steigst dort ein, wo du gerade stehst. Jedes Angebot funktioniert für sich — und gemeinsam ergeben sie eine Linie.
+      </p>
+    </div>
+
+    <!-- 3 cards, middle card lifted on lg+ -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7 items-stretch max-w-6xl mx-auto md:[&>*:last-child]:md:col-span-2 lg:[&>*:last-child]:lg:col-span-1">
+
+      <AngebotKarte
+        eyebrow="Schritt 1 — Klarheit"
+        title="KI-Praxis-Check"
+        price="600 €"
+        duration="2 Stunden Gespräch + schriftlicher Report"
+        outcome="Du weißt konkret, wo KI in deiner Praxis Zeit zurückgibt, wo deine aktuellen Tools EU-AI-Act- und DSGVO-tauglich sind und wo nicht, und welche drei bis fünf Schritte den größten Hebel haben."
+        deliverables={[
+          'Befund-Gespräch von 90 Minuten',
+          'Schriftlicher Audit-Report (PDF, ca. 8 bis 12 Seiten)',
+          'Drei bis fünf priorisierte Quick Wins mit konkreten Tool- und Prozess-Empfehlungen',
+          'Bewertung deiner aktuellen Tool-Landschaft auf DSGVO und EU AI Act',
+        ]}
+        cta="Audit anfragen"
+      />
+
+      <div class="lg:-translate-y-5">
+        <AngebotKarte
+          eyebrow="Schritt 2 — Aufbau"
+          title="KI-Implementierung für deine Praxis"
+          price="6.500 €"
+          duration="6 bis 8 Wochen"
+          outcome="Du hast ein KI-System, das in deiner Sprache schreibt, deine Sitzungen nachbereitet und dein Klienten-Follow-up automatisch anstößt. Inklusive der Schulung, die deine EU-AI-Act-Pflicht erfüllt."
+          deliverables={[
+            'Voice-Profil aus deinen Texten, Podcasts und Sitzungs-Aufnahmen',
+            'Content-System für LinkedIn, Newsletter und Reels-Skripte',
+            'DSGVO-konforme Sitzungs-Transkription mit automatischer Zusammenfassung',
+            'Automatisches Klienten-Follow-up nach Sitzungen',
+            'Lead-Funnel mit personalisiertem Onboarding',
+            'Drei Schulungs-Sessions zur eigenständigen Bedienung',
+            'Integrierte EU-AI-Act-Schulung',
+          ]}
+          cta="Projekt anfragen"
+          highlighted
+        />
+      </div>
+
+      <AngebotKarte
+        eyebrow="Schritt 3 — Tiefe"
+        title="Methodik-Assistent und KI-Verstärker"
+        price="14.000 €"
+        duration="10 bis 12 Wochen"
+        outcome="Dein Buch, deine Methode, dein Programm sind in einem Assistenten verfügbar, der nach dir klingt — für deine Klienten, für deine Inhalte, für dein Team. Deine Wirkung wächst, ohne dass du dafür mehr Stunden gibst."
+        deliverables={[
+          'Methodik-Assistent auf Basis deiner Bücher, Modelle und Texte (technische Grundlage RAG)',
+          'Content-Stimme zur authentischen Reproduktion deiner Sprachfarbe (technische Grundlage ElevenLabs)',
+          'Webseiten-Embedding für Klienten-Interaktion',
+          'Integration in den Praxis-Workflow aus Schritt 2',
+          'Intensive Begleitung über drei Monate',
+          'Quartals-Review nach Abschluss',
+        ]}
+        cta="Projekt anfragen"
+      />
+    </div>
+  </div>
+</section>

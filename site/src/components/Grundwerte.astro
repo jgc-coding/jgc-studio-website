@@ -1,0 +1,36 @@
+---
+// Sektion 7.9 — Meine Grundwerte, wenn ich mit KI arbeite
+const links = [
+  'KI ersetzt keine echte Beziehung. Begegnung bleibt menschlich.',
+  'Klienten wissen, wo KI eingesetzt wird. Transparenz ist Standard.',
+  'Ich baue für dich, nicht für die Masse. Jedes Setup wird auf deine Methode und deinen Stil zugeschnitten.',
+];
+const rechts = [
+  'Sensible Daten werden geschützt. EU-Hosting, Auftragsverarbeitungsverträge, lokale Modelle bei Bedarf.',
+  'Du bleibst Entscheider. KI macht Vorschläge, du wählst aus. Nichts geht raus, ohne dass du es gesehen hast.',
+  'Deine Stimme und deine Methode bleiben erkennbar. KI verstärkt, sie ersetzt nicht.',
+];
+---
+
+<section id="grundwerte" class="relative w-full" style="background-color: var(--bg-salbei-medium);">
+  <div class="container-wide py-24 md:py-28 lg:py-32">
+
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18">
+      <p class="eyebrow eyebrow-tinte mb-5">Haltung vor Technik</p>
+      <h2 class="font-serif text-section text-tinte">
+        Meine Grundwerte, wenn ich mit KI arbeite.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-7 md:gap-y-9 max-w-4xl mx-auto">
+      {[...links, ...rechts].map((punkt) => (
+        <div class="flex gap-4 items-start">
+          <span class="block mt-[0.6rem] flex-shrink-0 w-3 h-px bg-kupfer"></span>
+          <p class="font-sans text-[1.025rem] text-anthrazit leading-[1.65]">
+            {punkt}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

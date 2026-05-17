@@ -1,0 +1,100 @@
+---
+// Sektion 7.6 — Wer mit dir arbeitet
+// Drei Säulen mit Liniensymbolen. Mittlere Säule 16-24px tiefer (lg+).
+// Säulen-Animation: vereinfachte Scroll-In Variante (Briefing 7.6.1).
+---
+
+<section id="wer" class="section bg-pergament">
+  <div class="container-wide">
+
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20">
+      <p class="eyebrow eyebrow-kupfer mb-5">Wer mit dir arbeitet</p>
+      <h2 class="font-serif text-section text-tinte">
+        Drei Welten, ein Blick.
+      </h2>
+      <p class="mt-5 font-sans text-[1.0625rem] text-anthrazit/70 leading-relaxed">
+        Ich verstehe die innere Welt deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides verbinden.
+      </p>
+    </div>
+
+    <div id="pillars" class="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-9 items-start max-w-5xl mx-auto">
+
+      <!-- Säule 1: Coach-Hintergrund — Welle -->
+      <div class="pillar-symbol pillar-symbol-1 text-center md:text-left">
+        <div class="inline-flex items-center justify-center w-14 h-14 mb-7">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#1F2A44" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="24" cy="24" r="5" />
+            <path d="M24 12 A12 12 0 0 1 36 24" opacity="0.7" />
+            <path d="M24 4 A20 20 0 0 1 44 24" opacity="0.4" />
+          </svg>
+        </div>
+        <h3 class="font-serif text-[1.35rem] md:text-[1.45rem] text-tinte font-medium mb-3">
+          Coach-Hintergrund
+        </h3>
+        <p class="font-sans text-[1rem] text-anthrazit leading-[1.65]">
+          Ausgebildeter Mentaltrainer und Meditationskursleiter, in Ausbildung als Fitnesstrainer. Ich kenne die innere Welt deiner Arbeit aus eigener Anschauung.
+        </p>
+      </div>
+
+      <!-- Säule 2: Wirtschaftsingenieur — verbundene Knoten (sits lower) -->
+      <div class="pillar-symbol pillar-symbol-2 text-center md:text-left lg:translate-y-6">
+        <div class="inline-flex items-center justify-center w-14 h-14 mb-7">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#1F2A44" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="24" r="3" fill="#1F2A44" />
+            <circle cx="24" cy="11" r="3" fill="#1F2A44" />
+            <circle cx="39" cy="24" r="3" fill="#1F2A44" />
+            <circle cx="24" cy="37" r="3" fill="#1F2A44" />
+            <path d="M9 24 L24 11 L39 24 L24 37 Z" opacity="0.55" fill="none" />
+            <path d="M9 24 L39 24" opacity="0.3" />
+          </svg>
+        </div>
+        <h3 class="font-serif text-[1.35rem] md:text-[1.45rem] text-tinte font-medium mb-3">
+          Wirtschaftsingenieur
+        </h3>
+        <p class="font-sans text-[1rem] text-anthrazit leading-[1.65]">
+          Master in Wirtschaftsingenieurwesen. Mein Beruf ist es, zwischen verschiedenen Welten zu übersetzen — Technik, Wirtschaft, Mensch. Ich denke in Abläufen und Prozessen, ohne den Menschen darin aus den Augen zu verlieren.
+        </p>
+      </div>
+
+      <!-- Säule 3: TÜV-zertifizierter KI-Experte — gerichteter Pfeil -->
+      <div class="pillar-symbol pillar-symbol-3 text-center md:text-left">
+        <div class="inline-flex items-center justify-center w-14 h-14 mb-7">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#1F2A44" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="36" r="2.5" fill="#1F2A44" />
+            <path d="M12 36 L36 12" />
+            <path d="M24 12 L36 12 L36 24" />
+          </svg>
+        </div>
+        <h3 class="font-serif text-[1.35rem] md:text-[1.45rem] text-tinte font-medium mb-3">
+          TÜV-zertifizierter KI-Experte
+        </h3>
+        <p class="font-sans text-[1rem] text-anthrazit leading-[1.65]">
+          TÜV-Zertifikat Angewandte KI-Transformation. Eigene KI-Anwendungen entwickelt und in Praxen anderer integriert. KI ist nicht mein Hobby, sondern meine tägliche Arbeit — mit der Begeisterung von jemandem, der weiß, was diese Werkzeuge können und wo ihre Grenzen liegen.
+        </p>
+      </div>
+    </div>
+
+    <p class="mt-16 md:mt-20 text-center font-sans text-[0.96rem] text-anthrazit/70 italic">
+      Standort Freiburg im Breisgau. Arbeite im DACH-Raum, persönlich und remote.
+    </p>
+  </div>
+</section>
+
+<script>
+  // Reveal pillars when scrolled into view (vereinfachte Variante per Briefing 7.6.1)
+  const pillars = document.getElementById('pillars');
+  if (pillars) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            pillars.classList.add('pillars-revealed');
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+    );
+    observer.observe(pillars);
+  }
+</script>

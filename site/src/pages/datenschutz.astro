@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Datenschutz — JGC Studio" description="Datenschutzerklärung von JGC Studio, KI-Beratung für Coaches und Trainer.">
+  <Nav />
+
+  <main id="main" class="section">
+    <div class="container-prose">
+      <p class="eyebrow eyebrow-kupfer mb-5">Rechtliches</p>
+      <h1 class="font-serif text-section text-tinte mb-8">Datenschutz</h1>
+
+      <div class="font-sans text-[1.0625rem] text-anthrazit leading-[1.7] space-y-6">
+        <p>
+          Diese Seite ist in Vorbereitung. Die vollständige Datenschutzerklärung nach DSGVO wird hier kurzfristig ergänzt.
+        </p>
+        <p>
+          Diese Website wird derzeit nur lokal getestet und sammelt keine personenbezogenen Daten. Es kommen weder Tracking, noch Analytics, noch Drittanbieter-Skripte zum Einsatz. Schriftarten werden lokal ausgeliefert.
+        </p>
+        <p>
+          Bei Fragen erreichst du mich unter
+          <a href="mailto:kontakt@jgc-handwerk.de" class="text-tinte font-medium border-b border-kupfer hover:text-kupfer transition-colors">
+            kontakt@jgc-handwerk.de
+          </a>.
+        </p>
+      </div>
+
+      <a href="/" class="btn-tertiary mt-12 inline-flex">
+        <span aria-hidden="true">←</span>
+        Zurück zur Startseite
+      </a>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

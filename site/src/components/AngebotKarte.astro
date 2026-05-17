@@ -1,0 +1,84 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  price: string;
+  duration: string;
+  outcome: string;
+  deliverables: string[];
+  cta: string;
+  highlighted?: boolean;
+}
+const {
+  eyebrow, title, price, duration, outcome, deliverables, cta,
+  highlighted = false,
+} = Astro.props;
+---
+
+<article
+  class:list={[
+    'relative h-full flex flex-col p-7 md:p-9 transition-all duration-500 ease-quiet bg-pergament',
+    'rounded-[6px] border',
+    highlighted ? 'border-tinte/90 shadow-[0_8px_24px_-12px_rgba(31,42,68,0.18)]' : 'border-holzsand',
+    'hover:shadow-[0_8px_28px_-14px_rgba(31,42,68,0.18)]',
+  ]}
+>
+  {highlighted && (
+    <div class="absolute -top-3 left-7 inline-flex items-center gap-1.5 bg-tinte text-pergament font-sans text-[0.7rem] tracking-[0.16em] uppercase px-2.5 py-1.5 rounded-[3px]">
+      <span class="w-1.5 h-1.5 rounded-full bg-kupfer"></span>
+      Häufigster Einstieg
+    </div>
+  )}
+
+  <!-- Eyebrow -->
+  <p class="eyebrow eyebrow-kupfer mb-3.5">{eyebrow}</p>
+
+  <!-- Title -->
+  <h3 class="font-serif text-[1.5rem] md:text-[1.7rem] leading-[1.18] text-tinte font-medium mb-5">
+    {title}
+  </h3>
+
+  <!-- Price + duration block -->
+  <div class="flex items-baseline gap-2 mb-2">
+    <span class="font-serif text-[1.7rem] md:text-[1.9rem] font-medium text-tinte" style="font-variation-settings: 'opsz' 144;">
+      {price}
+    </span>
+  </div>
+  <p class="font-sans text-[0.92rem] text-anthrazit/65 mb-6 pb-6 border-b border-holzsand/60">
+    {duration}
+  </p>
+
+  <!-- Outcome -->
+  <div class="mb-6">
+    <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-2.5">
+      Was danach gelöst ist
+    </p>
+    <p class="font-sans text-[0.99rem] text-anthrazit leading-[1.65]">
+      {outcome}
+    </p>
+  </div>
+
+  <!-- Deliverables -->
+  <div class="mb-8 flex-grow">
+    <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-3.5">
+      Was du in die Hand bekommst
+    </p>
+    <ul class="space-y-2.5">
+      {deliverables.map((d) => (
+        <li class="flex gap-3 items-start font-sans text-[0.95rem] text-anthrazit leading-[1.55]">
+          <span class="block mt-[0.55rem] flex-shrink-0 w-1.5 h-1.5 rounded-full bg-kupfer"></span>
+          <span>{d}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <a href="#kontakt" class="btn-primary mt-auto w-full">
+    {cta}
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 8 L13 8" />
+      <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+    </svg>
+  </a>
+</article>
