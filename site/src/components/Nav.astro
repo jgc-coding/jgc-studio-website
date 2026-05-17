@@ -1,18 +1,21 @@
 ---
+const base = import.meta.env.BASE_URL;
 const links = [
-  { label: 'Angebote', href: '#angebote' },
-  { label: 'Grundwerte', href: '#grundwerte' },
-  { label: 'Wer mit dir arbeitet', href: '#wer' },
+  { label: 'Angebote', href: `${base}#angebote` },
+  { label: 'Grundwerte', href: `${base}#grundwerte` },
+  { label: 'Wer mit dir arbeitet', href: `${base}#wer` },
 ];
+const homeHref = base;
+const ctaHref = `${base}#kontakt`;
 ---
 
 <header class="site-nav fixed inset-x-0 top-0 z-40">
   <div class="container-wide flex items-center justify-between h-[68px] md:h-[76px]">
 
     <!-- Sigel + Wortmarke -->
-    <a href="#top" class="flex items-center gap-3 group" aria-label="JGC Studio – zurück zum Anfang">
+    <a href={homeHref} class="flex items-center gap-3 group" aria-label="JGC Studio – zurück zum Anfang">
       <img
-        src="/images/logo-sigel.png"
+        src={`${base}images/logo-sigel.png`}
         alt=""
         width="36"
         height="46"
@@ -35,7 +38,7 @@ const links = [
           {l.label}
         </a>
       ))}
-      <a href="#kontakt" class="btn-primary text-[0.95rem] !py-2.5 !px-5">
+      <a href={ctaHref} class="btn-primary text-[0.95rem] !py-2.5 !px-5">
         Audit anfragen
       </a>
     </nav>
@@ -69,7 +72,7 @@ const links = [
           {l.label}
         </a>
       ))}
-      <a href="#kontakt" class="btn-primary mt-4 w-full" data-mobile-link>
+      <a href={ctaHref} class="btn-primary mt-4 w-full" data-mobile-link>
         Audit anfragen
       </a>
     </nav>

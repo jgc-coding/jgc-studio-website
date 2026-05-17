@@ -13,6 +13,8 @@ const {
   eyebrow, title, price, duration, outcome, deliverables, cta,
   highlighted = false,
 } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <article
@@ -74,7 +76,7 @@ const {
   </div>
 
   <!-- CTA -->
-  <a href="#kontakt" class="btn-primary mt-auto w-full">
+  <a href={`${base}#kontakt`} class="btn-primary mt-auto w-full">
     {cta}
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M3 8 L13 8" />
