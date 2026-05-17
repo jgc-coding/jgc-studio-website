@@ -4,24 +4,26 @@
  * Übernommen aus der Komponentenvorlage (logo-resonanz-komponente.html).
  *
  * Verwendung als dezenter Hintergrund-Akzent. Eltern-Container braucht
- * position: relative + overflow: hidden, sonst ragt das Motiv hervor.
+ * position: relative + overflow: clip/hidden, sonst ragt das Motiv hervor.
  *
  * Props:
- *   side       'right' | 'left'   (default 'right')  — welche Seite angeschnitten
- *   vertical   'bottom' | 'top'   (default 'bottom') — oben oder unten
- *   size       Pixelmaß           (default 360)
- *   opacity    0-1                (default 0.08)     — dezent, leicht sichtbar
- *   inset      Pixel              (default -110)     — wie weit es über die Kante hinausragt
- *   instanceId String             (default 'av-clip-1') — eindeutig falls mehrfach genutzt
- *
- * Reduziert Bewegung bei prefers-reduced-motion automatisch.
+ *   side          'right' | 'left'              (default 'right')  — Horizontale Seite
+ *   vertical      'top' | 'middle' | 'bottom'   (default 'bottom') — Vertikale Position
+ *   size          Pixelmaß                       (default 360)
+ *   opacity       0-1                            (default 0.08)
+ *   inset         Pixel — Standard-Versatz für beide Achsen (default -110)
+ *   insetX        Pixel — überschreibt horizontalen Inset
+ *   insetY        Pixel — überschreibt vertikalen Inset (nur bei top/bottom)
+ *   instanceId    String                          (default 'av-clip-1') — eindeutig pro Instanz
  */
 interface Props {
   side?: 'left' | 'right';
-  vertical?: 'top' | 'bottom';
+  vertical?: 'top' | 'middle' | 'bottom';
   size?: number;
   opacity?: number;
   inset?: number;
+  insetX?: number;
+  insetY?: number;
   instanceId?: string;
 }
 const {
@@ -30,14 +32,25 @@ const {
   size = 360,
   opacity = 0.08,
   inset = -110,
+  insetX,
+  insetY,
   instanceId = 'av-clip-1',
 } = Astro.props;
+
+const x = insetX ?? inset;
+const y = insetY ?? inset;
+
+let positionRules: string;
+if (vertical === 'middle') {
+  positionRules = `${side === 'right' ? `right: ${x}px;` : `left: ${x}px;`} top: 50%; transform: translateY(-50%);`;
+} else {
+  positionRules = `${side === 'right' ? `right: ${x}px;` : `left: ${x}px;`} ${vertical === 'bottom' ? `bottom: ${y}px;` : `top: ${y}px;`}`;
+}
 
 const styleVars = `
   --logo-resonanz-size: ${size}px;
   --logo-resonanz-opacity: ${opacity};
-  ${side === 'right' ? `right: ${inset}px;` : `left: ${inset}px;`}
-  ${vertical === 'bottom' ? `bottom: ${inset}px;` : `top: ${inset}px;`}
+  ${positionRules}
 `;
 ---
 

@@ -1,5 +1,6 @@
 ---
 // Sektion 7.8 — Für wen das gemacht ist, und für wen nicht
+import LogoResonanz from './LogoResonanz.astro';
 const fuer = [
   'Du eine eigene Methode oder ein eigenes Programm hast, das in deiner Arbeit trägt.',
   'Du regelmäßig Inhalte veröffentlichst — Newsletter, Podcast, Posts — und merkst, dass dich das Tempo zermürbt.',
@@ -15,8 +16,23 @@ const nicht = [
 ];
 ---
 
-<section class="section bg-pergament">
-  <div class="container-wide">
+<section class="section bg-pergament relative overflow-clip">
+
+  <!-- 3) Logo-Resonanz top-left, stark angeschnitten. Crescendo-Stufe 3/5:
+       Anker am Sektionsuebergang Stimmen->Fuer-wen. -->
+  <div class="absolute inset-0 z-0 pointer-events-none hidden md:block" aria-hidden="true">
+    <LogoResonanz
+      side="left"
+      vertical="top"
+      size={360}
+      opacity={0.05}
+      insetX={-160}
+      insetY={-80}
+      instanceId="fuerwen-resonanz"
+    />
+  </div>
+
+  <div class="container-wide relative z-10">
 
     <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20">
       <p class="eyebrow eyebrow-kupfer mb-5">Ehrlich gesagt</p>

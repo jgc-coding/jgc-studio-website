@@ -1,5 +1,6 @@
 ---
 // Sektion 7.9 — Meine Grundwerte, wenn ich mit KI arbeite
+import LogoResonanz from './LogoResonanz.astro';
 const links = [
   'KI ersetzt keine echte Beziehung. Begegnung bleibt menschlich.',
   'Klienten wissen, wo KI eingesetzt wird. Transparenz ist Standard.',
@@ -12,8 +13,23 @@ const rechts = [
 ];
 ---
 
-<section id="grundwerte" class="relative w-full" style="background-color: var(--bg-salbei-medium);">
-  <div class="container-wide py-24 md:py-28 lg:py-32">
+<section id="grundwerte" class="relative w-full overflow-clip" style="background-color: var(--bg-salbei-medium);">
+
+  <!-- 4) Logo-Resonanz top-right, etwas praesenter. Crescendo-Stufe 4/5:
+       Echo des KI-Werkzeug-Auftritts, jetzt auf der Gegenseite und groesser. -->
+  <div class="absolute inset-0 z-0 pointer-events-none hidden md:block" aria-hidden="true">
+    <LogoResonanz
+      side="right"
+      vertical="top"
+      size={420}
+      opacity={0.08}
+      insetX={-120}
+      insetY={-130}
+      instanceId="grundwerte-resonanz"
+    />
+  </div>
+
+  <div class="container-wide py-24 md:py-28 lg:py-32 relative z-10">
 
     <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18">
       <p class="eyebrow eyebrow-tinte mb-5">Haltung vor Technik</p>

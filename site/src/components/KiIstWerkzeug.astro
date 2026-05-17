@@ -1,10 +1,24 @@
 ---
 // Sektion 7.3 — KI ist ein Werkzeug
 // Salbei-Block, zentrierter Text, kein CTA. Atempause.
+import LogoResonanz from './LogoResonanz.astro';
 ---
 
-<section class="relative w-full" style="background-color: var(--bg-salbei-soft);">
-  <div class="container-narrow py-24 md:py-28 lg:py-32">
+<section class="relative w-full overflow-clip" style="background-color: var(--bg-salbei-soft);">
+
+  <!-- 2) Logo-Resonanz links mittig, dezent. Crescendo-Stufe 2/5: leiser Begleiter. -->
+  <div class="absolute inset-0 z-0 pointer-events-none hidden md:block" aria-hidden="true">
+    <LogoResonanz
+      side="left"
+      vertical="middle"
+      size={300}
+      opacity={0.07}
+      insetX={-100}
+      instanceId="kiwerkzeug-resonanz"
+    />
+  </div>
+
+  <div class="container-narrow py-24 md:py-28 lg:py-32 relative z-10">
 
     <p class="eyebrow eyebrow-tinte text-center mb-6">
       Eine Einordnung vorweg

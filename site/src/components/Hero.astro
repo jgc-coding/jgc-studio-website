@@ -1,4 +1,5 @@
 ---
+import LogoResonanz from './LogoResonanz.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -20,6 +21,20 @@ const base = import.meta.env.BASE_URL;
   <!-- Brand gradient — Tinte-Tiefblau, leicht fade-out nach rechts -->
   <div class="absolute inset-0 hero-gradient-desktop hidden md:block" aria-hidden="true"></div>
   <div class="absolute inset-0 hero-gradient-mobile md:hidden" aria-hidden="true"></div>
+
+  <!-- 1) Atmosphaerische Logo-Resonanz top-right, sehr leise im dunklen Cinema-Bereich
+       (Crescendo-Stufe 1/5: nur fuer Augen, die hinschauen) -->
+  <div class="absolute inset-0 z-[1] pointer-events-none hidden md:block" aria-hidden="true">
+    <LogoResonanz
+      side="right"
+      vertical="top"
+      size={620}
+      opacity={0.035}
+      insetX={-180}
+      insetY={-200}
+      instanceId="hero-resonanz"
+    />
+  </div>
 
   <!-- Content layer — constrained to container-wide so text aligns with rest of site -->
   <div class="relative z-10 container-wide">
