@@ -5,11 +5,12 @@ const base = import.meta.env.BASE_URL;
 <!-- Full-bleed cinematic hero: edge-to-edge, no rounding, flush to nav above and next section below -->
 <section class="hero-cinema relative w-full overflow-hidden bg-tinte">
 
-  <!-- Background image -->
+  <!-- Background image (sanfter Scroll-Parallax via JS) -->
   <img
+    id="hero-img"
     src={`${base}images/hero-placeholder.png`}
     alt="Ruhiger Arbeitsplatz mit Holzschreibtisch, Pflanzen und Tageslicht"
-    class="absolute inset-0 w-full h-full object-cover"
+    class="hero-parallax absolute inset-0 w-full h-full object-cover"
     width="2400"
     height="1500"
     loading="eager"
@@ -25,8 +26,8 @@ const base = import.meta.env.BASE_URL;
   <div class="relative z-10 container-wide">
     <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[640px] sm:min-h-[700px] md:min-h-[760px] lg:min-h-[82vh] xl:min-h-[86vh]">
 
-      <!-- LEFT — Text -->
-      <div class="lg:col-span-7 xl:col-span-6 flex flex-col justify-center py-20 md:py-24 lg:py-28 lg:pr-12">
+      <!-- LEFT — Text (staggered rise on first paint) -->
+      <div class="hero-rise lg:col-span-7 xl:col-span-6 flex flex-col justify-center py-20 md:py-24 lg:py-28 lg:pr-12">
 
         <!-- Eyebrow marker -->
         <div class="flex items-center gap-3 mb-7 md:mb-10">
@@ -137,3 +138,30 @@ const base = import.meta.env.BASE_URL;
     color: #FEFCF7;
   }
 </style>
+
+<script>
+  // Sanfter Scroll-Parallax fürs Hero-Foto. Das Bild ist via .hero-parallax
+  // leicht hochskaliert (1.16), die Verschiebung bleibt darum innerhalb der Kante.
+  const hero = document.querySelector('.hero-cinema');
+  const img = document.getElementById('hero-img');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (hero && img && !reduce.matches) {
+    let ticking = false;
+    const update = () => {
+      const top = hero.getBoundingClientRect().top;
+      const scrolledPast = Math.max(-top, 0);
+      const shift = Math.min(scrolledPast * 0.16, 44);
+      img.style.transform = `scale(1.16) translate3d(0, ${(shift / 1.16).toFixed(2)}px, 0)`;
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

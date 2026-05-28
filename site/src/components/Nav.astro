@@ -33,7 +33,7 @@ const ctaHref = `${base}#kontakt`;
       {links.map((l) => (
         <a
           href={l.href}
-          class="font-sans text-[0.95rem] text-tinte/85 hover:text-kupfer transition-colors duration-200 relative"
+          class="link-underline font-sans text-[0.95rem] text-tinte/85 hover:text-kupfer transition-colors duration-200"
         >
           {l.label}
         </a>
@@ -51,9 +51,9 @@ const ctaHref = `${base}#kontakt`;
       aria-expanded="false"
       aria-controls="mobile-menu"
     >
-      <span class="block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-right"></span>
-      <span class="block h-[1.5px] w-4 bg-tinte transition-all duration-300 origin-right"></span>
-      <span class="block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-right"></span>
+      <span class="burger-bar block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-center"></span>
+      <span class="burger-bar block h-[1.5px] w-4 bg-tinte transition-all duration-300 origin-center"></span>
+      <span class="burger-bar block h-[1.5px] w-6 bg-tinte transition-transform duration-300 origin-center"></span>
     </button>
   </div>
 
@@ -82,6 +82,21 @@ const ctaHref = `${base}#kontakt`;
 <!-- Spacer for fixed header -->
 <div class="h-[68px] md:h-[76px]" aria-hidden="true" id="top"></div>
 
+<style>
+  /* Burger → X, über aria-expanded gesteuert. Die mittlere Linie blendet aus,
+     die äußeren rücken zur Mitte und kreuzen sich. */
+  #mobile-menu-btn[aria-expanded="true"] .burger-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  #mobile-menu-btn[aria-expanded="true"] .burger-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0.3);
+  }
+  #mobile-menu-btn[aria-expanded="true"] .burger-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+</style>
+
 <script>
   // Sticky nav border on scroll
   const nav = document.querySelector('.site-nav');
@@ -101,10 +116,12 @@ const ctaHref = `${base}#kontakt`;
     const close = () => {
       menu.classList.add('hidden');
       btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Menü öffnen');
     };
     btn.addEventListener('click', () => {
-      const open = menu.classList.toggle('hidden');
-      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      const isHidden = menu.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
+      btn.setAttribute('aria-label', isHidden ? 'Menü öffnen' : 'Menü schließen');
     });
     menu.querySelectorAll('[data-mobile-link]').forEach((a) =>
       a.addEventListener('click', close)

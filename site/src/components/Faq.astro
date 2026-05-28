@@ -43,14 +43,14 @@ const items = [
 <section class="section bg-pergament">
   <div class="container-prose">
 
-    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18">
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18 reveal">
       <p class="eyebrow eyebrow-kupfer mb-5">Was du sonst noch wissen willst</p>
       <h2 class="font-serif text-section text-tinte">
         Häufige Fragen.
       </h2>
     </div>
 
-    <div class="border-t border-holzsand">
+    <div class="border-t border-holzsand reveal">
       {items.map((item, i) => (
         <details class="faq-item" {...(i === 0 ? { open: true } : {})}>
           <summary class="font-sans">

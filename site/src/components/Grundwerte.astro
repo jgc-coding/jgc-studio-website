@@ -15,14 +15,14 @@ const rechts = [
 <section id="grundwerte" class="relative w-full" style="background-color: var(--bg-salbei-medium);">
   <div class="container-wide py-24 md:py-28 lg:py-32">
 
-    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18">
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18 reveal">
       <p class="eyebrow eyebrow-tinte mb-5">Haltung vor Technik</p>
       <h2 class="font-serif text-section text-tinte">
         Meine Grundwerte, wenn ich mit KI arbeite.
       </h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-7 md:gap-y-9 max-w-4xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-7 md:gap-y-9 max-w-4xl mx-auto reveal-stagger">
       {[...links, ...rechts].map((punkt) => (
         <div class="flex gap-4 items-start">
           <span class="block mt-[0.6rem] flex-shrink-0 w-3 h-px bg-kupfer"></span>

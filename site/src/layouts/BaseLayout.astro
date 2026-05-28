@@ -12,6 +12,10 @@ const {
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
+
+// Absolute URLs für Canonical + Open-Graph (pro Variante korrekt durch SITE_URL/BASE_PATH).
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const ogImage = new URL(`${base}images/hero-placeholder.png`, Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -20,17 +24,33 @@ const base = import.meta.env.BASE_URL;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Markiert JS-fähige Clients: erst dann verstecken Reveals ihren Startzustand.
+         Läuft synchron vor dem Paint, daher kein Flackern. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <meta name="theme-color" content="#FEFCF7" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_DE" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <meta name="robots" content="index, follow" />
   </head>
@@ -39,5 +59,33 @@ const base = import.meta.env.BASE_URL;
       Zum Inhalt springen
     </a>
     <slot />
+
+    <script>
+      // Globaler Scroll-Reveal: schaltet .is-visible, sobald ein .reveal- oder
+      // .reveal-stagger-Element den unteren Viewport-Bereich erreicht. Einmalig
+      // pro Element (danach unobserve). Above-the-fold-Elemente werden beim
+      // ersten observe sofort sichtbar geschaltet.
+      const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (revealEls.length) {
+        if (prefersReduced || !('IntersectionObserver' in window)) {
+          revealEls.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries, obs) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-visible');
+                  obs.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0, rootMargin: '0px 0px -12% 0px' }
+          );
+          revealEls.forEach((el) => io.observe(el));
+        }
+      }
+    </script>
   </body>
 </html>
