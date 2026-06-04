@@ -1,16 +1,35 @@
 ---
+// Schritt-Karte im Weg-Modell (Briefing v8 §7.5).
+// Gleiche Karten-Optik wie Variante 08, nur flexibler: priceNote, duration,
+// deliverables und footnote sind optional, Labels konfigurierbar.
+interface Footnote {
+  label?: string;
+  text: string;
+}
 interface Props {
   eyebrow: string;
   title: string;
   price: string;
-  duration: string;
+  priceNote?: string;
+  duration?: string;
+  outcomeLabel?: string;
   outcome: string;
-  deliverables: string[];
+  deliverablesLabel?: string;
+  deliverables?: string[];
+  footnote?: Footnote;
   cta: string;
+  badgeLabel?: string;
   highlighted?: boolean;
 }
 const {
-  eyebrow, title, price, duration, outcome, deliverables, cta,
+  eyebrow, title, price, priceNote, duration,
+  outcomeLabel = 'Was danach gelöst ist',
+  outcome,
+  deliverablesLabel = 'Was du in die Hand bekommst',
+  deliverables,
+  footnote,
+  cta,
+  badgeLabel = 'Häufigster Einstieg',
   highlighted = false,
 } = Astro.props;
 
@@ -29,7 +48,7 @@ const base = import.meta.env.BASE_URL;
   {highlighted && (
     <div class="absolute -top-3 left-7 inline-flex items-center gap-1.5 bg-tinte text-pergament font-sans text-[0.7rem] tracking-[0.16em] uppercase px-2.5 py-1.5 rounded-[3px]">
       <span class="w-1.5 h-1.5 rounded-full bg-kupfer"></span>
-      Häufigster Einstieg
+      {badgeLabel}
     </div>
   )}
 
@@ -41,42 +60,59 @@ const base = import.meta.env.BASE_URL;
     {title}
   </h3>
 
-  <!-- Price + duration block -->
-  <div class="flex items-baseline gap-2 mb-2">
+  <!-- Price (+ optional note) block -->
+  <div class="flex items-baseline gap-2.5 flex-wrap mb-2">
     <span class="font-serif text-[1.7rem] md:text-[1.9rem] font-medium text-tinte" style="font-variation-settings: 'opsz' 144;">
       {price}
     </span>
+    {priceNote && (
+      <span class="font-sans text-[0.85rem] text-anthrazit/65">{priceNote}</span>
+    )}
   </div>
-  <p class="font-sans text-[0.92rem] text-anthrazit/65 mb-6 pb-6 border-b border-holzsand/60">
-    {duration}
-  </p>
+  {duration && (
+    <p class="font-sans text-[0.92rem] text-anthrazit/65 mb-6 pb-6 border-b border-holzsand/60">
+      {duration}
+    </p>
+  )}
 
   <!-- Outcome -->
   <div class="mb-6">
     <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-2.5">
-      Was danach gelöst ist
+      {outcomeLabel}
     </p>
     <p class="font-sans text-[0.99rem] text-anthrazit leading-[1.65]">
       {outcome}
     </p>
   </div>
 
-  <!-- Deliverables -->
-  <div class="mb-8 flex-grow">
-    <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-3.5">
-      Was du in die Hand bekommst
-    </p>
-    <ul class="space-y-2.5">
-      {deliverables.map((d) => (
-        <li class="flex gap-3 items-start font-sans text-[0.95rem] text-anthrazit leading-[1.55]">
-          <span class="block mt-[0.55rem] flex-shrink-0 w-1.5 h-1.5 rounded-full bg-kupfer"></span>
-          <span>{d}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
+  <!-- Deliverables (optional) -->
+  {deliverables && deliverables.length > 0 && (
+    <div class="mb-6">
+      <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-3.5">
+        {deliverablesLabel}
+      </p>
+      <ul class="space-y-2.5">
+        {deliverables.map((d) => (
+          <li class="flex gap-3 items-start font-sans text-[0.95rem] text-anthrazit leading-[1.55]">
+            <span class="block mt-[0.55rem] flex-shrink-0 w-1.5 h-1.5 rounded-full bg-kupfer"></span>
+            <span>{d}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
 
-  <!-- CTA -->
+  <!-- Footnote (Anrechnung / Was du wählst), optional -->
+  {footnote && (
+    <div class="mb-6 pl-3.5 border-l-2 border-kupfer/40">
+      <p class="font-sans text-[0.9rem] text-anthrazit/75 leading-[1.55]">
+        {footnote.label && <span class="font-medium text-tinte">{footnote.label}: </span>}
+        {footnote.text}
+      </p>
+    </div>
+  )}
+
+  <!-- CTA — mt-auto hält den Button am unteren Kartenrand, egal wie lang der Inhalt ist -->
   <a href={`${base}#kontakt`} class="btn-primary mt-auto w-full">
     {cta}
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

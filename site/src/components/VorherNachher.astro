@@ -1,13 +1,13 @@
 ---
 // Sektion 7.4 — Deine Woche, zwei Versionen
 const heute = [
-  'Sitzungsnotizen liegen verstreut in Notion, auf Zetteln, in Voice-Memos.',
-  'Klienten-Follow-ups schiebst du auf den Abend, der nicht ruhig wird.',
-  'Der Newsletter wartet seit drei Wochen auf den Sonntag, der nicht kommt.',
+  'Sitzungsnotizen liegen verstreut auf Zetteln, in Notion, in Voice-Memos.',
+  'Das Follow-up an deine Klientin nimmst du dir für heute Abend vor, schon zum dritten Mal.',
+  'Den Newsletter verschiebst du seit drei Wochen aufs Wochenende.',
 ];
-const verstaerker = [
+const morgen = [
   'Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.',
-  'Das Follow-up an deine Klientin geht heraus, in deiner Sprache.',
+  'Das Follow-up an deine Klientin geht raus, in deiner Sprache.',
   'Der nächste Newsletter liegt im Entwurf, aus echten Themen deiner Woche.',
 ];
 ---
@@ -41,13 +41,13 @@ const verstaerker = [
         </ul>
       </div>
 
-      <!-- Verstärker -->
+      <!-- Morgen -->
       <div class="card p-7 md:p-10 lg:p-12" style="border-color: rgba(143,169,138,0.4); background: linear-gradient(180deg, var(--color-pergament) 0%, rgba(143,169,138,0.06) 100%);">
         <p class="font-serif italic text-[1.4rem] md:text-[1.55rem] text-tinte mb-7 md:mb-9">
-          Mit deinem KI-Verstärker
+          Morgen
         </p>
         <ul class="space-y-5 md:space-y-6">
-          {verstaerker.map((line) => (
+          {morgen.map((line) => (
             <li class="flex gap-4 items-start font-sans text-[1.0625rem] text-anthrazit leading-[1.65]">
               <span class="block mt-[0.55rem] flex-shrink-0 w-2 h-2 rounded-full bg-salbei"></span>
               <span>{line}</span>

@@ -1,75 +1,236 @@
 ---
+// Sektion 7.5 — Angebote: der Weg und die Bausteine (Briefing v8).
+// Erst der gemeinsame Weg in drei Schritt-Karten, dann die fünf Bausteine,
+// das vollständige System, die tiefere Stufe (Methodik-Assistent) und
+// Schritt 4 (Resonanzraum). Technisch wie Variante 08, Inhalt nach v8.
 import AngebotKarte from './AngebotKarte.astro';
+import Baustein from './Baustein.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const bausteine = [
+  {
+    title: 'Sitzungs-Nachbereitung',
+    price: 'ab 2.500 €',
+    tagline: 'Aus dem Gesprochenen wird Geschriebenes.',
+    examples: [
+      'eine Zusammenfassung für dich nach jeder Sitzung, ohne dass du tippst',
+      'auf Wunsch eine eigene, klientengerechte Fassung, die deine Klient:innen direkt bekommen',
+      'die Schlüssel-Erkenntnisse und nächsten Schritte herausgearbeitet, als sanfte Erinnerung für deine Klient:innen',
+    ],
+  },
+  {
+    title: 'Content-Stimme',
+    price: 'ab 4.000 €',
+    tagline: 'Sichtbarkeit, die nach dir klingt.',
+    examples: [
+      'Vorschläge für Beiträge auf LinkedIn oder Instagram aus deinen echten Themen, in deiner Sprache statt generisch',
+      'ein roter Faden über Wochen: eine zusammenhängende Themenreihe statt täglich bei null',
+      'Entwürfe für deinen Newsletter; ein Vortrag oder eine Sitzung wird zu mehreren Beiträgen weitergenutzt',
+    ],
+  },
+  {
+    title: 'Begleitung zwischen den Sitzungen',
+    price: 'ab 2.500 €',
+    tagline: 'Der Faden reißt nicht ab.',
+    examples: [
+      'Reflexionsfragen und Übungen, die deine Klient:innen zwischen den Terminen tragen',
+      'behutsame Erinnerungen an das Vereinbarte, per Mail oder Messenger, ohne dass du nachhalten musst',
+      'auf Wunsch ein gebrandeter Begleiter, den deine Klient:innen bei Fragen ansprechen — im Stil deiner Methode',
+      'Fortschritt sichtbar gemacht, der sonst zwischen den Sitzungen verschwindet',
+    ],
+  },
+  {
+    title: 'Klienten-Aufnahme',
+    price: 'ab 3.000 €',
+    tagline: 'Ein guter erster Eindruck, bevor ihr euch seht.',
+    examples: [
+      'ein Erstkontakt, der vorklärt: was bringt die Person mit, passt das zu dir',
+      'ein Anamnese- oder Erwartungs-Bogen, der das Wichtigste vor dem ersten Termin klärt',
+      'Anfragen zeitnah und in deinem Ton beantwortet, statt dass sie liegen bleiben',
+    ],
+  },
+  {
+    title: 'Praxis-Gedächtnis',
+    price: 'ab 2.500 €',
+    tagline: 'Schluss mit verstreuten Notizen.',
+    examples: [
+      'Notizen, Einsichten und Material an einem durchsuchbaren Ort statt über Zettel, Notion und WhatsApp verteilt',
+      'per Telegram eine Sprachnotiz oder einen Gedanken schicken — er landet sortiert im Gedächtnis deiner Praxis',
+      'du fragst in eigenen Worten nach und bekommst, was du festgehalten hast — über Klient:innen und Monate hinweg',
+      'Muster werden sichtbar, die in losen Notizen verloren gehen',
+    ],
+  },
+];
+
+const resonanzraum = [
+  'deine Werkzeuge bleiben auf dem Stand: neue Modelle, bessere Vorlagen, ohne dass du dich kümmerst',
+  'ich halte dich auf dem Laufenden, wenn sich bei DSGVO oder EU AI Act etwas ändert, das dich wirklich betrifft — verständlich, nicht als Paragrafen-Flut',
+  'Begleitung bei Bedarf, wenn eine Frage auftaucht oder etwas dazukommen soll',
+];
 ---
 
 <section id="angebote" class="section bg-pergament">
   <div class="container-wide">
 
+    <!-- Header -->
     <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20 reveal">
-      <p class="eyebrow eyebrow-kupfer mb-5">Drei Wege ineinander</p>
+      <p class="eyebrow eyebrow-kupfer mb-5">Schritt für Schritt, in deinem Tempo</p>
       <h2 class="font-serif text-section text-tinte text-balance">
-        Vom ersten Befund bis zum laufenden Verstärker.
+        So gehen wir gemeinsam vor.
       </h2>
       <p class="mt-5 font-sans text-[1.0625rem] text-anthrazit/70 leading-relaxed">
-        Du steigst dort ein, wo du gerade stehst. Jedes Angebot funktioniert für sich — und gemeinsam ergeben sie eine Linie.
+        Du musst nicht wissen, was technisch geht — das ist meine Aufgabe. Jeder Schritt klärt mehr, keiner verpflichtet zum nächsten.
       </p>
     </div>
 
-    <!-- 3 cards, middle card lifted on lg+ -->
+    <!-- Der Weg: drei Schritt-Karten, mittlere Karte auf lg+ leicht angehoben -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7 items-stretch max-w-6xl mx-auto reveal md:[&>*:last-child]:md:col-span-2 lg:[&>*:last-child]:lg:col-span-1">
 
       <AngebotKarte
-        eyebrow="Schritt 1 — Klarheit"
-        title="KI-Praxis-Check"
-        price="600 €"
-        duration="2 Stunden Gespräch + schriftlicher Report"
-        outcome="Du weißt konkret, wo KI in deiner Praxis Zeit zurückgibt, wo deine aktuellen Tools EU-AI-Act- und DSGVO-tauglich sind und wo nicht, und welche drei bis fünf Schritte den größten Hebel haben."
-        deliverables={[
-          'Befund-Gespräch von 90 Minuten',
-          'Schriftlicher Audit-Report (PDF, ca. 8 bis 12 Seiten)',
-          'Drei bis fünf priorisierte Quick Wins mit konkreten Tool- und Prozess-Empfehlungen',
-          'Bewertung deiner aktuellen Tool-Landschaft auf DSGVO und EU AI Act',
-        ]}
-        cta="Audit anfragen"
+        eyebrow="Schritt 1 — Kennenlernen"
+        title="Erstgespräch"
+        price="kostenlos"
+        duration="etwa 30 Minuten"
+        outcomeLabel="Was danach klar ist"
+        outcome="Ob das zueinander passt. Du erzählst, wo dir im Alltag Zeit und Ruhe verloren gehen. Ich sage offen, was sinnvoll ist und was nicht. Kein Verkaufsgespräch, keine Folien."
+        cta="Erstgespräch anfragen"
       />
 
       <div class="lg:-translate-y-5">
         <AngebotKarte
-          eyebrow="Schritt 2 — Aufbau"
-          title="KI-Implementierung für deine Praxis"
-          price="6.500 €"
-          duration="6 bis 8 Wochen"
-          outcome="Du hast ein KI-System, das in deiner Sprache schreibt, deine Sitzungen nachbereitet und dein Klienten-Follow-up automatisch anstößt. Inklusive der Schulung, die deine EU-AI-Act-Pflicht erfüllt."
+          eyebrow="Schritt 2 — Klarheit"
+          title="KI-Praxis-Check"
+          price="600 €"
+          priceNote="voll anrechenbar"
+          duration="90-Minuten-Gespräch + schriftlicher Report"
+          outcome="Du weißt konkret, wo KI in deiner Praxis Zeit zurückgibt, wo deine aktuellen Tools EU-AI-Act- und DSGVO-tauglich sind und wo nicht, und welche zwei bis drei Schritte den größten Hebel haben — alles in deiner Sprache, nicht in Fachjargon."
           deliverables={[
-            'Voice-Profil aus deinen Texten, Podcasts und Sitzungs-Aufnahmen',
-            'Content-System für LinkedIn, Newsletter und Reels-Skripte',
-            'DSGVO-konforme Sitzungs-Transkription mit automatischer Zusammenfassung',
-            'Automatisches Klienten-Follow-up nach Sitzungen',
-            'Lead-Funnel mit personalisiertem Onboarding',
-            'Drei Schulungs-Sessions zur eigenständigen Bedienung',
-            'Integrierte EU-AI-Act-Schulung',
+            'Befund-Gespräch von 90 Minuten',
+            'Schriftlicher Report (PDF, ca. 8 bis 12 Seiten)',
+            'Drei bis fünf priorisierte Quick Wins mit konkreten Empfehlungen',
+            'Bewertung deiner aktuellen Tool-Landschaft auf DSGVO und EU AI Act',
           ]}
-          cta="Projekt anfragen"
+          footnote={{ label: 'Anrechnung', text: 'Entscheidest du dich für eine Umsetzung, rechne ich die 600 € vollständig an.' }}
+          cta="Praxis-Check anfragen"
           highlighted
         />
       </div>
 
       <AngebotKarte
-        eyebrow="Schritt 3 — Tiefe"
-        title="Methodik-Assistent und KI-Verstärker"
-        price="14.000 €"
-        duration="10 bis 12 Wochen"
-        outcome="Dein Buch, deine Methode, dein Programm sind in einem Assistenten verfügbar, der nach dir klingt — für deine Klienten, für deine Inhalte, für dein Team. Deine Wirkung wächst, ohne dass du dafür mehr Stunden gibst."
-        deliverables={[
-          'Methodik-Assistent auf Basis deiner Bücher, Modelle und Texte (technische Grundlage RAG)',
-          'Content-Stimme zur authentischen Reproduktion deiner Sprachfarbe (technische Grundlage ElevenLabs)',
-          'Webseiten-Embedding für Klienten-Interaktion',
-          'Integration in den Praxis-Workflow aus Schritt 2',
-          'Intensive Begleitung über drei Monate',
-          'Quartals-Review nach Abschluss',
-        ]}
+        eyebrow="Schritt 3 — Aufbau"
+        title="Umsetzung"
+        price="ab 2.500 €"
+        priceNote="vollständiges System 6.500 €"
+        duration="je nach Umfang"
+        outcome="Was sich im Praxis-Check als sinnvoll gezeigt hat, ist gebaut — fertig eingerichtet, DSGVO-konform, in deiner Handschrift. Kein Tutorial, sondern etwas, das im Hintergrund arbeitet, während du bei den Menschen bist, die du begleitest."
+        footnote={{ label: 'Was du wählst', text: 'einzelne Bausteine oder das vollständige System. Den Umfang legen wir gemeinsam im Praxis-Check fest, der Preis steht vorher fest.' }}
         cta="Projekt anfragen"
       />
     </div>
+
+    <!-- Die Bausteine -->
+    <div class="reveal text-center max-w-2xl mx-auto mt-20 md:mt-28 mb-10 md:mb-12">
+      <h3 class="font-serif text-[1.6rem] md:text-[2rem] text-tinte font-medium">
+        Die Bausteine der Umsetzung
+      </h3>
+      <p class="mt-4 font-sans text-[1.0625rem] text-anthrazit/70 leading-relaxed">
+        Du nimmst nicht alles auf einmal und musst dir daraus nichts aussuchen. Das hier zeigt nur, was in einer Praxis entstehen kann. Was zu dir passt, klären wir im Praxis-Check.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 items-start max-w-6xl mx-auto reveal-stagger">
+      {bausteine.map((b) => (
+        <Baustein title={b.title} price={b.price} tagline={b.tagline} examples={b.examples} />
+      ))}
+    </div>
+
+    <!-- Querschicht-Hinweis -->
+    <p class="reveal mt-9 md:mt-10 max-w-3xl mx-auto text-center font-sans text-[0.95rem] text-anthrazit/65 leading-relaxed">
+      Jeder Baustein ist DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten werden nie zum Training von KI verwendet. Routine wie Buchung, Erinnerungen und Rechnungen binde ich an bewährte Tools an — abgedeckt, aber kein eigener Baustein.
+    </p>
+
+    <!-- Vollständiges System -->
+    <div class="reveal mt-14 md:mt-16 max-w-6xl mx-auto">
+      <div
+        class="rounded-[6px] border-[1.5px] border-tinte/85 p-7 md:p-9 lg:p-10 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10"
+        style="background-color: var(--bg-salbei-soft);"
+      >
+        <div class="lg:flex-1">
+          <div class="flex items-baseline gap-3 flex-wrap mb-3">
+            <h3 class="font-serif text-[1.5rem] md:text-[1.7rem] text-tinte font-medium">Vollständiges System</h3>
+            <span class="font-serif text-[1.6rem] md:text-[1.8rem] text-tinte font-medium" style="font-variation-settings:'opsz' 144;">6.500 €</span>
+          </div>
+          <p class="font-sans text-[1rem] md:text-[1.05rem] text-anthrazit leading-[1.65] max-w-2xl">
+            Alle fünf Bausteine greifen ineinander: ein Setup, drei gemeinsame Schulungs-Sessions, alles wie aus einem Guss — inklusive der Schulung, die deine EU-AI-Act-Pflicht erfüllt. Ab zwei Bausteinen lohnt sich der ganze Schritt: mehr Wirkung, ein fester Preis.
+          </p>
+        </div>
+        <div class="lg:flex-shrink-0">
+          <a href={`${base}#kontakt`} class="btn-primary w-full lg:w-auto">
+            Projekt anfragen
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 8 L13 8" />
+              <path d="M8.5 3.5 L13 8 L8.5 12.5" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tiefere Stufe: Methodik-Assistent -->
+    <div class="reveal mt-10 md:mt-12 max-w-6xl mx-auto">
+      <div class="rounded-[6px] p-7 md:p-9 lg:p-10" style="background-color: var(--bg-holzsand-soft);">
+        <p class="eyebrow eyebrow-tinte mb-4">Tiefere Stufe</p>
+        <div class="flex flex-col lg:flex-row lg:items-baseline lg:justify-between gap-1.5 lg:gap-6 mb-6">
+          <h3 class="font-serif text-[1.45rem] md:text-[1.6rem] text-tinte font-medium">
+            Methodik-Assistent und KI-Verstärker
+          </h3>
+          <span class="font-sans text-[0.95rem] text-anthrazit/70 whitespace-nowrap">ab 14.000 € · 10 bis 12 Wochen</span>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 lg:gap-10">
+          <div>
+            <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-2">Für wen</p>
+            <p class="font-sans text-[1rem] text-anthrazit leading-[1.65]">
+              Coaches mit eigenem Buch, eigener Methode oder eigenem Programm.
+            </p>
+          </div>
+          <div>
+            <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-2">Was entsteht</p>
+            <p class="font-sans text-[1rem] text-anthrazit leading-[1.65]">
+              Ein Methodik-Assistent, der deine Arbeit kennt und in deiner Stimme weiterträgt — auf Basis deiner Bücher, Modelle und Texte (technische Grundlage RAG), mit Content-Stimme zur authentischen Reproduktion deiner Sprachfarbe (technische Grundlage ElevenLabs), Webseiten-Embedding für Klienten-Interaktion, Integration in deine Umsetzung, intensiver Begleitung über drei Monate und Quartals-Review.
+            </p>
+          </div>
+        </div>
+        <p class="mt-6 font-sans text-[0.92rem] text-anthrazit/65 italic">
+          Ob das für dich stimmig ist, klären wir im Praxis-Check — nicht vorab auf dieser Seite.
+        </p>
+      </div>
+    </div>
+
+    <!-- Schritt 4: Resonanzraum (die Begleitung danach) -->
+    <div class="reveal mt-10 md:mt-12 max-w-6xl mx-auto">
+      <div class="rounded-[6px] border border-holzsand p-6 md:p-8 lg:p-9 flex flex-col lg:flex-row gap-6 lg:gap-12">
+        <div class="lg:w-[34%] lg:flex-shrink-0">
+          <p class="eyebrow eyebrow-kupfer mb-3">Schritt 4 — danach</p>
+          <h3 class="font-serif text-[1.4rem] md:text-[1.55rem] text-tinte font-medium mb-2.5">Resonanzraum</h3>
+          <p class="font-sans text-[0.95rem] text-anthrazit/70 leading-relaxed">ab 300 € pro Monat · optional, ab dem dritten Monat</p>
+        </div>
+        <div class="lg:flex-1">
+          <p class="font-sans text-[0.78rem] uppercase tracking-[0.14em] text-tinte/60 font-medium mb-3.5">Was er trägt</p>
+          <ul class="space-y-2.5">
+            {resonanzraum.map((line) => (
+              <li class="flex gap-3 items-start font-sans text-[0.97rem] text-anthrazit leading-[1.6]">
+                <span class="block mt-[0.55rem] flex-shrink-0 w-1.5 h-1.5 rounded-full bg-kupfer"></span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-5 font-sans text-[0.92rem] text-anthrazit/65 italic">
+            Ohne diese Anbindung bleibt deine Umsetzung stabil — du bist nicht abhängig.
+          </p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
