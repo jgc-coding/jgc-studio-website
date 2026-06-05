@@ -1,68 +1,42 @@
 ---
-// Baustein-Karte (Briefing v8 §7.5). Bewusst schlichter als die Schritt-Karten:
-// Holz-Sand-Rahmen, kein Etikett, ruhiger Hover (nur Rahmenfarbe, kein Lift).
-// Aufklappbares „So kann das aussehen" nutzt dieselbe <details>-Mechanik wie das FAQ.
+// Baustein als kompakte Klick-Box (Angebots-Spec Juni 2026):
+// Summary = Titel + Preis, Klick öffnet die "So kann das aussehen"-Beispiele inline.
+// Gleiche <details>-Mechanik wie das FAQ; ruhig, kein Schlagschatten, 5px Radius.
 interface Props {
   title: string;
   price: string;
-  tagline: string;
   examples: string[];
 }
-const { title, price, tagline, examples } = Astro.props;
+const { title, price, examples } = Astro.props;
 ---
 
-<article class="baustein flex flex-col rounded-[6px] border border-holzsand bg-pergament p-6 md:p-7 transition-colors duration-300">
-  <div class="flex items-baseline justify-between gap-3 mb-2.5">
-    <h4 class="font-serif text-[1.2rem] md:text-[1.3rem] leading-[1.22] text-tinte font-medium">
-      {title}
-    </h4>
-    <span class="font-sans text-[0.85rem] text-kupfer font-medium whitespace-nowrap">{price}</span>
-  </div>
-
-  <p class="font-sans text-[1.02rem] text-anthrazit/85 leading-[1.55] mb-5">
-    {tagline}
-  </p>
-
-  <details class="baustein-detail">
-    <summary class="font-sans text-[0.9rem] font-medium text-tinte/85">
-      <span>So kann das aussehen</span>
-      <svg class="chev" width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M4 7 L9 12 L14 7" />
-      </svg>
-    </summary>
-    <ul class="baustein-body space-y-2.5 pt-3.5">
+<details class="baustein-box rounded-[5px] border border-holzsand bg-pergament">
+  <summary class="flex items-center gap-3 px-4 py-3.5 cursor-pointer">
+    <span class="flex-1 font-sans font-medium text-tinte text-[1.02rem] leading-snug">{title}</span>
+    <span class="font-sans text-[0.85rem] text-kupfer whitespace-nowrap">{price}</span>
+    <svg class="chev flex-shrink-0 text-kupfer" width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 7 L9 12 L14 7" />
+    </svg>
+  </summary>
+  <div class="px-4 pb-4 pt-1">
+    <p class="font-sans text-[0.7rem] uppercase tracking-[0.14em] text-tinte/55 font-medium mb-2.5">So kann das aussehen</p>
+    <ul class="space-y-2">
       {examples.map((ex) => (
-        <li class="flex gap-2.5 items-start font-sans text-[0.92rem] text-anthrazit/85 leading-[1.5]">
+        <li class="flex gap-2.5 items-start font-sans text-[0.9rem] text-anthrazit/85 leading-[1.5]">
           <span class="block mt-[0.5rem] flex-shrink-0 w-1.5 h-1.5 rounded-full" style="background-color: rgba(201,123,63,0.7);"></span>
           <span>{ex}</span>
         </li>
       ))}
     </ul>
-  </details>
-</article>
+  </div>
+</details>
 
 <style>
-  .baustein:hover { border-color: rgba(201, 123, 63, 0.4); }
-
-  details.baustein-detail summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-top: auto;
-    padding-top: 0.9rem;
-    border-top: 1px solid rgba(217, 199, 168, 0.6);
-    color: var(--color-tinte);
-    transition: color 180ms ease;
-  }
-  details.baustein-detail summary::-webkit-details-marker { display: none; }
-  details.baustein-detail summary:hover { color: var(--color-kupfer); }
-  details.baustein-detail summary .chev {
-    flex: 0 0 auto;
-    color: var(--color-kupfer);
-    transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
-  }
-  details.baustein-detail[open] summary .chev { transform: rotate(180deg); }
+  details.baustein-box { transition: border-color 200ms ease; }
+  details.baustein-box:hover,
+  details.baustein-box[open] { border-color: rgba(201, 123, 63, 0.4); }
+  details.baustein-box summary { list-style: none; }
+  details.baustein-box summary::-webkit-details-marker { display: none; }
+  details.baustein-box summary .chev { transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1); }
+  details.baustein-box[open] summary .chev { transform: rotate(180deg); }
 </style>
