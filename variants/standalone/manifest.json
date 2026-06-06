@@ -1,0 +1,38 @@
+{
+  "09a-crafted-calm": {
+    "num": "09a",
+    "label": "Crafted Calm",
+    "skill": "emil-design-eng",
+    "source": "variants/standalone/09a-crafted-calm/index.html"
+  },
+  "09b-editorial-manuscript": {
+    "num": "09b",
+    "label": "Editorial Manuscript",
+    "skill": "design-taste-frontend",
+    "source": "variants/standalone/09b-editorial-manuscript/index.html"
+  },
+  "09c-audit-ledger": {
+    "num": "09c",
+    "label": "Audit & Ledger",
+    "skill": "impeccable",
+    "source": "variants/standalone/09c-audit-ledger/index.html"
+  },
+  "09d-editorial-luxury": {
+    "num": "09d",
+    "label": "Editorial Luxury",
+    "skill": "high-end-visual-design",
+    "source": "variants/standalone/09d-editorial-luxury/index.html"
+  },
+  "09e-quiet-handcraft": {
+    "num": "09e",
+    "label": "Quiet Handcraft",
+    "skill": "minimalist-ui",
+    "source": "variants/standalone/09e-quiet-handcraft/index.html"
+  },
+  "09f-premium-upgrade": {
+    "num": "09f",
+    "label": "Premium-Upgrade",
+    "skill": "redesign-existing-projects",
+    "source": "variants/standalone/09f-premium-upgrade/index.html"
+  }
+}

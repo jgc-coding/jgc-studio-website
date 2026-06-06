@@ -41,6 +41,25 @@ sind eingefrorene Snapshots, die du jederzeit zurückholen kannst.
 
 ---
 
+## Skill-Redesigns — Variante 09a–09f
+
+Eine andere Gattung: **self-contained Einzeldateien** (kein eigener Branch, kein
+Astro-Build). Jede basiert auf Variante 09 und wurde von **genau einem Design-Skill**
+umgestaltet — Inhalt & Grundfarben blieben erhalten, Layout/Motion durften frei.
+Die Dateien liegen unter `variants/standalone/<slug>/index.html` und werden vom
+Deploy-Workflow direkt nach `/variants/<slug>/` kopiert (siehe `variants/standalone/manifest.json`).
+
+| Nr. | Slug | Charakter | Skill |
+|---|---|---|---|
+| **09a** | `09a-crafted-calm` | **Crafted Calm** — Emil Kowalskis Detail-Obsession: spring-magnetische CTAs, WAAPI-Hero-Reveal, Cursor-Spotlight, taktile Press-States. | `emil-design-eng` |
+| **09b** | `09b-editorial-manuscript` | **Editorial Manuscript** — Anti-Slop-Taste: Fraunces mit optischer Größe, Lese-Numerale 01–06, full-bleed Tinte-Manifest als editoriales Scharnier. | `design-taste-frontend` |
+| **09c** | `09c-audit-ledger` | **Audit & Ledger** — Craft/Critique/Polish: Eyebrow-„Ledger"-System, Flächen-Rhythmus statt Pergament-Wand, sich selbst zeichnender Kupfer-Faden. | `impeccable` |
+| **09d** | `09d-editorial-luxury` | **Editorial Luxury** — Agentur-Niveau: Fraunces dominant, Double-Bezel-Cards, schwebende Glas-Nav-Insel, feiner Film-Grain & Vignette. | `high-end-visual-design` |
+| **09e** | `09e-quiet-handcraft` | **Quiet Handcraft** — editoriale Reduktion: alle Farbflächen zu einem warmen Pergament-Canvas vereint, flache Hairline-Surfaces, Kupfer als einziger Akzent. | `minimalist-ui` |
+| **09f** | `09f-premium-upgrade` | **Premium-Upgrade** — sichtbarer Before→After-Lift: Ghost-Numerale, Mask-Rise-Hero, Cursor-Spotlight, Kupfer-Scroll-Progress, Grain. | `redesign-existing-projects` |
+
+---
+
 ## Naming-Konvention
 
 `variant/NN-kurzname-mit-charakter`

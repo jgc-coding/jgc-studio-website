@@ -18,7 +18,7 @@
  * BASE_URL ist der Pages-Pfad-Prefix, z.B. "/jgc-studio-website/"
  */
 
-import { readdir, writeFile, copyFile, mkdir, stat } from 'node:fs/promises';
+import { readdir, writeFile, copyFile, mkdir, stat, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, basename } from 'node:path';
 
@@ -37,7 +37,8 @@ async function listVariantSlugs() {
 
 function variantTitle(slug) {
   // "01-briefing-v5-naturwarm-restraint" → "Variante 01 — Briefing V5 Naturwarm Restraint"
-  const m = slug.match(/^(\d+)-(.+)$/);
+  // Optionaler Buchstaben-Suffix wird mit erfasst: "09a-crafted-calm" → num "09a".
+  const m = slug.match(/^(\d+[a-z]?)-(.+)$/);
   if (!m) return slug;
   const num = m[1];
   const rest = m[2]
@@ -49,12 +50,26 @@ function variantTitle(slug) {
 
 async function findScreenshot(slug, variant_dir) {
   // Look for screenshot in <SITE_DIR>/variants/screenshots/<slug>-desktop.png
-  const expectedPath = join(SITE_DIR, 'variants', 'screenshots', `${slug.replace(/^(\d+)-.+$/, '$1')}-desktop.png`);
+  const expectedPath = join(SITE_DIR, 'variants', 'screenshots', `${slug.replace(/^(\d+[a-z]?)-.+$/, '$1')}-desktop.png`);
   if (existsSync(expectedPath)) {
-    return `${BASE}variants/screenshots/${slug.replace(/^(\d+)-.+$/, '$1')}-desktop.png`;
+    return `${BASE}variants/screenshots/${slug.replace(/^(\d+[a-z]?)-.+$/, '$1')}-desktop.png`;
   }
   // Fallback: numbered shortcut like "01-desktop.png"
   return null;
+}
+
+// Standalone-Varianten (self-contained HTML, kein eigener variant/*-Branch)
+// werden über variants/standalone/manifest.json mit Titel, Skill und
+// Quell-Link beschrieben. Branch-Varianten brauchen keinen Eintrag.
+async function loadStandaloneManifest() {
+  const manifestPath = join('variants', 'standalone', 'manifest.json');
+  if (!existsSync(manifestPath)) return {};
+  try {
+    return JSON.parse(await readFile(manifestPath, 'utf8'));
+  } catch (err) {
+    console.warn(`Manifest konnte nicht gelesen werden (${manifestPath}):`, err.message);
+    return {};
+  }
 }
 
 async function build() {
@@ -62,16 +77,23 @@ async function build() {
   console.log(`Found ${slugs.length} variant(s): ${slugs.join(', ')}`);
 
   const mainExists = existsSync(join(SITE_DIR, 'main', 'index.html'));
+  const manifest = await loadStandaloneManifest();
 
   const variants = await Promise.all(
     slugs.map(async (slug) => {
       const t = variantTitle(slug);
+      const m = manifest[slug];
       const screenshot = await findScreenshot(slug);
       return {
         slug,
-        num: t.num || '–',
-        label: t.label || slug,
+        num: m?.num || t.num || '–',
+        label: m?.label || t.label || slug,
+        skill: m?.skill || null,
         href: `${BASE}variants/${slug}/`,
+        // Standalone → Link auf die Quelldatei auf main; sonst auf den Branch.
+        code: m?.source
+          ? `https://github.com/jgc-coding/jgc-studio-website/blob/main/${m.source}`
+          : `https://github.com/jgc-coding/jgc-studio-website/tree/variant/${slug}`,
         screenshot,
       };
     })
@@ -148,6 +170,12 @@ async function build() {
       font-family: 'Fraunces', serif; font-weight: 500;
       color: #1F2A44; font-size: 1.25rem; line-height: 1.25;
     }
+    .card .skill-tag {
+      align-self: flex-start;
+      font-family: ui-monospace, monospace; font-size: 0.72rem;
+      color: #C97B3F; background: rgba(201, 123, 63, 0.1);
+      padding: 0.2rem 0.55rem; border-radius: 4px; letter-spacing: 0.01em;
+    }
     .card .slug-code {
       margin-top: auto; padding-top: 1rem;
       font-family: ui-monospace, monospace; font-size: 0.78rem;
@@ -209,10 +237,11 @@ async function build() {
       <div class="body">
         <span class="num">Variante ${v.num}</span>
         <h3>${v.label}</h3>
+        ${v.skill ? `<span class="skill-tag">${v.skill}</span>` : ''}
         <code class="slug-code">${v.slug}</code>
         <div class="actions">
           <a class="primary" href="${v.href}">Live ansehen →</a>
-          <a class="ghost" href="https://github.com/jgc-coding/jgc-studio-website/tree/variant/${v.slug}" target="_blank" rel="noopener noreferrer">Code</a>
+          <a class="ghost" href="${v.code}" target="_blank" rel="noopener noreferrer">Code</a>
         </div>
       </div>
     </article>`

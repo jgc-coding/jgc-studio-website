@@ -97,6 +97,25 @@ jobs:
             cd ..
           done
 
+      - name: Copy standalone HTML variants → /variants/<slug>/
+        run: |
+          # Self-contained single-file variants live on main under
+          # variants/standalone/<slug>/index.html (no Astro build needed).
+          # main is still checked out here, so the dir is present.
+          if [ -d variants/standalone ]; then
+            for d in variants/standalone/*/; do
+              [ -d "$d" ] || continue
+              slug="$(basename "$d")"
+              if [ -f "${d}index.html" ]; then
+                mkdir -p "_site/variants/$slug"
+                cp "${d}index.html" "_site/variants/$slug/index.html"
+                echo "  + standalone: $slug"
+              fi
+            done
+          else
+            echo "No variants/standalone dir on main"
+          fi
+
       - name: Generate gallery landing page
         run: |
           # Use main's gallery generator
