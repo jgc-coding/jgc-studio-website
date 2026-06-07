@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Symbol-Studie II — Vier Skill-Richtungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --tinte:#1F2A44;
+    --pergament:#FEFCF7;
+    --anthrazit:#2D2D2D;
+    --kupfer:#C97B3F;
+    --holzsand:#D9C7A8;
+    --ink:#1F2A44;
+    --cu:#C97B3F;
+    --ease-expo:cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-spring:cubic-bezier(0.34, 1.3, 0.64, 1);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--pergament);color:var(--anthrazit);
+    font-family:"Inter","Inter Variable",ui-sans-serif,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.6;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem);}
+
+  /* Header */
+  header.top{padding:clamp(3rem,7vw,5.5rem) 0 1.5rem;}
+  .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--kupfer);font-weight:600;margin:0 0 1rem;}
+  h1{font-family:"Fraunces",ui-serif,Georgia,serif;font-weight:500;color:var(--tinte);
+     font-size:clamp(1.9rem,3.4vw + 1rem,3.1rem);line-height:1.1;letter-spacing:-0.015em;margin:0 0 1rem;text-wrap:balance;}
+  .lede{max-width:48rem;font-size:1.0625rem;color:rgba(45,45,45,.78);margin:0;text-wrap:pretty;}
+  .lede strong{color:var(--tinte);font-weight:600;}
+
+  /* Controls */
+  .controls{position:sticky;top:0;z-index:20;background:rgba(254,252,247,.82);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(217,199,168,.5);margin-top:2.25rem;}
+  .controls .inner{max-width:1120px;margin:0 auto;padding:.85rem clamp(1.25rem,4vw,2.5rem);
+    display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.4rem;}
+  .btn{font-family:inherit;font-size:.9rem;font-weight:500;color:var(--pergament);background:var(--tinte);
+    border:none;border-radius:999px;padding:.6rem 1.2rem;cursor:pointer;
+    transition:transform .3s var(--ease-out),background .3s ease;}
+  .btn:hover{transform:translateY(-1px);background:#2a3859;}
+  .btn:active{transform:scale(.97);}
+  .toggle{display:inline-flex;align-items:center;gap:.55rem;font-size:.9rem;color:var(--tinte);cursor:pointer;user-select:none;}
+  .toggle input{accent-color:var(--kupfer);width:1.05rem;height:1.05rem;cursor:pointer;}
+  .hint{font-size:.85rem;color:rgba(45,45,45,.6);margin-left:auto;}
+  @media (max-width:640px){.hint{margin-left:0;width:100%;}}
+
+  /* Lens section */
+  section.lens{padding:clamp(2.75rem,5vw,4rem) 0 1rem;border-top:1px solid rgba(217,199,168,.4);}
+  section.lens:first-of-type{border-top:none;}
+  .lens-head{max-width:46rem;margin-bottom:1.9rem;}
+  .lens-head h2{font-family:"Fraunces",serif;font-weight:500;color:var(--tinte);
+    font-size:clamp(1.4rem,1.6vw + 1rem,1.95rem);margin:0 0 .5rem;letter-spacing:-0.01em;}
+  .method{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .85rem;font-size:.92rem;color:rgba(45,45,45,.72);}
+  .method code{font-family:ui-monospace,"SF Mono",monospace;font-size:.8rem;color:var(--kupfer);
+    background:rgba(201,123,63,.1);padding:.16rem .5rem;border-radius:5px;}
+  .method .motion{color:var(--tinte);font-weight:500;}
+
+  /* Triptych */
+  .grid{display:grid;gap:clamp(.85rem,1.4vw,1.1rem);grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+  .card{position:relative;margin:0;background:#fff;border:1px solid rgba(217,199,168,.65);border-radius:14px;
+    padding:1.5rem 1.2rem 1.3rem;text-align:center;
+    transition:transform .45s var(--ease-out),box-shadow .45s var(--ease-out),border-color .45s ease;
+    box-shadow:0 1px 3px 0 rgba(31,42,68,.04);}
+  .card:hover{transform:translateY(-4px);box-shadow:0 10px 26px -8px rgba(31,42,68,.14);border-color:rgba(201,123,63,.4);}
+  .role{font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:rgba(31,42,68,.4);margin:0 0 .3rem;}
+  .sym-wrap{width:84px;height:84px;margin:.4rem auto .95rem;display:flex;align-items:center;justify-content:center;}
+  svg.sym{width:64px;height:64px;overflow:visible;display:block;}
+  .name{font-weight:600;color:var(--tinte);font-size:1.02rem;margin:0 0 .25rem;letter-spacing:-0.005em;}
+  .desc{font-size:.84rem;line-height:1.45;color:rgba(45,45,45,.66);margin:0;}
+
+  /* Symbol primitives */
+  .sym .dr{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:100 100;stroke-dashoffset:0;}
+  .sym .pp{fill:var(--ink);}
+  .sym .cuf{fill:var(--cu);}
+  .sym .soft{opacity:.5;}
+  .sym .travel{fill:var(--cu);opacity:0;}
+
+  /* Build-up animations — one mechanic per lens */
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes draw{from{stroke-dashoffset:100;}to{stroke-dashoffset:0;}}
+    @keyframes spring{from{opacity:0;transform:scale(.9);}60%{opacity:1;}to{opacity:1;transform:scale(1);}}
+    @keyframes wipe{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 -4% 0 0);}}
+
+    /* Konzept — clip-path wipe across the whole glyph */
+    .card.is-playing.lens-konzept .sym{animation:wipe 680ms var(--ease-expo) both;}
+
+    /* Bewegung — spring-in with gentle overshoot, quick draw for links */
+    .card.is-playing.lens-bewegung .spr{animation:spring 560ms var(--ease-spring) both;
+      animation-delay:var(--d,0ms);transform-box:fill-box;transform-origin:center;}
+    .card.is-playing.lens-bewegung .dr{animation:draw 460ms var(--ease-out) both;animation-delay:var(--d,0ms);}
+
+    /* Präzision — copper dot draws the line like a pen; dot travels via SMIL (JS-triggered) */
+    .card.is-playing.lens-praezision .dr{animation:draw 920ms linear both;animation-delay:var(--d,0ms);}
+
+    /* Reduktion — one slow, quiet stroke */
+    .card.is-playing.lens-reduktion .dr{animation:draw 1000ms var(--ease-expo) both;}
+  }
+
+  footer{padding:3rem 0 4rem;color:rgba(45,45,45,.6);font-size:.9rem;border-top:1px solid rgba(217,199,168,.4);margin-top:2.5rem;}
+  footer code{background:rgba(31,42,68,.06);padding:.1rem .4rem;border-radius:5px;font-size:.85em;color:var(--tinte);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Symbol-Studie II · vier Skill-Richtungen</p>
+    <h1>Dieselben drei Welten, vier neue Handschriften.</h1>
+    <p class="lede">Bewusst unabhängig von der ersten Charge: andere Konzepte, andere Stile, vor allem <strong>andere Aufbau-Mechaniken</strong>. Jede Richtung trägt die Handschrift genau eines Design-Skills und zeigt pro Hintergrund ein frisches Symbol. Fahr mit der Maus über ein Symbol, um die Bewegung erneut zu sehen.</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="inner">
+    <button class="btn" id="replay">Alle Symbole neu abspielen</button>
+    <label class="toggle"><input type="checkbox" id="loop" /> Endlosschleife</label>
+    <span class="hint">Vier Richtungen, je drei Hintergründe. Sag mir, welche Handschrift dich anspricht.</span>
+  </div>
+</div>
+
+<!-- ===================== KONZEPT (Taste) ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Konzept</h2>
+      <p class="method"><code>design-taste-frontend</code> <span>Weg vom Klischee, hin zur Idee.</span> <span class="motion">Aufbau: Tinten-Wisch (clip-path).</span></p>
+    </div>
+    <div class="grid">
+
+      <figure class="card lens-konzept" data-card>
+        <p class="role">Coach</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" d="M10 12 C 13 26 18 31 24 31 C 30 31 35 25 39 13" stroke-width="1.8"/>
+          <circle class="cuf" cx="24" cy="31" r="2.7"/>
+        </svg></div>
+        <p class="name">Wendepunkt</p>
+        <p class="desc">Der Moment, an dem sich die Richtung dreht.</p>
+      </figure>
+
+      <figure class="card lens-konzept" data-card>
+        <p class="role">Wirtschaftsingenieur</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <rect class="dr" x="7" y="16.5" width="14" height="14" rx="1.5" stroke-width="1.8"/>
+          <circle class="dr" cx="35" cy="23.5" r="7.5" stroke-width="1.8"/>
+          <path class="dr soft" d="M21.5 21.5 L27.5 21.5 M21.5 25.5 L27.5 25.5" stroke-width="1.8"/>
+        </svg></div>
+        <p class="name">Übersetzung</p>
+        <p class="desc">Zwei fremde Formen, miteinander in Verbindung.</p>
+      </figure>
+
+      <figure class="card lens-konzept" data-card>
+        <p class="role">KI-Experte</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr soft" d="M9 11 L9 39 L40 39" stroke-width="1.4"/>
+          <circle class="pp" cx="17" cy="30" r="1.5"/>
+          <circle class="pp" cx="22" cy="20" r="1.5"/>
+          <circle class="pp" cx="31" cy="27" r="1.5"/>
+          <circle class="pp" cx="34" cy="16" r="1.5"/>
+          <circle class="pp" cx="26.5" cy="33" r="1.5"/>
+          <circle class="cuf" cx="27" cy="24" r="2.9"/>
+        </svg></div>
+        <p class="name">Einordnung</p>
+        <p class="desc">Bedeutung, verortet in einem Raum aus Daten.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BEWEGUNG (Emil) ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Bewegung</h2>
+      <p class="method"><code>emil-design-eng</code> <span>Motion zuerst gedacht.</span> <span class="motion">Aufbau: Elemente federn mit leichtem Überschwung ein.</span></p>
+    </div>
+    <div class="grid">
+
+      <figure class="card lens-bewegung" data-card>
+        <p class="role">Coach</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M6 24 L16 24 L19 24 L22 14 L26 35 L29 24 L42 24" stroke-width="1.7" style="--d:0ms"/>
+          <circle class="spr cuf" cx="22" cy="14" r="2.5" style="--d:340ms"/>
+        </svg></div>
+        <p class="name">Puls</p>
+        <p class="desc">Innere Anspannung und Ruhe, ein Ausschlag.</p>
+      </figure>
+
+      <figure class="card lens-bewegung" data-card>
+        <p class="role">Wirtschaftsingenieur</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <rect class="spr" x="13" y="30" width="22" height="7" rx="1.6" style="--d:0ms"/>
+          <rect class="spr" x="16" y="20.5" width="16" height="7" rx="1.6" style="--d:95ms"/>
+          <rect class="spr" x="19" y="11" width="10" height="7" rx="1.6" style="--d:190ms"/>
+        </svg></div>
+        <p class="name">Module</p>
+        <p class="desc">Bausteine, die sich zu einem System fügen.</p>
+      </figure>
+
+      <figure class="card lens-bewegung" data-card>
+        <p class="role">KI-Experte</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr soft" pathLength="100" d="M24 24 L12 14 M24 24 L38 13 M24 24 L34 36" style="--d:140ms"/>
+          <circle class="spr cuf" cx="24" cy="24" r="4" style="--d:0ms"/>
+          <circle class="spr" cx="12" cy="14" r="2.7" style="--d:240ms"/>
+          <circle class="spr" cx="38" cy="13" r="2.7" style="--d:320ms"/>
+          <circle class="spr" cx="34" cy="36" r="2.7" style="--d:400ms"/>
+        </svg></div>
+        <p class="name">Aktivierung</p>
+        <p class="desc">Ein Knoten zündet, das Netz reagiert.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRÄZISION (Impeccable) ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Präzision</h2>
+      <p class="method"><code>impeccable · animate</code> <span>Eine gerichtete Mikro-Interaktion.</span> <span class="motion">Aufbau: ein Kupferpunkt zeichnet die Linie wie ein Stift.</span></p>
+    </div>
+    <div class="grid">
+
+      <figure class="card lens-praezision" data-card>
+        <p class="role">Coach</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="p-coach3" class="dr" pathLength="100" d="M8 39 C 13 31 11 23 22 21 C 31 19.5 31 13 38 11"/>
+          <path class="dr" pathLength="100" d="M38 11 L38 6.5 M38 6.5 L43 8 L38 9.8" style="--d:760ms"/>
+          <circle class="travel" r="2.4"><animateMotion dur="0.92s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#p-coach3"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Wegmarke</p>
+        <p class="desc">Der begleitete Weg bis zum gesetzten Ziel.</p>
+      </figure>
+
+      <figure class="card lens-praezision" data-card>
+        <p class="role">Wirtschaftsingenieur</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="p-ing3" class="dr" pathLength="100" d="M24 11 A 13 13 0 1 1 12.5 30.5"/>
+          <path class="dr" pathLength="100" d="M8 26.5 L12.5 31 L17 27.5" style="--d:780ms"/>
+          <circle class="travel" r="2.4"><animateMotion dur="0.92s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#p-ing3"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Regelkreis</p>
+        <p class="desc">Steuern, messen, nachregeln. Der Kreis der Technik.</p>
+      </figure>
+
+      <figure class="card lens-praezision" data-card>
+        <p class="role">KI-Experte</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="p-ki3" class="dr" pathLength="100" d="M7 24 L41 24"/>
+          <circle class="dr" cx="11" cy="24" r="3" style="--d:120ms"/>
+          <rect class="dr" x="20" y="19" width="8" height="10" rx="1.6" style="--d:300ms"/>
+          <circle class="dr" cx="38" cy="24" r="3" style="--d:480ms"/>
+          <circle class="travel" r="2.2"><animateMotion dur="0.92s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#p-ki3"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Pipeline</p>
+        <p class="desc">Eingabe, Modell, Ergebnis. Daten in Bewegung.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REDUKTION (Minimalist) ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Reduktion</h2>
+      <p class="method"><code>minimalist-ui</code> <span>Alles weg, was nicht trägt.</span> <span class="motion">Aufbau: ein einziger ruhiger Strich.</span></p>
+    </div>
+    <div class="grid">
+
+      <figure class="card lens-reduktion" data-card>
+        <p class="role">Coach</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M28 28 C 33 23 30 16 24 16 C 16 16 13 26 20 31 C 28 37 39 31 38 21 C 37 11 28 7 21 9" stroke-width="1.4"/>
+        </svg></div>
+        <p class="name">Innehalten</p>
+        <p class="desc">Die Bewegung nach innen, ein Atemzug.</p>
+      </figure>
+
+      <figure class="card lens-reduktion" data-card>
+        <p class="role">Wirtschaftsingenieur</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M6 31 C 13 31 13 18 21 18 C 29 18 27 33 35 33 C 40 33 42 28 42 24" stroke-width="1.4"/>
+        </svg></div>
+        <p class="name">Faden</p>
+        <p class="desc">Der durchgehende Faden durch alle Welten.</p>
+      </figure>
+
+      <figure class="card lens-reduktion" data-card>
+        <p class="role">KI-Experte</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M6 31 L18 31 Q22 31 22 27 L22 21 Q22 17 26 17 L42 17" stroke-width="1.4"/>
+        </svg></div>
+        <p class="name">Schwelle</p>
+        <p class="desc">Das klare Signal, eine Stufe nach oben.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Symbol-Studie II · JGC Studio · Vier Skill-Handschriften, ergänzend zu Variante 10. Nenn mir die Richtung (oder einzelne Symbole), die passt, dann baue ich sie fest in <code>WerMitDirArbeitet.astro</code> ein.
+  </div>
+</footer>
+
+<script>
+  const cards = Array.from(document.querySelectorAll('[data-card]'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function play(card){
+    card.classList.remove('is-playing');
+    void card.offsetWidth;
+    card.classList.add('is-playing');
+    if(!reduceMotion){
+      card.querySelectorAll('.travel').forEach(d=>{ d.style.opacity='1'; });
+      card.querySelectorAll('animateMotion').forEach(am=>{ try{ am.beginElement(); }catch(e){} });
+    }
+  }
+  function playAll(){ cards.forEach((c, i) => setTimeout(() => play(c), i * 70)); }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting){ play(e.target); io.unobserve(e.target); } });
+  }, { threshold: 0.4 });
+  cards.forEach((c) => io.observe(c));
+
+  cards.forEach((c) => c.addEventListener('mouseenter', () => play(c)));
+  document.getElementById('replay').addEventListener('click', playAll);
+
+  let loopTimer = null;
+  document.getElementById('loop').addEventListener('change', (e) => {
+    if (e.target.checked){ playAll(); loopTimer = setInterval(playAll, 3800); }
+    else { clearInterval(loopTimer); loopTimer = null; }
+  });
+</script>
+</body>
+</html>

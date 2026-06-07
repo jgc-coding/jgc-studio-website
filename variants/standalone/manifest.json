@@ -39,5 +39,10 @@
     "num": "10",
     "label": "Symbol-Studie",
     "source": "variants/standalone/10-symbol-studie/index.html"
+  },
+  "11-symbol-studie-ii": {
+    "num": "11",
+    "label": "Symbol-Studie II",
+    "source": "variants/standalone/11-symbol-studie-ii/index.html"
   }
 }
