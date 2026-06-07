@@ -60,7 +60,7 @@ Deploy-Workflow direkt nach `/variants/<slug>/` kopiert (siehe `variants/standal
 
 ---
 
-## Werkzeug-Studien — Variante 10–11
+## Werkzeug-Studien — Variante 10–12
 
 Keine Sales-Page-Varianten, sondern **Arbeits-Studien**: self-contained
 Einzeldateien zur Symbol-Auswahl. Liegen wie die 09er-Reihe unter
@@ -70,6 +70,7 @@ Einzeldateien zur Symbol-Auswahl. Liegen wie die 09er-Reihe unter
 |---|---|---|
 | **10** | `10-symbol-studie` | **Symbol-Studie „Wer mit dir arbeitet"** — je 5 animierte Icon-Vorschläge für die drei Hintergründe (Coach-Hintergrund / Wirtschaftsingenieur / TÜV-KI-Experte), jeweils mit Aufbau-Animation (Linien zeichnen sich selbst, Punkte ploppen rein). Auswahl-Galerie zur Entscheidung über die finalen Säulen-Symbole in `WerMitDirArbeitet.astro`. |
 | **11** | `11-symbol-studie-ii` | **Symbol-Studie II — vier Skill-Handschriften** — pro Design-Skill eine eigene Richtung über alle drei Hintergründe, je mit eigener Aufbau-Mechanik: Konzept/Tinten-Wisch (`design-taste-frontend`), Bewegung/Spring (`emil-design-eng`), Präzision/wandernder Kupferpunkt (`impeccable`), Reduktion/Einzelstrich (`minimalist-ui`). Bewusst unabhängig von Variante 10. |
+| **12** | `12-symbol-studie-iii` | **Symbol-Studie III — Impeccable, der Kupferpunkt baut** — je 3 Varianten pro Hintergrund, alle vom wandernden Kupferpunkt (SVG `animateMotion`) aufgebaut: Coach/Kompass mit gedämpft auf Norden einpendelnder Nadel (`animateTransform`), Wirtschaftsingenieur/Punkte-Netz (Kette · Stern · Knotenpunkt), KI/Prüfsiegel (schlicht · Strahlen · Medaille). |
 
 ---
 

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Symbol-Studie III — Impeccable, der Kupferpunkt baut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --tinte:#1F2A44;--pergament:#FEFCF7;--anthrazit:#2D2D2D;--kupfer:#C97B3F;--holzsand:#D9C7A8;
+    --ink:#1F2A44;--cu:#C97B3F;
+    --ease-expo:cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--pergament);color:var(--anthrazit);
+    font-family:"Inter","Inter Variable",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem);}
+
+  header.top{padding:clamp(3rem,7vw,5.5rem) 0 1.5rem;}
+  .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--kupfer);font-weight:600;margin:0 0 1rem;}
+  h1{font-family:"Fraunces",ui-serif,Georgia,serif;font-weight:500;color:var(--tinte);
+     font-size:clamp(1.9rem,3.4vw + 1rem,3.1rem);line-height:1.1;letter-spacing:-0.015em;margin:0 0 1rem;text-wrap:balance;}
+  .lede{max-width:48rem;font-size:1.0625rem;color:rgba(45,45,45,.78);margin:0;text-wrap:pretty;}
+  .lede strong{color:var(--tinte);font-weight:600;}
+
+  .controls{position:sticky;top:0;z-index:20;background:rgba(254,252,247,.82);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(217,199,168,.5);margin-top:2.25rem;}
+  .controls .inner{max-width:1120px;margin:0 auto;padding:.85rem clamp(1.25rem,4vw,2.5rem);display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.4rem;}
+  .btn{font-family:inherit;font-size:.9rem;font-weight:500;color:var(--pergament);background:var(--tinte);border:none;border-radius:999px;padding:.6rem 1.2rem;cursor:pointer;transition:transform .3s var(--ease-out),background .3s ease;}
+  .btn:hover{transform:translateY(-1px);background:#2a3859;}
+  .btn:active{transform:scale(.97);}
+  .toggle{display:inline-flex;align-items:center;gap:.55rem;font-size:.9rem;color:var(--tinte);cursor:pointer;user-select:none;}
+  .toggle input{accent-color:var(--kupfer);width:1.05rem;height:1.05rem;cursor:pointer;}
+  .hint{font-size:.85rem;color:rgba(45,45,45,.6);margin-left:auto;}
+  @media (max-width:640px){.hint{margin-left:0;width:100%;}}
+
+  section.lens{padding:clamp(2.75rem,5vw,4rem) 0 1rem;border-top:1px solid rgba(217,199,168,.4);}
+  section.lens:first-of-type{border-top:none;}
+  .lens-head{max-width:46rem;margin-bottom:1.9rem;}
+  .lens-head h2{font-family:"Fraunces",serif;font-weight:500;color:var(--tinte);font-size:clamp(1.4rem,1.6vw + 1rem,1.95rem);margin:0 0 .5rem;letter-spacing:-0.01em;}
+  .method{font-size:.95rem;color:rgba(45,45,45,.72);margin:0;}
+  .method .accent{color:var(--tinte);font-weight:500;}
+
+  .grid{display:grid;gap:clamp(.85rem,1.4vw,1.1rem);grid-template-columns:repeat(auto-fit,minmax(210px,1fr));}
+  .card{position:relative;margin:0;background:#fff;border:1px solid rgba(217,199,168,.65);border-radius:14px;
+    padding:1.5rem 1.2rem 1.3rem;text-align:center;
+    transition:transform .45s var(--ease-out),box-shadow .45s var(--ease-out),border-color .45s ease;box-shadow:0 1px 3px 0 rgba(31,42,68,.04);}
+  .card:hover{transform:translateY(-4px);box-shadow:0 10px 26px -8px rgba(31,42,68,.14);border-color:rgba(201,123,63,.4);}
+  .role{font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:rgba(31,42,68,.4);margin:0 0 .3rem;}
+  .sym-wrap{width:88px;height:88px;margin:.4rem auto .95rem;display:flex;align-items:center;justify-content:center;}
+  svg.sym{width:68px;height:68px;overflow:visible;display:block;}
+  .name{font-weight:600;color:var(--tinte);font-size:1.0rem;margin:0 0 .25rem;letter-spacing:-0.005em;}
+  .desc{font-size:.83rem;line-height:1.45;color:rgba(45,45,45,.66);margin:0;}
+
+  /* primitives */
+  .sym .dr{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100 100;stroke-dashoffset:0;}
+  .sym .pp{fill:var(--ink);}
+  .sym .nd{fill:var(--ink);}
+  .sym .nd.south{opacity:.38;}
+  .sym .cu{stroke:var(--cu);}
+  .sym .cuf{fill:var(--cu);}
+  .sym .soft{opacity:.5;}
+  .sym .travel{fill:var(--cu);opacity:0;}
+
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes draw{from{stroke-dashoffset:100;}to{stroke-dashoffset:0;}}
+    @keyframes pop{from{opacity:0;transform:scale(.3);}60%{opacity:1;}to{opacity:1;transform:scale(1);}}
+    .card.is-playing .dr{animation:draw var(--draw,1000ms) linear both;animation-delay:var(--d,0ms);}
+    .card.is-playing .pp{animation:pop 360ms var(--ease-out) both;animation-delay:var(--d,0ms);transform-box:fill-box;transform-origin:center;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sym .needle [data-rot]{display:none;} /* no SMIL motion; needle rests at north */
+  }
+
+  footer{padding:3rem 0 4rem;color:rgba(45,45,45,.6);font-size:.9rem;border-top:1px solid rgba(217,199,168,.4);margin-top:2.5rem;}
+  footer code{background:rgba(31,42,68,.06);padding:.1rem .4rem;border-radius:5px;font-size:.85em;color:var(--tinte);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Symbol-Studie III · Impeccable</p>
+    <h1>Ein Kupferpunkt, der das Symbol baut.</h1>
+    <p class="lede">Drei Varianten pro Hintergrund, alle in einer Handschrift: ein kleiner <strong>Kupferpunkt</strong> zeichnet die Form auf. Beim Kompass pendelt sich danach die Nadel auf Norden ein, beim Netz wächst ein Knotenbild, beim Siegel folgt der Haken zum Schluss. Fahr mit der Maus über ein Symbol, um die Bewegung erneut zu sehen.</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="inner">
+    <button class="btn" id="replay">Alle Symbole neu abspielen</button>
+    <label class="toggle"><input type="checkbox" id="loop" /> Endlosschleife</label>
+    <span class="hint">Drei Hintergründe, je drei Varianten. Sag mir, welche du nehmen willst.</span>
+  </div>
+</div>
+
+<!-- ===================== COACH — KOMPASS ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Kompass</h2>
+      <p class="method">Drei Detailstufen, von schlicht bis fein. <span class="accent">Die Nadel pendelt sich gedämpft auf Norden ein.</span></p>
+    </div>
+    <div class="grid">
+
+      <!-- Variante 1: schlicht -->
+      <figure class="card" data-card style="--draw:900ms">
+        <p class="role">Variante 1</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="cmp1ring" class="dr" pathLength="100" d="M24 10 A14 14 0 1 1 24 38 A14 14 0 1 1 24 10"/>
+          <g class="needle">
+            <path class="nd" d="M24 13 L26.2 24 L24 25.2 L21.8 24 Z"/>
+            <path class="nd south" d="M24 35 L26.2 24 L21.8 24 Z"/>
+            <animateTransform data-rot attributeName="transform" attributeType="XML" type="rotate" begin="cmp1dot.end" dur="1.6s" fill="freeze" calcMode="spline"
+              values="0 24 24;30 24 24;-20 24 24;12 24 24;-7 24 24;4 24 24;-2 24 24;0 24 24"
+              keyTimes="0;0.12;0.3;0.46;0.62;0.78;0.9;1"
+              keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </g>
+          <circle class="pp" cx="24" cy="24" r="1.8" style="--d:520ms"/>
+          <circle class="travel" r="2.2"><animateMotion class="smil-root" id="cmp1dot" dur="0.9s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#cmp1ring"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Reduziert</p>
+        <p class="desc">Ring und Nadel. Nichts, was ablenkt.</p>
+      </figure>
+
+      <!-- Variante 2: mit Himmelsrichtungen -->
+      <figure class="card" data-card style="--draw:900ms">
+        <p class="role">Variante 2</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="cmp2ring" class="dr" pathLength="100" d="M24 10 A14 14 0 1 1 24 38 A14 14 0 1 1 24 10"/>
+          <path class="dr" pathLength="100" d="M24 11.5 L24 14.5" style="--d:300ms;--draw:300ms"/>
+          <path class="dr" pathLength="100" d="M24 33.5 L24 36.5" style="--d:380ms;--draw:300ms"/>
+          <path class="dr" pathLength="100" d="M11.5 24 L14.5 24" style="--d:460ms;--draw:300ms"/>
+          <path class="dr" pathLength="100" d="M33.5 24 L36.5 24" style="--d:540ms;--draw:300ms"/>
+          <g class="needle">
+            <path class="nd" d="M24 13.5 L26.2 24 L24 25.2 L21.8 24 Z"/>
+            <path class="nd south" d="M24 34.5 L26.2 24 L21.8 24 Z"/>
+            <animateTransform data-rot attributeName="transform" attributeType="XML" type="rotate" begin="cmp2dot.end" dur="1.6s" fill="freeze" calcMode="spline"
+              values="0 24 24;30 24 24;-20 24 24;12 24 24;-7 24 24;4 24 24;-2 24 24;0 24 24"
+              keyTimes="0;0.12;0.3;0.46;0.62;0.78;0.9;1"
+              keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </g>
+          <circle class="pp" cx="24" cy="24" r="1.8" style="--d:560ms"/>
+          <circle class="travel" r="2.2"><animateMotion class="smil-root" id="cmp2dot" dur="0.9s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#cmp2ring"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Mit Rose</p>
+        <p class="desc">Die vier Himmelsrichtungen als feine Marken.</p>
+      </figure>
+
+      <!-- Variante 3: feine Rose -->
+      <figure class="card" data-card style="--draw:900ms">
+        <p class="role">Variante 3</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="cmp3ring" class="dr" pathLength="100" d="M24 10 A14 14 0 1 1 24 38 A14 14 0 1 1 24 10"/>
+          <path class="dr" pathLength="100" d="M24 11.5 L24 15 M24 33 L24 36.5 M11.5 24 L15 24 M33 24 L36.5 24" style="--d:300ms;--draw:340ms"/>
+          <path class="dr soft" pathLength="100" d="M15.2 15.2 L17.4 17.4 M32.8 15.2 L30.6 17.4 M32.8 32.8 L30.6 30.6 M15.2 32.8 L17.4 30.6" style="--d:470ms;--draw:340ms"/>
+          <path class="pp" d="M24 6.5 L22.4 10 L25.6 10 Z" style="--d:640ms"/>
+          <g class="needle">
+            <path class="nd" d="M24 14 L26.4 24 L24 25.3 L21.6 24 Z"/>
+            <path class="nd south" d="M24 34 L26.4 24 L21.6 24 Z"/>
+            <animateTransform data-rot attributeName="transform" attributeType="XML" type="rotate" begin="cmp3dot.end" dur="1.6s" fill="freeze" calcMode="spline"
+              values="0 24 24;30 24 24;-20 24 24;12 24 24;-7 24 24;4 24 24;-2 24 24;0 24 24"
+              keyTimes="0;0.12;0.3;0.46;0.62;0.78;0.9;1"
+              keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </g>
+          <circle class="pp" cx="24" cy="24" r="1.9" style="--d:700ms"/>
+          <circle class="travel" r="2.2"><animateMotion class="smil-root" id="cmp3dot" dur="0.9s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#cmp3ring"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Feine Rose</p>
+        <p class="desc">Acht Striche, ein Nordzeiger. Instrument, nicht Icon.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INGENIEUR — PUNKTE-NETZ ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Punkte-Netz</h2>
+      <p class="method">Drei Arten, wie sich ein Knotenbild aufbaut. <span class="accent">Der Kupferpunkt verlegt die Verbindungen, die Knoten setzen sich.</span></p>
+    </div>
+    <div class="grid">
+
+      <!-- Variante 1: Pfad, Knoten leuchten der Reihe nach auf -->
+      <figure class="card" data-card style="--draw:1300ms">
+        <p class="role">Variante 1</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="net1path" class="dr" pathLength="100" d="M8 33 L17 18 L26 30 L35 15 L41 31"/>
+          <circle class="pp" cx="8" cy="33" r="2.6" style="--d:0ms"/>
+          <circle class="pp" cx="17" cy="18" r="2.6" style="--d:340ms"/>
+          <circle class="pp" cx="26" cy="30" r="2.6" style="--d:650ms"/>
+          <circle class="pp" cx="35" cy="15" r="2.6" style="--d:960ms"/>
+          <circle class="pp" cx="41" cy="31" r="2.6" style="--d:1240ms"/>
+          <circle class="travel" r="2.3"><animateMotion class="smil-root" id="net1dot" dur="1.3s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#net1path"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Kette</p>
+        <p class="desc">Knoten für Knoten, der Reihe nach verbunden.</p>
+      </figure>
+
+      <!-- Variante 2: Stern, Speichen vom Zentrum -->
+      <figure class="card" data-card style="--draw:1500ms">
+        <p class="role">Variante 2</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="net2path" class="dr soft" pathLength="100" d="M24 24 L24 9 L24 24 L38 18 L24 24 L33 38 L24 24 L15 38 L24 24 L10 18 L24 24"/>
+          <circle class="pp" cx="24" cy="9" r="2.5" style="--d:300ms"/>
+          <circle class="pp" cx="38" cy="18" r="2.5" style="--d:600ms"/>
+          <circle class="pp" cx="33" cy="38" r="2.5" style="--d:900ms"/>
+          <circle class="pp" cx="15" cy="38" r="2.5" style="--d:1180ms"/>
+          <circle class="pp" cx="10" cy="18" r="2.5" style="--d:1460ms"/>
+          <circle class="pp" cx="24" cy="24" r="3.2" style="--d:0ms"/>
+          <circle class="travel" r="2.3"><animateMotion class="smil-root" id="net2dot" dur="1.5s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#net2path"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Stern</p>
+        <p class="desc">Aus einem Zentrum heraus, Speiche um Speiche.</p>
+      </figure>
+
+      <!-- Variante 3: Diamant-Knoten (wie "Knotenpunkt") -->
+      <figure class="card" data-card style="--draw:1500ms">
+        <p class="role">Variante 3</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="net3path" class="dr" pathLength="100" d="M24 9 L39 24 L24 39 L9 24 L24 9 L24 39 L9 24 L39 24"/>
+          <circle class="pp" cx="24" cy="9" r="2.7" style="--d:200ms"/>
+          <circle class="pp" cx="39" cy="24" r="2.7" style="--d:450ms"/>
+          <circle class="pp" cx="24" cy="39" r="2.7" style="--d:700ms"/>
+          <circle class="pp" cx="9" cy="24" r="2.7" style="--d:950ms"/>
+          <circle class="pp" cx="24" cy="24" r="2.4" style="--d:1150ms"/>
+          <circle class="travel" r="2.3"><animateMotion class="smil-root" id="net3dot" dur="1.5s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#net3path"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Knotenpunkt</p>
+        <p class="desc">Die Raute mit Kern, in einem Zug gezogen.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== KI — PRÜFSIEGEL ===================== -->
+<section class="lens">
+  <div class="wrap">
+    <div class="lens-head">
+      <h2>Prüfsiegel</h2>
+      <p class="method">Drei Siegel, vom Kupferpunkt gezogen. <span class="accent">Der Haken kommt zum Schluss.</span></p>
+    </div>
+    <div class="grid">
+
+      <!-- Variante 1: schlicht -->
+      <figure class="card" data-card style="--draw:950ms">
+        <p class="role">Variante 1</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="sig1ring" class="dr" pathLength="100" d="M24 11 A13 13 0 1 1 24 37 A13 13 0 1 1 24 11"/>
+          <path class="dr cu" pathLength="100" d="M17.5 24.5 L22 29 L31 18.5" stroke-width="1.9" style="--d:1000ms;--draw:520ms"/>
+          <circle class="travel" r="2.2"><animateMotion class="smil-root" id="sig1dot" dur="0.95s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#sig1ring"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Schlicht</p>
+        <p class="desc">Ein Ring, ein Haken. Geprüft, ohne Schnörkel.</p>
+      </figure>
+
+      <!-- Variante 2: Strahlensiegel -->
+      <figure class="card" data-card style="--draw:950ms">
+        <p class="role">Variante 2</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="sig2ring" class="dr" pathLength="100" d="M24 11 A13 13 0 1 1 24 37 A13 13 0 1 1 24 11"/>
+          <path class="dr soft" pathLength="100" d="M24 7.5 L24 10 M40.5 24 L38 24 M24 40.5 L24 38 M7.5 24 L10 24" style="--d:560ms;--draw:300ms"/>
+          <path class="dr soft" pathLength="100" d="M35.7 12.3 L34 14 M35.7 35.7 L34 34 M12.3 35.7 L14 34 M12.3 12.3 L14 14" style="--d:700ms;--draw:300ms"/>
+          <path class="dr cu" pathLength="100" d="M17.5 24.5 L22 29 L31 18.5" stroke-width="1.9" style="--d:1040ms;--draw:520ms"/>
+          <circle class="travel" r="2.2"><animateMotion class="smil-root" id="sig2dot" dur="0.95s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#sig2ring"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Strahlen</p>
+        <p class="desc">Ein Kranz aus Strahlen, wie ein Orden.</p>
+      </figure>
+
+      <!-- Variante 3: Doppelring mit Perlrand -->
+      <figure class="card" data-card style="--draw:950ms">
+        <p class="role">Variante 3</p>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path id="sig3ring" class="dr" pathLength="100" d="M24 11 A13 13 0 1 1 24 37 A13 13 0 1 1 24 11"/>
+          <circle class="dr soft" pathLength="100" cx="24" cy="24" r="9.5" style="--d:520ms;--draw:520ms"/>
+          <circle class="pp" cx="37" cy="24" r="0.85" style="--d:700ms"/>
+          <circle class="pp" cx="35.3" cy="30.5" r="0.85" style="--d:740ms"/>
+          <circle class="pp" cx="30.5" cy="35.3" r="0.85" style="--d:780ms"/>
+          <circle class="pp" cx="24" cy="37" r="0.85" style="--d:820ms"/>
+          <circle class="pp" cx="17.5" cy="35.3" r="0.85" style="--d:860ms"/>
+          <circle class="pp" cx="12.7" cy="30.5" r="0.85" style="--d:900ms"/>
+          <circle class="pp" cx="11" cy="24" r="0.85" style="--d:940ms"/>
+          <circle class="pp" cx="12.7" cy="17.5" r="0.85" style="--d:980ms"/>
+          <circle class="pp" cx="17.5" cy="12.7" r="0.85" style="--d:1020ms"/>
+          <circle class="pp" cx="24" cy="11" r="0.85" style="--d:1060ms"/>
+          <circle class="pp" cx="30.5" cy="12.7" r="0.85" style="--d:1100ms"/>
+          <circle class="pp" cx="35.3" cy="17.5" r="0.85" style="--d:1140ms"/>
+          <path class="dr cu" pathLength="100" d="M17.5 24.5 L22 29 L31 18.5" stroke-width="1.9" style="--d:1240ms;--draw:520ms"/>
+          <circle class="travel" r="2.2"><animateMotion class="smil-root" id="sig3dot" dur="0.95s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#sig3ring"/></animateMotion></circle>
+        </svg></div>
+        <p class="name">Medaille</p>
+        <p class="desc">Doppelring mit Perlrand. Das volle Siegel.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Symbol-Studie III · JGC Studio · Neun Impeccable-Varianten, alle vom Kupferpunkt gebaut. Nenn mir je Hintergrund die Variante, dann baue ich sie fest in <code>WerMitDirArbeitet.astro</code> ein.
+  </div>
+</footer>
+
+<script>
+  const cards = Array.from(document.querySelectorAll('[data-card]'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function play(card){
+    card.classList.remove('is-playing');
+    void card.offsetWidth;
+    card.classList.add('is-playing');
+    if(!reduceMotion){
+      card.querySelectorAll('.travel').forEach(d=>{ d.style.opacity='1'; });
+      card.querySelectorAll('.smil-root').forEach(am=>{ try{ am.beginElement(); }catch(e){} });
+    }
+  }
+  function playAll(){ cards.forEach((c, i) => setTimeout(() => play(c), i * 70)); }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting){ play(e.target); io.unobserve(e.target); } });
+  }, { threshold: 0.4 });
+  cards.forEach((c) => io.observe(c));
+
+  cards.forEach((c) => c.addEventListener('mouseenter', () => play(c)));
+  document.getElementById('replay').addEventListener('click', playAll);
+
+  let loopTimer = null;
+  document.getElementById('loop').addEventListener('change', (e) => {
+    if (e.target.checked){ playAll(); loopTimer = setInterval(playAll, 4200); }
+    else { clearInterval(loopTimer); loopTimer = null; }
+  });
+</script>
+</body>
+</html>
