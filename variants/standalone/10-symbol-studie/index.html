@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Symbol-Studie — Wer mit dir arbeitet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --tinte:#1F2A44;
+    --pergament:#FEFCF7;
+    --anthrazit:#2D2D2D;
+    --kupfer:#C97B3F;
+    --salbei:#8FA98A;
+    --quellwasser:#6FA3B5;
+    --holzsand:#D9C7A8;
+    --ink:#1F2A44;
+    --cu:#C97B3F;
+    --ease-draw:cubic-bezier(0.32, 0.72, 0, 1);
+    --ease-pop:cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--pergament);
+    color:var(--anthrazit);
+    font-family:"Inter","Inter Variable",ui-sans-serif,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem);}
+
+  /* ---------- Header ---------- */
+  header.top{padding:clamp(3rem,7vw,5.5rem) 0 1.5rem;}
+  .eyebrow{
+    font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--kupfer);font-weight:600;margin:0 0 1rem;
+  }
+  h1{
+    font-family:"Fraunces",ui-serif,Georgia,serif;
+    font-weight:500;color:var(--tinte);
+    font-size:clamp(1.9rem,3.4vw + 1rem,3.1rem);
+    line-height:1.1;letter-spacing:-0.015em;margin:0 0 1rem;
+  }
+  .lede{max-width:46rem;font-size:1.0625rem;color:rgba(45,45,45,.78);margin:0;}
+  .lede strong{color:var(--tinte);font-weight:600;}
+
+  /* ---------- Controls ---------- */
+  .controls{
+    position:sticky;top:0;z-index:20;
+    background:rgba(254,252,247,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(217,199,168,.5);
+    margin-top:2.25rem;
+  }
+  .controls .inner{
+    max-width:1120px;margin:0 auto;padding:.85rem clamp(1.25rem,4vw,2.5rem);
+    display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.4rem;
+  }
+  .btn{
+    font-family:inherit;font-size:.9rem;font-weight:500;
+    color:var(--pergament);background:var(--tinte);
+    border:none;border-radius:999px;padding:.6rem 1.2rem;cursor:pointer;
+    transition:transform .3s var(--ease-draw),background .3s ease;
+  }
+  .btn:hover{transform:translateY(-1px);background:#2a3859;}
+  .btn:active{transform:translateY(0);}
+  .toggle{display:inline-flex;align-items:center;gap:.55rem;font-size:.9rem;color:var(--tinte);cursor:pointer;user-select:none;}
+  .toggle input{accent-color:var(--kupfer);width:1.05rem;height:1.05rem;cursor:pointer;}
+  .hint{font-size:.85rem;color:rgba(45,45,45,.6);margin-left:auto;}
+  @media (max-width:640px){.hint{margin-left:0;width:100%;}}
+
+  /* ---------- Section ---------- */
+  section.bg{padding:clamp(2.75rem,5vw,4rem) 0 1rem;border-top:1px solid rgba(217,199,168,.4);}
+  section.bg:first-of-type{border-top:none;}
+  .sec-head{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap;margin-bottom:.35rem;}
+  .sec-num{font-family:"Fraunces",serif;font-size:1rem;color:var(--kupfer);font-weight:500;}
+  .sec-head h2{
+    font-family:"Fraunces",serif;font-weight:500;color:var(--tinte);
+    font-size:clamp(1.4rem,1.6vw + 1rem,1.9rem);margin:0;letter-spacing:-0.01em;
+  }
+  .sec-note{max-width:44rem;color:rgba(45,45,45,.72);font-size:.98rem;margin:.15rem 0 1.9rem;}
+  .sec-note em{color:var(--tinte);font-style:normal;font-weight:500;}
+
+  /* ---------- Grid + Cards ---------- */
+  .grid{
+    display:grid;gap:clamp(.85rem,1.4vw,1.1rem);
+    grid-template-columns:repeat(auto-fill,minmax(168px,1fr));
+  }
+  .card{
+    position:relative;margin:0;
+    background:#fff;
+    border:1px solid rgba(217,199,168,.65);
+    border-radius:16px;
+    padding:1.4rem 1.15rem 1.25rem;
+    text-align:center;
+    transition:transform .45s var(--ease-draw),box-shadow .45s var(--ease-draw),border-color .45s ease;
+    box-shadow:0 1px 4px 0 rgba(31,42,68,.05);
+    cursor:default;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 26px -8px rgba(31,42,68,.16);
+    border-color:rgba(201,123,63,.45);
+  }
+  .card.current{background:linear-gradient(180deg,#fbf7ef,#fff);border-style:dashed;}
+  .pill{
+    position:absolute;top:.7rem;right:.7rem;
+    font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+    color:var(--kupfer);background:rgba(201,123,63,.1);
+    padding:.2rem .5rem;border-radius:999px;
+  }
+  .sym-wrap{
+    width:72px;height:72px;margin:0 auto .95rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  svg.sym{width:56px;height:56px;overflow:visible;display:block;}
+  .name{font-weight:600;color:var(--tinte);font-size:.97rem;margin:0 0 .25rem;letter-spacing:-0.005em;}
+  .meta{font-size:.83rem;line-height:1.45;color:rgba(45,45,45,.66);margin:0;}
+
+  /* ---------- Symbol primitives ---------- */
+  .sym .dr{
+    fill:none;stroke:var(--ink);stroke-width:1.6;
+    stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:100 100;stroke-dashoffset:0;
+  }
+  .sym .pp{fill:var(--ink);}
+  .sym .cu{stroke:var(--cu);}
+  .sym .cuf{fill:var(--cu);}
+  .sym .soft{opacity:.5;}
+  .sym .softer{opacity:.32;}
+
+  /* ---------- Build-up animation (only when motion is welcome) ---------- */
+  @media (prefers-reduced-motion: no-preference){
+    .card.is-playing .dr{
+      animation:draw 720ms var(--ease-draw) both;
+      animation-delay:var(--d,0ms);
+    }
+    .card.is-playing .pp{
+      animation:pop 420ms var(--ease-pop) both;
+      animation-delay:var(--d,0ms);
+      transform-box:fill-box;transform-origin:center;
+    }
+    @keyframes draw{from{stroke-dashoffset:100;}to{stroke-dashoffset:0;}}
+    @keyframes pop{from{opacity:0;transform:scale(.2);}60%{opacity:1;}to{opacity:1;transform:scale(1);}}
+  }
+
+  footer{padding:3rem 0 4rem;color:rgba(45,45,45,.6);font-size:.9rem;}
+  footer code{background:rgba(31,42,68,.06);padding:.1rem .4rem;border-radius:5px;font-size:.85em;color:var(--tinte);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Symbol-Studie · Wer mit dir arbeitet</p>
+    <h1>Drei Welten, je fünf neue Symbole.</h1>
+    <p class="lede">Für jeden deiner drei Hintergründe findest du hier das <strong>aktuelle Symbol</strong> und fünf Alternativen — jede mit der kleinen Aufbau-Animation. Fahr mit der Maus über ein Symbol, um die Animation erneut zu sehen. Sag mir einfach pro Reihe deinen Favoriten, dann baue ich ihn fest auf die Website.</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="inner">
+    <button class="btn" id="replay">Alle Symbole neu abspielen</button>
+    <label class="toggle"><input type="checkbox" id="loop" /> Endlosschleife</label>
+    <span class="hint">Tipp: Mit der Maus über ein Symbol fahren spielt es einzeln neu ab.</span>
+  </div>
+</div>
+
+<!-- ============================ COACH ============================ -->
+<section class="bg">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>Coach-Hintergrund</h2>
+    </div>
+    <p class="sec-note">Mentaltrainer, Meditationskursleiter, Fitnesstrainer — die <em>innere Welt der Arbeit</em>. Themen: Ruhe, Wachstum, Balance, Präsenz, der Weg nach innen.</p>
+    <div class="grid">
+
+      <!-- aktuell: Resonanz-Wellen -->
+      <figure class="card current" data-card>
+        <span class="pill">aktuell</span>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <circle class="dr" pathLength="100" cx="24" cy="24" r="5" style="--d:0ms"/>
+          <path class="dr soft" pathLength="100" d="M24 12 A12 12 0 0 1 36 24" style="--d:170ms"/>
+          <path class="dr softer" pathLength="100" d="M24 4 A20 20 0 0 1 44 24" style="--d:340ms"/>
+        </svg></div>
+        <p class="name">Resonanz</p>
+        <p class="meta">Konzentrische Wellen — das aktuelle Symbol.</p>
+      </figure>
+
+      <!-- Spross -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr softer" pathLength="100" d="M16 41 L32 41" style="--d:120ms"/>
+          <path class="dr" pathLength="100" d="M24 41 L24 21" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M24 30 C 18 30 14 25.5 14.5 19.5 C 20.5 19.5 24 24 24 30 Z" style="--d:280ms"/>
+          <path class="dr" pathLength="100" d="M24 25 C 30 25 34 20.5 33.5 14.5 C 27.5 14.5 24 19 24 25 Z" style="--d:480ms"/>
+        </svg></div>
+        <p class="name">Spross</p>
+        <p class="meta">Wachstum, Entwicklung, etwas zum Aufgehen bringen.</p>
+      </figure>
+
+      <!-- Enso -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M33 13.5 A 13.5 13.5 0 1 1 18.5 11.4" style="--d:0ms" stroke-width="1.9"/>
+        </svg></div>
+        <p class="name">Enso</p>
+        <p class="meta">Der offene Zen-Kreis — Meditation, Achtsamkeit.</p>
+      </figure>
+
+      <!-- Steinmännchen / Cairn -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <ellipse class="dr" pathLength="100" cx="24" cy="37" rx="11" ry="3.4" style="--d:0ms"/>
+          <ellipse class="dr" pathLength="100" cx="24" cy="29.5" rx="8" ry="2.9" style="--d:200ms"/>
+          <ellipse class="dr" pathLength="100" cx="24" cy="23" rx="5.6" ry="2.5" style="--d:400ms"/>
+          <ellipse class="dr" pathLength="100" cx="24" cy="17.5" rx="3.4" ry="2.1" style="--d:600ms"/>
+        </svg></div>
+        <p class="name">Steinmännchen</p>
+        <p class="meta">Balance, Ruhe, Schritt für Schritt ins Gleichgewicht.</p>
+      </figure>
+
+      <!-- Gipfel + Pfad -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <circle class="pp" cx="36.5" cy="11" r="3" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M5 40 L19 15 L27 27 L34 18 L43 40" style="--d:160ms"/>
+          <path class="dr soft" pathLength="100" d="M15 40 C 20 34 19 30 24 25" style="--d:540ms"/>
+        </svg></div>
+        <p class="name">Gipfel &amp; Weg</p>
+        <p class="meta">Der Weg nach oben — Entwicklung, Ausdauer, Ziel.</p>
+      </figure>
+
+      <!-- Kompass -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <circle class="dr" pathLength="100" cx="24" cy="24" r="14" style="--d:0ms"/>
+          <line class="dr soft" pathLength="100" x1="24" y1="6"  x2="24" y2="9"  style="--d:280ms"/>
+          <line class="dr soft" pathLength="100" x1="24" y1="39" x2="24" y2="42" style="--d:320ms"/>
+          <line class="dr soft" pathLength="100" x1="6"  y1="24" x2="9"  y2="24" style="--d:360ms"/>
+          <line class="dr soft" pathLength="100" x1="39" y1="24" x2="42" y2="24" style="--d:400ms"/>
+          <path class="dr cu" pathLength="100" d="M24 11 L26.5 24 L21.5 24 Z" style="--d:480ms"/>
+          <path class="dr" pathLength="100" d="M24 37 L26.5 24 L21.5 24 Z" style="--d:560ms"/>
+          <circle class="pp" cx="24" cy="24" r="1.6" style="--d:640ms"/>
+        </svg></div>
+        <p class="name">Kompass</p>
+        <p class="meta">Innere Orientierung, Klarheit, Richtung finden.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====================== WIRTSCHAFTSINGENIEUR ====================== -->
+<section class="bg">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>Wirtschaftsingenieur</h2>
+    </div>
+    <p class="sec-note">Zwischen den Welten übersetzen — <em>Technik, Wirtschaft, Mensch</em>. Themen: Abläufe, Prozesse, Verbinden, Struktur, Präzision.</p>
+    <div class="grid">
+
+      <!-- aktuell: verbundene Knoten -->
+      <figure class="card current" data-card>
+        <span class="pill">aktuell</span>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr soft" pathLength="100" d="M9 24 L24 11 L39 24 L24 37 Z" style="--d:300ms"/>
+          <path class="dr softer" pathLength="100" d="M9 24 L39 24" style="--d:460ms"/>
+          <circle class="pp" cx="9"  cy="24" r="3" style="--d:0ms"/>
+          <circle class="pp" cx="24" cy="11" r="3" style="--d:80ms"/>
+          <circle class="pp" cx="39" cy="24" r="3" style="--d:160ms"/>
+          <circle class="pp" cx="24" cy="37" r="3" style="--d:240ms"/>
+        </svg></div>
+        <p class="name">Knotenpunkt</p>
+        <p class="meta">Verbundene Knoten — das aktuelle Symbol.</p>
+      </figure>
+
+      <!-- Brücke -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M5 21 L43 21" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M9 21 C 13 36 35 36 39 21" style="--d:220ms"/>
+          <line class="dr soft" pathLength="100" x1="16" y1="21" x2="16" y2="30.5" style="--d:460ms"/>
+          <line class="dr soft" pathLength="100" x1="24" y1="21" x2="24" y2="33.5" style="--d:520ms"/>
+          <line class="dr soft" pathLength="100" x1="32" y1="21" x2="32" y2="30.5" style="--d:580ms"/>
+        </svg></div>
+        <p class="name">Brücke</p>
+        <p class="meta">Zwischen Welten übersetzen — verbinden, was getrennt ist.</p>
+      </figure>
+
+      <!-- Zahnräder -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <!-- großes Zahnrad -->
+          <circle class="dr" pathLength="100" cx="19" cy="28" r="6" style="--d:0ms"/>
+          <circle class="dr" pathLength="100" cx="19" cy="28" r="2" style="--d:520ms"/>
+          <line class="dr" pathLength="100" x1="25" y1="28" x2="27.4" y2="28" style="--d:180ms"/>
+          <line class="dr" pathLength="100" x1="23.24" y1="32.24" x2="24.94" y2="33.94" style="--d:200ms"/>
+          <line class="dr" pathLength="100" x1="19" y1="34" x2="19" y2="36.4" style="--d:220ms"/>
+          <line class="dr" pathLength="100" x1="14.76" y1="32.24" x2="13.06" y2="33.94" style="--d:240ms"/>
+          <line class="dr" pathLength="100" x1="13" y1="28" x2="10.6" y2="28" style="--d:260ms"/>
+          <line class="dr" pathLength="100" x1="14.76" y1="23.76" x2="13.06" y2="22.06" style="--d:280ms"/>
+          <line class="dr" pathLength="100" x1="19" y1="22" x2="19" y2="19.6" style="--d:300ms"/>
+          <line class="dr" pathLength="100" x1="23.24" y1="23.76" x2="24.94" y2="22.06" style="--d:320ms"/>
+          <!-- kleines Zahnrad -->
+          <circle class="dr" pathLength="100" cx="33" cy="18" r="4" style="--d:120ms"/>
+          <circle class="dr" pathLength="100" cx="33" cy="18" r="1.4" style="--d:560ms"/>
+          <line class="dr" pathLength="100" x1="37" y1="18" x2="39" y2="18" style="--d:360ms"/>
+          <line class="dr" pathLength="100" x1="35" y1="21.46" x2="36" y2="23.2" style="--d:380ms"/>
+          <line class="dr" pathLength="100" x1="31" y1="21.46" x2="30" y2="23.2" style="--d:400ms"/>
+          <line class="dr" pathLength="100" x1="29" y1="18" x2="27" y2="18" style="--d:420ms"/>
+          <line class="dr" pathLength="100" x1="31" y1="14.54" x2="30" y2="12.8" style="--d:440ms"/>
+          <line class="dr" pathLength="100" x1="35" y1="14.54" x2="36" y2="12.8" style="--d:460ms"/>
+        </svg></div>
+        <p class="name">Zahnräder</p>
+        <p class="meta">Ineinandergreifende Abläufe — Technik &amp; Mechanik.</p>
+      </figure>
+
+      <!-- Prozess-Fluss -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <rect class="dr" pathLength="100" x="5" y="19" width="9" height="10" rx="2" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M14 24 L19.5 24" style="--d:200ms"/>
+          <path class="dr" pathLength="100" d="M17.5 22.3 L19.7 24 L17.5 25.7" style="--d:260ms"/>
+          <rect class="dr" pathLength="100" x="19.5" y="19" width="9" height="10" rx="2" style="--d:320ms"/>
+          <path class="dr" pathLength="100" d="M28.5 24 L34 24" style="--d:480ms"/>
+          <path class="dr" pathLength="100" d="M32 22.3 L34.2 24 L32 25.7" style="--d:540ms"/>
+          <rect class="dr" pathLength="100" x="34" y="19" width="9" height="10" rx="2" style="--d:600ms"/>
+        </svg></div>
+        <p class="name">Prozess-Fluss</p>
+        <p class="meta">Denken in Abläufen — Schritt für Schritt, end-to-end.</p>
+      </figure>
+
+      <!-- Zirkel -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <circle class="pp" cx="24" cy="9" r="2.4" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M24 10.5 L13.5 38" style="--d:140ms"/>
+          <path class="dr" pathLength="100" d="M24 10.5 L31 33" style="--d:200ms"/>
+          <path class="dr" pathLength="100" d="M11.5 38.5 L13.5 34.5 L16 37.5" style="--d:380ms"/>
+          <path class="dr cu soft" pathLength="100" d="M12.5 38 Q 22 44 30.5 34" style="--d:560ms"/>
+        </svg></div>
+        <p class="name">Zirkel</p>
+        <p class="meta">Präzision, Entwurf, Ingenieurskunst mit Plan.</p>
+      </figure>
+
+      <!-- Waage -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M24 14 L24 32" style="--d:120ms"/>
+          <path class="dr" pathLength="100" d="M24 32 L19 40 M24 32 L29 40 M17 40 L31 40" style="--d:200ms"/>
+          <path class="dr" pathLength="100" d="M12 15 L36 15" style="--d:0ms"/>
+          <circle class="pp" cx="24" cy="14" r="2" style="--d:300ms"/>
+          <path class="dr soft" pathLength="100" d="M12 15 L8.5 23 M12 15 L15.5 23" style="--d:380ms"/>
+          <path class="dr" pathLength="100" d="M8 23 Q 12 27.5 16 23" style="--d:480ms"/>
+          <path class="dr soft" pathLength="100" d="M36 15 L32.5 23 M36 15 L39.5 23" style="--d:420ms"/>
+          <path class="dr" pathLength="100" d="M32 23 Q 36 27.5 40 23" style="--d:520ms"/>
+        </svg></div>
+        <p class="name">Waage</p>
+        <p class="meta">Technik, Wirtschaft &amp; Mensch im Gleichgewicht.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TÜV KI-EXPERTE ======================= -->
+<section class="bg">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>TÜV-zertifizierter KI-Experte</h2>
+    </div>
+    <p class="sec-note">Angewandte KI-Transformation — <em>geprüftes Wissen, echte Praxis</em>. Themen: Intelligenz, Vernetzung, Prüfsiegel, Wandel, Werkzeug.</p>
+    <div class="grid">
+
+      <!-- aktuell: Pfeil -->
+      <figure class="card current" data-card>
+        <span class="pill">aktuell</span>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <circle class="pp" cx="12" cy="36" r="2.5" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M12 36 L36 12" style="--d:160ms"/>
+          <path class="dr" pathLength="100" d="M24 12 L36 12 L36 24" style="--d:440ms"/>
+        </svg></div>
+        <p class="name">Richtung</p>
+        <p class="meta">Gerichteter Pfeil — das aktuelle Symbol.</p>
+      </figure>
+
+      <!-- Prüfsiegel -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <circle class="dr" pathLength="100" cx="24" cy="24" r="13" style="--d:0ms"/>
+          <circle class="dr soft" pathLength="100" cx="24" cy="24" r="9.5" style="--d:160ms"/>
+          <circle class="pp" cx="37" cy="24" r="0.9" style="--d:300ms"/>
+          <circle class="pp" cx="35.26" cy="30.5" r="0.9" style="--d:320ms"/>
+          <circle class="pp" cx="30.5" cy="35.26" r="0.9" style="--d:340ms"/>
+          <circle class="pp" cx="24" cy="37" r="0.9" style="--d:360ms"/>
+          <circle class="pp" cx="17.5" cy="35.26" r="0.9" style="--d:380ms"/>
+          <circle class="pp" cx="12.74" cy="30.5" r="0.9" style="--d:400ms"/>
+          <circle class="pp" cx="11" cy="24" r="0.9" style="--d:420ms"/>
+          <circle class="pp" cx="12.74" cy="17.5" r="0.9" style="--d:440ms"/>
+          <circle class="pp" cx="17.5" cy="12.74" r="0.9" style="--d:460ms"/>
+          <circle class="pp" cx="24" cy="11" r="0.9" style="--d:480ms"/>
+          <circle class="pp" cx="30.5" cy="12.74" r="0.9" style="--d:500ms"/>
+          <circle class="pp" cx="35.26" cy="17.5" r="0.9" style="--d:520ms"/>
+          <path class="dr cu" pathLength="100" d="M18 24 L22.5 28.5 L31 18" style="--d:600ms" stroke-width="1.9"/>
+        </svg></div>
+        <p class="name">Prüfsiegel</p>
+        <p class="meta">Zertifiziert, geprüft — Vertrauen mit Haken.</p>
+      </figure>
+
+      <!-- Neuronales Netz -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr softer" pathLength="100" d="M10 14 L24 18 M10 14 L24 30 M10 24 L24 18 M10 24 L24 30 M10 34 L24 18 M10 34 L24 30" style="--d:200ms"/>
+          <path class="dr softer" pathLength="100" d="M24 18 L38 24 M24 30 L38 24" style="--d:520ms"/>
+          <circle class="pp" cx="10" cy="14" r="2.2" style="--d:0ms"/>
+          <circle class="pp" cx="10" cy="24" r="2.2" style="--d:70ms"/>
+          <circle class="pp" cx="10" cy="34" r="2.2" style="--d:140ms"/>
+          <circle class="pp" cx="24" cy="18" r="2.4" style="--d:380ms"/>
+          <circle class="pp" cx="24" cy="30" r="2.4" style="--d:440ms"/>
+          <circle class="pp cuf" cx="38" cy="24" r="2.6" style="--d:660ms"/>
+        </svg></div>
+        <p class="name">Neuronales Netz</p>
+        <p class="meta">Künstliche Intelligenz, Vernetzung, Lernen.</p>
+      </figure>
+
+      <!-- KI-Funke -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr cu" pathLength="100" d="M23 9 L26 21 L38 24 L26 27 L23 39 L20 27 L8 24 L20 21 Z" style="--d:0ms" stroke-width="1.7"/>
+          <path class="dr cu" pathLength="100" d="M37 8 L38.3 12 L42 13.3 L38.3 14.6 L37 18.5 L35.7 14.6 L32 13.3 L35.7 12 Z" style="--d:420ms"/>
+        </svg></div>
+        <p class="name">KI-Funke</p>
+        <p class="meta">Der moderne KI-Glanz — Idee, Werkzeug, Möglichkeit.</p>
+      </figure>
+
+      <!-- Chip -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <rect class="dr" pathLength="100" x="16" y="16" width="16" height="16" rx="3" style="--d:200ms"/>
+          <rect class="dr soft" pathLength="100" x="21" y="21" width="6" height="6" rx="1.5" style="--d:560ms"/>
+          <line class="dr" pathLength="100" x1="20" y1="16" x2="20" y2="11" style="--d:0ms"/>
+          <line class="dr" pathLength="100" x1="24" y1="16" x2="24" y2="11" style="--d:40ms"/>
+          <line class="dr" pathLength="100" x1="28" y1="16" x2="28" y2="11" style="--d:80ms"/>
+          <line class="dr" pathLength="100" x1="20" y1="32" x2="20" y2="37" style="--d:120ms"/>
+          <line class="dr" pathLength="100" x1="24" y1="32" x2="24" y2="37" style="--d:160ms"/>
+          <line class="dr" pathLength="100" x1="28" y1="32" x2="28" y2="37" style="--d:200ms"/>
+          <line class="dr" pathLength="100" x1="16" y1="20" x2="11" y2="20" style="--d:80ms"/>
+          <line class="dr" pathLength="100" x1="16" y1="24" x2="11" y2="24" style="--d:120ms"/>
+          <line class="dr" pathLength="100" x1="16" y1="28" x2="11" y2="28" style="--d:160ms"/>
+          <line class="dr" pathLength="100" x1="32" y1="20" x2="37" y2="20" style="--d:40ms"/>
+          <line class="dr" pathLength="100" x1="32" y1="24" x2="37" y2="24" style="--d:80ms"/>
+          <line class="dr" pathLength="100" x1="32" y1="28" x2="37" y2="28" style="--d:120ms"/>
+        </svg></div>
+        <p class="name">Prozessor</p>
+        <p class="meta">Technologie, Rechenkraft, das Werkzeug dahinter.</p>
+      </figure>
+
+      <!-- Transformation -->
+      <figure class="card" data-card>
+        <div class="sym-wrap"><svg class="sym" viewBox="0 0 48 48" aria-hidden="true">
+          <path class="dr" pathLength="100" d="M24 11 A 13 13 0 0 1 24 37" style="--d:0ms"/>
+          <path class="dr" pathLength="100" d="M19.5 33 L24 37.5 L19 41" style="--d:280ms"/>
+          <path class="dr" pathLength="100" d="M24 37 A 13 13 0 0 1 24 11" style="--d:360ms"/>
+          <path class="dr" pathLength="100" d="M28.5 15 L24 10.5 L29 7" style="--d:640ms"/>
+          <circle class="pp cuf" cx="24" cy="24" r="2.4" style="--d:520ms"/>
+        </svg></div>
+        <p class="name">Transformation</p>
+        <p class="meta">KI-Transformation — Wandel, Kreislauf, neue Form.</p>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Auswahl-Galerie · JGC Studio · Sag mir pro Reihe deinen Favoriten (z.&nbsp;B. „Coach: Spross, Ing: Brücke, KI: Prüfsiegel"), dann baue ich sie fest in <code>WerMitDirArbeitet.astro</code> ein.
+  </div>
+</footer>
+
+<script>
+  const cards = Array.from(document.querySelectorAll('[data-card]'));
+
+  function play(card){
+    card.classList.remove('is-playing');
+    void card.offsetWidth; // reflow → restart CSS animations
+    card.classList.add('is-playing');
+  }
+  function playAll(){
+    cards.forEach((c, i) => setTimeout(() => play(c), i * 80));
+  }
+
+  // Erstes Abspielen, sobald eine Karte in den Blick scrollt
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting){ play(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  cards.forEach((c) => io.observe(c));
+
+  // Hover spielt ein einzelnes Symbol neu
+  cards.forEach((c) => c.addEventListener('mouseenter', () => play(c)));
+
+  // Steuerung
+  document.getElementById('replay').addEventListener('click', playAll);
+
+  let loopTimer = null;
+  document.getElementById('loop').addEventListener('change', (e) => {
+    if (e.target.checked){
+      playAll();
+      loopTimer = setInterval(playAll, 3800);
+    } else {
+      clearInterval(loopTimer);
+      loopTimer = null;
+    }
+  });
+</script>
+</body>
+</html>

@@ -34,5 +34,10 @@
     "label": "Premium-Upgrade",
     "skill": "redesign-existing-projects",
     "source": "variants/standalone/09f-premium-upgrade/index.html"
+  },
+  "10-symbol-studie": {
+    "num": "10",
+    "label": "Symbol-Studie",
+    "source": "variants/standalone/10-symbol-studie/index.html"
   }
 }

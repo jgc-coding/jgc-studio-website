@@ -60,6 +60,18 @@ Deploy-Workflow direkt nach `/variants/<slug>/` kopiert (siehe `variants/standal
 
 ---
 
+## Werkzeug-Studien — Variante 10
+
+Keine Sales-Page-Variante, sondern eine **Arbeits-Studie**: eine self-contained
+Einzeldatei zur Symbol-Auswahl. Liegt wie die 09er-Reihe unter
+`variants/standalone/<slug>/index.html` und wird direkt nach `/variants/<slug>/` deployt.
+
+| Nr. | Slug | Charakter |
+|---|---|---|
+| **10** | `10-symbol-studie` | **Symbol-Studie „Wer mit dir arbeitet"** — je 5 animierte Icon-Vorschläge für die drei Hintergründe (Coach-Hintergrund / Wirtschaftsingenieur / TÜV-KI-Experte), jeweils mit Aufbau-Animation (Linien zeichnen sich selbst, Punkte ploppen rein). Auswahl-Galerie zur Entscheidung über die finalen Säulen-Symbole in `WerMitDirArbeitet.astro`. |
+
+---
+
 ## Naming-Konvention
 
 `variant/NN-kurzname-mit-charakter`
