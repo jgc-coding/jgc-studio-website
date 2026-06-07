@@ -11,9 +11,10 @@
 <style>
   :root{
     --tinte:#1F2A44;--pergament:#FEFCF7;--anthrazit:#2D2D2D;--kupfer:#C97B3F;--holzsand:#D9C7A8;
-    --ink:#1F2A44;--cu:#C97B3F;
+    --ink:#1F2A44;--cu:#C97B3F;--quellwasser:#6FA3B5;
     --ease-expo:cubic-bezier(0.16, 1, 0.3, 1);
     --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-pendulum:cubic-bezier(0.37, 0, 0.63, 1);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -68,6 +69,7 @@
   .sym .soft{opacity:.5;}
   .sym .travel{fill:var(--cu);opacity:0;}
   .sym .conv{fill:var(--cu);opacity:0;}
+  .sym .trail{fill:none;stroke:var(--quellwasser);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:100 100;stroke-dashoffset:0;}
 
   @media (prefers-reduced-motion: no-preference){
     @keyframes draw{from{stroke-dashoffset:100;}to{stroke-dashoffset:0;}}
@@ -75,15 +77,16 @@
     .card.is-playing .dr{animation:draw var(--draw,1000ms) linear both;animation-delay:var(--d,0ms);}
     .card.is-playing .pp{animation:pop 360ms var(--ease-out) both;animation-delay:var(--d,0ms);transform-box:fill-box;transform-origin:center;}
     @keyframes settle{0%{transform:rotate(0deg);}10%{transform:rotate(28deg);}28%{transform:rotate(-18deg);}45%{transform:rotate(11deg);}62%{transform:rotate(-6deg);}78%{transform:rotate(3deg);}90%{transform:rotate(-1.5deg);}100%{transform:rotate(0deg);}}
-    .card.is-playing .needle{animation:settle var(--settle-dur,1.6s) var(--ease-out) both;animation-delay:var(--settle-delay,900ms);}
-    @keyframes convN{0%{opacity:0;transform:translate(0,0);}28%{opacity:1;}100%{opacity:1;transform:translate(0px,15px);}}
-    @keyframes convE{0%{opacity:0;transform:translate(0,0);}28%{opacity:1;}100%{opacity:1;transform:translate(-15px,0px);}}
-    @keyframes convS{0%{opacity:0;transform:translate(0,0);}28%{opacity:1;}100%{opacity:1;transform:translate(0px,-15px);}}
-    @keyframes convW{0%{opacity:0;transform:translate(0,0);}28%{opacity:1;}100%{opacity:1;transform:translate(15px,0px);}}
+    .card.is-playing .needle{animation:settle var(--settle-dur,1.6s) var(--ease-pendulum) both;animation-delay:var(--settle-delay,900ms);}
+    @keyframes convN{0%{opacity:0;transform:translate(0,0);}12%{opacity:1;}100%{opacity:1;transform:translate(0px,15px);}}
+    @keyframes convE{0%{opacity:0;transform:translate(0,0);}12%{opacity:1;}100%{opacity:1;transform:translate(-15px,0px);}}
+    @keyframes convS{0%{opacity:0;transform:translate(0,0);}12%{opacity:1;}100%{opacity:1;transform:translate(0px,-15px);}}
+    @keyframes convW{0%{opacity:0;transform:translate(0,0);}12%{opacity:1;}100%{opacity:1;transform:translate(15px,0px);}}
     .card.is-playing .conv-n{animation:convN 850ms var(--ease-out) both;animation-delay:var(--cd,1500ms);}
     .card.is-playing .conv-e{animation:convE 850ms var(--ease-out) both;animation-delay:var(--cd,1500ms);}
     .card.is-playing .conv-s{animation:convS 850ms var(--ease-out) both;animation-delay:var(--cd,1500ms);}
     .card.is-playing .conv-w{animation:convW 850ms var(--ease-out) both;animation-delay:var(--cd,1500ms);}
+    .card.is-playing .trail{animation:draw 850ms var(--ease-out) both;animation-delay:var(--cd,1500ms);}
   }
   @media (prefers-reduced-motion: reduce){
     .sym .needle [data-rot]{display:none;} /* no SMIL motion; needle rests at north */
@@ -230,13 +233,17 @@
           <circle class="pp" cx="39" cy="24" r="2.7" style="--d:430ms"/>
           <circle class="pp" cx="24" cy="39" r="2.7" style="--d:710ms"/>
           <circle class="pp" cx="9" cy="24" r="2.7" style="--d:990ms"/>
+          <path class="trail" pathLength="100" d="M24 9 L24 24"/>
+          <path class="trail" pathLength="100" d="M39 24 L24 24"/>
+          <path class="trail" pathLength="100" d="M24 39 L24 24"/>
+          <path class="trail" pathLength="100" d="M9 24 L24 24"/>
           <circle class="conv conv-n" cx="24" cy="9"  r="2.3"/>
           <circle class="conv conv-e" cx="39" cy="24" r="2.3"/>
           <circle class="conv conv-s" cx="24" cy="39" r="2.3"/>
           <circle class="conv conv-w" cx="9"  cy="24" r="2.3"/>
         </svg></div>
         <p class="name">Knotenpunkt</p>
-        <p class="desc">Erst die Raute, dann wandern vier Kupferpunkte zur Mitte.</p>
+        <p class="desc">Erst die Raute, dann ziehen vier Kupferpunkte blaue Linien zur Mitte und bilden ein Kreuz.</p>
       </figure>
 
     </div>
