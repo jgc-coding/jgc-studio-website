@@ -74,6 +74,19 @@ Einzeldateien zur Symbol-Auswahl. Liegen wie die 09er-Reihe unter
 
 ---
 
+## Finale Richtung — Variante 13
+
+Die erste **nachgeschärfte** Variante statt reiner Exploration: **Variante 09c**
+(Impeccable) als Basis, von Hand poliert und zur Marke **JGC Lumen** umbenannt.
+Self-contained Einzeldatei wie die 09er-Reihe unter
+`variants/standalone/13-lumen/index.html`.
+
+| Nr. | Slug | Charakter | Skill |
+|---|---|---|---|
+| **13** | `13-lumen` | **JGC Lumen** — 09c verfeinert: „JGC Studio" → „JGC Lumen", Hero-Unterstrich tiefer gelegt (zeichnet „Wesentliche" nicht mehr durch), Angebots-Spalten 2 & 4 dauerhaft aufgeklappt, CTA auf 30 Min mit entferntem Demo-Link & entfernter bewegter Logo-Resonanz, „Ehrlich gesagt"-Spalten auf Card-Tiefe gehoben. Die drei „Wer mit dir arbeitet"-Symbole fest aus Variante 12 übernommen: Coach/Kompass (Mit Rose), Ingenieur/Punkte-Netz (Knotenpunkt), KI/Prüfsiegel (Schlicht). | `impeccable` |
+
+---
+
 ## Naming-Konvention
 
 `variant/NN-kurzname-mit-charakter`

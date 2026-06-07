@@ -49,5 +49,11 @@
     "num": "12",
     "label": "Symbol-Studie III",
     "source": "variants/standalone/12-symbol-studie-iii/index.html"
+  },
+  "13-lumen": {
+    "num": "13",
+    "label": "JGC Lumen (09c verfeinert)",
+    "skill": "impeccable",
+    "source": "variants/standalone/13-lumen/index.html"
   }
 }
