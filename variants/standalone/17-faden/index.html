@@ -1,0 +1,1294 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JGC Lumen — Mehr Raum für das Wesentliche</title>
+<meta name="description" content="KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. DSGVO-konform, maßgeschneidert.">
+<meta name="theme-color" content="#FEFCF7">
+<meta property="og:title" content="JGC Lumen — Mehr Raum für das Wesentliche">
+<meta property="og:description" content="KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. DSGVO-konform, maßgeschneidert.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinte:#1F2A44;
+  --kupfer:#C97B3F;
+  --salbei:#8FA98A;
+  --quellwasser:#6FA3B5;
+  --holzsand:#D9C7A8;
+  --pergament:#FEFCF7;
+  --anthrazit:#2D2D2D;
+
+  --bg:#FBF7EF;
+  --bg-warm:#F6EFE2;
+  --card:#FFFDF8;
+  --ink:#23304D;
+  --ink-soft:rgba(35,48,77,.74);
+  --ink-faint:rgba(35,48,77,.68);
+  --line:rgba(31,42,68,.12);
+  --line-warm:rgba(217,199,168,.55);
+  --hair:rgba(31,42,68,.08);
+
+  --maxw:1180px;
+  --measure:64ch;
+  --gut:clamp(20px,5vw,80px);
+
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-soft:cubic-bezier(.22,1,.36,1);
+  --ease-thread:cubic-bezier(.33,.9,.2,1);
+
+  --step--1:clamp(.78rem,.75rem + .14vw,.85rem);
+  --step-0:clamp(1rem,.97rem + .18vw,1.075rem);
+  --step-1:clamp(1.14rem,1.06rem + .4vw,1.32rem);
+  --step-2:clamp(1.42rem,1.24rem + .9vw,1.9rem);
+  --step-3:clamp(1.9rem,1.5rem + 1.9vw,2.85rem);
+  --step-4:clamp(2.5rem,1.85rem + 3.1vw,4.1rem);
+  --step-5:clamp(3rem,2rem + 4.8vw,5.4rem);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+html:not(.no-smooth){scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Inter",system-ui,-apple-system,sans-serif;
+  font-size:var(--step-0);
+  line-height:1.66;
+  letter-spacing:.004em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.06;letter-spacing:-.014em;margin:0}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+img,canvas{display:block;max-width:100%}
+ul{margin:0;padding:0;list-style:none}
+
+:focus-visible{outline:2px solid var(--kupfer);outline-offset:3px;border-radius:4px}
+
+.eyebrow{
+  font-family:"Inter",sans-serif;
+  font-size:var(--step--1);
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--kupfer);
+  display:inline-flex;align-items:center;gap:.7em;
+}
+.eyebrow::before{
+  content:"";width:24px;height:1px;background:var(--kupfer);opacity:.65;
+}
+
+.skip-link{
+  position:absolute;left:50%;top:-60px;transform:translateX(-50%);
+  background:var(--tinte);color:var(--pergament);padding:.6em 1.2em;border-radius:999px;
+  font-size:.85rem;font-weight:600;z-index:300;transition:top .25s var(--ease-out);
+}
+.skip-link:focus{top:14px}
+
+/* ---------- background atmosphere ---------- */
+.atmo{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 78% -5%,rgba(201,123,63,.06),transparent 55%),
+    radial-gradient(100% 70% at 8% 12%,rgba(111,163,181,.055),transparent 55%);
+}
+.grain{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- the thread ---------- */
+.thread-stage{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  z-index:1;pointer-events:none;overflow:visible;
+}
+#thread-svg{position:absolute;top:0;left:0;width:100%;height:100%}
+#thread-path{
+  fill:none;
+  stroke:url(#thread-grad);
+  stroke-width:1.8;
+  stroke-linecap:round;
+  vector-effect:non-scaling-stroke;
+  opacity:.92;
+}
+#thread-head{}
+#thread-head-glow{opacity:.9}
+#thread-head-core{filter:drop-shadow(0 0 4px rgba(201,123,63,.7))}
+
+/* ---------- nav ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:120;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;padding:18px var(--gut);
+  transition:background .4s var(--ease-out),border-color .4s var(--ease-out),padding .35s var(--ease-out),box-shadow .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(251,247,239,.82);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border-bottom-color:var(--hair);
+  padding-top:13px;padding-bottom:13px;
+  box-shadow:0 1px 28px rgba(31,42,68,.05);
+}
+.brand{
+  font-family:"Fraunces",serif;font-weight:600;font-size:1.18rem;letter-spacing:-.01em;
+  display:inline-flex;align-items:center;gap:.55em;color:var(--tinte);
+}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--kupfer);box-shadow:0 0 0 4px rgba(201,123,63,.14)}
+.nav-links{display:flex;align-items:center;gap:clamp(1.1rem,2.4vw,2.4rem)}
+.nav-links a{
+  font-size:.95rem;color:var(--ink-soft);font-weight:500;position:relative;padding:.2em 0;
+  transition:color .25s var(--ease-out);
+}
+.nav-links a:not(.nav-cta)::after{
+  content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;
+  background:var(--kupfer);transform:scaleX(0);transform-origin:left;
+  transition:transform .35s var(--ease-out);
+}
+.nav-links a:not(.nav-cta):hover{color:var(--tinte)}
+.nav-links a:not(.nav-cta):hover::after{transform:scaleX(1)}
+.nav-cta{
+  background:var(--tinte);color:var(--pergament);
+  padding:.62em 1.25em;border-radius:999px;font-weight:600;
+  transition:transform .3s var(--ease-out),box-shadow .3s var(--ease-out),background .3s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(31,42,68,.22);background:#26334f}
+.burger{
+  display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;
+  background:var(--card);cursor:pointer;flex-direction:column;justify-content:center;
+  align-items:center;gap:5px;padding:0;
+}
+.burger span{display:block;width:18px;height:1.6px;background:var(--tinte);border-radius:2px;transition:transform .3s var(--ease-out),opacity .2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.6px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.6px) rotate(-45deg)}
+
+@media (max-width:860px){
+  .nav-links{
+    position:fixed;inset:0 0 auto 0;top:0;padding:84px var(--gut) 34px;
+    flex-direction:column;align-items:flex-start;gap:1.3rem;
+    background:rgba(251,247,239,.97);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--line);
+    transform:translateY(-104%);transition:transform .45s var(--ease-soft);
+    box-shadow:0 24px 50px rgba(31,42,68,.1);
+  }
+  .nav-links.open{transform:translateY(0)}
+  .nav-links a{font-size:1.25rem;font-family:"Fraunces",serif}
+  .nav-cta{margin-top:.2rem}
+  .burger{display:flex;z-index:130}
+}
+
+/* ---------- layout ---------- */
+main{position:relative;z-index:2}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.section{padding:clamp(76px,11vh,140px) 0;position:relative}
+.section-head{max-width:760px;margin-bottom:clamp(38px,5vw,62px)}
+.section-head h2{font-size:var(--step-3);margin-top:.5rem;color:var(--tinte)}
+.lead{font-size:var(--step-1);color:var(--ink-soft);max-width:var(--measure);margin-top:1.1rem;line-height:1.6}
+.divider{height:1px;background:var(--hair);max-width:var(--maxw);margin:0 auto}
+
+/* reveal — start state only applied when JS+motion active */
+.js-motion .reveal{opacity:0;transform:translateY(20px);transition:opacity .9s var(--ease-thread),transform .9s var(--ease-thread)}
+.js-motion .reveal.is-in{opacity:1;transform:none}
+.js-motion .reveal[data-d="1"]{transition-delay:.08s}
+.js-motion .reveal[data-d="2"]{transition-delay:.16s}
+.js-motion .reveal[data-d="3"]{transition-delay:.24s}
+.js-motion .reveal[data-d="4"]{transition-delay:.32s}
+/* hero container reveals instantly; its children carry the staggered intro */
+.js-motion .hero-inner.reveal{opacity:1;transform:none;transition:none}
+/* hide hero children pre-intro to avoid a flash before GSAP takes over */
+.js-motion.hero-armed .hero-inner>*{opacity:0}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;min-height:100svh;display:flex;align-items:center;
+  padding-top:120px;padding-bottom:60px;
+}
+.hero-inner{max-width:920px}
+.hero h1{
+  font-size:var(--step-5);font-weight:400;color:var(--tinte);
+  margin-top:1.1rem;letter-spacing:-.022em;line-height:1.02;
+}
+.hero h1 .ink{font-style:italic;font-weight:500;color:var(--kupfer)}
+.hero-sub{font-size:var(--step-1);color:var(--ink-soft);max-width:60ch;margin-top:1.6rem;line-height:1.6}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.3rem}
+.btn{
+  display:inline-flex;align-items:center;gap:.6em;
+  padding:.85em 1.6em;border-radius:999px;font-weight:600;font-size:.98rem;
+  transition:transform .3s var(--ease-out),box-shadow .3s var(--ease-out),background .3s,border-color .3s;
+}
+.btn-primary{background:var(--kupfer);color:#241407;box-shadow:0 10px 26px rgba(201,123,63,.26)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(201,123,63,.32)}
+.btn-primary .arr{transition:transform .3s var(--ease-out)}
+.btn-primary:hover .arr{transform:translateX(4px)}
+.btn-ghost{border:1px solid var(--line);color:var(--tinte);background:transparent}
+.btn-ghost:hover{border-color:var(--kupfer);background:var(--card);transform:translateY(-2px)}
+.trust{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;margin-top:2.8rem;align-items:center}
+.trust-badge{
+  display:inline-flex;align-items:center;gap:.55em;font-size:.84rem;
+  color:var(--ink-faint);font-weight:500;letter-spacing:.02em;
+}
+.trust-badge .tick{
+  width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line-warm);color:var(--salbei);flex:none;
+}
+.trust-badge .tick svg{width:9px;height:9px}
+
+/* ---------- prose / einordnung ---------- */
+.prose p+p{margin-top:1.15rem}
+.prose p{font-size:var(--step-1);color:var(--ink-soft);max-width:var(--measure);line-height:1.66}
+.einordnung .big{
+  font-size:var(--step-4);font-style:italic;font-weight:400;color:var(--tinte);
+  line-height:1.05;max-width:16ch;
+}
+
+/* ---------- two versions ---------- */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px)}
+@media (max-width:760px){.cols2{grid-template-columns:1fr}}
+.vcard{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:clamp(26px,3vw,40px);position:relative;overflow:hidden;
+  transition:transform .4s var(--ease-out),box-shadow .4s,border-color .4s;
+}
+.vcard.tomorrow:hover{transform:translateY(-4px);box-shadow:0 26px 56px -30px rgba(201,123,63,.42);border-color:rgba(201,123,63,.5)}
+.vcard.today{background:#F4EEE3}
+.vcard.tomorrow{border-color:var(--line-warm);box-shadow:0 18px 48px -28px rgba(201,123,63,.3)}
+.vcard .tag{
+  font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;
+  display:inline-flex;align-items:center;gap:.5em;
+}
+.vcard.today .tag{color:var(--ink-faint)}
+.vcard.tomorrow .tag{color:var(--kupfer)}
+.vcard ul{margin-top:1.5rem;display:flex;flex-direction:column;gap:1.05rem}
+.vcard li{
+  display:grid;grid-template-columns:auto 1fr;gap:.85em;align-items:start;
+  color:var(--ink-soft);line-height:1.5;
+}
+.vcard li .num{
+  font-family:"Fraunces",serif;font-size:.9rem;font-weight:600;line-height:1.6;
+  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:none;
+  border:1px solid var(--line);color:var(--ink-faint);
+}
+.vcard.tomorrow li .num{border-color:rgba(201,123,63,.45);color:var(--kupfer)}
+.versions-outro{margin-top:clamp(28px,4vw,46px);font-size:var(--step-1);color:var(--ink-soft);max-width:var(--measure)}
+
+/* ---------- angebote / steps ---------- */
+.step{
+  border-top:1px solid var(--hair);padding:clamp(40px,5vw,64px) 0;
+  display:grid;grid-template-columns:minmax(0,.34fr) minmax(0,.66fr);gap:clamp(22px,4vw,56px);
+}
+@media (max-width:820px){.step{grid-template-columns:1fr;gap:18px}}
+.step:first-of-type{border-top:none}
+.step-label{
+  font-size:.82rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  color:var(--kupfer);
+}
+.step-aside h3{font-size:var(--step-2);color:var(--tinte);margin-top:1rem}
+.step-meta{
+  margin-top:.7rem;font-size:.9rem;color:var(--ink-faint);font-weight:500;
+  display:inline-flex;align-items:center;gap:.5em;
+}
+.step-meta::before{content:"";width:18px;height:1px;background:var(--kupfer);opacity:.6}
+.step-body>p{color:var(--ink-soft);max-width:var(--measure);line-height:1.62}
+.step-body>p+p{margin-top:1rem}
+.list-label{font-size:.82rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin:1.4rem 0 .7rem}
+.checklist{display:flex;flex-direction:column;gap:.7rem}
+.checklist li{display:grid;grid-template-columns:auto 1fr;gap:.7em;color:var(--ink-soft);line-height:1.5;align-items:start}
+.checklist li::before{
+  content:"";width:7px;height:7px;border-radius:2px;margin-top:.55em;flex:none;
+  background:var(--salbei);transform:rotate(45deg);
+}
+.callout{
+  margin-top:1.5rem;padding:1rem 1.2rem;border-radius:14px;
+  background:rgba(143,169,138,.1);border:1px solid rgba(143,169,138,.32);
+  color:var(--tinte);font-size:.95rem;line-height:1.55;
+}
+.callout strong{color:var(--salbei);font-weight:600}
+.btn-link{
+  display:inline-flex;align-items:center;gap:.5em;margin-top:1.5rem;
+  color:var(--kupfer);font-weight:600;font-size:.95rem;
+  border-bottom:1px solid transparent;transition:border-color .25s,gap .25s var(--ease-out);
+}
+.btn-link:hover{border-bottom-color:var(--kupfer);gap:.8em}
+.subline{margin-top:1.4rem;color:var(--ink-soft);font-size:.98rem}
+
+/* bausteine details */
+.bausteine{margin-top:1.4rem;display:flex;flex-direction:column;gap:.6rem}
+.baustein{
+  border:1px solid var(--line);border-radius:14px;background:var(--card);
+  transition:border-color .3s,box-shadow .3s;overflow:hidden;
+}
+.baustein[open]{border-color:var(--line-warm);box-shadow:0 16px 40px -30px rgba(31,42,68,.4)}
+.baustein summary{
+  list-style:none;cursor:pointer;padding:1.05rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  font-family:"Fraunces",serif;font-size:1.08rem;font-weight:500;color:var(--tinte);
+}
+.baustein summary::-webkit-details-marker{display:none}
+.baustein summary .price{font-family:"Inter",sans-serif;font-size:.85rem;font-weight:600;color:var(--kupfer);white-space:nowrap}
+.baustein summary .chev{
+  width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--line);transition:transform .35s var(--ease-out),background .3s;color:var(--ink-faint);
+}
+.baustein summary .summary-l{display:flex;align-items:baseline;gap:.75em;flex-wrap:wrap}
+.baustein[open] summary .chev{transform:rotate(45deg);background:rgba(201,123,63,.12);color:var(--kupfer)}
+.baustein .inner{padding:0 1.25rem 1.25rem;border-top:1px solid var(--hair);margin:0 0 0;}
+.baustein .inner-pad{padding-top:1.05rem}
+.baustein .so-label{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin-bottom:.7rem}
+.baustein-final{
+  padding:1rem 1.25rem;font-style:italic;color:var(--ink-soft);
+  border:1px dashed var(--line-warm);border-radius:14px;background:transparent;
+}
+.angebote-note{
+  margin-top:1.6rem;font-size:.92rem;color:var(--ink-faint);line-height:1.55;max-width:var(--measure);
+}
+.angebote-foot{
+  margin-top:clamp(34px,5vw,56px);padding-top:1.6rem;border-top:1px solid var(--hair);
+  font-size:.92rem;color:var(--ink-faint);max-width:var(--measure);line-height:1.6;
+}
+
+/* ---------- wer / pillars ---------- */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,32px);margin-top:clamp(34px,4vw,52px)}
+@media (max-width:820px){.pillars{grid-template-columns:1fr}}
+.pillar{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:clamp(24px,2.6vw,34px);transition:transform .4s var(--ease-out),box-shadow .4s,border-color .4s;
+}
+.pillar:hover{transform:translateY(-4px);box-shadow:0 22px 46px -30px rgba(31,42,68,.35);border-color:var(--line-warm)}
+.pillar .pnum{font-family:"Fraunces",serif;font-style:italic;color:var(--kupfer);font-size:1.4rem}
+.pillar h3{font-size:var(--step-1);color:var(--tinte);margin-top:.6rem}
+.pillar p{margin-top:.85rem;color:var(--ink-soft);font-size:.96rem;line-height:1.6}
+.wer-outro{margin-top:clamp(30px,4vw,48px);font-size:var(--step-1);color:var(--ink-soft);max-width:var(--measure)}
+
+/* ---------- stimmen ---------- */
+.stimmen-note{
+  display:inline-flex;align-items:center;gap:.6em;margin-bottom:clamp(26px,3vw,40px);
+  font-size:.9rem;color:var(--ink-faint);background:rgba(217,199,168,.2);
+  border:1px dashed var(--line-warm);border-radius:999px;padding:.55em 1.1em;
+}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.2vw,28px)}
+@media (max-width:860px){.quotes{grid-template-columns:1fr}}
+.quote{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:clamp(24px,2.6vw,32px);display:flex;flex-direction:column;
+  transition:transform .4s var(--ease-out),box-shadow .4s,border-color .4s;
+}
+.quote:hover{transform:translateY(-4px);box-shadow:0 22px 46px -30px rgba(31,42,68,.32);border-color:var(--line-warm)}
+.quote .mark{font-family:"Fraunces",serif;font-size:2.6rem;line-height:.6;color:var(--holzsand);transition:color .4s}
+.quote:hover .mark{color:var(--kupfer)}
+.quote blockquote{margin:.6rem 0 0;font-size:1.04rem;color:var(--ink);line-height:1.55;flex:1}
+.quote .src{margin-top:1.5rem;border-top:1px solid var(--hair);padding-top:1rem}
+.quote .ph{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--kupfer)}
+.quote .who{display:block;margin-top:.3rem;font-size:.9rem;color:var(--ink-faint)}
+
+/* ---------- ehrlich / fit ---------- */
+.fit{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px)}
+@media (max-width:760px){.fit{grid-template-columns:1fr}}
+.fit-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(26px,3vw,40px)}
+.fit-card.yes{border-color:rgba(143,169,138,.4)}
+.fit-card.no{border-color:rgba(31,42,68,.16);background:#F4EEE3}
+.fit-card h3{font-size:var(--step-2);color:var(--tinte);display:flex;align-items:center;gap:.55em}
+.fit-card .sign{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:1rem}
+.fit-card.yes .sign{background:rgba(143,169,138,.18);color:var(--salbei)}
+.fit-card.no .sign{background:rgba(31,42,68,.08);color:var(--ink-faint)}
+.fit-card ul{margin-top:1.5rem;display:flex;flex-direction:column;gap:1.05rem}
+.fit-card li{color:var(--ink-soft);line-height:1.55;padding-left:1.4em;position:relative}
+.fit-card.yes li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:50%;background:var(--salbei)}
+.fit-card.no li::before{content:"";position:absolute;left:0;top:.72em;width:10px;height:1.6px;background:var(--ink-faint)}
+
+/* ---------- grundwerte ---------- */
+.values{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(2px,.2vw,4px);margin-top:clamp(34px,4vw,52px);
+  border:1px solid var(--hair);border-radius:18px;overflow:hidden;background:var(--hair)}
+@media (max-width:760px){.values{grid-template-columns:1fr}}
+.value{background:var(--bg);padding:clamp(24px,2.6vw,34px);transition:background .3s}
+.value:hover{background:var(--card)}
+.value .vn{font-family:"Fraunces",serif;font-style:italic;color:var(--kupfer);font-size:1.1rem}
+.value .vlead{font-family:"Fraunces",serif;font-weight:500;font-size:var(--step-1);color:var(--tinte);margin-top:.5rem;line-height:1.2}
+.value p{margin-top:.7rem;color:var(--ink-soft);font-size:.96rem;line-height:1.55}
+
+/* ---------- faq ---------- */
+.faq{margin-top:clamp(30px,4vw,48px);border-top:1px solid var(--hair)}
+.faq-item{border-bottom:1px solid var(--hair)}
+.faq-item summary{
+  list-style:none;cursor:pointer;padding:1.4rem 0;
+  display:grid;grid-template-columns:auto 1fr auto;gap:1.1em;align-items:center;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item .qn{font-family:"Fraunces",serif;font-size:.92rem;color:var(--kupfer);font-style:italic;width:2.2em}
+.faq-item .qt{font-family:"Fraunces",serif;font-size:var(--step-1);font-weight:500;color:var(--tinte);line-height:1.25}
+.faq-item .plus{
+  width:28px;height:28px;flex:none;position:relative;border:1px solid var(--line);border-radius:50%;
+  transition:transform .35s var(--ease-out),border-color .3s;
+}
+.faq-item .plus::before,.faq-item .plus::after{
+  content:"";position:absolute;left:50%;top:50%;background:var(--ink-faint);
+  transition:transform .35s var(--ease-out),background .3s;
+}
+.faq-item .plus::before{width:11px;height:1.6px;transform:translate(-50%,-50%)}
+.faq-item .plus::after{width:1.6px;height:11px;transform:translate(-50%,-50%)}
+.faq-item[open] .plus{border-color:var(--kupfer)}
+.faq-item[open] .plus::after{transform:translate(-50%,-50%) scaleY(0)}
+.faq-item[open] .plus::before{background:var(--kupfer)}
+.faq-answer{padding:0 0 1.6rem calc(2.2em + 1.1em);color:var(--ink-soft);max-width:74ch;line-height:1.65}
+
+/* ---------- final cta ---------- */
+.final{
+  text-align:center;padding:clamp(90px,13vh,160px) 0;position:relative;
+}
+.final h2{font-size:var(--step-4);color:var(--tinte);font-weight:400}
+.final h2 em{font-style:italic;color:var(--kupfer);font-weight:500}
+.final p{font-size:var(--step-1);color:var(--ink-soft);margin:1.2rem auto 0;max-width:48ch}
+.final .btn{margin-top:2.2rem}
+
+/* ---------- footer ---------- */
+.footer{
+  background:var(--bg-warm);border-top:1px solid var(--line);
+  padding:clamp(54px,7vw,84px) 0 36px;position:relative;z-index:2;
+}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:clamp(28px,4vw,56px)}
+@media (max-width:760px){.footer-grid{grid-template-columns:1fr}}
+.footer .brand{font-size:1.3rem}
+.footer-tag{margin-top:1rem;color:var(--ink-soft);max-width:38ch;line-height:1.6}
+.footer-loc{margin-top:.6rem;color:var(--ink-faint);font-size:.92rem}
+.footer-col h4{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:0 0 1.1rem}
+.footer-col ul{display:flex;flex-direction:column;gap:.7rem}
+.footer-col a{color:var(--ink-soft);font-size:.96rem;transition:color .25s}
+.footer-col a:hover{color:var(--kupfer)}
+.footer-bottom{
+  margin-top:clamp(40px,6vw,64px);padding-top:1.4rem;border-top:1px solid var(--hair);
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;
+  font-size:.86rem;color:var(--ink-faint);
+}
+.footer-bottom a{color:var(--kupfer);font-weight:500}
+.footer-bottom a:hover{text-decoration:underline}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<div class="atmo" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- The thread spans the whole document, behind content -->
+<div class="thread-stage" aria-hidden="true">
+  <svg id="thread-svg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="thread-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#C97B3F"/>
+        <stop offset="0.35" stop-color="#D69155"/>
+        <stop offset="0.62" stop-color="#A98E6E"/>
+        <stop offset="1" stop-color="#6FA3B5"/>
+      </linearGradient>
+      <radialGradient id="head-glow-grad">
+        <stop offset="0" stop-color="#E0A05C" stop-opacity="0.55"/>
+        <stop offset="0.45" stop-color="#C97B3F" stop-opacity="0.32"/>
+        <stop offset="1" stop-color="#C97B3F" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="head-core-grad">
+        <stop offset="0" stop-color="#FFF4E6"/>
+        <stop offset="0.4" stop-color="#E9A85F"/>
+        <stop offset="1" stop-color="#C97B3F"/>
+      </radialGradient>
+    </defs>
+    <path id="thread-path" d=""/>
+    <g id="thread-head">
+      <circle id="thread-head-glow" cx="-100" cy="-100" r="22" fill="url(#head-glow-grad)"/>
+      <circle id="thread-head-ring" cx="-100" cy="-100" r="7.5" fill="none" stroke="#C97B3F" stroke-width="1" stroke-opacity="0.4"/>
+      <circle id="thread-head-core" cx="-100" cy="-100" r="4.5" fill="url(#head-core-grad)"/>
+    </g>
+  </svg>
+</div>
+
+<header>
+<nav class="nav" aria-label="Hauptnavigation">
+  <a class="brand" href="../../" aria-label="JGC Lumen — zur Galerie"><span class="dot"></span>JGC Lumen</a>
+  <div class="nav-links" id="nav-links">
+    <a href="#angebote">Angebote</a>
+    <a href="#grundwerte">Grundwerte</a>
+    <a href="#wer">Wer mit dir arbeitet</a>
+    <a class="nav-cta" href="#kontakt">Erstgespräch anfragen</a>
+  </div>
+  <button class="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
+</nav>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="hero-inner reveal" data-reveal>
+        <span class="eyebrow">Freiburg im Breisgau</span>
+        <h1>Mehr Raum für<br>das <span class="ink">Wesentliche.</span></h1>
+        <p class="hero-sub">KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#kontakt">Erstgespräch anfragen <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#angebote">Angebote ansehen</a>
+        </div>
+        <div class="trust">
+          <span class="trust-badge"><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5l2.3 2.3 4.7-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>EU-gehostet</span>
+          <span class="trust-badge"><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5l2.3 2.3 4.7-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>TÜV-zertifiziert</span>
+          <span class="trust-badge"><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5l2.3 2.3 4.7-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>EU AI Act-konform</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EINORDNUNG -->
+  <section class="section einordnung" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Eine Einordnung vorweg</span>
+        <h2>KI ist ein Werkzeug.</h2>
+      </div>
+      <div class="prose reveal" data-reveal data-d="1">
+        <p>Was wir daraus machen und wofür wir es einsetzen, liegt in unserer Verantwortung, so wie bei jedem Werkzeug. Wir können KI nutzen, um das Positive zu verstärken. Wir können ihr unsere Werte beibringen, unsere Sichtweisen, unsere Sprache.</p>
+        <p>Meine Mission ist, Menschen zu unterstützen, die anderen helfen. Coaches, Trainer, Mentoren: Ihr leistet eine Arbeit, die zählt. Ich sorge dafür, dass die Technik euch dient und Zeit zurückgibt. So habt ihr mehr Raum für das Wesentliche.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DEINE WOCHE -->
+  <section class="section" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Deine Woche, zwei Versionen</span>
+        <h2>Was sich verändert, wenn KI deine Sprache spricht.</h2>
+      </div>
+      <div class="cols2">
+        <div class="vcard today reveal" data-reveal data-d="1">
+          <span class="tag">Heute</span>
+          <ul>
+            <li><span class="num">1</span><span>Sitzungsnotizen liegen verstreut auf Zetteln, in Notion, in Voice-Memos.</span></li>
+            <li><span class="num">2</span><span>Das Follow-up an deine Klientin nimmst du dir für heute Abend vor, schon zum dritten Mal.</span></li>
+            <li><span class="num">3</span><span>Den Newsletter verschiebst du seit drei Wochen aufs Wochenende.</span></li>
+          </ul>
+        </div>
+        <div class="vcard tomorrow reveal" data-reveal data-d="2">
+          <span class="tag">Morgen</span>
+          <ul>
+            <li><span class="num">1</span><span>Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.</span></li>
+            <li><span class="num">2</span><span>Das Follow-up an deine Klientin geht raus, in deiner Sprache.</span></li>
+            <li><span class="num">3</span><span>Der nächste Newsletter liegt im Entwurf, aus echten Themen deiner Woche.</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="versions-outro reveal" data-reveal data-d="3">Du bekommst keine Tool-Liste und keinen Online-Kurs. Du bekommst eine Begleitung, in der wir gemeinsam herausarbeiten, wo KI in deiner Arbeit Substanz hat — und sie genau dort einbauen.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ANGEBOTE -->
+  <section class="section" id="angebote" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Schritt für Schritt, in deinem Tempo</span>
+        <h2>So gehen wir gemeinsam vor.</h2>
+      </div>
+
+      <!-- Schritt 1 -->
+      <div class="step reveal" data-reveal>
+        <div class="step-aside">
+          <span class="step-label">Schritt 1 — So fangen wir an</span>
+          <h3>Erstgespräch</h3>
+          <span class="step-meta">kostenlos · etwa 30 Minuten</span>
+        </div>
+        <div class="step-body">
+          <p>Wir lernen uns auf Augenhöhe kennen und klären, ob das zueinander passt. Du erzählst, wo dir im Alltag Zeit und Ruhe verloren gehen. Ich sage offen, was sinnvoll ist und was nicht. Kein Verkaufsgespräch, keine Folien.</p>
+          <a class="btn-link" href="#kontakt">Erstgespräch anfragen →</a>
+        </div>
+      </div>
+
+      <!-- Schritt 2 -->
+      <div class="step reveal" data-reveal>
+        <div class="step-aside">
+          <span class="step-label">Schritt 2 — Klarheit</span>
+          <h3>KI-Praxis-Check</h3>
+          <span class="step-meta">600 €, voll anrechenbar</span>
+        </div>
+        <div class="step-body">
+          <p>Ich schaue mir deine Praxis genau an — du bekommst eine ehrliche Orientierung, wo KI dich wirklich entlastet und wo deine Tools schon reichen.</p>
+          <p class="list-label">Was du bekommst</p>
+          <ul class="checklist">
+            <li>90-Minuten-Gespräch</li>
+            <li>schriftlicher Report (PDF, ca. 8 bis 12 Seiten)</li>
+            <li>drei bis fünf priorisierte Quick Wins mit konkreten Empfehlungen</li>
+            <li>Bewertung deiner Tools auf DSGVO und EU AI Act</li>
+          </ul>
+          <div class="callout"><strong>Anrechnung:</strong> Entscheidest du dich für eine Umsetzung, rechne ich die 600 € vollständig an.</div>
+        </div>
+      </div>
+
+      <!-- Schritt 3 -->
+      <div class="step reveal" data-reveal>
+        <div class="step-aside">
+          <span class="step-label">Schritt 3 — Aufbau</span>
+          <h3>Umsetzung</h3>
+          <span class="step-meta">ab 2.500 €</span>
+        </div>
+        <div class="step-body">
+          <p>Was sich im Praxis-Check gezeigt hat, baue ich — fertig eingerichtet, DSGVO-konform, in deiner Handschrift.</p>
+          <p class="subline">Du wählst die Bausteine, die zu dir passen. Klick für Beispiele.</p>
+          <div class="bausteine">
+
+            <details class="baustein">
+              <summary>
+                <span class="summary-l"><span>Sitzungs-Nachbereitung</span><span class="price">ab 2.500 €</span></span>
+                <span class="chev">+</span>
+              </summary>
+              <div class="inner"><div class="inner-pad">
+                <p class="so-label">So kann das aussehen</p>
+                <ul class="checklist">
+                  <li>eine Zusammenfassung für dich nach jeder Sitzung, ohne dass du tippst</li>
+                  <li>auf Wunsch eine klientengerechte Fassung</li>
+                  <li>die Schlüssel-Erkenntnisse und nächsten Schritte als sanfte Erinnerung für deine Klient:innen</li>
+                </ul>
+              </div></div>
+            </details>
+
+            <details class="baustein">
+              <summary>
+                <span class="summary-l"><span>Content-Stimme</span><span class="price">ab 4.000 €</span></span>
+                <span class="chev">+</span>
+              </summary>
+              <div class="inner"><div class="inner-pad">
+                <p class="so-label">So kann das aussehen</p>
+                <ul class="checklist">
+                  <li>die KI lernt, wie du schreibst und formulierst, und schlägt daraus Beiträge und Newsletter vor — in deiner Sprache statt generisch</li>
+                  <li>Grundlage sind deine Texte, Sprachnotizen oder Sitzungs-Transkripte; was am besten passt, schauen wir individuell</li>
+                </ul>
+              </div></div>
+            </details>
+
+            <details class="baustein">
+              <summary>
+                <span class="summary-l"><span>Begleitung zwischen den Sitzungen</span><span class="price">ab 2.500 €</span></span>
+                <span class="chev">+</span>
+              </summary>
+              <div class="inner"><div class="inner-pad">
+                <p class="so-label">So kann das aussehen</p>
+                <ul class="checklist">
+                  <li>Reflexionsfragen und Übungen, die deine Klient:innen zwischen den Terminen tragen</li>
+                  <li>behutsame Erinnerungen ans Vereinbarte</li>
+                  <li>Fortschritt sichtbar gemacht</li>
+                </ul>
+              </div></div>
+            </details>
+
+            <details class="baustein">
+              <summary>
+                <span class="summary-l"><span>Klienten-Aufnahme</span><span class="price">ab 3.000 €</span></span>
+                <span class="chev">+</span>
+              </summary>
+              <div class="inner"><div class="inner-pad">
+                <p class="so-label">So kann das aussehen</p>
+                <ul class="checklist">
+                  <li>ein Erstkontakt, der vorklärt, was die Person mitbringt</li>
+                  <li>ein Erwartungs-Bogen vor dem ersten Termin</li>
+                  <li>Anfragen zeitnah in deinem Ton beantwortet</li>
+                </ul>
+              </div></div>
+            </details>
+
+            <details class="baustein">
+              <summary>
+                <span class="summary-l"><span>Praxis-Gedächtnis</span><span class="price">ab 2.500 €</span></span>
+                <span class="chev">+</span>
+              </summary>
+              <div class="inner"><div class="inner-pad">
+                <p class="so-label">So kann das aussehen</p>
+                <ul class="checklist">
+                  <li>Notizen und Material an einem durchsuchbaren Ort statt verstreut</li>
+                  <li>per Telegram einen Gedanken oder eine Sprachnotiz schicken, die sortiert abgelegt wird</li>
+                  <li>in eigenen Worten nachfragen, was du festgehalten hast</li>
+                </ul>
+              </div></div>
+            </details>
+
+            <p class="baustein-final">und vieles mehr — oder was du sonst für deine Praxis brauchst</p>
+          </div>
+          <p class="angebote-note">Mehrere Bausteine richte ich als ein stimmiges Ganzes ein — das ist günstiger als die Summe. Welcher Zuschnitt für dich passt, klären wir im Praxis-Check.</p>
+        </div>
+      </div>
+
+      <!-- Schritt 4 -->
+      <div class="step reveal" data-reveal>
+        <div class="step-aside">
+          <span class="step-label">Schritt 4 — Danach (optional)</span>
+          <h3>Resonanzraum</h3>
+          <span class="step-meta">ab 300 € pro Monat, ab dem dritten Monat</span>
+        </div>
+        <div class="step-body">
+          <p>Auf Wunsch begleite ich dich laufend weiter.</p>
+          <p class="list-label">Was er trägt</p>
+          <ul class="checklist">
+            <li>deine Werkzeuge bleiben auf dem Stand: neue Modelle, bessere Vorlagen</li>
+            <li>ich halte dich auf dem Laufenden, wenn sich bei DSGVO oder EU AI Act etwas ändert, das dich betrifft — verständlich, nicht als Paragrafen-Flut</li>
+            <li>Begleitung bei Bedarf</li>
+          </ul>
+          <p class="subline">Ohne diese Anbindung bleibt deine Umsetzung stabil — du bist nicht abhängig.</p>
+        </div>
+      </div>
+
+      <p class="angebote-foot reveal" data-reveal>Jeder Baustein ist DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten werden nie zum Training von KI verwendet. Routine wie Buchung, Erinnerungen und Rechnungen binde ich an bewährte Tools an.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- WER -->
+  <section class="section" id="wer" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Wer mit dir arbeitet</span>
+        <h2>Drei Welten, ein Blick.</h2>
+        <p class="lead">Ich verstehe die innere Welt deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides verbinden.</p>
+      </div>
+      <div class="pillars">
+        <article class="pillar reveal" data-reveal data-d="1">
+          <span class="pnum">01</span>
+          <h3>Coach-Hintergrund</h3>
+          <p>Ausgebildeter Mentaltrainer und Meditationskursleiter, in Ausbildung als Fitnesstrainer. Ich kenne die innere Welt deiner Arbeit aus eigener Anschauung und Erfahrung.</p>
+        </article>
+        <article class="pillar reveal" data-reveal data-d="2">
+          <span class="pnum">02</span>
+          <h3>Wirtschaftsingenieur</h3>
+          <p>Master in Wirtschaftsingenieurwesen. Mein Beruf ist es, zwischen verschiedenen Welten zu übersetzen — Technik, Wirtschaft, Mensch. Ich denke in Abläufen und Prozessen, ohne den Menschen darin aus den Augen zu verlieren.</p>
+        </article>
+        <article class="pillar reveal" data-reveal data-d="3">
+          <span class="pnum">03</span>
+          <h3>TÜV-zertifizierter KI-Experte</h3>
+          <p>TÜV-Zertifikat Angewandte KI-Transformation. Eigene KI-Anwendungen entwickelt und in Praxen anderer integriert. KI ist nicht mein Hobby, sondern meine tägliche Arbeit — mit der Begeisterung von jemandem, der weiß, was diese Werkzeuge können und wo ihre Grenzen liegen.</p>
+        </article>
+      </div>
+      <p class="wer-outro reveal" data-reveal>Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und remote.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- STIMMEN -->
+  <section class="section" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Stimmen aus der Praxis</span>
+        <h2>Was Kunden über die Arbeit sagen.</h2>
+      </div>
+      <p class="stimmen-note reveal" data-reveal>Pilotkunden-Zitate folgen. Die hier gezeigten Karten sind klar als Platzhalter gekennzeichnet.</p>
+      <div class="quotes">
+        <figure class="quote reveal" data-reveal data-d="1">
+          <span class="mark">“</span>
+          <blockquote>Was vorher zwei Abende pro Woche fraß, läuft jetzt im Hintergrund. Und das Beste: meine Klienten merken keinen Unterschied — außer, dass ich präsenter bin.</blockquote>
+          <figcaption class="src"><span class="ph">Platzhalter — Pilotkundin</span><span class="who">Mental-Coach, München (Beispiel-Stimme)</span></figcaption>
+        </figure>
+        <figure class="quote reveal" data-reveal data-d="2">
+          <span class="mark">“</span>
+          <blockquote>Ich war skeptisch, ob ein KI-Setup wirklich „nach mir“ klingen kann. Tut es. Das war der Punkt, an dem aus Werkzeug Verstärker wurde.</blockquote>
+          <figcaption class="src"><span class="ph">Platzhalter — Pilotkunde</span><span class="who">Trainer für Führungskräfte, Wien (Beispiel-Stimme)</span></figcaption>
+        </figure>
+        <figure class="quote reveal" data-reveal data-d="3">
+          <span class="mark">“</span>
+          <blockquote>Der Audit allein war den Preis schon wert. Drei konkrete Schritte, mit denen ich sofort weiterkam — kein Tech-Sprech, einfach klare Empfehlungen.</blockquote>
+          <figcaption class="src"><span class="ph">Platzhalter — Pilotkundin</span><span class="who">Mentorin, Hamburg (Beispiel-Stimme)</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EHRLICH GESAGT -->
+  <section class="section" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Ehrlich gesagt</span>
+        <h2>Lass uns schauen, ob das passt.</h2>
+      </div>
+      <div class="fit">
+        <div class="fit-card yes reveal" data-reveal data-d="1">
+          <h3><span class="sign">✓</span>Passt für dich, wenn …</h3>
+          <ul>
+            <li>Du eine eigene Methode oder ein eigenes Programm hast, das in deiner Arbeit trägt.</li>
+            <li>Du regelmäßig Inhalte veröffentlichst — Newsletter, Podcast, Posts — und merkst, dass dich das Tempo zermürbt.</li>
+            <li>Du KI nutzen willst, ohne dass dein Schreiben generisch wird.</li>
+            <li>Du tech-skeptisch bist und genau deshalb jemanden brauchst, der die Werkzeuge für dich baut, statt dir Tutorials zu schicken.</li>
+            <li>Du in einer Praxis mit Klienten arbeitest und dafür Rechtssicherheit brauchst, die wirklich greift.</li>
+          </ul>
+        </div>
+        <div class="fit-card no reveal" data-reveal data-d="2">
+          <h3><span class="sign">—</span>Passt nicht, wenn …</h3>
+          <ul>
+            <li>Du gerade erst startest und deine Methode noch nicht steht. Hier hilft kein Tool, sondern erst einmal Klarheit über dein Angebot.</li>
+            <li>Du eine Marketing-Maschine suchst, die dich ersetzt. Das baue ich nicht.</li>
+            <li>Du KI als Beziehungsersatz für deine Klienten einsetzen willst.</li>
+            <li>Du erwartest, dass der Aufbau ohne deine Mitarbeit funktioniert. Deine Content-Stimme und die Praxis-Bausteine brauchen dich als Quelle.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- GRUNDWERTE -->
+  <section class="section" id="grundwerte" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Haltung vor Technik</span>
+        <h2>Meine Grundwerte, wenn ich mit KI arbeite.</h2>
+      </div>
+      <div class="values">
+        <div class="value reveal" data-reveal data-d="1"><span class="vn">01</span><p class="vlead">KI ersetzt keine echte Beziehung.</p><p>Begegnung bleibt menschlich.</p></div>
+        <div class="value reveal" data-reveal data-d="1"><span class="vn">02</span><p class="vlead">Klienten wissen, wo KI eingesetzt wird.</p><p>Transparenz ist Standard.</p></div>
+        <div class="value reveal" data-reveal data-d="2"><span class="vn">03</span><p class="vlead">Ich baue für dich, nicht für die Masse.</p><p>Jedes Setup wird auf deine Methode und deinen Stil zugeschnitten.</p></div>
+        <div class="value reveal" data-reveal data-d="2"><span class="vn">04</span><p class="vlead">Sensible Daten werden geschützt.</p><p>EU-Hosting, Auftragsverarbeitungsverträge, lokale Modelle bei Bedarf.</p></div>
+        <div class="value reveal" data-reveal data-d="3"><span class="vn">05</span><p class="vlead">Du bleibst Entscheider.</p><p>KI macht Vorschläge, du wählst aus. Nichts geht raus, ohne dass du es gesehen hast.</p></div>
+        <div class="value reveal" data-reveal data-d="3"><span class="vn">06</span><p class="vlead">Deine Stimme und deine Methode bleiben erkennbar.</p><p>KI verstärkt, sie ersetzt nicht.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section class="section" data-thread-section>
+    <div class="wrap">
+      <div class="section-head reveal" data-reveal>
+        <span class="eyebrow">Was du sonst noch wissen willst</span>
+        <h2>Häufige Fragen.</h2>
+      </div>
+      <div class="faq reveal" data-reveal>
+        <details class="faq-item">
+          <summary><span class="qn">01</span><span class="qt">Wie läuft die Zusammenarbeit ab?</span><span class="plus"></span></summary>
+          <div class="faq-answer">In Schritten, in deinem Tempo. Zuerst ein kostenfreies Erstgespräch, etwa 30 Minuten: Wir klären auf Augenhöhe, ob das zueinander passt. Wenn es passt, folgt der KI-Praxis-Check (600 €). Du zeigst mir deine Praxis, deine Tools, deine drängendsten Themen, und innerhalb einer Woche bekommst du einen schriftlichen Report mit drei bis fünf priorisierten Quick Wins, einer Bewertung deiner aktuellen Tools und einer klaren Empfehlung. Danach entscheidest du in Ruhe: Wenn der Report alles ist, was du brauchst — auch gut. Gehst du in die Umsetzung, rechne ich die 600 € vollständig an. In der Umsetzung baust du einzelne Bausteine oder mehrere, die ineinandergreifen — das legen wir gemeinsam fest.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">02</span><span class="qt">Wie hältst du es mit DSGVO und EU AI Act?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Beides ist bei mir Fundament, kein Anhang. Seit Februar 2025 verpflichtet der EU AI Act jeden, der KI in seiner Arbeit einsetzt, zur KI-Kompetenz. Ab August 2026 drohen Bußgelder bis 30 Millionen Euro. Jede Implementierung kommt deshalb mit EU-gehosteten Modellen (Mistral, Aleph Alpha, Azure OpenAI Frankfurt) als Standard, mit Auftragsverarbeitungsverträgen als Basis und mit einer integrierten Schulung, die deine Pflicht aus Artikel 4 abdeckt. Wenn du als Heilpraktikerin, Therapeutin oder mit anderer Doppelqualifikation arbeitest, kommen zusätzliche Vorkehrungen dazu, weil Paragraf 203 StGB greift — das beraten wir individuell.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">03</span><span class="qt">Was passiert mit den Aufnahmen und Daten meiner Klienten?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Sitzungs-Transkriptionen laufen über lokal gehostetes Whisper, also auf einem Server, den ich für dich einrichte. Die Aufnahmen verlassen niemals den europäischen Rechtsraum. Bei besonders sensiblen Inhalten arbeiten wir mit Open-Weight-Modellen (Llama, Mistral) komplett auf deiner eigenen Infrastruktur. Klienten werden vorab informiert, dass KI in der Nachbereitung eingesetzt wird — das ist Teil der Transparenz, die zur Sache gehört.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">04</span><span class="qt">Wie viel Zeit musst du selbst investieren?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Im KI-Praxis-Check rechnest du mit zwei bis drei Stunden insgesamt — Gespräch und Report-Lektüre. In der Umsetzung hängt es vom Umfang ab: ein einzelner Baustein braucht entsprechend wenig; mehrere Bausteine über einige Wochen brauchen etwa vier bis sechs Stunden pro Woche, vor allem am Anfang, etwa für deine Content-Stimme. Danach wird es deutlich weniger.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">05</span><span class="qt">Funktioniert das auch, wenn ich noch kein Buch oder kein Programm habe?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Für den KI-Praxis-Check und die Umsetzung reichen deine bisherigen Texte, Posts, Podcast-Folgen und Sitzungs-Notizen — daraus lässt sich zum Beispiel deine Content-Stimme aufbauen. Ein fertiges Buch brauchst du dafür nicht. Wenn deine Methode noch gar nicht steht, ist die Umsetzung eher früh — dann hilft erst einmal Klarheit über dein Angebot.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">06</span><span class="qt">Was unterscheidet das von einem Online-Kurs zu KI für Coaches?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Ich liefere keine Lektionen, sondern fertige Workflows in deine Praxis. Du musst nichts lernen, was du nicht willst. Die Schulung, die du bekommst, betrifft die Bedienung deines konkreten Setups — nicht KI im Allgemeinen. Wenn du einen Kurs willst, gibt es gute Anbieter dafür. Wenn du Werkzeuge willst, die in deiner Praxis greifen, bist du hier richtig.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">07</span><span class="qt">Was ist, wenn die Tools sich in einem Jahr geändert haben?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Tools ändern sich, das gehört dazu. Mein Setup ist so gebaut, dass die Logik bleibt, auch wenn einzelne Komponenten getauscht werden. Im optionalen Resonanzraum (ab 300 Euro pro Monat) bekommst du laufende Updates auf neue Modelle und Vorlagen, eine verständliche Information, wenn sich bei DSGVO oder EU AI Act etwas für dich ändert, und Begleitung bei Bedarf. Ohne diese Anbindung bleibt deine Umsetzung trotzdem stabil — du bist nicht abhängig.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">08</span><span class="qt">Brauche ich eine technische Vorbildung?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Nein. Wenn du E-Mail, Notion oder ein Buchungstool wie Calendly bedienen kannst, reicht das. Die Schulung am Ende der Implementierung deckt genau das ab, was du brauchst, um dein Setup zu pflegen.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="qn">09</span><span class="qt">Geht das auch, wenn ich nicht in Freiburg bin?</span><span class="plus"></span></summary>
+          <div class="faq-answer">Ja. Die meiste Arbeit läuft remote, mit regelmäßigen Videoanrufen. Wenn du in Freiburg oder Umgebung bist und Wert auf persönliche Treffen legst, machen wir das gerne. In jedem Fall arbeite ich mit Coaches und Trainern im gesamten DACH-Raum.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FINAL CTA -->
+  <section class="final" id="kontakt" data-thread-section>
+    <div class="wrap">
+      <div class="reveal" data-reveal>
+        <h2>Lass uns <em>30 Minuten</em> reden.</h2>
+        <p>Kostenfreies Erstgespräch. Kein Verkaufsgespräch, keine Verpflichtung.</p>
+        <a class="btn btn-primary" href="#kontakt">Erstgespräch anfragen <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="../../"><span class="dot"></span>JGC Lumen</a>
+        <p class="footer-tag">KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise, DSGVO-konform.</p>
+        <p class="footer-loc">Freiburg im Breisgau · DACH-Raum</p>
+      </div>
+      <div class="footer-col">
+        <h4>Seite</h4>
+        <ul>
+          <li><a href="#angebote">Angebote</a></li>
+          <li><a href="#grundwerte">Grundwerte</a></li>
+          <li><a href="#wer">Wer mit dir arbeitet</a></li>
+          <li><a href="#kontakt">Erstgespräch anfragen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="../../main/impressum/">Impressum</a></li>
+          <li><a href="../../main/datenschutz/">Datenschutz</a></li>
+          <li><a href="https://www.linkedin.com">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform</span>
+      <a href="#grundwerte">Haltung vor Technik →</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var prefersReduced = false;
+  try{ prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
+
+  function ready(fn){
+    if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, {once:true});
+    else fn();
+  }
+
+  ready(function(){
+    var $ = function(s, c){ return (c||document).querySelector(s); };
+    var $$ = function(s, c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+    /* ---------- mobile menu ---------- */
+    (function(){
+      var burger = $(".burger"), links = $("#nav-links");
+      if(!burger || !links) return;
+      function setOpen(open){
+        links.classList.toggle("open", open);
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+        burger.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+      }
+      burger.addEventListener("click", function(){
+        setOpen(burger.getAttribute("aria-expanded") !== "true");
+      });
+      $$("#nav-links a").forEach(function(a){
+        a.addEventListener("click", function(){ setOpen(false); });
+      });
+      document.addEventListener("keydown", function(e){
+        if(e.key === "Escape") setOpen(false);
+      });
+    })();
+
+    /* ---------- nav scrolled state ---------- */
+    (function(){
+      var nav = $(".nav");
+      if(!nav) return;
+      var onScroll = function(){ nav.classList.toggle("scrolled", window.scrollY > 24); };
+      onScroll();
+      window.addEventListener("scroll", onScroll, {passive:true});
+    })();
+
+    var hasGSAP = !!(window.gsap);
+    var reveals = $$("[data-reveal]");
+    var threadSections = $$("[data-thread-section]");
+
+    /* ---------- static fallback path (always present, simple) ---------- */
+    function showAllReveals(){
+      reveals.forEach(function(el){ el.classList.add("is-in"); });
+    }
+
+    /* If reduced motion OR no GSAP: show everything, draw thread fully (static), bail out of animation. */
+    if(prefersReduced || !hasGSAP){
+      showAllReveals();
+      try{ buildThread(true); }catch(e){}
+      return;
+    }
+
+    /* JS + motion active: enable reveal start-state via class on <html> */
+    document.documentElement.classList.add("js-motion");
+    document.documentElement.classList.add("hero-armed");
+
+    var gsap = window.gsap;
+    var ST = window.ScrollTrigger;
+    if(ST){ try{ gsap.registerPlugin(ST); }catch(e){} }
+
+    /* ---------- THE THREAD ---------- */
+    var svg = $("#thread-svg");
+    var path = $("#thread-path");
+    var head = $("#thread-head");
+    var headCore = $("#thread-head-core");
+    var headGlow = $("#thread-head-glow");
+    var headRing = $("#thread-head-ring");
+
+    var L = 0;                 // total path length
+    var lut = [];              // [{len, y}] lookup
+    var docH = 0, docW = 0;
+    var anchorRatio = 0.62;
+    var rafId = null, dirty = false;
+    var built = false;
+
+    function vw(){ return window.innerWidth || document.documentElement.clientWidth || 1024; }
+    function vh(){ return window.innerHeight || document.documentElement.clientHeight || 800; }
+    function isMobile(){ return vw() < 760; }
+
+    /* Build a smooth monotonic-in-y path through section anchors (catmull-rom -> bezier). */
+    function buildThread(staticFull){
+      if(!svg || !path) return;
+      docH = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+      docW = vw();
+      svg.setAttribute("viewBox", "0 0 " + docW + " " + docH);
+      svg.setAttribute("width", docW);
+      svg.setAttribute("height", docH);
+
+      var mob = isMobile();
+      // leading line: left gutter on mobile, slightly left-of-center on desktop
+      var centerX = mob ? Math.max(22, docW * 0.07) : docW * 0.5;
+      var amp = mob ? Math.min(26, docW * 0.06) : Math.min(150, docW * 0.16);
+
+      // gather anchor points from sections
+      var pts = [];
+      pts.push({ x: centerX, y: 0 });
+
+      var i = 0;
+      threadSections.forEach(function(sec){
+        var rect = sec.getBoundingClientRect();
+        var top = rect.top + window.scrollY;
+        var y = top + Math.min(rect.height * 0.34, 150);
+        var phase = i * 0.9;
+        var dir = (i % 2 === 0) ? 1 : -1;
+        // gentle sine sway plus a small tap toward content
+        var x = centerX + Math.sin(phase) * amp * 0.7 + dir * amp * 0.42;
+        if(mob){ x = centerX + Math.abs(Math.sin(phase)) * amp; } // keep at left edge on mobile
+        x = Math.max(14, Math.min(docW - 14, x));
+        pts.push({ x: x, y: y });
+        i++;
+      });
+
+      pts.push({ x: centerX, y: docH - 30 });
+
+      // enforce strictly increasing y
+      for(var k=1;k<pts.length;k++){
+        if(pts[k].y <= pts[k-1].y) pts[k].y = pts[k-1].y + 12;
+      }
+
+      var d = catmullRom(pts);
+      path.setAttribute("d", d);
+
+      try{ L = path.getTotalLength(); }catch(e){ L = 0; }
+      if(!L){ return; }
+
+      path.style.strokeDasharray = L;
+
+      // build lookup table for y -> length
+      lut = [];
+      var N = 240;
+      for(var s=0;s<=N;s++){
+        var len = (L * s) / N;
+        var p;
+        try{ p = path.getPointAtLength(len); }catch(e){ p = {x:centerX, y:(docH*s)/N}; }
+        lut.push({ len: len, y: p.y });
+      }
+
+      built = true;
+
+      if(staticFull){
+        path.style.strokeDashoffset = 0;
+        head.style.display = "none";
+        return;
+      }
+      // initial draw based on current scroll
+      updateThread();
+    }
+
+    function catmullRom(p){
+      if(p.length < 2) return "";
+      var d = "M " + p[0].x.toFixed(1) + " " + p[0].y.toFixed(1);
+      for(var i=0;i<p.length-1;i++){
+        var p0 = p[i-1] || p[i];
+        var p1 = p[i];
+        var p2 = p[i+1];
+        var p3 = p[i+2] || p2;
+        var c1x = p1.x + (p2.x - p0.x) / 6;
+        var c1y = p1.y + (p2.y - p0.y) / 6;
+        var c2x = p2.x - (p3.x - p1.x) / 6;
+        var c2y = p2.y - (p3.y - p1.y) / 6;
+        d += " C " + c1x.toFixed(1) + " " + c1y.toFixed(1) + ", " +
+                     c2x.toFixed(1) + " " + c2y.toFixed(1) + ", " +
+                     p2.x.toFixed(1) + " " + p2.y.toFixed(1);
+      }
+      return d;
+    }
+
+    // find path length whose y is closest to targetY (lut is monotonic in y)
+    function lenForY(targetY){
+      if(!lut.length) return 0;
+      if(targetY <= lut[0].y) return 0;
+      if(targetY >= lut[lut.length-1].y) return L;
+      var lo = 0, hi = lut.length - 1;
+      while(lo < hi){
+        var mid = (lo + hi) >> 1;
+        if(lut[mid].y < targetY) lo = mid + 1; else hi = mid;
+      }
+      var a = lut[Math.max(0, lo-1)], b = lut[lo];
+      var span = (b.y - a.y) || 1;
+      var t = (targetY - a.y) / span;
+      return a.len + (b.len - a.len) * t;
+    }
+
+    var revealed = {};
+    function updateThread(){
+      if(!built || !L) return;
+      var headY = window.scrollY + vh() * anchorRatio;
+      var len = lenForY(headY);
+      path.style.strokeDashoffset = (L - len);
+
+      // position head
+      var pos;
+      try{ pos = path.getPointAtLength(len); }catch(e){ pos = null; }
+      if(pos){
+        headCore.setAttribute("cx", pos.x);
+        headCore.setAttribute("cy", pos.y);
+        headGlow.setAttribute("cx", pos.x);
+        headGlow.setAttribute("cy", pos.y);
+        if(headRing){ headRing.setAttribute("cx", pos.x); headRing.setAttribute("cy", pos.y); }
+        head.style.display = (len > 2 && len < L - 2) ? "" : "none";
+      }
+
+      // reveal sections whose anchor the head has reached
+      var mobEarly = isMobile() ? vh() * 0.12 : 0;
+      reveals.forEach(function(el, idx){
+        if(revealed[idx]) return;
+        var top = el.getBoundingClientRect().top + window.scrollY;
+        if(headY + mobEarly >= top + 40){
+          el.classList.add("is-in");
+          revealed[idx] = true;
+        }
+      });
+    }
+
+    function requestUpdate(){
+      if(dirty) return;
+      dirty = true;
+      rafId = requestAnimationFrame(function(){
+        dirty = false;
+        updateThread();
+      });
+    }
+
+    /* head glow soft pulse — breathing bead: glow swells while a thin ring expands and fades */
+    function startPulse(){
+      try{
+        gsap.to(headGlow, { attr:{ r: 30 }, opacity: 0.55, duration: 2.4, ease:"sine.inOut", yoyo:true, repeat:-1 });
+        if(headRing){
+          gsap.fromTo(headRing,
+            { attr:{ r: 6 }, opacity: 0.5 },
+            { attr:{ r: 13 }, opacity: 0, duration: 2.4, ease:"sine.out", repeat:-1 });
+        }
+      }catch(e){}
+    }
+
+    /* hero intro — choreographed first impression (children stagger up) */
+    var heroIntroDone = false;
+    function heroIntro(){
+      if(heroIntroDone) return;
+      heroIntroDone = true;
+      var hero = $(".hero-inner");
+      if(!hero) return;
+      var kids = $$(".eyebrow, h1, .hero-sub, .hero-actions, .trust", hero);
+      if(!kids.length) return;
+      try{
+        gsap.set(kids, { opacity:0, y:22 });
+        document.documentElement.classList.remove("hero-armed");
+        gsap.to(kids, {
+          opacity:1, y:0, duration:1.05, ease:"power3.out",
+          stagger:0.085, delay:0.1,
+          onComplete:function(){ gsap.set(kids, { clearProps:"transform" }); }
+        });
+      }catch(e){
+        document.documentElement.classList.remove("hero-armed");
+        kids.forEach(function(k){ k.style.opacity=""; k.style.transform=""; });
+      }
+    }
+
+    var pulseTl = null;
+    function buildAll(){
+      try{ buildThread(false); }catch(e){ showAllReveals(); return; }
+      // ensure hero/already-passed sections are revealed on load (anchor jumps too)
+      updateThread();
+      startPulse();
+      heroIntro();
+    }
+
+    // scroll + resize wiring
+    window.addEventListener("scroll", requestUpdate, {passive:true});
+
+    var resizeT = null;
+    window.addEventListener("resize", function(){
+      clearTimeout(resizeT);
+      resizeT = setTimeout(function(){
+        try{ buildThread(false); }catch(e){}
+        if(window.ScrollTrigger){ try{ ScrollTrigger.refresh(); }catch(e){} }
+      }, 180);
+    });
+
+    // pause head-pulse when tab hidden or thread offscreen (perf hygiene)
+    document.addEventListener("visibilitychange", function(){
+      try{
+        if(document.hidden) gsap.globalTimeline.pause();
+        else gsap.globalTimeline.resume();
+      }catch(e){}
+    });
+
+    // build after fonts settle so anchor Y values are correct
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(function(){ buildAll(); }).catch(function(){ buildAll(); });
+    } else {
+      buildAll();
+    }
+    // safety rebuild on full load (images/late layout)
+    window.addEventListener("load", function(){
+      try{ buildThread(false); updateThread(); }catch(e){ showAllReveals(); }
+    });
+
+    // hard safety net: if after 2.5s some reveal is still hidden but in view, force it
+    setTimeout(function(){
+      document.documentElement.classList.remove("hero-armed");
+      if(!heroIntroDone){ heroIntro(); }
+      // Hard guarantee: hero must never stay invisible (e.g. tab loaded while hidden -> gsap ticker frozen).
+      try{
+        $$(".hero-inner .eyebrow, .hero-inner h1, .hero-inner .hero-sub, .hero-inner .hero-actions, .hero-inner .trust").forEach(function(k){
+          if(parseFloat(getComputedStyle(k).opacity) < 0.9){ k.style.opacity = "1"; k.style.transform = "none"; }
+        });
+      }catch(e){}
+      if(!built){ showAllReveals(); return; }
+      updateThread();
+    }, 2500);
+  });
+})();
+</script>
+</body>
+</html>

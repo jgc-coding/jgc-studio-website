@@ -70,5 +70,10 @@
     "num": "16",
     "label": "Resonanzfeld — Interactive 3D",
     "source": "variants/standalone/16-resonanzfeld/index.html"
+  },
+  "17-faden": {
+    "num": "17",
+    "label": "Der Faden — Serpentinen-Scrollpfad",
+    "source": "variants/standalone/17-faden/index.html"
   }
 }
