@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JGC Lumen — Mehr Raum für das Wesentliche</title>
+<meta name="description" content="KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. DSGVO-konform, maßgeschneidert.">
+<meta property="og:title" content="JGC Lumen — Mehr Raum für das Wesentliche">
+<meta property="og:description" content="KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. DSGVO-konform, maßgeschneidert.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta name="theme-color" content="#F7F4EC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800;12..96,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinte:#1F2A44;
+  --kupfer:#C97B3F;
+  --salbei:#8FA98A;
+  --quellwasser:#6FA3B5;
+  --holzsand:#D9C7A8;
+  --pergament:#FEFCF7;
+  --papier:#F7F4EC;
+  --anthrazit:#2D2D2D;
+  --ink:#161b27;
+  --line:rgba(31,42,68,.16);
+  --line-strong:rgba(31,42,68,.42);
+  --disp:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-io:cubic-bezier(.65,.05,.36,1);
+  --pad:clamp(20px,5vw,72px);
+  --maxw:1440px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{
+  font-family:var(--body);
+  background:var(--papier);
+  color:var(--ink);
+  line-height:1.55;
+  font-size:clamp(15px,1.05vw,17px);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+::selection{background:var(--kupfer);color:var(--pergament)}
+a{color:inherit;text-decoration:none}
+img,svg{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--disp);font-weight:900;line-height:.92;letter-spacing:-.03em}
+.mono{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.14em;font-size:.7rem}
+:focus-visible{outline:3px solid var(--kupfer);outline-offset:3px;border-radius:2px}
+
+/* ---- Layout primitives ---- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.rule{height:1px;background:var(--line-strong);width:100%}
+section{position:relative}
+.sec{padding-block:clamp(72px,11vw,160px)}
+.eyebrow{display:inline-flex;align-items:center;gap:.7em;color:var(--kupfer)}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--kupfer);display:inline-block}
+.num-marker{font-family:var(--disp);font-weight:900;font-size:clamp(3rem,9vw,7.5rem);line-height:.8;color:transparent;-webkit-text-stroke:1.4px var(--line-strong);letter-spacing:-.04em;display:block}
+
+/* ---- Resonanz thread (full-page SVG) ---- */
+.thread-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+.thread-layer path{fill:none;stroke:var(--kupfer);stroke-width:2;stroke-linecap:round;opacity:.5}
+
+/* ---- Skip link ---- */
+.skip{position:fixed;top:-100px;left:16px;z-index:200;background:var(--ink);color:var(--pergament);padding:12px 18px;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;transition:top .2s var(--ease)}
+.skip:focus{top:16px}
+
+/* ---- Nav ---- */
+.nav{position:sticky;top:0;z-index:120;background:rgba(247,244,236,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .35s var(--ease),background .35s var(--ease)}
+.nav.scrolled{border-color:var(--line-strong);background:rgba(247,244,236,.94)}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad);height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{font-family:var(--disp);font-weight:900;font-size:1.18rem;letter-spacing:-.03em;line-height:1;display:inline-flex;align-items:baseline;gap:.4em}
+.brand .dot{width:9px;height:9px;background:var(--kupfer);display:inline-block;transform:translateY(-1px)}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a:not(.nav-cta){font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;position:relative;padding:6px 0}
+.nav-links a:not(.nav-cta)::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1.5px;background:var(--kupfer);transition:width .35s var(--ease)}
+.nav-links a:not(.nav-cta):hover::after{width:100%}
+.nav-cta{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;background:var(--ink);color:var(--pergament);padding:12px 18px;transition:background .3s var(--ease),color .3s var(--ease)}
+.nav-cta:hover{background:var(--kupfer)}
+.burger{display:none;width:46px;height:46px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;position:relative;flex:0 0 auto}
+.burger span{position:absolute;left:11px;right:11px;height:2px;background:var(--ink);transition:transform .35s var(--ease),opacity .25s var(--ease);top:50%}
+.burger span:nth-child(1){transform:translateY(-6px)}
+.burger span:nth-child(3){transform:translateY(6px)}
+.burger[aria-expanded="true"] span:nth-child(1){transform:rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:rotate(-45deg)}
+.mobile-menu{display:none}
+
+@media(max-width:860px){
+  .nav-links{position:fixed;inset:68px 0 auto 0;flex-direction:column;align-items:flex-start;gap:0;background:var(--papier);border-bottom:1px solid var(--line-strong);padding:8px var(--pad) 28px;transform:translateY(-12px);opacity:0;pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+  .nav-links.open{opacity:1;transform:translateY(0);pointer-events:auto}
+  .nav-links a{width:100%;padding:18px 0!important;border-bottom:1px solid var(--line);font-size:.85rem!important}
+  .nav-links a:not(.nav-cta)::after{display:none}
+  .nav-cta{margin-top:14px;text-align:center}
+  .burger{display:block}
+}
+
+/* ---- HERO ---- */
+.hero{padding-top:clamp(28px,5vw,60px);padding-bottom:clamp(40px,7vw,100px);position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:clamp(24px,4vw,48px);position:relative;z-index:2}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.hero-place{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;color:var(--kupfer)}
+.hero-meta{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:var(--tinte);opacity:.65;max-width:32ch;text-align:right}
+.h1{font-size:clamp(3.4rem,15vw,13.5rem);line-height:.84;letter-spacing:-.045em;font-weight:900;margin-top:.1em}
+.h1 .line{display:block;overflow:hidden}
+.h1 .line>span{display:block;will-change:transform}
+.h1 em{font-style:italic;color:var(--kupfer);font-weight:900}
+.h1 .out{color:transparent;-webkit-text-stroke:1.6px var(--ink)}
+.hero-lower{display:grid;grid-template-columns:1fr;gap:clamp(24px,3vw,40px);align-items:end;border-top:1px solid var(--line-strong);padding-top:clamp(22px,2.5vw,34px)}
+.hero-sub{font-size:clamp(1.05rem,1.7vw,1.35rem);max-width:42ch;font-weight:400;color:var(--tinte)}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;padding:16px 24px;display:inline-flex;align-items:center;gap:.7em;cursor:pointer;border:1px solid var(--ink);transition:background .32s var(--ease),color .32s var(--ease),border-color .32s var(--ease),transform .32s var(--ease),box-shadow .32s var(--ease);will-change:transform}
+.btn:hover{transform:translateY(-2px);box-shadow:4px 6px 0 -1px var(--kupfer)}
+.btn:active{transform:translateY(0);box-shadow:2px 3px 0 -1px var(--kupfer)}
+.btn .arr{transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(5px)}
+.btn-fill{background:var(--ink);color:var(--pergament)}
+.btn-fill:hover{background:var(--kupfer);border-color:var(--kupfer)}
+.btn-line{background:transparent;color:var(--ink)}
+.btn-line:hover{background:var(--ink);color:var(--pergament)}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.badge{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;padding:8px 13px;border:1px solid var(--line-strong);color:var(--tinte);display:inline-flex;align-items:center;gap:.6em}
+.badge::before{content:"";width:6px;height:6px;background:var(--salbei)}
+.hero-art{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.9}
+@media(min-width:980px){
+  .hero-lower{grid-template-columns:1.3fr 1fr}
+}
+
+/* ---- MARQUEE ---- */
+.marquee{border-block:1px solid var(--ink);background:var(--ink);color:var(--pergament);overflow:hidden;white-space:nowrap;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.marquee-track{display:inline-flex;will-change:transform;padding-block:18px}
+.marquee-track span{font-family:var(--disp);font-weight:800;font-size:clamp(1.4rem,3.4vw,2.6rem);letter-spacing:-.01em;padding-inline:1.2ch;display:inline-flex;align-items:center}
+.marquee-track .star{color:var(--kupfer);padding-inline:.8ch}
+
+/* ---- EINORDNUNG (manifest dark block) ---- */
+.manifest{background:var(--ink);color:var(--pergament);position:relative;overflow:hidden}
+.manifest .thread-layer path{stroke:var(--kupfer);opacity:.55}
+.manifest .eyebrow{color:var(--holzsand)}
+.manifest .eyebrow::before{background:var(--holzsand)}
+.manifest-grid{display:grid;grid-template-columns:1fr;gap:clamp(32px,5vw,72px);position:relative;z-index:2}
+.manifest h2{font-size:clamp(3rem,11vw,9rem);line-height:.86;color:var(--pergament)}
+.manifest h2 em{font-style:normal;color:var(--kupfer)}
+.manifest-body{display:grid;gap:clamp(20px,2.5vw,32px);max-width:62ch;font-size:clamp(1.05rem,1.5vw,1.3rem);color:rgba(254,252,247,.86)}
+@media(min-width:980px){
+  .manifest-grid{grid-template-columns:1.1fr 1fr;align-items:end}
+}
+
+/* ---- generic section header ---- */
+.sec-head{display:grid;gap:18px;margin-bottom:clamp(40px,6vw,80px)}
+.sec-head h2{font-size:clamp(2.2rem,6.5vw,5.4rem)}
+.sec-head .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+
+/* ---- WOCHE (two versions) ---- */
+.woche-cols{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--line-strong)}
+.wcol{padding:clamp(28px,4vw,52px) 0;position:relative}
+.wcol+.wcol{border-top:1px solid var(--line)}
+.wcol-label{font-family:var(--disp);font-weight:900;font-size:clamp(2.4rem,6vw,4.4rem);line-height:.9;letter-spacing:-.04em;margin-bottom:8px}
+.wcol.heute .wcol-label{color:transparent;-webkit-text-stroke:1.4px var(--line-strong)}
+.wcol.morgen .wcol-label{color:var(--kupfer)}
+.wlist{list-style:none;display:grid;gap:18px;counter-reset:w}
+.wlist li{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;font-size:clamp(1rem,1.4vw,1.2rem);max-width:60ch;padding-top:18px;border-top:1px solid var(--line)}
+.wlist li::before{counter-increment:w;content:counter(w,decimal-leading-zero);font-family:var(--mono);font-size:.72rem;color:var(--kupfer);padding-top:.35em}
+.woche-outro{margin-top:clamp(40px,5vw,72px);max-width:64ch;font-size:clamp(1.1rem,1.7vw,1.4rem);font-family:var(--disp);font-weight:600;line-height:1.3;letter-spacing:-.01em}
+@media(min-width:880px){
+  .woche-cols{grid-template-columns:1fr 1fr;border-left:0}
+  .wcol{padding:clamp(34px,3vw,56px) clamp(28px,3vw,48px)}
+  .wcol+.wcol{border-top:0;border-left:1px solid var(--line-strong)}
+  .wcol.heute{padding-left:0}
+}
+
+/* ---- ANGEBOTE (horizontal pinned chapter for steps) ---- */
+#angebote{background:var(--pergament)}
+.steps-pin{position:relative;overflow:hidden}
+.steps-track{display:flex;gap:0}
+.step-card{flex:0 0 100%;padding:clamp(28px,4vw,56px) var(--pad);border-right:1px solid var(--line-strong);min-height:auto}
+.step-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.step-label{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--kupfer)}
+.step-num{font-family:var(--disp);font-weight:900;font-size:clamp(4rem,12vw,9rem);line-height:.78;color:transparent;-webkit-text-stroke:1.5px var(--line-strong);letter-spacing:-.05em;margin-bottom:8px}
+.step-title{font-size:clamp(2rem,5vw,3.4rem);line-height:.95}
+.step-meta{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--tinte);margin-top:10px;text-transform:none}
+.step-text{margin-top:18px;max-width:54ch;font-size:clamp(1rem,1.3vw,1.16rem);color:var(--tinte)}
+.step-cta{margin-top:24px}
+.kv-list{list-style:none;margin-top:22px;display:grid;gap:0;max-width:60ch}
+.kv-list .kv-title{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink);margin-bottom:10px}
+.kv-list li{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--line);align-items:start}
+.kv-list li::before{content:"+";font-family:var(--mono);color:var(--kupfer);font-weight:700;line-height:1.5}
+.callout{margin-top:24px;border-left:3px solid var(--kupfer);background:rgba(201,123,63,.07);padding:16px 20px;font-size:.98rem;max-width:58ch}
+.callout strong{color:var(--kupfer)}
+.zwischen{margin-top:24px;font-family:var(--disp);font-weight:600;font-size:1.1rem;letter-spacing:-.01em;max-width:46ch}
+
+/* details (Bausteine + FAQ) */
+details{border-top:1px solid var(--line-strong)}
+details summary{list-style:none;cursor:pointer;padding:20px 0;display:flex;align-items:center;gap:18px;justify-content:space-between;font-family:var(--disp);font-weight:600;letter-spacing:-.01em;font-size:clamp(1.05rem,1.7vw,1.35rem);transition:color .25s var(--ease)}
+details summary::-webkit-details-marker{display:none}
+details summary:hover{color:var(--kupfer)}
+.sum-sign{flex:0 0 auto;width:24px;height:24px;position:relative;transition:transform .4s var(--ease)}
+.sum-sign::before,.sum-sign::after{content:"";position:absolute;background:var(--kupfer);transition:transform .3s var(--ease),opacity .3s var(--ease)}
+.sum-sign::before{left:0;right:0;top:50%;height:2px;transform:translateY(-50%)}
+.sum-sign::after{top:0;bottom:0;left:50%;width:2px;transform:translateX(-50%)}
+details summary:hover .sum-sign{transform:rotate(90deg)}
+details[open] .sum-sign{transform:rotate(90deg)}
+details[open] summary:hover .sum-sign{transform:rotate(0deg)}
+details[open] .sum-sign::after{transform:translateX(-50%) scaleY(0);opacity:0}
+.det-body{padding:0 0 26px;display:grid;gap:14px;max-width:60ch}
+.det-body .sokann{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--kupfer)}
+.det-body ul{list-style:none;display:grid;gap:10px}
+.det-body ul li{display:grid;grid-template-columns:auto 1fr;gap:12px;font-size:1rem;color:var(--tinte)}
+.det-body ul li::before{content:"·";color:var(--kupfer);font-weight:900;font-size:1.3em;line-height:1}
+.bausteine-end{padding:20px 0;border-top:1px solid var(--line-strong);font-family:var(--disp);font-weight:600;font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--tinte)}
+.note{margin-top:24px;font-size:.98rem;color:var(--tinte);max-width:62ch;opacity:.88}
+.ang-foot{border-top:1px solid var(--line-strong);margin-top:clamp(48px,6vw,80px);padding-top:24px;font-family:var(--mono);font-size:.74rem;line-height:1.7;letter-spacing:.04em;color:var(--tinte);max-width:74ch;text-transform:none}
+
+@media(min-width:980px){
+  .step-card{flex:0 0 70vw;max-width:920px}
+  .step-card.full{flex:0 0 92vw}
+}
+
+/* ---- WER (3 pillars) ---- */
+#wer{background:var(--ink);color:var(--pergament)}
+#wer .eyebrow{color:var(--holzsand)}
+#wer .eyebrow::before{background:var(--holzsand)}
+#wer h2{color:var(--pergament)}
+#wer .thread-layer path{stroke:var(--quellwasser);opacity:.5}
+.wer-intro{font-size:clamp(1.2rem,2vw,1.7rem);max-width:46ch;font-family:var(--disp);font-weight:600;letter-spacing:-.01em;color:rgba(254,252,247,.9);margin-bottom:clamp(40px,5vw,72px)}
+.pillars{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid rgba(254,252,247,.22)}
+.pillar{padding:clamp(28px,3vw,44px) 0;border-bottom:1px solid rgba(254,252,247,.14);display:grid;grid-template-columns:1fr;gap:14px}
+.pillar .p-num{font-family:var(--mono);font-size:.72rem;color:var(--quellwasser);letter-spacing:.14em}
+.pillar h3{font-size:clamp(1.5rem,3vw,2.4rem);color:var(--pergament)}
+.pillar p{color:rgba(254,252,247,.78);max-width:56ch;font-size:clamp(1rem,1.3vw,1.16rem)}
+.wer-outro{margin-top:clamp(36px,4vw,56px);font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;color:var(--holzsand);text-transform:none}
+@media(min-width:880px){
+  .pillar{grid-template-columns:.5fr 1.5fr;gap:32px;align-items:start}
+}
+
+/* ---- STIMMEN ---- */
+.stimmen-hint{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--kupfer);text-transform:none;border:1px solid var(--line-strong);padding:12px 16px;display:inline-block;margin-bottom:clamp(36px,5vw,60px)}
+.voices{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--line-strong)}
+.voice{padding:clamp(30px,4vw,52px) 0;border-bottom:1px solid var(--line);display:grid;gap:24px}
+.voice blockquote{font-family:var(--disp);font-weight:600;font-size:clamp(1.35rem,2.6vw,2.1rem);line-height:1.18;letter-spacing:-.02em}
+.voice blockquote::before{content:"“";color:var(--kupfer)}
+.voice-src{display:grid;gap:3px}
+.voice-tag{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--kupfer)}
+.voice-who{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--tinte);text-transform:none}
+@media(min-width:880px){
+  .voice{grid-template-columns:1.6fr .8fr;gap:40px;align-items:start}
+}
+
+/* ---- EHRLICH (passt / passt nicht) ---- */
+.fit-cols{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--line-strong)}
+.fit-col{padding:clamp(28px,3.5vw,48px) 0}
+.fit-col h3{font-family:var(--disp);font-weight:900;font-size:clamp(1.5rem,2.6vw,2.2rem);margin-bottom:24px;display:flex;align-items:center;gap:.5em}
+.fit-col.yes h3 .mk{color:var(--salbei)}
+.fit-col.no h3 .mk{color:var(--kupfer)}
+.fit-list{list-style:none;display:grid;gap:0}
+.fit-list li{padding:16px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:14px;font-size:clamp(1rem,1.3vw,1.14rem);color:var(--tinte);max-width:56ch}
+.fit-col.yes .fit-list li::before{content:"→";color:var(--salbei);font-weight:700}
+.fit-col.no .fit-list li::before{content:"×";color:var(--kupfer);font-weight:700}
+@media(min-width:880px){
+  .fit-cols{grid-template-columns:1fr 1fr}
+  .fit-col.no{border-left:1px solid var(--line-strong);padding-left:clamp(28px,3vw,48px)}
+  .fit-col.yes{padding-right:clamp(28px,3vw,48px)}
+}
+
+/* ---- GRUNDWERTE ---- */
+#grundwerte{background:var(--pergament)}
+.werte{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--line-strong)}
+.wert{padding:clamp(26px,3vw,42px) 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr;gap:10px}
+.wert .w-num{font-family:var(--mono);font-size:.72rem;color:var(--kupfer);letter-spacing:.14em}
+.wert h3{font-size:clamp(1.3rem,2.2vw,1.9rem);line-height:1.05;max-width:24ch}
+.wert p{color:var(--tinte);max-width:42ch;font-size:clamp(1rem,1.3vw,1.14rem)}
+@media(min-width:760px){
+  .werte{grid-template-columns:1fr 1fr}
+  .wert:nth-child(odd){border-right:1px solid var(--line-strong);padding-right:clamp(24px,2.5vw,40px)}
+  .wert:nth-child(even){padding-left:clamp(24px,2.5vw,40px)}
+}
+@media(min-width:760px){
+  .wert{grid-template-columns:.85fr 1.15fr;gap:28px;align-items:start}
+}
+
+/* ---- FAQ ---- */
+.faq-list details summary{align-items:flex-start}
+.faq-q{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:baseline}
+.faq-q .faq-n{font-family:var(--mono);font-size:.72rem;color:var(--kupfer);letter-spacing:.1em;padding-top:.3em}
+.faq-list .det-body{max-width:74ch;padding-bottom:30px}
+.faq-list .det-body p{color:var(--tinte);font-size:clamp(1rem,1.25vw,1.12rem);line-height:1.65}
+
+/* ---- KONTAKT / final CTA ---- */
+#kontakt{background:var(--ink);color:var(--pergament);position:relative;overflow:hidden}
+#kontakt .thread-layer path{stroke:var(--kupfer);opacity:.6}
+.cta-final{position:relative;z-index:2;display:grid;gap:clamp(24px,3vw,40px);text-align:center;justify-items:center}
+.cta-final h2{font-size:clamp(2.6rem,9vw,7.5rem);line-height:.88;color:var(--pergament);max-width:14ch}
+.cta-final h2 em{font-style:italic;color:var(--kupfer)}
+.cta-final .cta-sub{font-size:clamp(1.05rem,1.7vw,1.35rem);color:rgba(254,252,247,.82);max-width:40ch}
+#kontakt .btn-fill{background:var(--kupfer);color:var(--ink);border-color:var(--kupfer);font-size:.84rem;padding:20px 32px}
+#kontakt .btn-fill:hover{background:var(--pergament);border-color:var(--pergament);box-shadow:5px 7px 0 -1px var(--kupfer)}
+#kontakt .btn-fill:active{box-shadow:2px 3px 0 -1px var(--kupfer)}
+
+/* ---- FOOTER ---- */
+footer{background:var(--papier);border-top:1px solid var(--ink);padding-block:clamp(48px,6vw,80px)}
+.foot-top{display:grid;grid-template-columns:1fr;gap:40px;margin-bottom:48px}
+.foot-brand .brand{font-size:1.5rem}
+.foot-brand p{margin-top:16px;color:var(--tinte);max-width:42ch;font-size:.96rem}
+.foot-brand .place{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--kupfer);margin-top:14px}
+.foot-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.foot-col h4{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink);margin-bottom:16px}
+.foot-col a{display:block;padding:7px 0;color:var(--tinte);font-size:.92rem;transition:color .25s var(--ease)}
+.foot-col a:hover{color:var(--kupfer)}
+.foot-bottom{border-top:1px solid var(--line-strong);padding-top:24px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.foot-bottom .cp{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--tinte);text-transform:none}
+.foot-bottom .haltung{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--kupfer);transition:transform .3s var(--ease)}
+.foot-bottom .haltung:hover{transform:translateX(4px)}
+@media(min-width:880px){
+  .foot-top{grid-template-columns:1.4fr 1fr;gap:64px}
+  .foot-cols{grid-template-columns:1fr 1fr}
+}
+
+/* ---- reveal defaults (JS-driven; visible by default for no-JS/fallback) ---- */
+.reveal{will-change:transform,opacity}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .marquee-track{transform:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Zum Inhalt springen</a>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="../../" aria-label="JGC Lumen — zurück zur Galerie">JGC Lumen<span class="dot" aria-hidden="true"></span></a>
+    <nav class="nav-links" id="navLinks" aria-label="Hauptnavigation">
+      <a href="#angebote">Angebote</a>
+      <a href="#grundwerte">Grundwerte</a>
+      <a href="#wer">Wer mit dir arbeitet</a>
+      <a class="nav-cta" href="#kontakt">Erstgespräch anfragen</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero wrap" aria-labelledby="hero-h1">
+    <svg class="hero-art" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path id="heroThread" d="M -50 620 C 200 540, 320 700, 540 580 S 880 420, 1100 540 S 1320 700, 1300 600" fill="none" stroke="#C97B3F" stroke-width="2" opacity="0.32"/>
+    </svg>
+    <div class="hero-grid">
+      <div class="hero-top">
+        <span class="hero-place">Freiburg im Breisgau</span>
+        <span class="hero-meta">KI-Implementierung für Coaches, Trainer und Mentoren · DACH-Raum</span>
+      </div>
+      <h1 class="h1" id="hero-h1">
+        <span class="line"><span>Mehr Raum</span></span>
+        <span class="line"><span class="out">für das</span></span>
+        <span class="line"><span><em>Wesentliche.</em></span></span>
+      </h1>
+      <div class="hero-lower">
+        <p class="hero-sub">KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.</p>
+        <div>
+          <div class="hero-ctas">
+            <a class="btn btn-fill" href="#kontakt">Erstgespräch anfragen <span class="arr" aria-hidden="true">→</span></a>
+            <a class="btn btn-line" href="#angebote">Angebote ansehen</a>
+          </div>
+          <div class="badges">
+            <span class="badge">EU-gehostet</span>
+            <span class="badge">TÜV-zertifiziert</span>
+            <span class="badge">EU AI Act-konform</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee">
+      <span>EU-GEHOSTET</span><span class="star">·</span><span>TÜV-ZERTIFIZIERT</span><span class="star">·</span><span>EU AI ACT-KONFORM</span><span class="star">·</span>
+      <span>EU-GEHOSTET</span><span class="star">·</span><span>TÜV-ZERTIFIZIERT</span><span class="star">·</span><span>EU AI ACT-KONFORM</span><span class="star">·</span>
+      <span>EU-GEHOSTET</span><span class="star">·</span><span>TÜV-ZERTIFIZIERT</span><span class="star">·</span><span>EU AI ACT-KONFORM</span><span class="star">·</span>
+      <span>EU-GEHOSTET</span><span class="star">·</span><span>TÜV-ZERTIFIZIERT</span><span class="star">·</span><span>EU AI ACT-KONFORM</span><span class="star">·</span>
+    </div>
+  </div>
+
+  <!-- EINORDNUNG (manifest dark) -->
+  <section class="manifest sec" aria-labelledby="einordnung-h2">
+    <svg class="thread-layer" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+      <path class="rthread" d="M -20 120 C 280 40, 420 320, 720 220 S 1100 60, 1240 240" />
+    </svg>
+    <div class="wrap manifest-grid">
+      <div>
+        <span class="eyebrow mono reveal">Eine Einordnung vorweg</span>
+        <h2 id="einordnung-h2" class="reveal" style="margin-top:24px">KI ist ein <em>Werkzeug.</em></h2>
+      </div>
+      <div class="manifest-body">
+        <p class="reveal">Was wir daraus machen und wofür wir es einsetzen, liegt in unserer Verantwortung, so wie bei jedem Werkzeug. Wir können KI nutzen, um das Positive zu verstärken. Wir können ihr unsere Werte beibringen, unsere Sichtweisen, unsere Sprache.</p>
+        <p class="reveal">Meine Mission ist, Menschen zu unterstützen, die anderen helfen. Coaches, Trainer, Mentoren: Ihr leistet eine Arbeit, die zählt. Ich sorge dafür, dass die Technik euch dient und Zeit zurückgibt. So habt ihr mehr Raum für das Wesentliche.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WOCHE -->
+  <section class="sec wrap" aria-labelledby="woche-h2">
+    <div class="sec-head">
+      <div class="top">
+        <span class="eyebrow mono reveal">Deine Woche, zwei Versionen</span>
+        <span class="num-marker reveal" aria-hidden="true">01</span>
+      </div>
+      <h2 id="woche-h2" class="reveal">Was sich verändert, wenn KI deine Sprache spricht.</h2>
+    </div>
+    <div class="woche-cols">
+      <div class="wcol heute">
+        <div class="wcol-label" aria-hidden="true">Heute</div>
+        <ul class="wlist" aria-label="Heute">
+          <li class="reveal">Sitzungsnotizen liegen verstreut auf Zetteln, in Notion, in Voice-Memos.</li>
+          <li class="reveal">Das Follow-up an deine Klientin nimmst du dir für heute Abend vor, schon zum dritten Mal.</li>
+          <li class="reveal">Den Newsletter verschiebst du seit drei Wochen aufs Wochenende.</li>
+        </ul>
+      </div>
+      <div class="wcol morgen">
+        <div class="wcol-label" aria-hidden="true">Morgen</div>
+        <ul class="wlist" aria-label="Morgen">
+          <li class="reveal">Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.</li>
+          <li class="reveal">Das Follow-up an deine Klientin geht raus, in deiner Sprache.</li>
+          <li class="reveal">Der nächste Newsletter liegt im Entwurf, aus echten Themen deiner Woche.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="woche-outro reveal">Du bekommst keine Tool-Liste und keinen Online-Kurs. Du bekommst eine Begleitung, in der wir gemeinsam herausarbeiten, wo KI in deiner Arbeit Substanz hat — und sie genau dort einbauen.</p>
+  </section>
+
+  <!-- ANGEBOTE (horizontal pinned chapter) -->
+  <section id="angebote" class="sec" aria-labelledby="angebote-h2">
+    <div class="wrap sec-head">
+      <div class="top">
+        <span class="eyebrow mono reveal">Schritt für Schritt, in deinem Tempo</span>
+        <span class="num-marker reveal" aria-hidden="true">02</span>
+      </div>
+      <h2 id="angebote-h2" class="reveal">So gehen wir gemeinsam vor.</h2>
+    </div>
+
+    <div class="steps-pin" id="stepsPin">
+      <div class="steps-track" id="stepsTrack">
+
+        <!-- Schritt 1 -->
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">01</div>
+          <div class="step-head"><span class="step-label">Schritt 1 — So fangen wir an</span></div>
+          <h3 class="step-title">Erstgespräch</h3>
+          <div class="step-meta">kostenlos · etwa 30 Minuten</div>
+          <p class="step-text">Wir lernen uns auf Augenhöhe kennen und klären, ob das zueinander passt. Du erzählst, wo dir im Alltag Zeit und Ruhe verloren gehen. Ich sage offen, was sinnvoll ist und was nicht. Kein Verkaufsgespräch, keine Folien.</p>
+          <a class="btn btn-fill step-cta" href="#kontakt">Erstgespräch anfragen <span class="arr" aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- Schritt 2 -->
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">02</div>
+          <div class="step-head"><span class="step-label">Schritt 2 — Klarheit</span></div>
+          <h3 class="step-title">KI-Praxis-Check</h3>
+          <div class="step-meta">600 €, voll anrechenbar</div>
+          <p class="step-text">Ich schaue mir deine Praxis genau an — du bekommst eine ehrliche Orientierung, wo KI dich wirklich entlastet und wo deine Tools schon reichen.</p>
+          <ul class="kv-list">
+            <li class="kv-title" style="display:block;grid-column:1/-1">Was du bekommst</li>
+            <li>90-Minuten-Gespräch</li>
+            <li>schriftlicher Report (PDF, ca. 8 bis 12 Seiten)</li>
+            <li>drei bis fünf priorisierte Quick Wins mit konkreten Empfehlungen</li>
+            <li>Bewertung deiner Tools auf DSGVO und EU AI Act</li>
+          </ul>
+          <div class="callout"><strong>Anrechnung:</strong> Entscheidest du dich für eine Umsetzung, rechne ich die 600 € vollständig an.</div>
+        </article>
+
+        <!-- Schritt 3 -->
+        <article class="step-card full">
+          <div class="step-num" aria-hidden="true">03</div>
+          <div class="step-head"><span class="step-label">Schritt 3 — Aufbau</span></div>
+          <h3 class="step-title">Umsetzung</h3>
+          <div class="step-meta">ab 2.500 €</div>
+          <p class="step-text">Was sich im Praxis-Check gezeigt hat, baue ich — fertig eingerichtet, DSGVO-konform, in deiner Handschrift.</p>
+          <p class="zwischen">Du wählst die Bausteine, die zu dir passen. Klick für Beispiele.</p>
+
+          <div class="bausteine" style="margin-top:18px">
+            <details>
+              <summary><span>Sitzungs-Nachbereitung — ab 2.500 €</span><span class="sum-sign" aria-hidden="true"></span></summary>
+              <div class="det-body">
+                <span class="sokann">So kann das aussehen</span>
+                <ul>
+                  <li>eine Zusammenfassung für dich nach jeder Sitzung, ohne dass du tippst</li>
+                  <li>auf Wunsch eine klientengerechte Fassung</li>
+                  <li>die Schlüssel-Erkenntnisse und nächsten Schritte als sanfte Erinnerung für deine Klient:innen</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span>Content-Stimme — ab 4.000 €</span><span class="sum-sign" aria-hidden="true"></span></summary>
+              <div class="det-body">
+                <span class="sokann">So kann das aussehen</span>
+                <ul>
+                  <li>die KI lernt, wie du schreibst und formulierst, und schlägt daraus Beiträge und Newsletter vor — in deiner Sprache statt generisch</li>
+                  <li>Grundlage sind deine Texte, Sprachnotizen oder Sitzungs-Transkripte; was am besten passt, schauen wir individuell</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span>Begleitung zwischen den Sitzungen — ab 2.500 €</span><span class="sum-sign" aria-hidden="true"></span></summary>
+              <div class="det-body">
+                <span class="sokann">So kann das aussehen</span>
+                <ul>
+                  <li>Reflexionsfragen und Übungen, die deine Klient:innen zwischen den Terminen tragen</li>
+                  <li>behutsame Erinnerungen ans Vereinbarte</li>
+                  <li>Fortschritt sichtbar gemacht</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span>Klienten-Aufnahme — ab 3.000 €</span><span class="sum-sign" aria-hidden="true"></span></summary>
+              <div class="det-body">
+                <span class="sokann">So kann das aussehen</span>
+                <ul>
+                  <li>ein Erstkontakt, der vorklärt, was die Person mitbringt</li>
+                  <li>ein Erwartungs-Bogen vor dem ersten Termin</li>
+                  <li>Anfragen zeitnah in deinem Ton beantwortet</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span>Praxis-Gedächtnis — ab 2.500 €</span><span class="sum-sign" aria-hidden="true"></span></summary>
+              <div class="det-body">
+                <span class="sokann">So kann das aussehen</span>
+                <ul>
+                  <li>Notizen und Material an einem durchsuchbaren Ort statt verstreut</li>
+                  <li>per Telegram einen Gedanken oder eine Sprachnotiz schicken, die sortiert abgelegt wird</li>
+                  <li>in eigenen Worten nachfragen, was du festgehalten hast</li>
+                </ul>
+              </div>
+            </details>
+            <div class="bausteine-end">und vieles mehr — oder was du sonst für deine Praxis brauchst</div>
+          </div>
+
+          <p class="note">Mehrere Bausteine richte ich als ein stimmiges Ganzes ein — das ist günstiger als die Summe. Welcher Zuschnitt für dich passt, klären wir im Praxis-Check.</p>
+        </article>
+
+        <!-- Schritt 4 -->
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">04</div>
+          <div class="step-head"><span class="step-label">Schritt 4 — Danach (optional)</span></div>
+          <h3 class="step-title">Resonanzraum</h3>
+          <div class="step-meta">ab 300 € pro Monat, ab dem dritten Monat</div>
+          <p class="step-text">Auf Wunsch begleite ich dich laufend weiter.</p>
+          <ul class="kv-list">
+            <li class="kv-title" style="display:block;grid-column:1/-1">Was er trägt</li>
+            <li>deine Werkzeuge bleiben auf dem Stand: neue Modelle, bessere Vorlagen</li>
+            <li>ich halte dich auf dem Laufenden, wenn sich bei DSGVO oder EU AI Act etwas ändert, das dich betrifft — verständlich, nicht als Paragrafen-Flut</li>
+            <li>Begleitung bei Bedarf</li>
+          </ul>
+          <p class="note">Ohne diese Anbindung bleibt deine Umsetzung stabil — du bist nicht abhängig.</p>
+        </article>
+
+      </div>
+    </div>
+
+    <div class="wrap">
+      <p class="ang-foot">Jeder Baustein ist DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten werden nie zum Training von KI verwendet. Routine wie Buchung, Erinnerungen und Rechnungen binde ich an bewährte Tools an.</p>
+    </div>
+  </section>
+
+  <!-- WER -->
+  <section id="wer" class="sec" aria-labelledby="wer-h2">
+    <svg class="thread-layer" viewBox="0 0 1200 700" preserveAspectRatio="none" aria-hidden="true">
+      <path class="rthread" d="M -20 540 C 300 600, 380 280, 660 360 S 1080 560, 1240 380" />
+    </svg>
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="top">
+          <span class="eyebrow mono reveal">Wer mit dir arbeitet</span>
+          <span class="num-marker reveal" aria-hidden="true" style="-webkit-text-stroke-color:rgba(254,252,247,.35)">03</span>
+        </div>
+        <h2 id="wer-h2" class="reveal">Drei Welten, ein Blick.</h2>
+      </div>
+      <p class="wer-intro reveal">Ich verstehe die innere Welt deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides verbinden.</p>
+      <div class="pillars">
+        <article class="pillar reveal">
+          <span class="p-num">I</span>
+          <div>
+            <h3>Coach-Hintergrund</h3>
+            <p>Ausgebildeter Mentaltrainer und Meditationskursleiter, in Ausbildung als Fitnesstrainer. Ich kenne die innere Welt deiner Arbeit aus eigener Anschauung und Erfahrung.</p>
+          </div>
+        </article>
+        <article class="pillar reveal">
+          <span class="p-num">II</span>
+          <div>
+            <h3>Wirtschaftsingenieur</h3>
+            <p>Master in Wirtschaftsingenieurwesen. Mein Beruf ist es, zwischen verschiedenen Welten zu übersetzen — Technik, Wirtschaft, Mensch. Ich denke in Abläufen und Prozessen, ohne den Menschen darin aus den Augen zu verlieren.</p>
+          </div>
+        </article>
+        <article class="pillar reveal">
+          <span class="p-num">III</span>
+          <div>
+            <h3>TÜV-zertifizierter KI-Experte</h3>
+            <p>TÜV-Zertifikat Angewandte KI-Transformation. Eigene KI-Anwendungen entwickelt und in Praxen anderer integriert. KI ist nicht mein Hobby, sondern meine tägliche Arbeit — mit der Begeisterung von jemandem, der weiß, was diese Werkzeuge können und wo ihre Grenzen liegen.</p>
+          </div>
+        </article>
+      </div>
+      <p class="wer-outro reveal">Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und remote.</p>
+    </div>
+  </section>
+
+  <!-- STIMMEN -->
+  <section class="sec wrap" aria-labelledby="stimmen-h2">
+    <div class="sec-head">
+      <div class="top">
+        <span class="eyebrow mono reveal">Stimmen aus der Praxis</span>
+        <span class="num-marker reveal" aria-hidden="true">04</span>
+      </div>
+      <h2 id="stimmen-h2" class="reveal">Was Kunden über die Arbeit sagen.</h2>
+    </div>
+    <span class="stimmen-hint reveal">Pilotkunden-Zitate folgen. Die hier gezeigten Karten sind klar als Platzhalter gekennzeichnet.</span>
+    <div class="voices">
+      <figure class="voice reveal">
+        <blockquote>Was vorher zwei Abende pro Woche fraß, läuft jetzt im Hintergrund. Und das Beste: meine Klienten merken keinen Unterschied — außer, dass ich präsenter bin.</blockquote>
+        <figcaption class="voice-src">
+          <span class="voice-tag">Platzhalter — Pilotkundin</span>
+          <span class="voice-who">Mental-Coach, München (Beispiel-Stimme)</span>
+        </figcaption>
+      </figure>
+      <figure class="voice reveal">
+        <blockquote>Ich war skeptisch, ob ein KI-Setup wirklich „nach mir“ klingen kann. Tut es. Das war der Punkt, an dem aus Werkzeug Verstärker wurde.</blockquote>
+        <figcaption class="voice-src">
+          <span class="voice-tag">Platzhalter — Pilotkunde</span>
+          <span class="voice-who">Trainer für Führungskräfte, Wien (Beispiel-Stimme)</span>
+        </figcaption>
+      </figure>
+      <figure class="voice reveal">
+        <blockquote>Der Audit allein war den Preis schon wert. Drei konkrete Schritte, mit denen ich sofort weiterkam — kein Tech-Sprech, einfach klare Empfehlungen.</blockquote>
+        <figcaption class="voice-src">
+          <span class="voice-tag">Platzhalter — Pilotkundin</span>
+          <span class="voice-who">Mentorin, Hamburg (Beispiel-Stimme)</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- EHRLICH -->
+  <section class="sec wrap" aria-labelledby="ehrlich-h2">
+    <div class="sec-head">
+      <div class="top">
+        <span class="eyebrow mono reveal">Ehrlich gesagt</span>
+        <span class="num-marker reveal" aria-hidden="true">05</span>
+      </div>
+      <h2 id="ehrlich-h2" class="reveal">Lass uns schauen, ob das passt.</h2>
+    </div>
+    <div class="fit-cols">
+      <div class="fit-col yes reveal">
+        <h3><span class="mk" aria-hidden="true">→</span> Passt für dich, wenn …</h3>
+        <ul class="fit-list">
+          <li>Du eine eigene Methode oder ein eigenes Programm hast, das in deiner Arbeit trägt.</li>
+          <li>Du regelmäßig Inhalte veröffentlichst — Newsletter, Podcast, Posts — und merkst, dass dich das Tempo zermürbt.</li>
+          <li>Du KI nutzen willst, ohne dass dein Schreiben generisch wird.</li>
+          <li>Du tech-skeptisch bist und genau deshalb jemanden brauchst, der die Werkzeuge für dich baut, statt dir Tutorials zu schicken.</li>
+          <li>Du in einer Praxis mit Klienten arbeitest und dafür Rechtssicherheit brauchst, die wirklich greift.</li>
+        </ul>
+      </div>
+      <div class="fit-col no reveal">
+        <h3><span class="mk" aria-hidden="true">×</span> Passt nicht, wenn …</h3>
+        <ul class="fit-list">
+          <li>Du gerade erst startest und deine Methode noch nicht steht. Hier hilft kein Tool, sondern erst einmal Klarheit über dein Angebot.</li>
+          <li>Du eine Marketing-Maschine suchst, die dich ersetzt. Das baue ich nicht.</li>
+          <li>Du KI als Beziehungsersatz für deine Klienten einsetzen willst.</li>
+          <li>Du erwartest, dass der Aufbau ohne deine Mitarbeit funktioniert. Deine Content-Stimme und die Praxis-Bausteine brauchen dich als Quelle.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRUNDWERTE -->
+  <section id="grundwerte" class="sec" aria-labelledby="grundwerte-h2">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="top">
+          <span class="eyebrow mono reveal">Haltung vor Technik</span>
+          <span class="num-marker reveal" aria-hidden="true">06</span>
+        </div>
+        <h2 id="grundwerte-h2" class="reveal">Meine Grundwerte, wenn ich mit KI arbeite.</h2>
+      </div>
+      <div class="werte">
+        <article class="wert reveal"><span class="w-num">01</span><h3>KI ersetzt keine echte Beziehung.</h3><p>Begegnung bleibt menschlich.</p></article>
+        <article class="wert reveal"><span class="w-num">02</span><h3>Klienten wissen, wo KI eingesetzt wird.</h3><p>Transparenz ist Standard.</p></article>
+        <article class="wert reveal"><span class="w-num">03</span><h3>Ich baue für dich, nicht für die Masse.</h3><p>Jedes Setup wird auf deine Methode und deinen Stil zugeschnitten.</p></article>
+        <article class="wert reveal"><span class="w-num">04</span><h3>Sensible Daten werden geschützt.</h3><p>EU-Hosting, Auftragsverarbeitungsverträge, lokale Modelle bei Bedarf.</p></article>
+        <article class="wert reveal"><span class="w-num">05</span><h3>Du bleibst Entscheider.</h3><p>KI macht Vorschläge, du wählst aus. Nichts geht raus, ohne dass du es gesehen hast.</p></article>
+        <article class="wert reveal"><span class="w-num">06</span><h3>Deine Stimme und deine Methode bleiben erkennbar.</h3><p>KI verstärkt, sie ersetzt nicht.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec wrap" aria-labelledby="faq-h2">
+    <div class="sec-head">
+      <div class="top">
+        <span class="eyebrow mono reveal">Was du sonst noch wissen willst</span>
+        <span class="num-marker reveal" aria-hidden="true">07</span>
+      </div>
+      <h2 id="faq-h2" class="reveal">Häufige Fragen.</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">01</span><span>Wie läuft die Zusammenarbeit ab?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>In Schritten, in deinem Tempo. Zuerst ein kostenfreies Erstgespräch, etwa 30 Minuten: Wir klären auf Augenhöhe, ob das zueinander passt. Wenn es passt, folgt der KI-Praxis-Check (600 €). Du zeigst mir deine Praxis, deine Tools, deine drängendsten Themen, und innerhalb einer Woche bekommst du einen schriftlichen Report mit drei bis fünf priorisierten Quick Wins, einer Bewertung deiner aktuellen Tools und einer klaren Empfehlung. Danach entscheidest du in Ruhe: Wenn der Report alles ist, was du brauchst — auch gut. Gehst du in die Umsetzung, rechne ich die 600 € vollständig an. In der Umsetzung baust du einzelne Bausteine oder mehrere, die ineinandergreifen — das legen wir gemeinsam fest.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">02</span><span>Wie hältst du es mit DSGVO und EU AI Act?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Beides ist bei mir Fundament, kein Anhang. Seit Februar 2025 verpflichtet der EU AI Act jeden, der KI in seiner Arbeit einsetzt, zur KI-Kompetenz. Ab August 2026 drohen Bußgelder bis 30 Millionen Euro. Jede Implementierung kommt deshalb mit EU-gehosteten Modellen (Mistral, Aleph Alpha, Azure OpenAI Frankfurt) als Standard, mit Auftragsverarbeitungsverträgen als Basis und mit einer integrierten Schulung, die deine Pflicht aus Artikel 4 abdeckt. Wenn du als Heilpraktikerin, Therapeutin oder mit anderer Doppelqualifikation arbeitest, kommen zusätzliche Vorkehrungen dazu, weil Paragraf 203 StGB greift — das beraten wir individuell.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">03</span><span>Was passiert mit den Aufnahmen und Daten meiner Klienten?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Sitzungs-Transkriptionen laufen über lokal gehostetes Whisper, also auf einem Server, den ich für dich einrichte. Die Aufnahmen verlassen niemals den europäischen Rechtsraum. Bei besonders sensiblen Inhalten arbeiten wir mit Open-Weight-Modellen (Llama, Mistral) komplett auf deiner eigenen Infrastruktur. Klienten werden vorab informiert, dass KI in der Nachbereitung eingesetzt wird — das ist Teil der Transparenz, die zur Sache gehört.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">04</span><span>Wie viel Zeit musst du selbst investieren?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Im KI-Praxis-Check rechnest du mit zwei bis drei Stunden insgesamt — Gespräch und Report-Lektüre. In der Umsetzung hängt es vom Umfang ab: ein einzelner Baustein braucht entsprechend wenig; mehrere Bausteine über einige Wochen brauchen etwa vier bis sechs Stunden pro Woche, vor allem am Anfang, etwa für deine Content-Stimme. Danach wird es deutlich weniger.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">05</span><span>Funktioniert das auch, wenn ich noch kein Buch oder kein Programm habe?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Für den KI-Praxis-Check und die Umsetzung reichen deine bisherigen Texte, Posts, Podcast-Folgen und Sitzungs-Notizen — daraus lässt sich zum Beispiel deine Content-Stimme aufbauen. Ein fertiges Buch brauchst du dafür nicht. Wenn deine Methode noch gar nicht steht, ist die Umsetzung eher früh — dann hilft erst einmal Klarheit über dein Angebot.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">06</span><span>Was unterscheidet das von einem Online-Kurs zu KI für Coaches?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Ich liefere keine Lektionen, sondern fertige Workflows in deine Praxis. Du musst nichts lernen, was du nicht willst. Die Schulung, die du bekommst, betrifft die Bedienung deines konkreten Setups — nicht KI im Allgemeinen. Wenn du einen Kurs willst, gibt es gute Anbieter dafür. Wenn du Werkzeuge willst, die in deiner Praxis greifen, bist du hier richtig.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">07</span><span>Was ist, wenn die Tools sich in einem Jahr geändert haben?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Tools ändern sich, das gehört dazu. Mein Setup ist so gebaut, dass die Logik bleibt, auch wenn einzelne Komponenten getauscht werden. Im optionalen Resonanzraum (ab 300 Euro pro Monat) bekommst du laufende Updates auf neue Modelle und Vorlagen, eine verständliche Information, wenn sich bei DSGVO oder EU AI Act etwas für dich ändert, und Begleitung bei Bedarf. Ohne diese Anbindung bleibt deine Umsetzung trotzdem stabil — du bist nicht abhängig.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">08</span><span>Brauche ich eine technische Vorbildung?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Nein. Wenn du E-Mail, Notion oder ein Buchungstool wie Calendly bedienen kannst, reicht das. Die Schulung am Ende der Implementierung deckt genau das ab, was du brauchst, um dein Setup zu pflegen.</p></div>
+      </details>
+      <details>
+        <summary><span class="faq-q"><span class="faq-n">09</span><span>Geht das auch, wenn ich nicht in Freiburg bin?</span></span><span class="sum-sign" aria-hidden="true"></span></summary>
+        <div class="det-body"><p>Ja. Die meiste Arbeit läuft remote, mit regelmäßigen Videoanrufen. Wenn du in Freiburg oder Umgebung bist und Wert auf persönliche Treffen legst, machen wir das gerne. In jedem Fall arbeite ich mit Coaches und Trainern im gesamten DACH-Raum.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt" class="sec" aria-labelledby="kontakt-h2">
+    <svg class="thread-layer" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
+      <path class="rthread" d="M -20 360 C 280 180, 420 420, 700 280 S 1060 120, 1240 300" />
+    </svg>
+    <div class="wrap cta-final">
+      <h2 id="kontakt-h2" class="reveal">Lass uns <em>30 Minuten</em> reden.</h2>
+      <p class="cta-sub reveal">Kostenfreies Erstgespräch. Kein Verkaufsgespräch, keine Verpflichtung.</p>
+      <a class="btn btn-fill reveal" href="#kontakt">Erstgespräch anfragen <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <span class="brand">JGC Lumen<span class="dot" aria-hidden="true"></span></span>
+        <p>KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise, DSGVO-konform.</p>
+        <p class="place">Freiburg im Breisgau · DACH-Raum</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Seite</h4>
+          <a href="#angebote">Angebote</a>
+          <a href="#grundwerte">Grundwerte</a>
+          <a href="#wer">Wer mit dir arbeitet</a>
+          <a href="#kontakt">Erstgespräch anfragen</a>
+        </div>
+        <div class="foot-col">
+          <h4>Rechtliches</h4>
+          <a href="../../main/impressum/">Impressum</a>
+          <a href="../../main/datenschutz/">Datenschutz</a>
+          <a href="https://www.linkedin.com">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="cp">© 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform</span>
+      <a class="haltung" href="#grundwerte">Haltung vor Technik →</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function ready(fn){
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", fn);
+    } else { fn(); }
+  }
+
+  ready(function(){
+    /* ---- Mobile menu (works without GSAP) ---- */
+    try{
+      var burger = document.getElementById("burger");
+      var navLinks = document.getElementById("navLinks");
+      if(burger && navLinks){
+        burger.addEventListener("click", function(){
+          var open = navLinks.classList.toggle("open");
+          burger.setAttribute("aria-expanded", open ? "true" : "false");
+          burger.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+        });
+        navLinks.querySelectorAll("a").forEach(function(a){
+          a.addEventListener("click", function(){
+            navLinks.classList.remove("open");
+            burger.setAttribute("aria-expanded","false");
+            burger.setAttribute("aria-label","Menü öffnen");
+          });
+        });
+      }
+    }catch(e){}
+
+    /* ---- Nav scroll state ---- */
+    try{
+      var nav = document.getElementById("nav");
+      var onScroll = function(){
+        if(!nav) return;
+        if(window.scrollY > 12) nav.classList.add("scrolled");
+        else nav.classList.remove("scrolled");
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, {passive:true});
+    }catch(e){}
+
+    /* ---- Smooth scroll for anchors ---- */
+    try{
+      if(!reduce){
+        document.querySelectorAll('a[href^="#"]').forEach(function(a){
+          a.addEventListener("click", function(ev){
+            var id = a.getAttribute("href");
+            if(id.length < 2) return;
+            var t = document.querySelector(id);
+            if(t){
+              ev.preventDefault();
+              t.scrollIntoView({behavior:"smooth", block:"start"});
+              history.replaceState(null,"",id);
+            }
+          });
+        });
+      }
+    }catch(e){}
+
+    /* ---- GSAP-driven motion (guarded) ---- */
+    var hasGSAP = (typeof window.gsap !== "undefined");
+    if(reduce || !hasGSAP){
+      // static fallback: ensure everything visible (reveal class has no hidden default in CSS)
+      return;
+    }
+
+    try{
+      var gsap = window.gsap;
+      var hasST = (typeof window.ScrollTrigger !== "undefined");
+      if(hasST){ gsap.registerPlugin(ScrollTrigger); }
+
+      gsap.defaults({ease:"power3.out"});
+
+      /* Hero headline mask reveal */
+      var heroLines = document.querySelectorAll(".h1 .line > span");
+      if(heroLines.length){
+        gsap.set(heroLines, {yPercent:115});
+        gsap.to(heroLines, {yPercent:0, duration:1.1, stagger:0.09, ease:"expo.out", delay:0.15});
+      }
+      var heroLower = document.querySelector(".hero-lower");
+      if(heroLower){
+        gsap.from(heroLower, {y:24, autoAlpha:0, duration:1, delay:0.55, ease:"power3.out"});
+      }
+
+      /* Reveal choreography */
+      if(hasST){
+        gsap.utils.toArray(".reveal").forEach(function(el){
+          gsap.set(el, {y:30, autoAlpha:0});
+          ScrollTrigger.create({
+            trigger:el,
+            start:"top 88%",
+            once:true,
+            onEnter:function(){
+              gsap.to(el, {y:0, autoAlpha:1, duration:0.9, ease:"power3.out"});
+            }
+          });
+        });
+      } else {
+        gsap.set(".reveal", {autoAlpha:1});
+      }
+
+      /* ---- Marquee with scroll-velocity reactive speed ---- */
+      var track = document.getElementById("marquee");
+      if(track){
+        var half = track.scrollWidth / 2;
+        if(half > 0){
+          var mx = gsap.to(track, {x:-half, duration:18, ease:"none", repeat:-1,
+            modifiers:{ x:function(x){ return (parseFloat(x) % half) + "px"; } }
+          });
+          if(hasST){
+            var clamp = gsap.utils.clamp(-2.4, 2.4);
+            ScrollTrigger.create({
+              onUpdate:function(self){
+                var v = self.getVelocity() / 320;
+                var ts = 1 + clamp(v);
+                if(ts < 0.1) ts = 0.1;
+                gsap.to(mx, {timeScale:ts, duration:0.3, overwrite:true});
+                gsap.to(mx, {timeScale:1, duration:1.2, delay:0.3, overwrite:false});
+              }
+            });
+          }
+        }
+      }
+
+      /* ---- Scroll-velocity skew on big display type ---- */
+      if(hasST){
+        var skewTargets = gsap.utils.toArray(".h1, .manifest h2, .cta-final h2, .wcol-label, .step-num");
+        var proxy = {skew:0};
+        var skewSetters = skewTargets.map(function(t){ return gsap.quickSetter(t, "skewY", "deg"); });
+        var clampSkew = gsap.utils.clamp(-7, 7);
+        ScrollTrigger.create({
+          onUpdate:function(self){
+            var s = clampSkew(self.getVelocity() / -260);
+            if(Math.abs(s) > Math.abs(proxy.skew)){
+              proxy.skew = s;
+              gsap.to(proxy, {skew:0, duration:0.7, ease:"power3.out", overwrite:true,
+                onUpdate:function(){ skewSetters.forEach(function(set){ set(proxy.skew); }); }
+              });
+            }
+          }
+        });
+      }
+
+      /* ---- Horizontal pinned chapter (Angebote steps) ---- */
+      if(hasST){
+        var pin = document.getElementById("stepsPin");
+        var trk = document.getElementById("stepsTrack");
+        var mm = gsap.matchMedia();
+        mm.add("(min-width: 980px)", function(){
+          if(!pin || !trk) return;
+          var getScroll = function(){ return trk.scrollWidth - pin.clientWidth; };
+          var amount = getScroll();
+          if(amount <= 0) return;
+          var tween = gsap.to(trk, {
+            x:function(){ return -getScroll(); },
+            ease:"none",
+            scrollTrigger:{
+              trigger:pin,
+              pin:true,
+              start:"top 76px",
+              end:function(){ return "+=" + getScroll(); },
+              scrub:0.6,
+              invalidateOnRefresh:true,
+              anticipatePin:1
+            }
+          });
+          /* counter-drift parallax on oversized numerals + title for depth */
+          var nums = trk.querySelectorAll(".step-num");
+          var titles = trk.querySelectorAll(".step-title");
+          var drift = gsap.timeline({
+            scrollTrigger:{ trigger:pin, start:"top 76px", end:function(){ return "+=" + getScroll(); }, scrub:0.6 }
+          });
+          if(nums.length){ drift.fromTo(nums, {xPercent:14}, {xPercent:-14, ease:"none"}, 0); }
+          if(titles.length){ drift.fromTo(titles, {xPercent:5}, {xPercent:-5, ease:"none"}, 0); }
+          return function(){
+            if(tween && tween.scrollTrigger) tween.scrollTrigger.kill(); tween && tween.kill();
+            if(drift && drift.scrollTrigger) drift.scrollTrigger.kill(); drift && drift.kill();
+            gsap.set(trk,{x:0}); gsap.set([nums,titles],{xPercent:0,clearProps:"transform"});
+          };
+        });
+      }
+
+      /* ---- Resonanz thread draw-on-scroll ---- */
+      if(hasST){
+        document.querySelectorAll(".thread-layer .rthread, #heroThread").forEach(function(p){
+          try{
+            var len = p.getTotalLength();
+            p.style.strokeDasharray = len;
+            p.style.strokeDashoffset = len;
+            gsap.to(p, {
+              strokeDashoffset:0,
+              ease:"none",
+              scrollTrigger:{
+                trigger:p.closest("section") || p,
+                start:"top 85%",
+                end:"bottom 40%",
+                scrub:0.8
+              }
+            });
+          }catch(e){}
+        });
+      } else {
+        document.querySelectorAll(".thread-layer .rthread, #heroThread").forEach(function(p){
+          p.style.strokeDashoffset = 0;
+        });
+      }
+
+      /* ---- Kinetic number ticker on section markers ---- */
+      if(hasST){
+        gsap.utils.toArray(".num-marker").forEach(function(el){
+          var target = el.textContent.trim();
+          var n = parseInt(target, 10);
+          if(isNaN(n)) return;
+          var obj = {v:0};
+          ScrollTrigger.create({
+            trigger:el, start:"top 90%", once:true,
+            onEnter:function(){
+              gsap.to(obj, {v:n, duration:0.9, ease:"power2.out",
+                onUpdate:function(){ el.textContent = String(Math.round(obj.v)).padStart(2,"0"); }
+              });
+            }
+          });
+        });
+      }
+
+      if(hasST){
+        // refresh after fonts settle to fix pin math
+        if(document.fonts && document.fonts.ready){
+          document.fonts.ready.then(function(){ ScrollTrigger.refresh(); }).catch(function(){});
+        }
+        window.addEventListener("load", function(){ ScrollTrigger.refresh(); });
+      }
+    }catch(err){
+      // any failure: make sure content is visible, no spinner, no throw
+      try{
+        document.querySelectorAll(".reveal").forEach(function(el){ el.style.opacity = ""; el.style.transform = ""; el.style.visibility = ""; });
+        document.querySelectorAll(".h1 .line > span").forEach(function(el){ el.style.transform = "none"; });
+      }catch(e){}
+    }
+  });
+})();
+</script>
+</body>
+</html>

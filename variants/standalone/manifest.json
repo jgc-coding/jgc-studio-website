@@ -55,5 +55,20 @@
     "label": "JGC Lumen (09c verfeinert)",
     "skill": "impeccable",
     "source": "variants/standalone/13-lumen/index.html"
+  },
+  "14-nocturne": {
+    "num": "14",
+    "label": "Lumen Nocturne — Dark Cinematic WebGL",
+    "source": "variants/standalone/14-nocturne/index.html"
+  },
+  "15-kinetik": {
+    "num": "15",
+    "label": "Kinetik — Brutalist-Luxe Editorial",
+    "source": "variants/standalone/15-kinetik/index.html"
+  },
+  "16-resonanzfeld": {
+    "num": "16",
+    "label": "Resonanzfeld — Interactive 3D",
+    "source": "variants/standalone/16-resonanzfeld/index.html"
   }
 }

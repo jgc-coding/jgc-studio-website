@@ -87,6 +87,25 @@ Self-contained Einzeldatei wie die 09er-Reihe unter
 
 ---
 
+## Freie Neuentwürfe — Variante 14–16
+
+Eine eigene Gattung: **komplett freie Neugestaltungen** auf Awwwards-Niveau. Inhalt
+1:1 aus Variante 13 (JGC Lumen) übernommen, Marken-Palette erhalten — aber Layout,
+Typografie und Motion bewusst radikal anders als die ruhige, helle, editoriale V13.
+Self-contained Einzeldateien wie die 09er-Reihe unter `variants/standalone/<slug>/index.html`.
+GSAP/ScrollTrigger (alle) und Three.js (14 & 16) werden per CDN geladen
+(cdnjs: GSAP 3.12.5, Three.js r128; Fonts via Google Fonts) — alles mit sauberem
+statischem Fallback, falls ein CDN blockiert ist. `prefers-reduced-motion` respektiert,
+WebGL pausiert bei verstecktem/off-screen Canvas.
+
+| Nr. | Slug | Charakter |
+|---|---|---|
+| **14** | `14-nocturne` | **Lumen Nocturne — Dark Cinematic WebGL** — nächtliche Tinte-Schwarz-Bühne; im Hero ein lebendiges Three.js-Lichtfeld (GPU-Punktewolke, Kupfer/Quellwasser/Salbei-Glühen), das sich zum Cursor neigt und beim Scrollen aufblüht — die Marke „Lumen" = Licht wörtlich genommen. GSAP-ScrollTrigger inszeniert eine cineastische Scroll-Geschichte: ein Kupfer-Lichtfaden zeichnet sich durch die Angebote und entzündet die vier Schritte nacheinander. Glas-Cards, Licht-Bloom-CTAs, Heute (gedämpft) → Morgen (leuchtend). Fraunces + Inter + Space Mono. |
+| **15** | `15-kinetik` | **Kinetik — Brutalist-Luxe Editorial** — helles, warmes Papier, tintenschwarze Mode-Magazin-Typografie, EIN lauter Kupfer-Akzent (kein Three.js, nur GSAP + SVG). Übergroße kinetische Headlines (Outline-Schnitt im Hero), scroll-velocity-reaktiver Endlos-Marquee, ein durchlaufender SVG-„Resonanz-Faden", gepinntes horizontales Schritt-Kapitel (≥ 980 px, mit vertikalem Fallback), übergroße Sektions-Numerale, harte Rule-Lines und kantige Buttons. Bricolage Grotesque + Inter + JetBrains Mono. |
+| **16** | `16-resonanzfeld` | **Resonanzfeld — Interactive 3D** — durchgehendes Three.js-Partikelfeld (BufferGeometry, Marken-Farbpunkte) hinter dem ganzen Inhalt. Beim Scrollen morphen die Partikel scroll-getrieben zwischen Gestalten: Resonanz-Ringe (Hero) → Ordnung (Heute→Morgen) → drei Cluster (die drei Welten, mit Per-Sektion-Highlight) → Gitter → Kollaps. Maus stößt das Feld ab/zieht es an; dunkle Glas-Cards halten den Text lesbar. Space Grotesk + Space Mono + Fraunces-Akzent. |
+
+---
+
 ## Naming-Konvention
 
 `variant/NN-kurzname-mit-charakter`

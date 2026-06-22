@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JGC Lumen — Mehr Raum für das Wesentliche</title>
+<meta name="description" content="KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. DSGVO-konform, maßgeschneidert.">
+<meta name="theme-color" content="#0B1120">
+<meta property="og:title" content="JGC Lumen — Mehr Raum für das Wesentliche">
+<meta property="og:description" content="KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. DSGVO-konform, maßgeschneidert.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinte:#1F2A44; --kupfer:#C97B3F; --salbei:#8FA98A; --quellwasser:#6FA3B5;
+  --holzsand:#D9C7A8; --pergament:#FEFCF7; --anthrazit:#2D2D2D;
+  --stage:#0B1120; --stage-2:#0E1525; --ink:#F4F1EA;
+  --line:rgba(244,241,234,.14); --line-soft:rgba(244,241,234,.08);
+  --glass:rgba(13,19,34,.74); --glass-strong:rgba(11,17,30,.9);
+  --muted:rgba(244,241,234,.62);
+  --mono:'Space Mono',ui-monospace,monospace;
+  --sans:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --edi:'Fraunces',Georgia,serif;
+  --maxw:1200px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-2:cubic-bezier(.22,.61,.36,1);
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:104px; --s7:160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0; background:var(--stage); color:var(--ink);
+  font-family:var(--sans); font-weight:400; line-height:1.62;
+  font-size:16px; letter-spacing:.005em;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+::selection{background:var(--kupfer);color:#0B1120}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-weight:600;line-height:1.04;letter-spacing:-.02em;margin:0}
+p{margin:0}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--kupfer);outline-offset:3px;border-radius:3px}
+
+/* ---- WebGL canvas behind everything ---- */
+#field{
+  position:fixed; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none; display:block;
+}
+.stage-grad{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 78% -10%, rgba(201,123,63,.10), transparent 55%),
+    radial-gradient(90% 70% at 8% 108%, rgba(111,163,181,.10), transparent 60%),
+    linear-gradient(180deg, rgba(11,17,30,.18), rgba(11,17,30,.55));
+}
+.page{position:relative;z-index:2}
+
+/* ---- skip ---- */
+.skip{position:absolute;left:-9999px;top:0;background:var(--kupfer);color:#0B1120;
+  padding:12px 18px;font-family:var(--mono);font-size:13px;z-index:100;border-radius:0 0 6px 0}
+.skip:focus{left:0}
+
+/* ---- nav ---- */
+header.nav{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  transition:background .5s var(--ease),border-color .5s var(--ease),backdrop-filter .5s var(--ease);
+  border-bottom:1px solid transparent;
+}
+header.nav.scrolled{
+  background:rgba(11,17,30,.78);backdrop-filter:blur(14px) saturate(1.1);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:18px clamp(20px,5vw,48px);
+  display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:600;letter-spacing:-.01em;font-size:18px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--kupfer);
+  box-shadow:0 0 0 4px rgba(201,123,63,.18),0 0 14px rgba(201,123,63,.6)}
+.nav-links{display:flex;align-items:center;gap:clamp(18px,2.4vw,34px)}
+.nav-links a.lnk{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--muted);
+  position:relative;transition:color .3s var(--ease)}
+.nav-links a.lnk::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;
+  background:var(--kupfer);transition:width .35s var(--ease)}
+.nav-links a.lnk:hover{color:var(--ink)} .nav-links a.lnk:hover::after{width:100%}
+.nav-cta{font-family:var(--mono);font-size:12.5px;letter-spacing:.03em;
+  padding:10px 18px;border:1px solid var(--line);border-radius:100px;color:var(--ink);
+  transition:border-color .35s var(--ease),background .35s var(--ease),color .35s var(--ease)}
+.nav-cta:hover{background:var(--kupfer);border-color:var(--kupfer);color:#0B1120}
+.burger{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:10px;
+  background:rgba(13,19,34,.5);cursor:pointer;flex-direction:column;gap:5px;
+  align-items:center;justify-content:center;padding:0}
+.burger span{display:block;width:18px;height:1.5px;background:var(--ink);transition:transform .35s var(--ease),opacity .25s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+@media (max-width:900px){
+  .burger{display:flex}
+  .nav-links{position:fixed;inset:0 0 0 auto;top:0;width:min(82vw,360px);height:100dvh;
+    background:var(--glass-strong);backdrop-filter:blur(18px);
+    flex-direction:column;align-items:flex-start;justify-content:center;gap:26px;
+    padding:0 clamp(28px,8vw,48px);border-left:1px solid var(--line);
+    transform:translateX(100%);transition:transform .5s var(--ease);
+    box-shadow:-30px 0 80px rgba(0,0,0,.5)}
+  .nav-links.open{transform:translateX(0)}
+  .nav-links a.lnk{font-size:16px}
+  .nav-cta{font-size:14px;padding:13px 22px}
+}
+
+/* ---- layout primitives ---- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+section{position:relative;padding:var(--s7) 0}
+@media (max-width:760px){section{padding:var(--s6) 0}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--kupfer);display:inline-flex;align-items:center;gap:12px;margin-bottom:var(--s3)}
+.eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--kupfer),transparent)}
+.h2{font-size:clamp(30px,4.6vw,58px);letter-spacing:-.025em;max-width:18ch}
+.lead{font-size:clamp(17px,1.5vw,20px);color:var(--muted);max-width:60ch;margin-top:var(--s3);line-height:1.66}
+
+/* glass card base */
+.glass{background:var(--glass);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:18px}
+
+/* ---- HERO ---- */
+.hero{min-height:100svh;display:flex;align-items:center;padding-top:120px;padding-bottom:80px}
+.hero-inner{max-width:var(--maxw);margin:0 auto;width:100%;padding:0 clamp(20px,5vw,48px)}
+.hero .place{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--quellwasser);display:flex;align-items:center;gap:12px;margin-bottom:var(--s4)}
+.hero .place .pulse{width:7px;height:7px;border-radius:50%;background:var(--quellwasser);
+  box-shadow:0 0 0 0 rgba(111,163,181,.6);animation:pulse 2.6s var(--ease) infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(111,163,181,.5)}70%{box-shadow:0 0 0 12px rgba(111,163,181,0)}100%{box-shadow:0 0 0 0 rgba(111,163,181,0)}}
+h1{font-size:clamp(44px,8.4vw,118px);line-height:.97;letter-spacing:-.04em;font-weight:600;
+  max-width:14ch}
+h1 .em{font-family:var(--edi);font-style:italic;font-weight:400;color:var(--kupfer);letter-spacing:-.01em}
+.hero-sub{font-size:clamp(17px,1.7vw,21px);color:var(--ink);opacity:.86;max-width:54ch;
+  margin-top:var(--s4);line-height:1.62}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:var(--s5)}
+.btn{font-family:var(--mono);font-size:13.5px;letter-spacing:.02em;padding:16px 26px;
+  border-radius:100px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  transition:transform .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease),color .4s var(--ease),box-shadow .4s var(--ease)}
+.btn-primary{background:var(--kupfer);color:#0B1120;border:1px solid var(--kupfer);font-weight:700;
+  box-shadow:0 14px 40px -18px rgba(201,123,63,.85);position:relative;overflow:hidden;isolation:isolate}
+.btn-primary::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(110deg,transparent 18%,rgba(255,255,255,.55) 50%,transparent 82%);
+  transform:translateX(-120%);transition:transform .7s var(--ease)}
+.btn-primary:hover::before{transform:translateX(120%)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 22px 52px -16px rgba(201,123,63,.9)}
+@media (prefers-reduced-motion:reduce){.btn-primary::before{display:none}}
+.btn-ghost{background:rgba(244,241,234,.04);color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+.btn .arr{transition:transform .4s var(--ease)} .btn:hover .arr{transform:translate(3px,-3px)}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--s5)}
+.badge{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);padding:8px 14px;border:1px solid var(--line-soft);border-radius:100px;
+  display:inline-flex;align-items:center;gap:9px;background:rgba(11,17,30,.4)}
+.badge .b-dot{width:5px;height:5px;border-radius:50%;background:var(--salbei)}
+
+/* ---- EINORDNUNG ---- */
+.einordnung .h2{font-size:clamp(34px,5.6vw,72px)}
+.einordnung .h2 b{font-family:var(--edi);font-style:italic;font-weight:400;color:var(--quellwasser)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,72px);margin-top:var(--s5)}
+.two-col p{font-size:clamp(16px,1.3vw,18.5px);color:var(--muted);line-height:1.74}
+@media (max-width:760px){.two-col{grid-template-columns:1fr;gap:var(--s3)}}
+
+/* ---- WOCHE ---- */
+.woche-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-top:var(--s5)}
+@media (max-width:760px){.woche-grid{grid-template-columns:1fr}}
+.woche-col{padding:clamp(26px,3vw,40px);border-radius:20px}
+.woche-col.heute{background:rgba(13,19,34,.6);border:1px solid var(--line-soft)}
+.woche-col.morgen{background:linear-gradient(165deg,rgba(201,123,63,.10),rgba(111,163,181,.06));
+  border:1px solid rgba(201,123,63,.28)}
+.woche-tag{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:var(--s3)}
+.woche-col.heute .woche-tag{color:var(--muted)}
+.woche-col.morgen .woche-tag{color:var(--kupfer)}
+.woche-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s2)}
+.woche-list li{display:flex;gap:14px;font-size:15.5px;line-height:1.56;color:var(--ink);opacity:.9}
+.woche-list li .n{font-family:var(--mono);font-size:12px;color:var(--kupfer);flex:none;
+  padding-top:3px;opacity:.85}
+.woche-col.heute .woche-list li .n{color:var(--quellwasser);opacity:.6}
+.woche-close{margin-top:var(--s5);max-width:66ch;font-size:clamp(16px,1.4vw,19px);
+  color:var(--ink);opacity:.9;line-height:1.7}
+.woche-close b{color:var(--kupfer);font-weight:600}
+
+/* ---- ANGEBOTE / steps ---- */
+.steps{margin-top:var(--s6);display:flex;flex-direction:column;gap:var(--s4)}
+.step{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:clamp(24px,4vw,64px);
+  padding-top:var(--s4);border-top:1px solid var(--line-soft)}
+.step:first-child{border-top:none;padding-top:0}
+@media (max-width:820px){.step{grid-template-columns:1fr;gap:var(--s3)}}
+.step-label{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--kupfer);
+  text-transform:uppercase}
+.step-title{font-size:clamp(26px,3.2vw,40px);margin-top:var(--s2);letter-spacing:-.02em}
+.step-meta{font-family:var(--mono);font-size:13px;color:var(--quellwasser);margin-top:12px;letter-spacing:.02em}
+.step-body p{color:var(--muted);font-size:16.5px;line-height:1.7}
+.mini-h{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--salbei);margin:var(--s3) 0 12px}
+.tick{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.tick li{position:relative;padding-left:26px;font-size:15.5px;color:var(--ink);opacity:.88;line-height:1.55}
+.tick li::before{content:"";position:absolute;left:0;top:9px;width:11px;height:11px;border-radius:2px;
+  border:1px solid var(--kupfer);background:rgba(201,123,63,.18);transform:rotate(45deg)}
+.callout{margin-top:var(--s3);padding:16px 20px;border-radius:12px;
+  background:rgba(111,163,181,.10);border:1px solid rgba(111,163,181,.3);
+  font-size:14.5px;color:var(--ink);line-height:1.6}
+.callout b{color:var(--quellwasser)}
+.step-cta{margin-top:var(--s3)}
+.midline{margin:var(--s3) 0 var(--s2);font-size:15.5px;color:var(--ink);opacity:.9}
+.midline b{color:var(--kupfer)}
+
+/* details blocks */
+details.block{border:1px solid var(--line-soft);border-radius:14px;
+  background:rgba(13,19,34,.55);margin-top:var(--s2);overflow:hidden;
+  transition:border-color .35s var(--ease),background .35s var(--ease)}
+details.block[open]{border-color:rgba(201,123,63,.32);background:rgba(13,19,34,.72)}
+details.block>summary{list-style:none;cursor:pointer;padding:18px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-weight:600;font-size:16px;letter-spacing:-.01em}
+details.block>summary::-webkit-details-marker{display:none}
+details.block>summary .plus{font-family:var(--mono);color:var(--kupfer);flex:none;
+  width:24px;height:24px;display:grid;place-items:center;transition:transform .4s var(--ease);font-size:18px}
+details.block[open]>summary .plus{transform:rotate(45deg)}
+.block-inner{padding:0 22px 22px}
+.block-inner .mini-h{margin-top:0}
+.fine{margin-top:var(--s4);padding-top:var(--s3);border-top:1px solid var(--line-soft);
+  font-size:14px;color:var(--muted);line-height:1.7;max-width:74ch}
+.angebot-foot{margin-top:var(--s5);font-size:14.5px;color:var(--muted);line-height:1.75;
+  max-width:78ch;padding:20px 24px;border-left:2px solid var(--salbei);
+  background:rgba(143,169,138,.06);border-radius:0 12px 12px 0}
+
+/* ---- WER / Säulen ---- */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-top:var(--s5)}
+@media (max-width:880px){.pillars{grid-template-columns:1fr}}
+.pillar{padding:clamp(24px,2.6vw,34px);border-radius:18px;background:rgba(13,19,34,.62);
+  border:1px solid var(--line-soft);position:relative;overflow:hidden;
+  transition:transform .5s var(--ease),border-color .5s var(--ease)}
+.pillar:hover{transform:translateY(-4px);border-color:rgba(201,123,63,.3)}
+.pillar .idx{font-family:var(--mono);font-size:12px;color:var(--quellwasser);letter-spacing:.1em}
+.pillar h3{font-size:21px;margin:14px 0 12px;letter-spacing:-.01em}
+.pillar p{color:var(--muted);font-size:15px;line-height:1.66}
+.wer-close{margin-top:var(--s4);font-size:clamp(16px,1.4vw,19px);color:var(--ink);opacity:.9;max-width:56ch}
+
+/* ---- STIMMEN ---- */
+.stimmen-note{font-family:var(--mono);font-size:13px;color:var(--kupfer);
+  margin-top:var(--s3);padding:14px 18px;border:1px dashed rgba(201,123,63,.4);
+  border-radius:10px;display:inline-block;letter-spacing:.01em}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-top:var(--s5)}
+@media (max-width:880px){.quotes{grid-template-columns:1fr}}
+.quote{padding:clamp(24px,2.6vw,32px);border-radius:18px;background:rgba(13,19,34,.6);
+  border:1px solid var(--line-soft);display:flex;flex-direction:column;gap:var(--s3);position:relative}
+.quote .ph{position:absolute;top:16px;right:18px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--kupfer);
+  border:1px solid rgba(201,123,63,.4);padding:4px 8px;border-radius:6px}
+.quote blockquote{margin:0;font-family:var(--edi);font-style:italic;font-size:18.5px;line-height:1.5;
+  color:var(--ink);font-weight:400}
+.quote .src{margin-top:auto}
+.quote .src .who{font-family:var(--mono);font-size:12.5px;color:var(--quellwasser);letter-spacing:.02em}
+.quote .src .role{font-size:13px;color:var(--muted);margin-top:3px}
+
+/* ---- EHRLICH (fit) ---- */
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-top:var(--s5)}
+@media (max-width:760px){.fit-grid{grid-template-columns:1fr}}
+.fit-col{padding:clamp(26px,3vw,38px);border-radius:20px}
+.fit-col.yes{background:linear-gradient(170deg,rgba(143,169,138,.10),rgba(13,19,34,.5));
+  border:1px solid rgba(143,169,138,.3)}
+.fit-col.no{background:rgba(13,19,34,.55);border:1px solid var(--line-soft)}
+.fit-tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:var(--s3);display:flex;align-items:center;gap:10px}
+.fit-col.yes .fit-tag{color:var(--salbei)} .fit-col.no .fit-tag{color:var(--muted)}
+.fit-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s2)}
+.fit-list li{display:flex;gap:13px;font-size:15px;line-height:1.56;color:var(--ink);opacity:.88}
+.fit-list li .ic{flex:none;width:18px;height:18px;margin-top:2px}
+.fit-col.yes .ic{color:var(--salbei)} .fit-col.no .ic{color:var(--kupfer)}
+
+/* ---- GRUNDWERTE ---- */
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s5)}
+@media (max-width:880px){.values{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.values{grid-template-columns:1fr}}
+.value{padding:clamp(22px,2.4vw,30px);border-radius:16px;background:rgba(13,19,34,.6);
+  border:1px solid var(--line-soft);transition:border-color .45s var(--ease),transform .45s var(--ease)}
+.value:hover{border-color:rgba(111,163,181,.34);transform:translateY(-3px)}
+.value .vn{font-family:var(--mono);font-size:12px;color:var(--kupfer)}
+.value h3{font-size:18px;margin:12px 0 10px;line-height:1.28;letter-spacing:-.01em}
+.value p{font-size:14.5px;color:var(--muted);line-height:1.62}
+
+/* ---- FAQ ---- */
+.faq{margin-top:var(--s5);border-top:1px solid var(--line-soft)}
+details.faq-item{border-bottom:1px solid var(--line-soft)}
+details.faq-item>summary{list-style:none;cursor:pointer;padding:26px 0;
+  display:flex;align-items:flex-start;gap:20px}
+details.faq-item>summary::-webkit-details-marker{display:none}
+.faq-num{font-family:var(--mono);font-size:13px;color:var(--quellwasser);flex:none;padding-top:3px;width:30px}
+.faq-q{font-size:clamp(17px,1.7vw,21px);font-weight:600;letter-spacing:-.01em;flex:1;line-height:1.32}
+.faq-plus{font-family:var(--mono);color:var(--kupfer);flex:none;font-size:20px;line-height:1;
+  transition:transform .4s var(--ease);padding-top:2px}
+details.faq-item[open] .faq-plus{transform:rotate(45deg)}
+.faq-a{padding:0 0 28px 50px;color:var(--muted);font-size:16px;line-height:1.74;max-width:74ch}
+@media (max-width:560px){.faq-a{padding-left:0}}
+
+/* ---- FINAL CTA ---- */
+.final{text-align:center;padding:var(--s7) 0}
+.final h2{font-size:clamp(38px,7vw,92px);letter-spacing:-.035em;max-width:none;margin:0 auto}
+.final h2 .em{font-family:var(--edi);font-style:italic;font-weight:400;color:var(--kupfer)}
+.final .sub{font-size:clamp(17px,1.6vw,20px);color:var(--muted);margin:var(--s4) auto 0;max-width:46ch}
+.final .btn{margin-top:var(--s5)}
+
+/* ---- FOOTER ---- */
+footer{position:relative;z-index:2;border-top:1px solid var(--line-soft);
+  background:rgba(8,12,22,.78);backdrop-filter:blur(10px);padding:var(--s6) 0 var(--s4)}
+.foot-grid{display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:var(--s4);align-items:start}
+@media (max-width:760px){.foot-grid{grid-template-columns:1fr;gap:var(--s4)}}
+.foot-brand .brand{font-size:21px;margin-bottom:var(--s3)}
+.foot-brand p{color:var(--muted);font-size:14.5px;line-height:1.7;max-width:42ch}
+.foot-brand p+p{margin-top:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--quellwasser)}
+.foot-col h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--kupfer);margin:0 0 var(--s3);font-weight:400}
+.foot-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px}
+.foot-col a{font-size:14.5px;color:var(--muted);transition:color .3s var(--ease)}
+.foot-col a:hover{color:var(--ink)}
+.foot-bottom{margin-top:var(--s5);padding-top:var(--s3);border-top:1px solid var(--line-soft);
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center}
+.foot-bottom .cp{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em}
+.foot-bottom .haltung{font-family:var(--mono);font-size:12.5px;color:var(--kupfer);letter-spacing:.02em}
+
+/* ---- reveal anim ---- */
+.reveal{opacity:0;transform:translateY(26px)}
+.is-in{opacity:1;transform:none;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;transition:none!important}
+  .pulse{animation:none!important}
+}
+.no-js .reveal{opacity:1;transform:none}
+</style>
+</head>
+<body class="no-js">
+<a class="skip" href="#main">Zum Inhalt springen</a>
+
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="stage-grad" aria-hidden="true"></div>
+
+<div class="page">
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="../../" aria-label="JGC Lumen — zurück zur Galerie">
+      <span class="dot" aria-hidden="true"></span> JGC Lumen
+    </a>
+    <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="navlinks">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="navlinks" aria-label="Hauptnavigation">
+      <a class="lnk" href="#angebote">Angebote</a>
+      <a class="lnk" href="#grundwerte">Grundwerte</a>
+      <a class="lnk" href="#wer">Wer mit dir arbeitet</a>
+      <a class="nav-cta" href="#kontakt">Erstgespräch anfragen</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero" data-shape="hero">
+    <div class="hero-inner">
+      <p class="place reveal"><span class="pulse" aria-hidden="true"></span> Freiburg im Breisgau</p>
+      <h1 class="reveal">Mehr Raum für das <span class="em">Wesentliche.</span></h1>
+      <p class="hero-sub reveal">KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren. Ich verstärke, was dich auszeichnet — DSGVO-konform und maßgeschneidert.</p>
+      <div class="hero-cta reveal">
+        <a class="btn btn-primary" href="#kontakt">Erstgespräch anfragen <span class="arr" aria-hidden="true">↗</span></a>
+        <a class="btn btn-ghost" href="#angebote">Angebote ansehen</a>
+      </div>
+      <div class="badges reveal">
+        <span class="badge"><span class="b-dot" aria-hidden="true"></span>EU-gehostet</span>
+        <span class="badge"><span class="b-dot" aria-hidden="true"></span>TÜV-zertifiziert</span>
+        <span class="badge"><span class="b-dot" aria-hidden="true"></span>EU AI Act-konform</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EINORDNUNG -->
+  <section class="einordnung" data-shape="order">
+    <div class="wrap">
+      <p class="eyebrow reveal">Eine Einordnung vorweg</p>
+      <h2 class="h2 reveal">KI ist ein <b>Werkzeug.</b></h2>
+      <div class="two-col">
+        <p class="reveal">Was wir daraus machen und wofür wir es einsetzen, liegt in unserer Verantwortung, so wie bei jedem Werkzeug. Wir können KI nutzen, um das Positive zu verstärken. Wir können ihr unsere Werte beibringen, unsere Sichtweisen, unsere Sprache.</p>
+        <p class="reveal">Meine Mission ist, Menschen zu unterstützen, die anderen helfen. Coaches, Trainer, Mentoren: Ihr leistet eine Arbeit, die zählt. Ich sorge dafür, dass die Technik euch dient und Zeit zurückgibt. So habt ihr mehr Raum für das Wesentliche.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WOCHE -->
+  <section class="woche" data-shape="chaos">
+    <div class="wrap">
+      <p class="eyebrow reveal">Deine Woche, zwei Versionen</p>
+      <h2 class="h2 reveal">Was sich verändert, wenn KI deine Sprache spricht.</h2>
+      <div class="woche-grid">
+        <div class="woche-col heute reveal">
+          <span class="woche-tag">Heute</span>
+          <ul class="woche-list">
+            <li><span class="n">01</span><span>Sitzungsnotizen liegen verstreut auf Zetteln, in Notion, in Voice-Memos.</span></li>
+            <li><span class="n">02</span><span>Das Follow-up an deine Klientin nimmst du dir für heute Abend vor, schon zum dritten Mal.</span></li>
+            <li><span class="n">03</span><span>Den Newsletter verschiebst du seit drei Wochen aufs Wochenende.</span></li>
+          </ul>
+        </div>
+        <div class="woche-col morgen reveal">
+          <span class="woche-tag">Morgen</span>
+          <ul class="woche-list">
+            <li><span class="n">01</span><span>Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.</span></li>
+            <li><span class="n">02</span><span>Das Follow-up an deine Klientin geht raus, in deiner Sprache.</span></li>
+            <li><span class="n">03</span><span>Der nächste Newsletter liegt im Entwurf, aus echten Themen deiner Woche.</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="woche-close reveal">Du bekommst keine Tool-Liste und keinen Online-Kurs. Du bekommst eine Begleitung, in der wir gemeinsam herausarbeiten, wo KI in deiner Arbeit Substanz hat — und sie genau dort einbauen.</p>
+    </div>
+  </section>
+
+  <!-- ANGEBOTE -->
+  <section id="angebote" data-shape="cluster">
+    <div class="wrap">
+      <p class="eyebrow reveal">Schritt für Schritt, in deinem Tempo</p>
+      <h2 class="h2 reveal">So gehen wir gemeinsam vor.</h2>
+
+      <div class="steps">
+
+        <!-- Schritt 1 -->
+        <div class="step reveal">
+          <div class="step-head">
+            <div class="step-label">Schritt 1 — So fangen wir an</div>
+            <h3 class="step-title">Erstgespräch</h3>
+            <div class="step-meta">kostenlos · etwa 30 Minuten</div>
+          </div>
+          <div class="step-body">
+            <p>Wir lernen uns auf Augenhöhe kennen und klären, ob das zueinander passt. Du erzählst, wo dir im Alltag Zeit und Ruhe verloren gehen. Ich sage offen, was sinnvoll ist und was nicht. Kein Verkaufsgespräch, keine Folien.</p>
+            <div class="step-cta"><a class="btn btn-primary" href="#kontakt">Erstgespräch anfragen <span class="arr" aria-hidden="true">↗</span></a></div>
+          </div>
+        </div>
+
+        <!-- Schritt 2 -->
+        <div class="step reveal">
+          <div class="step-head">
+            <div class="step-label">Schritt 2 — Klarheit</div>
+            <h3 class="step-title">KI-Praxis-Check</h3>
+            <div class="step-meta">600 €, voll anrechenbar</div>
+          </div>
+          <div class="step-body">
+            <p>Ich schaue mir deine Praxis genau an — du bekommst eine ehrliche Orientierung, wo KI dich wirklich entlastet und wo deine Tools schon reichen.</p>
+            <div class="mini-h">Was du bekommst</div>
+            <ul class="tick">
+              <li>90-Minuten-Gespräch</li>
+              <li>schriftlicher Report (PDF, ca. 8 bis 12 Seiten)</li>
+              <li>drei bis fünf priorisierte Quick Wins mit konkreten Empfehlungen</li>
+              <li>Bewertung deiner Tools auf DSGVO und EU AI Act</li>
+            </ul>
+            <div class="callout"><b>Anrechnung:</b> Entscheidest du dich für eine Umsetzung, rechne ich die 600 € vollständig an.</div>
+          </div>
+        </div>
+
+        <!-- Schritt 3 -->
+        <div class="step reveal">
+          <div class="step-head">
+            <div class="step-label">Schritt 3 — Aufbau</div>
+            <h3 class="step-title">Umsetzung</h3>
+            <div class="step-meta">ab 2.500 €</div>
+          </div>
+          <div class="step-body">
+            <p>Was sich im Praxis-Check gezeigt hat, baue ich — fertig eingerichtet, DSGVO-konform, in deiner Handschrift.</p>
+            <p class="midline">Du wählst die Bausteine, die zu dir passen. <b>Klick für Beispiele.</b></p>
+
+            <details class="block">
+              <summary><span>Sitzungs-Nachbereitung — ab 2.500 €</span><span class="plus" aria-hidden="true">+</span></summary>
+              <div class="block-inner">
+                <div class="mini-h">So kann das aussehen</div>
+                <ul class="tick">
+                  <li>eine Zusammenfassung für dich nach jeder Sitzung, ohne dass du tippst</li>
+                  <li>auf Wunsch eine klientengerechte Fassung</li>
+                  <li>die Schlüssel-Erkenntnisse und nächsten Schritte als sanfte Erinnerung für deine Klient:innen</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="block">
+              <summary><span>Content-Stimme — ab 4.000 €</span><span class="plus" aria-hidden="true">+</span></summary>
+              <div class="block-inner">
+                <div class="mini-h">So kann das aussehen</div>
+                <ul class="tick">
+                  <li>die KI lernt, wie du schreibst und formulierst, und schlägt daraus Beiträge und Newsletter vor — in deiner Sprache statt generisch</li>
+                  <li>Grundlage sind deine Texte, Sprachnotizen oder Sitzungs-Transkripte; was am besten passt, schauen wir individuell</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="block">
+              <summary><span>Begleitung zwischen den Sitzungen — ab 2.500 €</span><span class="plus" aria-hidden="true">+</span></summary>
+              <div class="block-inner">
+                <div class="mini-h">So kann das aussehen</div>
+                <ul class="tick">
+                  <li>Reflexionsfragen und Übungen, die deine Klient:innen zwischen den Terminen tragen</li>
+                  <li>behutsame Erinnerungen ans Vereinbarte</li>
+                  <li>Fortschritt sichtbar gemacht</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="block">
+              <summary><span>Klienten-Aufnahme — ab 3.000 €</span><span class="plus" aria-hidden="true">+</span></summary>
+              <div class="block-inner">
+                <div class="mini-h">So kann das aussehen</div>
+                <ul class="tick">
+                  <li>ein Erstkontakt, der vorklärt, was die Person mitbringt</li>
+                  <li>ein Erwartungs-Bogen vor dem ersten Termin</li>
+                  <li>Anfragen zeitnah in deinem Ton beantwortet</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="block">
+              <summary><span>Praxis-Gedächtnis — ab 2.500 €</span><span class="plus" aria-hidden="true">+</span></summary>
+              <div class="block-inner">
+                <div class="mini-h">So kann das aussehen</div>
+                <ul class="tick">
+                  <li>Notizen und Material an einem durchsuchbaren Ort statt verstreut</li>
+                  <li>per Telegram einen Gedanken oder eine Sprachnotiz schicken, die sortiert abgelegt wird</li>
+                  <li>in eigenen Worten nachfragen, was du festgehalten hast</li>
+                </ul>
+              </div>
+            </details>
+
+            <p class="midline" style="margin-top:24px">und vieles mehr — oder was du sonst für deine Praxis brauchst</p>
+
+            <div class="callout" style="background:rgba(143,169,138,.10);border-color:rgba(143,169,138,.3)">Mehrere Bausteine richte ich als ein stimmiges Ganzes ein — das ist günstiger als die Summe. Welcher Zuschnitt für dich passt, klären wir im Praxis-Check.</div>
+          </div>
+        </div>
+
+        <!-- Schritt 4 -->
+        <div class="step reveal">
+          <div class="step-head">
+            <div class="step-label">Schritt 4 — Danach (optional)</div>
+            <h3 class="step-title">Resonanzraum</h3>
+            <div class="step-meta">ab 300 € pro Monat, ab dem dritten Monat</div>
+          </div>
+          <div class="step-body">
+            <p>Auf Wunsch begleite ich dich laufend weiter.</p>
+            <div class="mini-h">Was er trägt</div>
+            <ul class="tick">
+              <li>deine Werkzeuge bleiben auf dem Stand: neue Modelle, bessere Vorlagen</li>
+              <li>ich halte dich auf dem Laufenden, wenn sich bei DSGVO oder EU AI Act etwas ändert, das dich betrifft — verständlich, nicht als Paragrafen-Flut</li>
+              <li>Begleitung bei Bedarf</li>
+            </ul>
+            <p class="midline" style="margin-top:20px">Ohne diese Anbindung bleibt deine Umsetzung stabil — du bist nicht abhängig.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="angebot-foot reveal">Jeder Baustein ist DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten werden nie zum Training von KI verwendet. Routine wie Buchung, Erinnerungen und Rechnungen binde ich an bewährte Tools an.</p>
+    </div>
+  </section>
+
+  <!-- WER -->
+  <section id="wer" data-shape="three">
+    <div class="wrap">
+      <p class="eyebrow reveal">Wer mit dir arbeitet</p>
+      <h2 class="h2 reveal">Drei Welten, ein Blick.</h2>
+      <p class="lead reveal">Ich verstehe die innere Welt deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides verbinden.</p>
+      <div class="pillars">
+        <div class="pillar reveal" data-cluster="0">
+          <span class="idx">01 / Coach</span>
+          <h3>Coach-Hintergrund</h3>
+          <p>Ausgebildeter Mentaltrainer und Meditationskursleiter, in Ausbildung als Fitnesstrainer. Ich kenne die innere Welt deiner Arbeit aus eigener Anschauung und Erfahrung.</p>
+        </div>
+        <div class="pillar reveal" data-cluster="1">
+          <span class="idx">02 / Ingenieur</span>
+          <h3>Wirtschaftsingenieur</h3>
+          <p>Master in Wirtschaftsingenieurwesen. Mein Beruf ist es, zwischen verschiedenen Welten zu übersetzen — Technik, Wirtschaft, Mensch. Ich denke in Abläufen und Prozessen, ohne den Menschen darin aus den Augen zu verlieren.</p>
+        </div>
+        <div class="pillar reveal" data-cluster="2">
+          <span class="idx">03 / KI</span>
+          <h3>TÜV-zertifizierter KI-Experte</h3>
+          <p>TÜV-Zertifikat Angewandte KI-Transformation. Eigene KI-Anwendungen entwickelt und in Praxen anderer integriert. KI ist nicht mein Hobby, sondern meine tägliche Arbeit — mit der Begeisterung von jemandem, der weiß, was diese Werkzeuge können und wo ihre Grenzen liegen.</p>
+        </div>
+      </div>
+      <p class="wer-close reveal">Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und remote.</p>
+    </div>
+  </section>
+
+  <!-- STIMMEN -->
+  <section class="stimmen" data-shape="cluster">
+    <div class="wrap">
+      <p class="eyebrow reveal">Stimmen aus der Praxis</p>
+      <h2 class="h2 reveal">Was Kunden über die Arbeit sagen.</h2>
+      <p class="stimmen-note reveal">Pilotkunden-Zitate folgen. Die hier gezeigten Karten sind klar als Platzhalter gekennzeichnet.</p>
+      <div class="quotes">
+        <figure class="quote reveal">
+          <span class="ph">Platzhalter</span>
+          <blockquote>Was vorher zwei Abende pro Woche fraß, läuft jetzt im Hintergrund. Und das Beste: meine Klienten merken keinen Unterschied — außer, dass ich präsenter bin.</blockquote>
+          <figcaption class="src"><div class="who">Platzhalter — Pilotkundin</div><div class="role">Mental-Coach, München (Beispiel-Stimme)</div></figcaption>
+        </figure>
+        <figure class="quote reveal">
+          <span class="ph">Platzhalter</span>
+          <blockquote>Ich war skeptisch, ob ein KI-Setup wirklich „nach mir“ klingen kann. Tut es. Das war der Punkt, an dem aus Werkzeug Verstärker wurde.</blockquote>
+          <figcaption class="src"><div class="who">Platzhalter — Pilotkunde</div><div class="role">Trainer für Führungskräfte, Wien (Beispiel-Stimme)</div></figcaption>
+        </figure>
+        <figure class="quote reveal">
+          <span class="ph">Platzhalter</span>
+          <blockquote>Der Audit allein war den Preis schon wert. Drei konkrete Schritte, mit denen ich sofort weiterkam — kein Tech-Sprech, einfach klare Empfehlungen.</blockquote>
+          <figcaption class="src"><div class="who">Platzhalter — Pilotkundin</div><div class="role">Mentorin, Hamburg (Beispiel-Stimme)</div></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- EHRLICH -->
+  <section class="ehrlich" data-shape="order">
+    <div class="wrap">
+      <p class="eyebrow reveal">Ehrlich gesagt</p>
+      <h2 class="h2 reveal">Lass uns schauen, ob das passt.</h2>
+      <div class="fit-grid">
+        <div class="fit-col yes reveal">
+          <div class="fit-tag">Passt für dich, wenn …</div>
+          <ul class="fit-list">
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span>Du eine eigene Methode oder ein eigenes Programm hast, das in deiner Arbeit trägt.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span>Du regelmäßig Inhalte veröffentlichst — Newsletter, Podcast, Posts — und merkst, dass dich das Tempo zermürbt.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span>Du KI nutzen willst, ohne dass dein Schreiben generisch wird.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span>Du tech-skeptisch bist und genau deshalb jemanden brauchst, der die Werkzeuge für dich baut, statt dir Tutorials zu schicken.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span>Du in einer Praxis mit Klienten arbeitest und dafür Rechtssicherheit brauchst, die wirklich greift.</span></li>
+          </ul>
+        </div>
+        <div class="fit-col no reveal">
+          <div class="fit-tag">Passt nicht, wenn …</div>
+          <ul class="fit-list">
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Du gerade erst startest und deine Methode noch nicht steht. Hier hilft kein Tool, sondern erst einmal Klarheit über dein Angebot.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Du eine Marketing-Maschine suchst, die dich ersetzt. Das baue ich nicht.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Du KI als Beziehungsersatz für deine Klienten einsetzen willst.</span></li>
+            <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Du erwartest, dass der Aufbau ohne deine Mitarbeit funktioniert. Deine Content-Stimme und die Praxis-Bausteine brauchen dich als Quelle.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRUNDWERTE -->
+  <section id="grundwerte" data-shape="lattice">
+    <div class="wrap">
+      <p class="eyebrow reveal">Haltung vor Technik</p>
+      <h2 class="h2 reveal">Meine Grundwerte, wenn ich mit KI arbeite.</h2>
+      <div class="values">
+        <div class="value reveal"><span class="vn">01</span><h3>KI ersetzt keine echte Beziehung.</h3><p>Begegnung bleibt menschlich.</p></div>
+        <div class="value reveal"><span class="vn">02</span><h3>Klienten wissen, wo KI eingesetzt wird.</h3><p>Transparenz ist Standard.</p></div>
+        <div class="value reveal"><span class="vn">03</span><h3>Ich baue für dich, nicht für die Masse.</h3><p>Jedes Setup wird auf deine Methode und deinen Stil zugeschnitten.</p></div>
+        <div class="value reveal"><span class="vn">04</span><h3>Sensible Daten werden geschützt.</h3><p>EU-Hosting, Auftragsverarbeitungsverträge, lokale Modelle bei Bedarf.</p></div>
+        <div class="value reveal"><span class="vn">05</span><h3>Du bleibst Entscheider.</h3><p>KI macht Vorschläge, du wählst aus. Nichts geht raus, ohne dass du es gesehen hast.</p></div>
+        <div class="value reveal"><span class="vn">06</span><h3>Deine Stimme und deine Methode bleiben erkennbar.</h3><p>KI verstärkt, sie ersetzt nicht.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-sec" data-shape="lattice">
+    <div class="wrap">
+      <p class="eyebrow reveal">Was du sonst noch wissen willst</p>
+      <h2 class="h2 reveal">Häufige Fragen.</h2>
+      <div class="faq">
+        <details class="faq-item reveal"><summary><span class="faq-num">01</span><span class="faq-q">Wie läuft die Zusammenarbeit ab?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">In Schritten, in deinem Tempo. Zuerst ein kostenfreies Erstgespräch, etwa 30 Minuten: Wir klären auf Augenhöhe, ob das zueinander passt. Wenn es passt, folgt der KI-Praxis-Check (600 €). Du zeigst mir deine Praxis, deine Tools, deine drängendsten Themen, und innerhalb einer Woche bekommst du einen schriftlichen Report mit drei bis fünf priorisierten Quick Wins, einer Bewertung deiner aktuellen Tools und einer klaren Empfehlung. Danach entscheidest du in Ruhe: Wenn der Report alles ist, was du brauchst — auch gut. Gehst du in die Umsetzung, rechne ich die 600 € vollständig an. In der Umsetzung baust du einzelne Bausteine oder mehrere, die ineinandergreifen — das legen wir gemeinsam fest.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">02</span><span class="faq-q">Wie hältst du es mit DSGVO und EU AI Act?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Beides ist bei mir Fundament, kein Anhang. Seit Februar 2025 verpflichtet der EU AI Act jeden, der KI in seiner Arbeit einsetzt, zur KI-Kompetenz. Ab August 2026 drohen Bußgelder bis 30 Millionen Euro. Jede Implementierung kommt deshalb mit EU-gehosteten Modellen (Mistral, Aleph Alpha, Azure OpenAI Frankfurt) als Standard, mit Auftragsverarbeitungsverträgen als Basis und mit einer integrierten Schulung, die deine Pflicht aus Artikel 4 abdeckt. Wenn du als Heilpraktikerin, Therapeutin oder mit anderer Doppelqualifikation arbeitest, kommen zusätzliche Vorkehrungen dazu, weil Paragraf 203 StGB greift — das beraten wir individuell.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">03</span><span class="faq-q">Was passiert mit den Aufnahmen und Daten meiner Klienten?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Sitzungs-Transkriptionen laufen über lokal gehostetes Whisper, also auf einem Server, den ich für dich einrichte. Die Aufnahmen verlassen niemals den europäischen Rechtsraum. Bei besonders sensiblen Inhalten arbeiten wir mit Open-Weight-Modellen (Llama, Mistral) komplett auf deiner eigenen Infrastruktur. Klienten werden vorab informiert, dass KI in der Nachbereitung eingesetzt wird — das ist Teil der Transparenz, die zur Sache gehört.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">04</span><span class="faq-q">Wie viel Zeit musst du selbst investieren?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Im KI-Praxis-Check rechnest du mit zwei bis drei Stunden insgesamt — Gespräch und Report-Lektüre. In der Umsetzung hängt es vom Umfang ab: ein einzelner Baustein braucht entsprechend wenig; mehrere Bausteine über einige Wochen brauchen etwa vier bis sechs Stunden pro Woche, vor allem am Anfang, etwa für deine Content-Stimme. Danach wird es deutlich weniger.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">05</span><span class="faq-q">Funktioniert das auch, wenn ich noch kein Buch oder kein Programm habe?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Für den KI-Praxis-Check und die Umsetzung reichen deine bisherigen Texte, Posts, Podcast-Folgen und Sitzungs-Notizen — daraus lässt sich zum Beispiel deine Content-Stimme aufbauen. Ein fertiges Buch brauchst du dafür nicht. Wenn deine Methode noch gar nicht steht, ist die Umsetzung eher früh — dann hilft erst einmal Klarheit über dein Angebot.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">06</span><span class="faq-q">Was unterscheidet das von einem Online-Kurs zu KI für Coaches?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Ich liefere keine Lektionen, sondern fertige Workflows in deine Praxis. Du musst nichts lernen, was du nicht willst. Die Schulung, die du bekommst, betrifft die Bedienung deines konkreten Setups — nicht KI im Allgemeinen. Wenn du einen Kurs willst, gibt es gute Anbieter dafür. Wenn du Werkzeuge willst, die in deiner Praxis greifen, bist du hier richtig.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">07</span><span class="faq-q">Was ist, wenn die Tools sich in einem Jahr geändert haben?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Tools ändern sich, das gehört dazu. Mein Setup ist so gebaut, dass die Logik bleibt, auch wenn einzelne Komponenten getauscht werden. Im optionalen Resonanzraum (ab 300 Euro pro Monat) bekommst du laufende Updates auf neue Modelle und Vorlagen, eine verständliche Information, wenn sich bei DSGVO oder EU AI Act etwas für dich ändert, und Begleitung bei Bedarf. Ohne diese Anbindung bleibt deine Umsetzung trotzdem stabil — du bist nicht abhängig.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">08</span><span class="faq-q">Brauche ich eine technische Vorbildung?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Nein. Wenn du E-Mail, Notion oder ein Buchungstool wie Calendly bedienen kannst, reicht das. Die Schulung am Ende der Implementierung deckt genau das ab, was du brauchst, um dein Setup zu pflegen.</div></details>
+        <details class="faq-item reveal"><summary><span class="faq-num">09</span><span class="faq-q">Geht das auch, wenn ich nicht in Freiburg bin?</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-a">Ja. Die meiste Arbeit läuft remote, mit regelmäßigen Videoanrufen. Wenn du in Freiburg oder Umgebung bist und Wert auf persönliche Treffen legst, machen wir das gerne. In jedem Fall arbeite ich mit Coaches und Trainern im gesamten DACH-Raum.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="kontakt" class="final" data-shape="collapse">
+    <div class="wrap">
+      <h2 class="reveal">Lass uns 30 Minuten <span class="em">reden.</span></h2>
+      <p class="sub reveal">Kostenfreies Erstgespräch. Kein Verkaufsgespräch, keine Verpflichtung.</p>
+      <div class="reveal"><a class="btn btn-primary" href="#kontakt">Erstgespräch anfragen <span class="arr" aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand"><span class="dot" aria-hidden="true"></span> JGC Lumen</div>
+        <p>KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise, DSGVO-konform.</p>
+        <p>Freiburg im Breisgau · DACH-Raum</p>
+      </div>
+      <div class="foot-col">
+        <h4>Seite</h4>
+        <ul>
+          <li><a href="#angebote">Angebote</a></li>
+          <li><a href="#grundwerte">Grundwerte</a></li>
+          <li><a href="#wer">Wer mit dir arbeitet</a></li>
+          <li><a href="#kontakt">Erstgespräch anfragen</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="../../main/impressum/">Impressum</a></li>
+          <li><a href="../../main/datenschutz/">Datenschutz</a></li>
+          <li><a href="https://www.linkedin.com">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="cp">© 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform</span>
+      <a class="haltung" href="#grundwerte">Haltung vor Technik →</a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  document.documentElement.classList.remove('no-js');
+  document.body.classList.remove('no-js');
+
+  var REDUCED = false;
+  try { REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+  document.addEventListener('DOMContentLoaded', function(){
+    try { initUI(); } catch(e){ /* never crash */ }
+    try { initReveals(); } catch(e){}
+    try { initField(); } catch(e){}
+  });
+
+  /* ---------- NAV / UI ---------- */
+  function initUI(){
+    var nav = document.getElementById('nav');
+    var burger = document.getElementById('burger');
+    var links = document.getElementById('navlinks');
+
+    if (nav){
+      var onScroll = function(){
+        if (window.scrollY > 24) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, {passive:true});
+    }
+
+    if (burger && links){
+      var setOpen = function(open){
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+        links.classList.toggle('open', open);
+      };
+      burger.addEventListener('click', function(){
+        setOpen(burger.getAttribute('aria-expanded') !== 'true');
+      });
+      links.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){ setOpen(false); });
+      });
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') setOpen(false);
+      });
+    }
+  }
+
+  /* ---------- REVEAL choreography ---------- */
+  function initReveals(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if (!items.length) return;
+    if (REDUCED || !('IntersectionObserver' in window)){
+      items.forEach(function(el){ el.classList.add('is-in'); });
+      return;
+    }
+    // Hero is above the fold: drive its cascade on load with a hand-tuned
+    // stagger instead of leaving it to scroll-observer timing.
+    var heroItems = Array.prototype.slice.call(
+      document.querySelectorAll('.hero .reveal'));
+    heroItems.forEach(function(el, i){
+      el.style.transitionDelay = (120 + i*110) + 'ms';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        el.classList.add('is-in');
+      }); });
+    });
+    items = items.filter(function(el){ return heroItems.indexOf(el) === -1; });
+    if (!items.length) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          var el = en.target;
+          var sibs = el.parentElement ? Array.prototype.slice.call(el.parentElement.querySelectorAll(':scope > .reveal')) : [el];
+          var i = Math.max(0, sibs.indexOf(el));
+          el.style.transitionDelay = Math.min(i,6)*70 + 'ms';
+          el.classList.add('is-in');
+          io.unobserve(el);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---------- THREE.js RESONANZFELD ---------- */
+  function initField(){
+    var canvas = document.getElementById('field');
+    if (!canvas) return;
+    if (typeof window.THREE === 'undefined'){
+      // graceful static fallback: tint canvas via CSS-ish, keep content visible
+      canvas.style.background = 'radial-gradient(120% 90% at 50% 18%, rgba(201,123,63,.12), transparent 55%), radial-gradient(100% 80% at 50% 100%, rgba(111,163,181,.10), transparent 60%)';
+      return;
+    }
+
+    var THREE = window.THREE;
+    var renderer, scene, camera, points, geo, mat, raf=null;
+    var COUNT, posAttr, basePos, targets={}, cur, dpr;
+    var mobile = window.innerWidth < 760;
+    COUNT = mobile ? 2600 : 5200;
+
+    try {
+      renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:false, alpha:true, powerPreference:'high-performance'});
+    } catch(e){
+      canvas.style.display='none';
+      return;
+    }
+    dpr = Math.min(window.devicePixelRatio||1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
+    renderer.setClearColor(0x000000, 0);
+
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+    camera.position.z = 16;
+
+    // palette colors
+    var C = [
+      new THREE.Color(0xC97B3F), // kupfer
+      new THREE.Color(0x6FA3B5), // quellwasser
+      new THREE.Color(0x8FA98A)  // salbei
+    ];
+
+    geo = new THREE.BufferGeometry();
+    var positions = new Float32Array(COUNT*3);
+    var colors = new Float32Array(COUNT*3);
+    var seed = new Float32Array(COUNT); // per-particle drift seed
+
+    // ---- shape generators (fill an array) ----
+    function sphere(arr){
+      for (var i=0;i<COUNT;i++){
+        var u=Math.random(), v=Math.random();
+        var th=2*Math.PI*u, ph=Math.acos(2*v-1);
+        var r=7.6 + (Math.random()-0.5)*0.6;
+        arr[i*3]   = r*Math.sin(ph)*Math.cos(th);
+        arr[i*3+1] = r*Math.sin(ph)*Math.sin(th)*0.82;
+        arr[i*3+2] = r*Math.cos(ph);
+      }
+    }
+    function rings(arr){ // concentric resonance rings (hero)
+      for (var i=0;i<COUNT;i++){
+        var ring = (i % 5);
+        var rad = 2.6 + ring*1.5 + (Math.random()-0.5)*0.35;
+        var a = Math.random()*Math.PI*2;
+        arr[i*3]   = Math.cos(a)*rad;
+        arr[i*3+1] = Math.sin(a)*rad*0.92;
+        arr[i*3+2] = (Math.random()-0.5)*1.4 + Math.sin(a*3)*0.6;
+      }
+    }
+    function chaos(arr){
+      for (var i=0;i<COUNT;i++){
+        arr[i*3]   = (Math.random()-0.5)*26;
+        arr[i*3+1] = (Math.random()-0.5)*16;
+        arr[i*3+2] = (Math.random()-0.5)*16;
+      }
+    }
+    function grid(arr){ // ordered aligned grid
+      var cols = Math.ceil(Math.sqrt(COUNT*1.6));
+      var rows = Math.ceil(COUNT/cols);
+      var gx=0.95, gy=0.95;
+      for (var i=0;i<COUNT;i++){
+        var cx = i % cols, cy = Math.floor(i/cols);
+        arr[i*3]   = (cx-(cols-1)/2)*gx;
+        arr[i*3+1] = (cy-(rows-1)/2)*gy*0.9;
+        arr[i*3+2] = Math.sin(cx*0.5)*0.6 + Math.cos(cy*0.5)*0.6;
+      }
+    }
+    function clusters(arr){ // three clusters
+      var centers=[[-8,0,0],[0,0.6,-2],[8,-0.4,0]];
+      for (var i=0;i<COUNT;i++){
+        var c = centers[i%3];
+        var r=2.9+(Math.random())*1.4;
+        var u=Math.random(), v=Math.random();
+        var th=2*Math.PI*u, ph=Math.acos(2*v-1);
+        arr[i*3]   = c[0]+r*Math.sin(ph)*Math.cos(th);
+        arr[i*3+1] = c[1]+r*Math.sin(ph)*Math.sin(th);
+        arr[i*3+2] = c[2]+r*Math.cos(ph);
+      }
+    }
+    function lattice(arr){ // stable 3d lattice
+      var n = Math.ceil(Math.cbrt(COUNT));
+      var sp=1.7;
+      for (var i=0;i<COUNT;i++){
+        var x=i%n, y=Math.floor(i/n)%n, z=Math.floor(i/(n*n))%n;
+        arr[i*3]   = (x-(n-1)/2)*sp;
+        arr[i*3+1] = (y-(n-1)/2)*sp*0.9;
+        arr[i*3+2] = (z-(n-1)/2)*sp;
+      }
+    }
+    function collapse(arr){ // collapse to a bright single point
+      for (var i=0;i<COUNT;i++){
+        var rr = Math.pow(Math.random(),3)*1.6;
+        var a=Math.random()*Math.PI*2, b=Math.random()*Math.PI;
+        arr[i*3]   = Math.sin(b)*Math.cos(a)*rr;
+        arr[i*3+1] = Math.sin(b)*Math.sin(a)*rr;
+        arr[i*3+2] = Math.cos(b)*rr;
+      }
+    }
+
+    targets.hero = new Float32Array(COUNT*3); rings(targets.hero);
+    targets.order = new Float32Array(COUNT*3); sphere(targets.order);
+    targets.chaos = new Float32Array(COUNT*3); chaos(targets.chaos);
+    targets.gridT = new Float32Array(COUNT*3); grid(targets.gridT);
+    targets.cluster = new Float32Array(COUNT*3); clusters(targets.cluster);
+    targets.lattice = new Float32Array(COUNT*3); lattice(targets.lattice);
+    targets.collapse = new Float32Array(COUNT*3); collapse(targets.collapse);
+
+    // initial = hero
+    for (var i=0;i<COUNT;i++){
+      positions[i*3]=targets.hero[i*3];
+      positions[i*3+1]=targets.hero[i*3+1];
+      positions[i*3+2]=targets.hero[i*3+2];
+      var col = C[i%3];
+      colors[i*3]=col.r; colors[i*3+1]=col.g; colors[i*3+2]=col.b;
+      seed[i]=Math.random()*Math.PI*2;
+    }
+    cur = targets.hero;
+
+    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors,3));
+    posAttr = geo.getAttribute('position');
+
+    // round soft sprite
+    var sprite = (function(){
+      var c=document.createElement('canvas'); c.width=c.height=64;
+      var ctx=c.getContext('2d');
+      var g=ctx.createRadialGradient(32,32,0,32,32,32);
+      g.addColorStop(0,'rgba(255,255,255,1)');
+      g.addColorStop(.35,'rgba(255,255,255,.85)');
+      g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(32,32,32,0,Math.PI*2); ctx.fill();
+      var t=new THREE.Texture(c); t.needsUpdate=true; return t;
+    })();
+
+    mat = new THREE.PointsMaterial({
+      size: mobile?0.13:0.115,
+      map: sprite,
+      vertexColors:true,
+      transparent:true,
+      opacity:0.92,
+      depthWrite:false,
+      blending:THREE.AdditiveBlending,
+      sizeAttenuation:true
+    });
+    points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    // mouse
+    var mouse={x:0,y:0,tx:0,ty:0};
+    window.addEventListener('pointermove', function(e){
+      mouse.tx = (e.clientX/window.innerWidth - 0.5);
+      mouse.ty = (e.clientY/window.innerHeight - 0.5);
+    }, {passive:true});
+
+    // ---- morph state ----
+    var morph = { t: 0 };      // lerp progress 0..1
+    var fromArr = cur, toArr = cur, activeCluster = -1;
+    function setTarget(name, dur){
+      if (REDUCED){
+        cur = targets[name] || cur;
+        var p=posAttr.array;
+        for (var i=0;i<p.length;i++) p[i]=cur[i];
+        posAttr.needsUpdate=true;
+        renderOnce();
+        return;
+      }
+      var t = targets[name];
+      if (!t || t===toArr) return;
+      // snapshot current as from
+      fromArr = posAttr.array.slice ? posAttr.array.slice() : new Float32Array(posAttr.array);
+      toArr = t; cur = t;
+      morph.t = 0;
+      if (window.gsap){
+        try { gsap.killTweensOf(morph); gsap.to(morph, {t:1, duration:dur||1.4, ease:'power2.inOut'}); }
+        catch(e){ morph.t = 1; }
+      } else { morph.t = 1; }
+    }
+
+    // ---- ScrollTrigger wiring ----
+    var stOK = false;
+    if (!REDUCED && window.gsap && window.ScrollTrigger){
+      try {
+        gsap.registerPlugin(ScrollTrigger);
+        stOK = true;
+        var map = {
+          hero:'hero', order:'order', chaos:'gridT', cluster:'cluster',
+          three:'cluster', lattice:'lattice', collapse:'collapse'
+        };
+        document.querySelectorAll('[data-shape]').forEach(function(sec){
+          var key = sec.getAttribute('data-shape');
+          ScrollTrigger.create({
+            trigger: sec,
+            start: 'top 60%',
+            end: 'bottom 40%',
+            onEnter: function(){ applyShape(key); },
+            onEnterBack: function(){ applyShape(key); }
+          });
+        });
+        // special: chaos section morphs chaos->order as you scroll through
+        var woche = document.querySelector('.woche');
+        if (woche){
+          ScrollTrigger.create({
+            trigger: woche, start:'top 80%', end:'top 30%',
+            onEnter:function(){ setTarget('chaos',1.0); },
+            onLeave:function(){ setTarget('gridT',1.4); },
+            onEnterBack:function(){ setTarget('chaos',1.0); }
+          });
+        }
+      } catch(e){ stOK=false; }
+    }
+
+    function applyShape(key){
+      if (key==='hero'){ setTarget('hero',1.6); highlightCluster(-1); }
+      else if (key==='order'){ setTarget('order',1.4); highlightCluster(-1); }
+      else if (key==='chaos'){ setTarget('gridT',1.4); highlightCluster(-1); }
+      else if (key==='cluster'){ setTarget('cluster',1.4); }
+      else if (key==='three'){ setTarget('cluster',1.4); }
+      else if (key==='lattice'){ setTarget('lattice',1.5); highlightCluster(-1); }
+      else if (key==='collapse'){ setTarget('collapse',1.6); highlightCluster(-1); }
+    }
+
+    // per-section cluster highlight (Wer section pillars)
+    function highlightCluster(idx){
+      if (idx===activeCluster) return;
+      activeCluster = idx;
+      var colAttr = geo.getAttribute('color');
+      var ca = colAttr.array;
+      for (var i=0;i<COUNT;i++){
+        var base = C[i%3];
+        var hot = (idx>=0 && (i%3)===idx);
+        var dim = (idx>=0 && (i%3)!==idx);
+        var f = hot?1.0:(dim?0.32:0.9);
+        ca[i*3]=base.r*f; ca[i*3+1]=base.g*f; ca[i*3+2]=base.b*f;
+      }
+      colAttr.needsUpdate=true;
+    }
+    if (!REDUCED){
+      var pillarEls = document.querySelectorAll('.pillar[data-cluster]');
+      if (pillarEls.length && 'IntersectionObserver' in window){
+        var pillarsIn = 0;
+        var pio = new IntersectionObserver(function(ents){
+          ents.forEach(function(en){
+            if (en.isIntersecting){
+              pillarsIn++;
+              var ci = parseInt(en.target.getAttribute('data-cluster'),10);
+              if (!isNaN(ci)) highlightCluster(ci);
+            } else {
+              pillarsIn = Math.max(0, pillarsIn-1);
+            }
+          });
+          // once every pillar has scrolled away, drop the dim/hot bias
+          // so the lingering highlight doesn't bleed into the next section
+          if (pillarsIn === 0) highlightCluster(-1);
+        }, {threshold:0.55});
+        pillarEls.forEach(function(p){ pio.observe(p); });
+      }
+    }
+
+    // ---- visibility & offscreen gating ----
+    var canvasVisible = true, pageVisible = true;
+    if ('IntersectionObserver' in window){
+      var cio = new IntersectionObserver(function(ents){
+        ents.forEach(function(en){ canvasVisible = en.isIntersecting; });
+        gate();
+      }, {threshold:0});
+      cio.observe(canvas);
+    }
+    document.addEventListener('visibilitychange', function(){
+      pageVisible = !document.hidden; gate();
+    });
+    function gate(){
+      if (REDUCED) return;
+      if (canvasVisible && pageVisible){ if(!raf) loop(); }
+      else { if(raf){ cancelAnimationFrame(raf); raf=null; } }
+    }
+
+    // ---- resize ----
+    var rt=null;
+    window.addEventListener('resize', function(){
+      if (rt) clearTimeout(rt);
+      rt=setTimeout(function(){
+        camera.aspect = window.innerWidth/window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
+        if (REDUCED) renderOnce();
+      },180);
+    }, {passive:true});
+
+    // ---- render ----
+    var clock = (window.THREE && THREE.Clock) ? new THREE.Clock() : null;
+    function frame(time){
+      var p = posAttr.array;
+      var t = (clock? clock.getElapsedTime() : (time||0)/1000);
+      // lerp morph — blend the ambient drift in proportionally so the
+      // shape never "pops" the moment it settles (drift weight rises with k)
+      if (morph.t < 1 && fromArr && toArr){
+        var k = morph.t;
+        var dw = k*k;                 // drift weight eases in (no snap at k=1)
+        for (var j0=0;j0<COUNT;j0++){
+          var i0=j0*3;
+          var dx = Math.sin(t*0.6 + seed[j0])*0.06*dw;
+          var dy = Math.cos(t*0.5 + seed[j0])*0.06*dw;
+          var dz = Math.sin(t*0.6 + seed[j0])*0.05*dw;
+          p[i0]   = fromArr[i0]   + (toArr[i0]-fromArr[i0])*k     + dx;
+          p[i0+1] = fromArr[i0+1] + (toArr[i0+1]-fromArr[i0+1])*k + dy;
+          p[i0+2] = fromArr[i0+2] + (toArr[i0+2]-fromArr[i0+2])*k + dz;
+        }
+      } else if (toArr){
+        // settle exactly + gentle drift
+        for (var j=0;j<COUNT;j++){
+          var idx=j*3;
+          var d = Math.sin(t*0.6 + seed[j]);
+          p[idx]   = toArr[idx]   + d*0.06;
+          p[idx+1] = toArr[idx+1] + Math.cos(t*0.5+seed[j])*0.06;
+          p[idx+2] = toArr[idx+2] + d*0.05;
+        }
+      }
+      posAttr.needsUpdate = true;
+
+      // mouse ease + slow rotation
+      mouse.x += (mouse.tx - mouse.x)*0.05;
+      mouse.y += (mouse.ty - mouse.y)*0.05;
+      points.rotation.y = t*0.04 + mouse.x*0.5;
+      points.rotation.x = mouse.y*0.35;
+      camera.position.x += ((mouse.x*3) - camera.position.x)*0.04;
+      camera.position.y += ((-mouse.y*2) - camera.position.y)*0.04;
+      camera.lookAt(0,0,0);
+
+      renderer.render(scene, camera);
+    }
+    function loop(){
+      raf = requestAnimationFrame(loop);
+      try { frame(); } catch(e){ if(raf){cancelAnimationFrame(raf); raf=null;} }
+    }
+    function renderOnce(){
+      try { frame(performance.now ? performance.now() : 0); } catch(e){}
+    }
+
+    // ---- start ----
+    if (REDUCED){
+      // single static frame, sphere look
+      cur = targets.hero; toArr = targets.hero; morph.t = 1;
+      var p2=posAttr.array; for (var q=0;q<p2.length;q++) p2[q]=targets.hero[q];
+      posAttr.needsUpdate=true;
+      renderOnce();
+    } else {
+      loop();
+    }
+  }
+})();
+</script>
+</body>
+</html>
