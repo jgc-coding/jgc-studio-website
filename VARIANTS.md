@@ -109,6 +109,19 @@ WebGL pausiert bei verstecktem/off-screen Canvas.
 
 ---
 
+## Weiterentwicklung — Variante 18
+
+Erste Variante, die über reines Design hinausgeht: **Variante 13 (JGC Lumen)** als
+Basis, ergänzt um eine **Vertrauens-/Verkörperungs-Ebene** und die redaktionellen
+Korrekturen aus dem Live-Review. Self-contained Einzeldatei unter
+`variants/standalone/18-lumen/index.html`.
+
+| Nr. | Slug | Charakter | Skill |
+|---|---|---|---|
+| **18** | `18-lumen` | **JGC Lumen v2** — V13 + Gründer verkörpert: echtes Profilbild (Hochkant) + Klarname **Gabriel Chimento** als Intro von „Wer mit dir arbeitet"; **TÜV-Rheinland-Prüfsiegel** (Qualifikation „Manager für angewandte KI-Transformation", ID 0217466495) als sichtbarer Beleg unter den drei Säulen. Redaktionell: FAQ-02-Faktenfehler bereinigt (falsche Bußgeld-Zahl + falsches Datum raus, entlastendes Art.-4-Framing; §203 bleibt), FAQ-04-Perspektive `du→ich`, „Quick Wins" → „Hebel" eingedeutscht, „Tool" → „Werkzeug" durchgängig, Resonanzraum-Überschrift „Was er trägt" → „Was der Resonanzraum trägt", Baustein „Content-Stimme" an Position 1, `JSON-LD` ProfessionalService (Standort Freiburg). | `impeccable` |
+
+---
+
 ## Naming-Konvention
 
 `variant/NN-kurzname-mit-charakter`

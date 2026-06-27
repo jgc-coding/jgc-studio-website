@@ -75,5 +75,11 @@
     "num": "17",
     "label": "Der Faden — Serpentinen-Scrollpfad",
     "source": "variants/standalone/17-faden/index.html"
+  },
+  "18-lumen": {
+    "num": "18",
+    "label": "JGC Lumen v2",
+    "skill": "impeccable",
+    "source": "variants/standalone/18-lumen/index.html"
   }
 }
