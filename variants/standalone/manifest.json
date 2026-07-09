@@ -80,6 +80,7 @@
     "num": "18",
     "label": "JGC Lumen v2",
     "skill": "impeccable",
+    "homepage": true,
     "source": "variants/standalone/18-lumen/index.html"
   }
 }

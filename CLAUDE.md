@@ -12,9 +12,14 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 
 ## Build / Deploy
 - Push auf `main` → GitHub Action (`.github/workflows/deploy.yml`) baut `site/`, kopiert alle
-  `variants/standalone/*/index.html` nach `/variants/<slug>/`, generiert die Galerie → GitHub Pages.
-- Live: `https://jgc-coding.github.io/jgc-studio-website/` (Galerie) bzw. `…/variants/<slug>/`.
-- JGC reviewt Design-Optionen auf der **Live-Galerie** → fertige Standalone-Varianten direkt nach `main` pushen.
+  `variants/standalone/*/index.html` nach `/variants/<slug>/`, generiert die Galerie nach `/galerie/`
+  (`scripts/generate-gallery.mjs`) und kopiert die als Hauptseite markierte Variante als Root-`index.html`
+  (`scripts/copy-homepage.mjs`) → GitHub Pages.
+- Welche Variante die **Hauptseite** ist, steht als Single Source of Truth im Manifest
+  (`variants/standalone/manifest.json`, Feld `"homepage": true`) — aktuell `18-lumen`.
+- Live: `https://jgc-coding.github.io/jgc-studio-website/` (**Hauptseiten-Variante**),
+  Galerie unter `…/galerie/`, einzelne Varianten unter `…/variants/<slug>/`.
+- JGC reviewt Design-Optionen auf der **Live-Galerie** (`…/galerie/`) → fertige Standalone-Varianten direkt nach `main` pushen.
 - Deploy-Check: `gh run list --workflow=deploy.yml --limit 1` (Lauf dauert ~1,5–2 min).
 
 ## Neue Standalone-Variante anlegen

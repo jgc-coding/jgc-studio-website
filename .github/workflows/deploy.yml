@@ -122,6 +122,11 @@ jobs:
           git checkout main -- scripts/generate-gallery.mjs
           node scripts/generate-gallery.mjs _site /jgc-studio-website/
 
+      - name: Copy homepage variant → root index
+        run: |
+          git checkout main -- scripts/copy-homepage.mjs
+          node scripts/copy-homepage.mjs _site
+
       - name: List final output
         run: |
           echo "Final _site structure (depth 3):"

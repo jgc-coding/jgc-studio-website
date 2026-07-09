@@ -2,9 +2,12 @@
 /**
  * generate-gallery.mjs
  *
- * Generiert eine Landing-Page (_site/index.html), die alle gebauten
- * Varianten als Galerie auflistet, mit Thumbnail (Desktop-Screenshot)
- * und Link zur Live-Variante.
+ * Generiert die Varianten-Galerie (_site/galerie/index.html), die alle
+ * gebauten Varianten mit Thumbnail (Desktop-Screenshot) und Link zur
+ * Live-Variante auflistet.
+ *
+ * Die Root (_site/index.html) wird NICHT hier geschrieben, sondern von
+ * scripts/copy-homepage.mjs mit der als Hauptseite markierten Variante befüllt.
  *
  * Aufruf in der GitHub Action:
  *   node scripts/generate-gallery.mjs <SITE_DIR> <BASE_URL>
@@ -89,6 +92,7 @@ async function build() {
         num: m?.num || t.num || '–',
         label: m?.label || t.label || slug,
         skill: m?.skill || null,
+        homepage: m?.homepage === true,
         href: `${BASE}variants/${slug}/`,
         // Standalone → Link auf die Quelldatei auf main; sonst auf den Branch.
         code: m?.source
@@ -176,6 +180,12 @@ async function build() {
       color: #C97B3F; background: rgba(201, 123, 63, 0.1);
       padding: 0.2rem 0.55rem; border-radius: 4px; letter-spacing: 0.01em;
     }
+    .card .homepage-tag {
+      align-self: flex-start;
+      font-family: ui-monospace, monospace; font-size: 0.72rem;
+      color: #8FA98A; background: rgba(143, 169, 138, 0.14);
+      padding: 0.2rem 0.55rem; border-radius: 4px; letter-spacing: 0.01em;
+    }
     .card .slug-code {
       margin-top: auto; padding-top: 1rem;
       font-family: ui-monospace, monospace; font-size: 0.78rem;
@@ -237,6 +247,7 @@ async function build() {
       <div class="body">
         <span class="num">Variante ${v.num}</span>
         <h3>${v.label}</h3>
+        ${v.homepage ? `<span class="homepage-tag">Hauptseite</span>` : ''}
         ${v.skill ? `<span class="skill-tag">${v.skill}</span>` : ''}
         <code class="slug-code">${v.slug}</code>
         <div class="actions">
@@ -290,6 +301,7 @@ async function build() {
         Klicke auf eine Karte, um die Live-Variante in voller Größe zu sehen.
       </p>
       <p class="meta">
+        <a href="${BASE}">Zur Hauptseite</a>
         <span><strong>${variants.length}</strong> Variante${variants.length === 1 ? '' : 'n'} aktiv</span>
         <a href="https://github.com/jgc-coding/jgc-studio-website" target="_blank" rel="noopener noreferrer">Repo auf GitHub</a>
         <a href="https://github.com/jgc-coding/jgc-studio-website/blob/main/VARIANTS.md" target="_blank" rel="noopener noreferrer">Register (VARIANTS.md)</a>
@@ -309,8 +321,11 @@ async function build() {
 </body>
 </html>`;
 
-  await writeFile(join(SITE_DIR, 'index.html'), html, 'utf8');
-  console.log(`✓ Galerie geschrieben nach ${join(SITE_DIR, 'index.html')} (${variants.length} Variante(n))`);
+  const galerieDir = join(SITE_DIR, 'galerie');
+  await mkdir(galerieDir, { recursive: true });
+  const galeriePath = join(galerieDir, 'index.html');
+  await writeFile(galeriePath, html, 'utf8');
+  console.log(`✓ Galerie geschrieben nach ${galeriePath} (${variants.length} Variante(n))`);
 }
 
 build().catch((err) => {
