@@ -1,33 +1,34 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (diese Session)
-- **Variante 13 „JGC Lumen"** erstellt (Basis: 09c-audit-ledger, Impeccable) und live deployed.
-  Liegt unter `variants/standalone/13-lumen/index.html`, registriert in `manifest.json` + `VARIANTS.md`.
-- Umgesetzt: Rename JGC Studio→Lumen (gesamte Seite); Hero-Unterstrich tiefer (`bottom -.12em → -.28em`)
-  + Unterstrich-`<em>` auf `display:inline` (Schlusspunkt bricht nicht mehr um); Angebote Schritt 2 & 4
-  dauerhaft aufgeklappt (Schritt 3 unverändert); CTA „60 → 30 Minuten"; „Demo-Workflow"-Link entfernt;
-  bewegte Logo-Resonanz am CTA entfernt; „Ehrlich gesagt"-Spalten auf Card-Tiefe (Schatten/Radius/Ledger-Akzent).
-- 3 Säulen-Symbole aus Variante 12 eingebaut, danach Kompass V2 + Netz V3 aus der **überarbeiteten** V12
-  nachgezogen (Prüfsiegel unverändert). Commits `e7040a1` + `de148f0` auf `main`.
-- Projekt-`CLAUDE.md` neu angelegt (Standalone-Varianten-Workflow dokumentiert).
+## Stand (Session 2026-07-11, Branch claude/stilprobe-automation-website-af3a9a)
+- **Stilprobe-Website-Teil komplett umgesetzt** (Konzept v1.1 §5, via /delegate smart):
+  V18-Hauptseite (Sektion `#stilprobe`, Nav ×2, Hero-CTA, FAQ 02 + Renummerierung bis 11,
+  Final-CTA-Zeile, Footer-Link, Rechtslink-Bugfix), Unterseite `stilprobe/index.html`,
+  Deploy-Step, Datenschutz-Abschnitt (Entwurf), `docs/stilprobe/` inkl. Schnittstellen-Vertrag.
+- Alles verifiziert: Zähl-Assertions, Live-DOM-Tests (auch Mock-`kontingent.php`: knapp/voll/
+  Warteliste-Umschaltung, Formular-Fehlerpfad), Astro-Build grün, 0 Konsolen-Fehler.
+- Details: CHANGELOG.md (2026-07-11) + delegation-log.md.
 
 ## Offen
-- V13 ist nur **Standalone-HTML** zur Galerie-Review — noch NICHT in die Haupt-`site/`-Astro-Quelle übernommen.
-- Hero-Umbruch im mittleren Breitenband (~1280–1500 px): „das" rutscht auf eigene Zeile (3 Zeilen statt 2).
-  Bei voller Review-Breite sauber. Optionaler Fix offen: Hero-Textspalte verbreitern
-  (`site`/Variante: `xl:col-span-6 → xl:col-span-7`). Auf Zuruf, noch nicht gemacht.
+- **Nicht auf `main` gepusht** — bewusst: Push würde sofort live deployen, Formular/Badge
+  laufen aber erst mit dem All-Inkl-Umzug (PHP). Gabriel entscheidet den Zeitpunkt.
+- Beispieltexte Fassung A/B in der Hauptseiten-Sektion = Platzhalter (Phase 6: durch
+  Gabriels echte Probe ersetzen; Marker `PLATZHALTER Phase 6` im HTML).
+- Datenschutz: neuer Stilprobe-Abschnitt ist Entwurf (juristische Prüfung); die restliche
+  Datenschutzerklärung ist weiter der alte Platzhalter („in Vorbereitung").
+- Astro-`site/` hinkt der Live-V18 weiter hinterher (Marke „JGC Studio", alte Inhalte) —
+  bekanntes Alt-Thema, heute unangetastet.
+- PHP-Empfangsschicht + n8n-Werkstatt = separates Repo `stilprobe-automatik` (Konzept
+  Phasen 0–4/6), noch nicht begonnen.
 
 ## Nächste Schritte
-1. JGC-Feedback zur Live-V13 abwarten (Galerie).
-2. Falls gewünscht: Hero-„das"-Umbruch fixen (Textspalte verbreitern), erneut deployen.
-3. Falls V13 final beschlossen: V13-Änderungen (Rename, Symbole, „Ehrlich gesagt", CTA) in die
-   Astro-Komponenten unter `site/src/` übertragen, damit `main`-Hauptseite nachzieht.
+1. Gabriel: Branch reviewen (lokal bauen oder Push auf main erst zum All-Inkl-Umzug).
+2. Repo `stilprobe-automatik` starten (Phase 0/1) — Zulieferungen aus Konzept §15.1.
+3. Phase 6: echte Beispiel-Ausschnitte einsetzen, STILPROBE_MAIL/Domain bestätigen.
 
-## Stolperfallen / Workarounds (sofort wichtig)
-- Standalone-Varianten = minifiziertes Single-File-HTML mit Inline-base64 → NICHT direkt editieren.
-  base64 strippen für Lesekopie; Änderungen per assertion-guardetem **Node-Transform-Skript** (UTF-8).
-- Preview einer Variante: `npm run dev` zeigt die Astro-`site/`, nicht die Variante. → kleiner
-  Node-Static-Server auf eigenem Port (temporär in `.claude/launch.json`), danach entfernen.
-- Preview-Screenshot timeoutet auf den 1-MB-Seiten; Animationen pausieren bei `hidden` Tab.
-  → Verifikation via `preview_eval` (DOM-Geometrie / `getAnimations().finish()`), nicht Screenshot.
-- Deploy = Push auf `main`; Variante immer in `manifest.json` UND `VARIANTS.md` registrieren.
+## Stolperfallen (unverändert wichtig)
+- V18 = minifiziertes Single-File-HTML: nie direkt editieren/lesen; Transform-Skript
+  mit Assertions (`scripts/stilprobe/transform-v18-stilprobe.mjs` als Vorbild).
+- Browser-Pane rendert headless (visibilityState hidden, Viewport 0): Sichtbarkeit über
+  is-visible-Klassen/CSS-Regeln prüfen, nicht über computed opacity; keine Screenshots.
+- Badge-/Formular-Wortlaute und Feldnamen sind Vertrag: `docs/stilprobe/schnittstelle.md`.

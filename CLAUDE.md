@@ -9,6 +9,22 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   (minifiziert, alle Assets als Inline-base64: Fraunces-Font ~566 KB, Hero-Bild ~322 KB).
 - `variants/standalone/manifest.json` + `VARIANTS.md` — Register aller Standalone-Varianten.
 - `scripts/generate-gallery.mjs` — baut die Galerie-Startseite.
+- `stilprobe/index.html` — eigenständige Unterseite „Die Stilprobe" (lesbares Single-File-HTML im V18-Design,
+  Fonts/Logos inline aus V18 extrahiert), wird vom Deploy nach `/stilprobe/` kopiert.
+- `scripts/stilprobe/` — `transform-v18-stilprobe.mjs` (assertion-guardeter V18-Umbau, ausführbare Änderungsdoku)
+  und `extract-v18-assets.mjs` (zieht CSS/Fonts/Logos aus V18 für die Unterseite).
+- `docs/stilprobe/` — Stilprobe-Konzept v1.1, Knoten-Graph, `schnittstelle.md` (Formular-/Badge-Vertrag für die
+  spätere PHP-Empfangsschicht aus dem separaten Repo `stilprobe-automatik`).
+
+## Stilprobe (Besonderheiten)
+- Formular (`senden.php`) und Kontingent-Badge (`kontingent.php`) zeigen auf Endpoints, die erst mit dem
+  All-Inkl-Umzug existieren — bis dahin greifen by design die Fallbacks (statischer Kontingent-Satz,
+  Fehlermeldung mit Mail-Ausweichweg). Feldnamen/JSON-Vertrag nicht ändern ohne `docs/stilprobe/schnittstelle.md`.
+- `stilprobe@jgc-lumen.de` ist Platzhalter (Domain unbestätigt), definiert als const in den Inline-Scripts.
+- Interne Links tragen den GitHub-Pages-Präfix `/jgc-studio-website/…`; beim All-Inkl-Umzug per Suchen-Ersetzen
+  auf `/` umstellen (Checkliste in `docs/stilprobe/schnittstelle.md`).
+- Beispiel-Ausschnitte in der `#stilprobe`-Sektion der Hauptseite sind Platzhalter (Kommentar `PLATZHALTER
+  Phase 6`) — vor Scharfschaltung durch Ausschnitte aus Gabriels eigener Probe ersetzen.
 
 ## Build / Deploy
 - Push auf `main` → GitHub Action (`.github/workflows/deploy.yml`) baut `site/`, kopiert alle

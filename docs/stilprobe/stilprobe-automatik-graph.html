@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knoten-Graph · JGC Lumen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pergament:#FEFCF7; --tinte:#1F2A44; --kupfer:#C97B3F; --salbei:#8FA086; --quell:#6FA3B5;
+    --line:#ECE6D8; --card:#FFFFFF; --ink-soft:rgba(31,42,68,.60);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--pergament);color:var(--tinte);
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1240px;margin:0 auto;padding:40px 26px 60px}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--kupfer);margin:0 0 10px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.08;letter-spacing:-.01em;margin:0 0 8px}
+  .sub{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:70ch}
+
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 24px;font-size:12.5px;color:var(--ink-soft)}
+  .legend i{display:inline-flex;align-items:center;gap:7px;font-style:normal}
+  .legend .sw{width:13px;height:13px;border-radius:4px}
+  .sw-eingabe{background:var(--salbei)} .sw-verarbeitung{background:var(--kupfer)}
+  .sw-freigabe{background:var(--tinte)} .sw-ausgabe{background:var(--quell)}
+  .legend .wl{width:24px;height:0;border-top:2px solid var(--kupfer);opacity:.6}
+  .legend .wd{width:24px;height:0;border-top:2px dashed var(--tinte);opacity:.5}
+
+  .stage{background:#FCFAF4;border:1px solid var(--line);border-radius:16px;padding:24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .graph{position:relative;margin:0 auto}
+  .graph svg.wires{position:absolute;inset:0;z-index:0;overflow:visible}
+  .gnode{
+    position:absolute;z-index:1;
+    background:#fff;border:1px solid var(--line);border-radius:11px;
+    box-shadow:0 1px 2px rgba(31,42,68,.05);
+    padding:10px 12px 10px 17px;overflow:hidden;
+  }
+  .gnode::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+  .gnode .gtag{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  .gnode .gttl{font-size:12.5px;font-weight:600;line-height:1.22;margin-top:3px;color:var(--tinte)}
+  .cat-eingabe::before{background:var(--salbei)} .cat-eingabe .gtag{color:var(--salbei)}
+  .cat-verarbeitung::before{background:var(--kupfer)} .cat-verarbeitung .gtag{color:var(--kupfer)}
+  .cat-freigabe::before{background:var(--tinte)} .cat-freigabe .gtag{color:var(--tinte)}
+  .cat-freigabe{border-color:var(--tinte);box-shadow:0 2px 10px rgba(31,42,68,.10)}
+  .cat-ausgabe::before{background:var(--quell)} .cat-ausgabe .gtag{color:var(--quell)}
+
+  .foot{margin-top:18px;font-size:12px;color:var(--ink-soft)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow" id="eyebrow">JGC Lumen · Funktionsstruktur</p>
+  <h1 id="title">Content-App</h1>
+  <p class="sub" id="sub">Knoten-Graph: was reingeht, wie es verarbeitet wird, wo deine Freigabe sitzt, was rauskommt.</p>
+
+  <div class="legend">
+    <i><span class="sw sw-eingabe"></span>Eingabe</i>
+    <i><span class="sw sw-verarbeitung"></span>Verarbeitung</i>
+    <i><span class="sw sw-freigabe"></span>Deine Freigabe</i>
+    <i><span class="sw sw-ausgabe"></span>Ausgabe</i>
+    <i><span class="wl"></span>Datenfluss</i>
+    <i><span class="wd"></span>Anpass-Schleife</i>
+  </div>
+
+  <div class="stage">
+    <div class="graph" id="graph">
+      <svg class="wires" id="wires" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowFlow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#C97B3F"></path>
+          </marker>
+          <marker id="arrowLoop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#1F2A44"></path>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </div>
+  <p class="foot">Breit? Seitlich scrollen. Am besten am Desktop ansehen.</p>
+</div>
+
+<script>
+/* =======================================================================
+   HIER BEARBEITEN  ·  nur dieser Block wird pro App geaendert
+   -----------------------------------------------------------------------
+   cat:  "eingabe" | "verarbeitung" | "freigabe" | "ausgabe"
+   col:  Spalte von links (0 = ganz links)   ->  Eingabe links, Ausgabe rechts
+   row:  Zeile innerhalb der Spalte (0 = oben)
+   edge: { from:"id", to:"id" }            durchgezogen = Datenfluss
+         { from:"id", to:"id", loop:true } gestrichelt  = Anpass-Schleife
+   Regel: Es gibt IMMER einen Freigabe-Knoten vor der Ausgabe.
+   ======================================================================= */
+const GRAPH = {
+  eyebrow: "JGC Lumen · Funktionsstruktur",
+  title:   "Die Stilprobe-Automatik",
+  sub:     "Vom Formular bis zur Rückgabe-Mail: Die Automatik schreibt vor, du gibst frei. Der Empfang (Formular, Bestätigung, Kontingent) läuft rund um die Uhr auf deinem All-Inkl-Webspace; die Werkstatt (n8n + Claude, Freigabe, Timer bis zur Löschung an Tag 30) auf deinem Rechner – 0 € Zusatzkosten, deutsch gehostet.",
+  nodes: [
+    { id:"formular",     cat:"eingabe",      label:"Formular /stilprobe: drei Texte + Wunschthema", col:0, row:1 },
+    { id:"antwort",      cat:"eingabe",      label:"Antwort des Coaches (Postfach)",                col:0, row:3 },
+
+    { id:"kontingent",   cat:"verarbeitung", label:"Kontingent-Weiche: 15 im Monat, sonst Warteliste", col:1, row:1 },
+    { id:"waechter",     cat:"verarbeitung", label:"Eingangs-Wächter: Spam & Klienten-Daten",       col:2, row:1 },
+    { id:"stil",         cat:"verarbeitung", label:"Kurz-Stilanalyse (Claude)",                     col:3, row:1 },
+    { id:"werk",         cat:"verarbeitung", label:"Fassung A & B, Beobachtungen, Mail-Entwurf",    col:4, row:1 },
+    { id:"nachfass",     cat:"verarbeitung", label:"Tag 5 ohne Antwort: Nachfass-Entwurf",          col:4, row:3 },
+
+    { id:"freigabe",     cat:"freigabe",     label:"Deine Freigabe: Telegram + Mail",               col:5, row:1 },
+
+    { id:"bestaetigung", cat:"ausgabe",      label:"Eingangsbestätigung (auto, festes Gerüst)",     col:6, row:0 },
+    { id:"rueckgabe",    cat:"ausgabe",      label:"Rückgabe-Mail an den Coach (48 h)",             col:6, row:1 },
+    { id:"nachfassmail", cat:"ausgabe",      label:"Nachfass-Mail (leise, einmal)",                 col:6, row:2 },
+  ],
+  edges: [
+    { from:"formular",   to:"kontingent" },
+    { from:"kontingent", to:"waechter" },
+    { from:"waechter",   to:"stil" },
+    { from:"waechter",   to:"bestaetigung" },
+    { from:"stil",       to:"werk" },
+    { from:"werk",       to:"freigabe" },
+    { from:"freigabe",   to:"rueckgabe" },
+    { from:"freigabe",   to:"werk", loop:true },
+    { from:"rueckgabe",  to:"nachfass", loop:true },
+    { from:"antwort",    to:"nachfass" },
+    { from:"nachfass",   to:"freigabe" },
+    { from:"freigabe",   to:"nachfassmail" },
+  ],
+};
+/* ====================  AB HIER NICHTS MEHR AENDERN  ==================== */
+
+const NODE_W = 168, COL_GAP = 64, ROW_STEP = 96, PAD = 8;
+const TAGS = { eingabe:"Eingabe", verarbeitung:"Verarbeitung", freigabe:"Deine Freigabe", ausgabe:"Ausgabe" };
+
+const graphEl = document.getElementById("graph");
+const svg = document.getElementById("wires");
+const byId = {};
+
+function buildNodes(){
+  // texts
+  document.getElementById("eyebrow").textContent = GRAPH.eyebrow || "";
+  document.getElementById("title").textContent   = GRAPH.title   || "";
+  document.getElementById("sub").textContent     = GRAPH.sub     || "";
+  document.title = (GRAPH.title || "Knoten-Graph") + " · JGC Lumen";
+
+  GRAPH.nodes.forEach(n=>{
+    const el = document.createElement("div");
+    el.className = "gnode cat-" + n.cat;
+    el.style.width = NODE_W + "px";
+    el.style.left  = (PAD + n.col * (NODE_W + COL_GAP)) + "px";
+    el.style.top   = (PAD + n.row * ROW_STEP) + "px";
+    el.innerHTML = '<div class="gtag">' + (TAGS[n.cat]||n.cat) + '</div>'
+                 + '<div class="gttl">' + n.label + '</div>';
+    graphEl.appendChild(el);
+    byId[n.id] = el;
+  });
+
+  // size the stage to its content
+  let maxR = 0, maxB = 0;
+  GRAPH.nodes.forEach(n=>{
+    const el = byId[n.id];
+    maxR = Math.max(maxR, el.offsetLeft + el.offsetWidth);
+    maxB = Math.max(maxB, el.offsetTop  + el.offsetHeight);
+  });
+  const W = maxR + PAD, H = maxB + PAD;
+  graphEl.style.width  = W + "px";
+  graphEl.style.height = H + "px";
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+}
+
+function drawWires(){
+  // clear old paths, keep <defs>
+  svg.querySelectorAll("path.wire").forEach(p=>p.remove());
+
+  GRAPH.edges.forEach(e=>{
+    const s = byId[e.from], t = byId[e.to];
+    if(!s || !t) return;
+    const p = document.createElementNS("http://www.w3.org/2000/svg","path");
+    let d;
+    if(e.loop){
+      // back-edge: dashed, routed under both nodes
+      const sx = s.offsetLeft + s.offsetWidth/2, sy = s.offsetTop + s.offsetHeight;
+      const tx = t.offsetLeft + t.offsetWidth/2, ty = t.offsetTop + t.offsetHeight;
+      const drop = 40;
+      d = "M"+sx+","+sy+" C"+sx+","+(sy+drop)+" "+tx+","+(ty+drop)+" "+tx+","+ty;
+      p.setAttribute("stroke","#1F2A44");
+      p.setAttribute("stroke-opacity",".45");
+      p.setAttribute("stroke-dasharray","6 5");
+      p.setAttribute("marker-end","url(#arrowLoop)");
+    } else {
+      const sx = s.offsetLeft + s.offsetWidth, sy = s.offsetTop + s.offsetHeight/2;
+      const tx = t.offsetLeft, ty = t.offsetTop + t.offsetHeight/2;
+      const dx = Math.max(36, (tx - sx)/2);
+      d = "M"+sx+","+sy+" C"+(sx+dx)+","+sy+" "+(tx-dx)+","+ty+" "+tx+","+ty;
+      p.setAttribute("stroke","#C97B3F");
+      p.setAttribute("stroke-opacity",".55");
+      p.setAttribute("marker-end","url(#arrowFlow)");
+    }
+    p.setAttribute("class","wire");
+    p.setAttribute("fill","none");
+    p.setAttribute("stroke-width","1.8");
+    p.setAttribute("d", d);
+    svg.appendChild(p);
+  });
+}
+
+function render(){ buildNodes(); drawWires(); }
+document.addEventListener("DOMContentLoaded", render);
+// redraw once webfonts settle (line wrapping can shift node heights)
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=>{ 
+  // node tops/widths are fixed; only wire endpoints depend on heights
+  let maxB=0; GRAPH.nodes.forEach(n=>{const el=byId[n.id]; if(el) maxB=Math.max(maxB, el.offsetTop+el.offsetHeight);});
+  const H=maxB+PAD; graphEl.style.height=H+"px"; svg.setAttribute("height",H); 
+  const W=svg.getAttribute("width"); svg.setAttribute("viewBox","0 0 "+W+" "+H);
+  drawWires(); 
+}); }
+</script>
+</body>
+</html>
