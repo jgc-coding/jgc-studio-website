@@ -139,6 +139,25 @@ jobs:
           git checkout main -- scripts/copy-homepage.mjs
           node scripts/copy-homepage.mjs _site
 
+      - name: Verify build artefacts
+        run: |
+          # Kernartefakte muessen existieren, sonst laut scheitern
+          # (kein stiller Teil-Deploy).
+          fail=0
+          for f in \
+            _site/index.html \
+            _site/galerie/index.html \
+            _site/main/index.html \
+            _site/stilprobe/index.html \
+          ; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Deploy-Artefakt fehlt: $f"
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then exit 1; fi
+          echo "Alle Kernartefakte vorhanden."
+
       - name: List final output
         run: |
           echo "Final _site structure (depth 3):"

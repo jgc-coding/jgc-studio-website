@@ -1,0 +1,18 @@
+# Zeilenenden: im Repo immer LF, keine CRLF-Drift (siehe globale Konventionen)
+* text=auto eol=lf
+
+# Eingefrorene Single-File-Varianten: explizit Text mit LF (keine
+# text=auto-Heuristik auf den 1-MB-Dateien). Der Index ist historisch
+# bereits LF; diese Regel haelt ihn byte-stabil und macht kuenftige
+# Checkouts LF. NICHT auf -text/binary stellen: das wuerde die
+# CRLF-Arbeitskopien woertlich einchecken und die Live-Bytes aendern.
+variants/standalone/**/*.html text eol=lf
+
+# Binärdateien explizit
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ico binary
