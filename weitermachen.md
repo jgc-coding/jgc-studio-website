@@ -9,15 +9,22 @@
   Warteliste-Umschaltung, Formular-Fehlerpfad), Astro-Build grün, 0 Konsolen-Fehler.
 - Details: CHANGELOG.md (2026-07-11) + delegation-log.md.
 
+## Auch erledigt (gleiche Session, /improve-Punkte 5–9)
+- Astro-`/main/`-Seiten auf Marke „JGC Lumen"; Kontaktmail überall `kontakt@jgc-lumen.de`
+  (ACHTUNG: Postfach existiert erst mit der Domain); `.gitattributes` (Index war schon LF,
+  Varianten byte-unangetastet); README neu (GitHub Pages statt Vercel); Deploy-Verify-Step.
+
 ## Offen
 - **Nicht auf `main` gepusht** — bewusst: Push würde sofort live deployen, Formular/Badge
   laufen aber erst mit dem All-Inkl-Umzug (PHP). Gabriel entscheidet den Zeitpunkt.
+- **Backlog aus /improve (auf Gabriels Wunsch gemerkt, auch im Claude-Memory):**
+  1) toter Erstgespräch-CTA (braucht Entscheidung mailto vs. Formular), 2) Impressum/
+  Datenschutz-Platzhalter füllen (braucht Gabriels Angaben), 3) LinkedIn-Profil-URL,
+  4) og:image, 5) Seitengewicht (nach Umzug).
 - Beispieltexte Fassung A/B in der Hauptseiten-Sektion = Platzhalter (Phase 6: durch
   Gabriels echte Probe ersetzen; Marker `PLATZHALTER Phase 6` im HTML).
-- Datenschutz: neuer Stilprobe-Abschnitt ist Entwurf (juristische Prüfung); die restliche
-  Datenschutzerklärung ist weiter der alte Platzhalter („in Vorbereitung").
-- Astro-`site/` hinkt der Live-V18 weiter hinterher (Marke „JGC Studio", alte Inhalte) —
-  bekanntes Alt-Thema, heute unangetastet.
+- Datenschutz: Stilprobe-Abschnitt ist Entwurf (juristische Prüfung); Rest weiter Platzhalter.
+- Astro-`site/`-INHALTE weiter älterer Stand als V18 (Marke ist seit heute angeglichen).
 - PHP-Empfangsschicht + n8n-Werkstatt = separates Repo `stilprobe-automatik` (Konzept
   Phasen 0–4/6), noch nicht begonnen.
 

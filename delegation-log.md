@@ -19,3 +19,14 @@ Session 2026-07-11: Stilprobe-Integration Website (Konzept v1.1 §5) — Orchest
 | 2026-07-11 | P5a: docs/stilprobe/ (Konzept-/Graph-Kopie, schnittstelle.md nach Vorgabe) | haiku | siehe Verifikationsvermerk nach Abschluss | 0 |
 
 Anmerkungen: Orchestrator-Entscheidung Pfeil-SVG in der neuen Sektion bleibt bei stroke-width 1.8 (wie FAQ-Chevrons; erneuter Transform wäre Risiko ohne Nutzen). P5 geteilt: docs→haiku, Projekt-Governance-Doku (CHANGELOG, CLAUDE.md, weitermachen.md, dieses Log)→Orchestrator.
+
+Nachtrag gleiche Session: /improve-Quick-Wins (Punkte 5–9, von Gabriel freigegeben)
+
+| Zeit | Paket | Worker-Modell | Verifikation (bestanden/Rework) | Rework-Anzahl |
+|------|-------|---------------|--------------------------------|---------------|
+| 2026-07-11 | W1: Marke JGC Studio→Lumen in site/ (7 Stellen), Mail →kontakt@jgc-lumen.de (4 Stellen), README neu | sonnet:low | bestanden: eigener Grep (0 Restvorkommen; 1 Scheintreffer lag in unversionierter site/dist), Diff-Review, Astro-Build grün. Orchestrator-Feinschliff: 1 überflüssige README-Zeile („kein Vercel mehr") entfernt | 0 |
+| 2026-07-11 | W2: .gitattributes + Deploy-Step „Verify build artefacts" | sonnet:low | bestanden mit Orchestrator-Korrektur: Briefing-Vorgabe `-text` für Varianten-HTMLs war FALSCH (hätte CRLF-Arbeitskopien wörtlich eingecheckt und die LF-Historie der Live-Varianten gekippt — beim kontrollierten Renormalize-Probelauf entdeckt, Staging zurückgesetzt, Regel auf `text eol=lf` korrigiert; Befund: Index war komplett LF, nichts zu renormalisieren, Varianten byte-unangetastet). Verify-Step: Diff-Review + js-yaml-Parse | 0* |
+
+*Fehlerursache lag im Orchestrator-Briefing, nicht beim Worker.
+
+Lesson Learned: Vor EOL-/Attribut-Umstellungen immer erst `git ls-files --eol` lesen (Index- vs. Arbeitskopie-Zustand), Renormalize nur mit Staging-Probelauf + Review, nie blind committen.
