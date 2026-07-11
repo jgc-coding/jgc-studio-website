@@ -116,6 +116,18 @@ jobs:
             echo "No variants/standalone dir on main"
           fi
 
+      - name: Copy Stilprobe-Unterseite → /stilprobe/
+        run: |
+          # Eigenständige Single-File-HTML unter stilprobe/index.html (kein
+          # Astro-Build noetig). main ist hier bereits ausgecheckt.
+          if [ -f stilprobe/index.html ]; then
+            mkdir -p _site/stilprobe
+            cp stilprobe/index.html _site/stilprobe/index.html
+            echo "  + stilprobe: index.html"
+          else
+            echo "No stilprobe/index.html on main"
+          fi
+
       - name: Generate gallery landing page
         run: |
           # Use main's gallery generator
