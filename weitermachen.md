@@ -14,9 +14,17 @@
   (ACHTUNG: Postfach existiert erst mit der Domain); `.gitattributes` (Index war schon LF,
   Varianten byte-unangetastet); README neu (GitHub Pages statt Vercel); Deploy-Verify-Step.
 
+## LIVE seit 2026-07-12
+- **Alles auf `main` gemergt und deployed** (FF-Merge, Deploy-Run grün inkl. Verify-Step).
+  Live verifiziert: Hauptseite → „Stilprobe anfordern" → `…/stilprobe/` lädt; Logo, Nav,
+  Footer, Rückweg korrekt. Tag `stilprobe-live-2026-07-12`. Rollback-Punkt davor: `4dff254`.
+- Zusatz-Fix vor Go-live: V18-Logo-Link `../../` → absolut `/jgc-studio-website/` (zeigte von
+  der Root sonst aufs GitHub-Konto-Wurzelverzeichnis). Skript `scripts/stilprobe/fix-v18-logo-link.mjs`.
+- WICHTIG: Formular/Badge sind live sichtbar, aber die Endpoints `senden.php`/`kontingent.php`
+  existieren noch NICHT → Fallbacks greifen (statischer Kontingent-Satz; Formular-Absenden
+  zeigt die ruhige Fehlermeldung mit Mail-Ausweichweg). Scharf erst mit dem All-Inkl-Umzug.
+
 ## Offen
-- **Nicht auf `main` gepusht** — bewusst: Push würde sofort live deployen, Formular/Badge
-  laufen aber erst mit dem All-Inkl-Umzug (PHP). Gabriel entscheidet den Zeitpunkt.
 - **Backlog aus /improve (auf Gabriels Wunsch gemerkt, auch im Claude-Memory):**
   1) toter Erstgespräch-CTA (braucht Entscheidung mailto vs. Formular), 2) Impressum/
   Datenschutz-Platzhalter füllen (braucht Gabriels Angaben), 3) LinkedIn-Profil-URL,
@@ -29,9 +37,11 @@
   Phasen 0–4/6), noch nicht begonnen.
 
 ## Nächste Schritte
-1. Gabriel: Branch reviewen (lokal bauen oder Push auf main erst zum All-Inkl-Umzug).
-2. Repo `stilprobe-automatik` starten (Phase 0/1) — Zulieferungen aus Konzept §15.1.
-3. Phase 6: echte Beispiel-Ausschnitte einsetzen, STILPROBE_MAIL/Domain bestätigen.
+1. Repo `stilprobe-automatik` starten (Phase 0/1) — Zulieferungen aus Konzept §15.1;
+   dann `senden.php`/`kontingent.php` bauen und per FTP in `…/stilprobe/` ablegen (macht das
+   Live-Formular scharf). Vertrag: `docs/stilprobe/schnittstelle.md`.
+2. Phase 6: echte Beispiel-Ausschnitte einsetzen, STILPROBE_MAIL/Domain (`jgc-lumen.de`) bestätigen.
+3. Backlog-Punkte aus /improve angehen (siehe oben), sobald Gabriel die Zulieferungen gibt.
 
 ## Stolperfallen (unverändert wichtig)
 - V18 = minifiziertes Single-File-HTML: nie direkt editieren/lesen; Transform-Skript
