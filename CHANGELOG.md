@@ -2,6 +2,12 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-12 — TÜV-Siegel verlinkt + Express-Passus in die Schritt-2-Spalte
+
+- Das TÜV-Prüfsiegel (Sektion „Wer mit dir arbeitet") ist jetzt klickbar und öffnet die offizielle Certipedia-Prüfseite des TÜV Rheinland (Prüfzeichen-ID 0217466495) in einem neuen Tab (`target="_blank"`, `rel="noopener noreferrer"`).
+- Angebotsstruktur: Der separate Nachtrag „Du weißt schon genau, was du willst?" unter dem Spalten-Grid ist in die Schritt-2-Spalte (KI-Praxis-Check) integriert — als kompakter Express-Passus mit feiner Trennlinie am Spaltenende, Text aufs Spaltenmaß gekürzt. Der Anrechnungs-Hinweis wandert aus dem „Was du bekommst"-Aufklapper ans Spaltenende und steht nur noch einmal in der Spalte, ergänzt um „— der Check kostet dich dann nichts extra". Spaltenhöhen Schritt 2/Schritt 3 im Desktop-Layout jetzt praktisch gleich (1126 px vs. 1125 px, im Browser gemessen).
+- Umgesetzt über `scripts/v18/transform-tuvlink-schritt2.mjs` (assertion-guarded, idempotent; neuer Ordner `scripts/v18/`, Zieldatei-Pfad relativ zum Skript statt absolut hardcodet).
+
 ## 2026-07-12 — Homepage-Navigation-Fix vor dem Live-Gang
 
 - V18-Logo-Link (Marke/„zurück zum Anfang") von relativ `../../` auf absolut `/jgc-studio-website/` umgestellt. Der relative Pfad war korrekt am Galerie-Standort `/variants/18-lumen/`, zeigte aber von der Root-Hauptseite aus auf das GitHub-Konto-Wurzelverzeichnis (weg von der Seite). Der absolute Pfad stimmt an beiden Standorten. Damit enthält V18 keinen einzigen ortsabhängigen relativen Link mehr (gleiche Fix-Klasse wie zuvor die Footer-Rechtslinks). Umgesetzt über `scripts/stilprobe/fix-v18-logo-link.mjs` (assertion-guarded).

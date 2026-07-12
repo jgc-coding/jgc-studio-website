@@ -38,3 +38,11 @@ Session 2026-07-12: Stilprobe-Unterseite Feedback-Runde (5 Änderungen Gabriel) 
 | 2026-07-12 | Unterseite: Verschlankung (Kopf, Ablauf-Liste statt Karten, Klartext, Abstände), Überschrift ohne „ruhig", Einordnung „mehr Texte in der Zusammenarbeit", Kontingent-Präzisierung (insgesamt, nicht je Person), Stil-Kohärenz-Hinweis (Formular + FAQ 04) | sonnet | bestanden: kompletter Diff-Review (24+/21−, exakt die 5 Stellen), Live-DOM-Test (kein „ruhig" im Seitentext, Hinweis-Position vor text_1, Zähler/11 Felder intakt), 0 Konsolen-Fehler. Worker erkannte die dokumentierte border-l-2-Skin-Falle selbständig und mied sie; Codepoint-Prüfung der Gedankenstriche | 0 |
 
 Anmerkung: Copy-Vorgaben kamen wie immer vom Orchestrator (Sperrliste/Du-Form geprüft). Worker-Strukturfrage (id="formular" umschließt Klartext+Formular) als unbedenklich bestätigt — Klartext steht direkt über dem <form>, wie das Konzept es verlangt.
+
+Session 2026-07-12 (2): TÜV-Siegel → Certipedia-Link + Express-Passus in Schritt-2-Spalte — Orchestrator: fable, Worker: smart-Routing
+
+| Zeit | Paket | Worker-Modell | Verifikation (bestanden/Rework) | Rework-Anzahl |
+|------|-------|---------------|--------------------------------|---------------|
+| 2026-07-12 | P1 (kombiniert, eine Zieldatei): V18-Transform `scripts/v18/transform-tuvlink-schritt2.mjs` — TÜV-Figure in Certipedia-`<a target="_blank">` gewrappt (T1/T2), Anrechnungs-Block aus Aufklapper geschnitten (T3), Express-Passus + konsolidierte Anrechnung ans Ende der Schritt-2-Spalte (T4), separaten Nachtrag-Block entfernt (T5) | sonnet (Standard) | bestanden ohne Rework: Skript-Review, eigene Anker-Zählung vorab am Original, frische Lesekopie + Kontext-Review nach Anwendung, `git ls-files --eol` (LF stabil), Diff 3+/4−, Browser-DOM-Test (Link-Attribute exakt, Express in Spalte A, genau 1 Anrechnung, Spaltenhöhen 1126/1125 px bei 1280 px Breite, 0 Konsolen-Fehler), Skin-Regel `#angebote .border-l-2 p` als unkritisch verifiziert (Struktur identisch zum Altblock) | 0 |
+
+Anmerkung: Copy (Express-Text, konsolidierter Anrechnungssatz) und alle Anker/Assertions vom Orchestrator vorgegeben; Modellwahl sonnet statt sonnet:low wegen Kodierungs-/Assertion-Sensibilität der 1,2-MB-Einzeiler-Datei.
