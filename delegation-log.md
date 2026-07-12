@@ -30,3 +30,11 @@ Nachtrag gleiche Session: /improve-Quick-Wins (Punkte 5–9, von Gabriel freigeg
 *Fehlerursache lag im Orchestrator-Briefing, nicht beim Worker.
 
 Lesson Learned: Vor EOL-/Attribut-Umstellungen immer erst `git ls-files --eol` lesen (Index- vs. Arbeitskopie-Zustand), Renormalize nur mit Staging-Probelauf + Review, nie blind committen.
+
+Session 2026-07-12: Stilprobe-Unterseite Feedback-Runde (5 Änderungen Gabriel) — Orchestrator: fable, Worker: smart-Routing
+
+| Zeit | Paket | Worker-Modell | Verifikation (bestanden/Rework) | Rework-Anzahl |
+|------|-------|---------------|--------------------------------|---------------|
+| 2026-07-12 | Unterseite: Verschlankung (Kopf, Ablauf-Liste statt Karten, Klartext, Abstände), Überschrift ohne „ruhig", Einordnung „mehr Texte in der Zusammenarbeit", Kontingent-Präzisierung (insgesamt, nicht je Person), Stil-Kohärenz-Hinweis (Formular + FAQ 04) | sonnet | bestanden: kompletter Diff-Review (24+/21−, exakt die 5 Stellen), Live-DOM-Test (kein „ruhig" im Seitentext, Hinweis-Position vor text_1, Zähler/11 Felder intakt), 0 Konsolen-Fehler. Worker erkannte die dokumentierte border-l-2-Skin-Falle selbständig und mied sie; Codepoint-Prüfung der Gedankenstriche | 0 |
+
+Anmerkung: Copy-Vorgaben kamen wie immer vom Orchestrator (Sperrliste/Du-Form geprüft). Worker-Strukturfrage (id="formular" umschließt Klartext+Formular) als unbedenklich bestätigt — Klartext steht direkt über dem <form>, wie das Konzept es verlangt.
