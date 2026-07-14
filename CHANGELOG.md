@@ -2,6 +2,13 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-14 — Über-mich-Foto: echtes Halbfigur-Portrait
+
+- Sektion „Wer mit dir arbeitet" (Live-Variante 18): Platzhalter-Portrait durch das echte Halbfigur-Foto (3:4) ersetzt. Slot von 208 px auf 270 px vergrößert, `border-radius` 6→8 px; zentriertes Layout unverändert. Auswahl von Gabriel nach Mockup-Vergleich mehrerer Zuschnitte, Formate und Größen (Achsen Größe/Platzierung und Zuschnitt/Form).
+- Bild mit `sharp` optimiert: 720×960 webp, 40,5 KB (data-URI 54 KB) — rund 8,5 KB leichter als das alte eingebettete Foto, die Seite wird also minimal leichter statt schwerer.
+- Quelldateien versioniert unter `Bildmaterial/Profilbild/`: `profil-halbfigur.webp` (Original-Upload 1086×1448) und `profil-halbfigur-web.webp` (eingebettete Web-Fassung).
+- Umgesetzt über ein assertion-guardetes Node-Transform (genau 1 Treffer erzwungen, alte Foto-URI/Maße nachweislich entfernt); Datei bleibt reines LF, Diff auf die eine minifizierte Zeile beschränkt.
+
 ## 2026-07-12 — TÜV-Siegel verlinkt + Express-Passus in die Schritt-2-Spalte
 
 - Das TÜV-Prüfsiegel (Sektion „Wer mit dir arbeitet") ist jetzt klickbar und öffnet die offizielle Certipedia-Prüfseite des TÜV Rheinland (Prüfzeichen-ID 0217466495) in einem neuen Tab (`target="_blank"`, `rel="noopener noreferrer"`).
