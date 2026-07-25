@@ -198,8 +198,12 @@ ersetze(
 // bleibt fuer Raender, Eyebrows und Akzente unveraendert; nur die Knopf-
 // flaeche wird eine Stufe tiefer gesetzt (#A55F2B = 4,79:1).
 // ---------------------------------------------------------------------------
+// Rechnerisch noetig sind mindestens 0,675 (anthrazit) bzw. 0,660 (tinte) auf
+// dem dunkelsten Papierton; 0,70 (Hex b3) ist der naechste Wert der bestehenden
+// Skala und damit die kleinste Aenderung, die sicher ueber 4,5:1 landet.
 ersetze('V11 Kleintext anthrazit/55 -> Deckkraft 0,70', '.text-anthrazit\\/55{color:#2d2d2d8c}', '.text-anthrazit\\/55{color:#2d2d2db3}', 1);
 ersetze('V11 Kleintext anthrazit/60 -> Deckkraft 0,70', '.text-anthrazit\\/60{color:#2d2d2d99}', '.text-anthrazit\\/60{color:#2d2d2db3}', 1);
+ersetze('V11 Kleintext anthrazit/65 -> Deckkraft 0,70', '.text-anthrazit\\/65{color:#2d2d2da6}', '.text-anthrazit\\/65{color:#2d2d2db3}', 1);
 ersetze('V11 Kleintext tinte/55 -> Deckkraft 0,70', '.text-tinte\\/55{color:#1f2a448c}', '.text-tinte\\/55{color:#1f2a44b3}', 1);
 ersetze(
   'V11 Knopfflaeche auf AA-tauglichen Kupferton',
@@ -255,6 +259,7 @@ darfNichtMehrVorkommen('V14 Rest-LinkedIn', 'https://www.linkedin.com');
 // Farbverlaeufen vor (z. B. hero-gradient-mobile) und sind dort korrekt.
 darfNichtMehrVorkommen('V11 Rest-Kontrast', '.text-anthrazit\\/55{color:#2d2d2d8c}');
 darfNichtMehrVorkommen('V11 Rest-Kontrast', '.text-anthrazit\\/60{color:#2d2d2d99}');
+darfNichtMehrVorkommen('V11 Rest-Kontrast', '.text-anthrazit\\/65{color:#2d2d2da6}');
 darfNichtMehrVorkommen('V11 Rest-Kontrast', '.text-tinte\\/55{color:#1f2a448c}');
 
 if (html === AUSGANG) throw new Error('Nichts geaendert — das kann nicht stimmen.');
