@@ -2,6 +2,28 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-25 — /improve-Runde 2: 13 Befunde behoben
+
+**Kontaktweg (der Blocker).** Der Knopf „Erstgespräch anfragen" in der Final-CTA-Sektion zeigte auf `#kontakt` — also auf die Sektion, in der er selbst steht. Zusammen mit fehlendem `mailto:`, `tel:` und Formular konnte die Seite keine einzige Anfrage erzeugen. Jetzt E-Mail-Link an `kontakt@jgc-lumen.de` mit vorbelegtem Betreff und Rumpf, darunter die sichtbare Adresse als zweiter Weg. Der Punkt stand seit dem 27.06.2026 in drei aufeinanderfolgenden Analysen.
+
+**Stilprobe-Formular.** Eingaben werden laufend im Browser der Besucherin gesichert (localStorage, 400 ms Debounce) und nach einem Reload mit Zeitstempel-Hinweis wiederhergestellt; ein Knopf verwirft den Entwurf, nach erfolgreichem Absenden wird er gelöscht. Vorher vernichtete jeder Reload drei Texte à 200–6.000 Zeichen. Die Fehlermeldung beim Absenden stand 2.140 px über dem Absendeknopf und war damit beim Klick unsichtbar — sie steht jetzt direkt darüber, holt sich den Fokus und scrollt sich in den Blick.
+
+**Sichtbarkeit ohne JavaScript.** Die Impeccable-Skin-Schicht setzte `.reveal:not(.is-visible){opacity:0}` ohne den `.js`-Vorsatz, den die Basis-Ebene korrekt verwendet, und hat den Schutz damit aufgehoben: ohne JavaScript blieben 68 % des Seitentexts unsichtbar. Betraf Variante 18 und die Stilprobe-Unterseite, die das CSS erbt.
+
+**Farbflächen stabilisiert.** Die Hervorhebungs-Verläufe hingen an `:nth-child(N of .bg-pergament)`. Der Einbau der Stilprobe-Sektion am 11.07. hat alles danach um eine Position verschoben — der Verlauf lag seitdem auf den Platzhalter-Kundenstimmen statt auf „Passt für dich / nicht". Jetzt an IDs gebunden.
+
+**Suchmaschinen.** Sieben alte Design-Varianten standen auf `index, follow` mit einem `canonical` auf `http://localhost:4321/` (für Suchmaschinen wertlos), vier weitere hatten gar kein Robots-Meta. Alle 14 Nicht-Hauptseiten stehen jetzt auf `noindex, nofollow`, die localhost-Adressen sind entfernt. Welche Variante indexierbar bleibt, liest das Skript aus dem Manifest.
+
+**Rechtsseiten.** Die Datenschutzerklärung behauptete, die Website werde „derzeit nur lokal getestet" — sie ist seit Wochen öffentlich und nimmt über `/stilprobe/` personenbezogene Daten entgegen. Ersetzt durch den tatsächlichen Stand samt Auslieferung über GitHub Pages (USA, Art. 6 Abs. 1 lit. f) und dem neuen Entwurfsspeicher. Im Impressum: „§ 5 TMG" → „§ 5 DDG" (das Gesetz heißt seit Mai 2024 so). Der Impressum-Inhalt selbst fehlt weiter und braucht Gabriels Daten.
+
+**Barrierefreiheit.** Der Primärknopf lag mit 3,21 : 1 unter dem WCAG-AA-Wert von 4,5 : 1 — Knopffläche auf `#A55F2B` (4,79 : 1), Kleintexte mit Deckkraft 0,55/0,6 auf 0,70. Die Markenfarbe Kupfer bleibt für Ränder, Eyebrows und Akzente unverändert.
+
+**Teilen-Vorschau.** `og:image` fehlte, während `twitter:card` ein großes Vorschaubild versprach — auf LinkedIn erschien eine leere Karte. Neues `assets/og-bild.jpg` (1200×630, 78 KB), gebaut aus dem Hero-Foto und dem Sigel der Variante 18 (`scripts/v18/baue-og-bild.mjs`), wird vom Deploy nach `/og-bild.jpg` kopiert.
+
+**Aufräumen.** Galerie trug noch die Marke „JGC Studio" und lud Google Fonts von außen (überträgt die IP der Besucherin an Google, im Widerspruch zur eigenen Datenschutz-Zusage) — Marke korrigiert, Schriften auf Systemstack. Zwei Transform-Skripte hatten einen absoluten Pfad in einen *anderen* Worktree hartkodiert und hätten bei einem erneuten Lauf unbemerkt die falsche Datei geändert — jetzt relativ zum Skript. Der tote LinkedIn-Fußzeilenlink (zeigte auf die LinkedIn-Startseite) ist entfernt, bis die echte Profil-URL vorliegt. `npm audit fix`: 8 → 4 Schwachstellen (6 → 2 hoch); der Rest verlangt Astro 7.
+
+**Neue Absicherung.** `scripts/pruefe-seiten.mjs` prüft in rund drei Sekunden zehn Regeln — je eine pro Fehlerklasse dieser Runde. Das Skript hängt im Deploy-Workflow (bricht dort laut ab) und in der neuen `.claude/pruefen.txt`. Beim allerersten Lauf hat es selbst einen bis dahin unentdeckten Fehler gefunden: die Stilprobe-Seite trug denselben `.js`-Fehler wie Variante 18. Die Projekt-CLAUDE.md nennt jetzt die Prozess-Stufe **Produkt**; `verbesserungen.md` als Befund-Register liegt auf `main`.
+
 ## 2026-07-14 — Über-mich-Foto: echtes Halbfigur-Portrait
 
 - Sektion „Wer mit dir arbeitet" (Live-Variante 18): Platzhalter-Portrait durch das echte Halbfigur-Foto (3:4) ersetzt. Slot von 208 px auf 270 px vergrößert, `border-radius` 6→8 px; zentriertes Layout unverändert. Auswahl von Gabriel nach Mockup-Vergleich mehrerer Zuschnitte, Formate und Größen (Achsen Größe/Platzierung und Zuschnitt/Form).

@@ -41,8 +41,15 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   Galerie unter `…/galerie/`, einzelne Varianten unter `…/variants/<slug>/`.
 - JGC reviewt Design-Optionen auf der **Live-Galerie** (`…/galerie/`) → fertige Standalone-Varianten direkt nach `main` pushen.
 - Deploy-Check: `gh run list --workflow=deploy.yml --limit 1` (Lauf dauert ~1,5–2 min). Der Step
-  „Verify build artefacts" lässt den Deploy **laut scheitern**, wenn Root-/Galerie-/`main`-/`stilprobe`-
-  Artefakt fehlt. `main` ist in keinem Worktree ausgecheckt → FF-Merge via `git branch -f main HEAD`.
+  „Verify build artefacts" lässt den Deploy **laut scheitern**, wenn Root-/Galerie-/`main`-/`stilprobe`-/
+  `og-bild`-Artefakt fehlt. `main` ist in keinem Worktree ausgecheckt → FF-Merge via `git branch -f main HEAD`.
+- Danach läuft `scripts/pruefe-seiten.mjs` über `_site` und bricht den Deploy ab bei: Sprungmarke ohne
+  Ziel, fehlendem Kontaktweg, `canonical` auf localhost, indexierbarer Alt-Variante, fehlender
+  Pflicht-Meta, Reveal-Regel ohne `.js`-Schutz, Positions-Selektor, hartkodiertem Pfad. Ohne Argument
+  prüft dasselbe Skript die Repo-Quellen — so hängt es auch in `.claude/pruefen.txt`.
+- Das Vorschaubild (`og:image`) ist eine echte Datei: `assets/og-bild.jpg` → `/og-bild.jpg`. Neu bauen
+  mit `node scripts/v18/baue-og-bild.mjs` (nimmt Hero und Sigel aus V18, braucht `site/node_modules`
+  für `sharp`). Ein `data:`-URI funktioniert hier NICHT — LinkedIn und Co. holen das Bild per HTTP.
 
 ## Neue Standalone-Variante anlegen
 1. `variants/standalone/<NN-slug>/index.html` anlegen (meist Kopie einer bestehenden Variante).
@@ -60,6 +67,16 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 - **Preview-Screenshot** hängt/timeoutet auf den schweren 1-MB-Variantenseiten; CSS-/SMIL-Animationen
   pausieren zudem bei `document.visibilityState === 'hidden'`. → Verifikation über `preview_eval`
   (DOM-Geometrie, `getComputedStyle`, `getAnimations().finish()`) statt Screenshot.
+- **Viewport prüfen, BEVOR gemessen wird.** Ein neu geöffneter Preview-Tab meldet `0×0`; jede
+  Breiten-/Höhen-/Abstandsmessung ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch).
+  Erst `resize_window` mit expliziter Breite/Höhe, dann `innerWidth` gegenprüfen. Im versteckten Pane
+  laufen `requestAnimationFrame` und IntersectionObserver gar nicht → `is-visible` wird nie gesetzt,
+  Reveal-Zustände sind dort grundsätzlich nicht prüfbar (`await` auf rAF hängt bis zum Timeout).
+- **Regeln, die Inhalt verstecken, brauchen den `.js`-Vorsatz** (`.js .reveal:not(.is-visible)`).
+  Ohne ihn ist die Seite ohne JavaScript leer. Gilt für V18 UND `stilprobe/index.html` — die
+  Unterseite erbt das CSS aus V18, ein Fehler dort taucht also zweimal auf.
+- **Sektions-Aussehen nie über die Position steuern** (`:nth-child(N of .bg-pergament)`): eine
+  eingeschobene Sektion verschiebt still alle Farbflächen. Immer IDs. `pruefe-seiten.mjs` bewacht das.
 - Windows: keine PS-Bulk-Replaces auf den HTML-Dateien (verstümmelt UTF-8). Edits via Tool oder Node.
 - **`.gitattributes` / EOL:** Der Git-Index der minifizierten Varianten-HTMLs ist LF; `.gitattributes` hält
   sie als `text eol=lf`. NICHT auf `-text`/`binary` stellen — das würde die CRLF-Arbeitskopien wörtlich
