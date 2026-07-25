@@ -1,0 +1,21 @@
+# Schnelle Pruefbefehle fuer das Done-Gate (Stop-Hook donecheck.ps1).
+# Eine Zeile = ein Befehl, Zeilen mit # sind Kommentare.
+# Alles hier muss ohne Netz und in wenigen Sekunden durchlaufen.
+
+# Qualitaetspruefung der Seiten: tote Sprungmarken, Kontaktweg, canonical auf
+# localhost, indexierbare Alt-Varianten, Pflicht-Metas, Reveal-Regeln ohne
+# .js-Schutz, positionsabhaengige Sektions-Selektoren, hartkodierte Pfade.
+# Jede Regel entspricht einem Fehler, der in /improve-Runde 2 live gefunden wurde.
+node scripts/pruefe-seiten.mjs
+
+# Syntaxpruefung aller Transform- und Hilfsskripte (kein Ausfuehren).
+node --check scripts/pruefe-seiten.mjs
+node --check scripts/generate-gallery.mjs
+node --check scripts/copy-homepage.mjs
+node --check scripts/varianten-noindex.mjs
+node --check scripts/v18/transform-improve-runde2.mjs
+node --check scripts/v18/transform-tuvlink-schritt2.mjs
+node --check scripts/v18/baue-og-bild.mjs
+node --check scripts/stilprobe/transform-v18-stilprobe.mjs
+node --check scripts/stilprobe/fix-v18-logo-link.mjs
+node --check scripts/stilprobe/extract-v18-assets.mjs

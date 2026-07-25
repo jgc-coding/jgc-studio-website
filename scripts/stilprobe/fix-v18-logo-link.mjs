@@ -19,8 +19,11 @@
  * ---------------------------------------------------------------------------
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 
-const TARGET = String.raw`C:\Projekte\JGC Studio\.claude\worktrees\stilprobe-automation-website-af3a9a\variants\standalone\18-lumen\index.html`;
+// Pfad relativ zum Skript (Befund V16): hier stand ein absoluter Pfad in einen
+// ANDEREN Worktree — ein erneuter Lauf haette dort die falsche Datei geaendert.
+const TARGET = fileURLToPath(new URL('../../variants/standalone/18-lumen/index.html', import.meta.url));
 const BACKUP = String.raw`C:\Users\chime\AppData\Local\Temp\claude\C--Projekte-JGC-Studio--claude-worktrees-stilprobe-automation-website-af3a9a\0303bfe3-a1b1-40c7-9bc4-c45e29cd21cb\scratchpad\v18-backup-vor-logo-fix.html`;
 
 const DRY = process.argv.includes('--dry');

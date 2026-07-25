@@ -128,6 +128,20 @@ jobs:
             echo "No stilprobe/index.html on main"
           fi
 
+      - name: Copy Vorschaubild (og:image) → /og-bild.jpg
+        run: |
+          # og:image muss als echte Datei unter einer HTTP-Adresse liegen:
+          # LinkedIn, X und WhatsApp holen das Bild mit einer eigenen Anfrage,
+          # ein data:-URI im Meta-Tag hilft ihnen nicht. Gebaut wird es mit
+          # scripts/v18/baue-og-bild.mjs aus den Assets von Variante 18.
+          if [ -f assets/og-bild.jpg ]; then
+            cp assets/og-bild.jpg _site/og-bild.jpg
+            echo "  + og-bild.jpg"
+          else
+            echo "::error::assets/og-bild.jpg fehlt — die Seite verweist im Meta-Tag darauf."
+            exit 1
+          fi
+
       - name: Generate gallery landing page
         run: |
           # Use main's gallery generator
@@ -149,6 +163,7 @@ jobs:
             _site/galerie/index.html \
             _site/main/index.html \
             _site/stilprobe/index.html \
+            _site/og-bild.jpg \
           ; do
             if [ ! -f "$f" ]; then
               echo "::error::Deploy-Artefakt fehlt: $f"
@@ -157,6 +172,13 @@ jobs:
           done
           if [ "$fail" -ne 0 ]; then exit 1; fi
           echo "Alle Kernartefakte vorhanden."
+
+      - name: Qualitaetspruefung der ausgelieferten Seiten
+        run: |
+          # Faengt genau die Fehlerklassen, die in Runde 2 live gefunden wurden:
+          # Anker ohne Ziel, canonical auf localhost, indexierbare Alt-Varianten,
+          # fehlende Pflicht-Metas, ortsabhaengige relative Links.
+          node scripts/pruefe-seiten.mjs _site
 
       - name: List final output
         run: |

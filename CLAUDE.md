@@ -1,5 +1,9 @@
 # Projekt: JGC Lumen Website (jgc-studio-website)
 
+**Prozess-Stufe: Produkt.** Die Seite ist öffentlich erreichbar, bewirbt kostenpflichtige Leistungen
+und nimmt personenbezogene Daten entgegen — also volles Programm: CHANGELOG, Regressionscheck vor
+größeren Sprüngen, `.claude/pruefen.txt` als Done-Gate.
+
 Sales-Page für **JGC Lumen** (KI-Implementierung für Coaches/Trainer/Mentoren, Freiburg/DACH).
 Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter `jgc-studio-website`.
 

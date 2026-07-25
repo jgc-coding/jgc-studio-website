@@ -114,7 +114,7 @@ async function build() {
       color: #C97B3F; font-weight: 500; margin-bottom: 1.25rem;
     }
     h1 {
-      font-family: 'Fraunces', 'Times New Roman', serif;
+      font-family: ui-serif, Georgia, 'Times New Roman', serif;
       font-size: clamp(2rem, 4vw, 3rem);
       color: #1F2A44; line-height: 1.1; letter-spacing: -0.015em;
       font-weight: 500;
@@ -162,16 +162,16 @@ async function build() {
       display: flex; align-items: center; justify-content: center;
       width: 100%; height: 100%;
       color: rgba(31, 42, 68, 0.35);
-      font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem;
+      font-family: ui-serif, Georgia, serif; font-style: italic; font-size: 1rem;
     }
     .card .body { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 0.65rem; }
     .card .num {
-      font-family: 'Fraunces', serif; font-style: italic;
+      font-family: ui-serif, Georgia, serif; font-style: italic;
       color: rgba(31, 42, 68, 0.45);
       font-size: 0.88rem;
     }
     .card h3 {
-      font-family: 'Fraunces', serif; font-weight: 500;
+      font-family: ui-serif, Georgia, serif; font-weight: 500;
       color: #1F2A44; font-size: 1.25rem; line-height: 1.25;
     }
     .card .skill-tag {
@@ -282,18 +282,19 @@ async function build() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JGC Studio — Design-Varianten Galerie</title>
-  <meta name="description" content="Übersicht aller Design-Varianten der JGC Studio Sales-Page." />
-  <meta name="robots" content="noindex" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <title>JGC Lumen — Design-Varianten Galerie</title>
+  <meta name="description" content="Übersicht aller Design-Varianten der JGC Lumen Sales-Page." />
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- Keine Google Fonts (Befund V15): die Galerie ist oeffentlich abrufbar,
+       ein externer Font-Abruf uebertraegt die IP der Besucherin an Google und
+       widerspricht der eigenen Zusage "Schriftarten werden lokal ausgeliefert".
+       Systemschriften reichen fuer eine interne Uebersichtsseite voellig. -->
   <style>${css}</style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <p class="eyebrow">JGC Studio · Design-Exploration</p>
+      <p class="eyebrow">JGC Lumen · Design-Exploration</p>
       <h1>Varianten-Galerie</h1>
       <p class="lede">
         Alle erkundeten Design-Richtungen für die Sales-Page, automatisch
@@ -314,7 +315,7 @@ async function build() {
     </section>
 
     <footer>
-      <span>© ${new Date().getFullYear()} JGC Studio · Freiburg im Breisgau</span>
+      <span>© ${new Date().getFullYear()} JGC Lumen · Freiburg im Breisgau</span>
       <span>Automatisch generiert · <code>scripts/generate-gallery.mjs</code></span>
     </footer>
   </div>

@@ -106,14 +106,14 @@ h1.font-serif, .hero-cinema h1{ letter-spacing:-.022em; }
    alternating warm/cool wash so the long scroll gets a beat. */
 section.bg-pergament{ background-color: var(--skin-paper) !important; }
 
-/* [pergament 1] Vorher-Nachher -- warm second surface (today vs tomorrow) */
-section.bg-pergament:nth-child(1 of .bg-pergament){
+/* #einleitung -- warmer Papierton (Befund V8: vorher positionsabhaengig) */
+section#einleitung.bg-pergament{
   background:
     radial-gradient(120% 80% at 50% -10%, color-mix(in srgb,var(--color-holzsand) 22%, transparent), transparent 60%),
     var(--skin-paper-2) !important;
 }
-/* [pergament 5] "Passt fuer dich / nicht" -- warm second surface again */
-section.bg-pergament:nth-child(5 of .bg-pergament){
+/* #abschluss -- warmer Papierton (Befund V8: vorher positionsabhaengig) */
+section#abschluss.bg-pergament{
   background:
     radial-gradient(110% 75% at 50% 0%, color-mix(in srgb,var(--color-holzsand) 16%, transparent), transparent 58%),
     var(--skin-paper-2) !important;
@@ -326,7 +326,11 @@ footer h3.uppercase{ letter-spacing:.16em; color:color-mix(in srgb,var(--color-p
    Content stays visible by default (already enforced upstream);
    these enhance, never gate.
    ------------------------------------------------------------ */
-.reveal:not(.is-visible){
+/* Der .js-Vorsatz ist zwingend (Befund V7): die Klasse setzt das Skript oben
+   im Kopf. Ohne ihn versteckt diese Regel den Inhalt auch dann, wenn gar kein
+   JavaScript laeuft — dann wird .is-visible nie gesetzt und die Seite bleibt
+   leer. Genau das widerspricht der Absicht im Kommentar darueber. */
+.js .reveal:not(.is-visible){
   opacity:0;
   transform:translateY(22px);
   filter:blur(4px);
@@ -336,7 +340,7 @@ footer h3.uppercase{ letter-spacing:.16em; color:color-mix(in srgb,var(--color-p
 }
 .reveal.is-visible{ filter:blur(0); }
 
-.reveal-stagger:not(.is-visible) > *{ opacity:0; transform:translateY(18px); }
+.js .reveal-stagger:not(.is-visible) > *{ opacity:0; transform:translateY(18px); }
 .reveal-stagger > *{ transition:opacity .68s var(--skin-exp), transform .68s var(--skin-exp); }
 
 /* Pillars (Wer): symbols lift slightly on hover -- fits "three worlds" */
@@ -611,7 +615,7 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
 <main id="main">
 
 <!-- A. Kopf -->
-<section class="section bg-pergament">
+<section id="einleitung" class="section bg-pergament">
   <div class="container-narrow reveal-stagger">
     <p class="eyebrow eyebrow-kupfer text-center mb-6">Die Stilprobe</p>
     <h1 class="font-serif text-section text-tinte text-center max-w-[20ch] mx-auto">Lies dich selbst.</h1>
@@ -662,9 +666,17 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
     </div>
 
     <div id="formular-normal">
-      <div id="stilprobe-fehler" class="card p-5 mb-8" hidden role="alert"></div>
       <!-- STILPROBE_MAIL + Endpoints werden mit dem All-Inkl-Umzug scharf; bis dahin antwortet senden.php nicht (Fehlerpfad greift). -->
       <form id="stilprobe-formular" method="post" action="senden.php" accept-charset="UTF-8" class="card p-7 md:p-10">
+
+        <!-- Entwurfsspeicher (Befund V5): wird per JavaScript eingeblendet,
+             wenn beim Laden ein gespeicherter Entwurf gefunden wurde. -->
+        <div id="entwurf-hinweis" hidden class="formfeld-gruppe" role="status">
+          <p class="font-sans text-[0.95rem] text-anthrazit/70 leading-relaxed">
+            Dein angefangener Entwurf ist wieder da – gespeichert am <span id="entwurf-zeit">zuletzt</span>.
+            <button type="button" id="entwurf-verwerfen" class="link-underline text-kupfer">Entwurf verwerfen und neu anfangen</button>
+          </p>
+        </div>
 
         <div class="formfeld-gruppe">
           <label for="name" class="formfeld-label">Wie heißt du?</label>
@@ -733,7 +745,17 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
         </div>
         <input type="hidden" name="geladen_ts" value="">
 
+        <!-- Die Fehlermeldung steht unmittelbar ueber dem Knopf. Vorher stand sie
+             oberhalb des Formulars und lag damit rund 2.100 px ausserhalb des
+             Bildschirms, wenn jemand unten auf "Stilprobe anfordern" klickte:
+             ein Fehlschlag sah aus wie "es passiert nichts". -->
+        <div id="stilprobe-fehler" class="card p-6 mb-6" hidden role="alert" tabindex="-1"></div>
+
         <button type="submit" class="btn-primary">Stilprobe anfordern</button>
+        <p class="font-sans text-[0.9rem] text-anthrazit/70 leading-relaxed mt-5">
+          Während du schreibst, bleibt dein Entwurf in deinem eigenen Browser gespeichert –
+          ein versehentlicher Reload kostet dich nichts. Übertragen wird er erst, wenn du oben klickst.
+        </p>
       </form>
 
       <script>
@@ -770,8 +792,12 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
           box.innerHTML =
             "Das hat gerade nicht geklappt. Schick mir deine drei Texte einfach direkt an " +
             '<a href="mailto:' + STILPROBE_MAIL + '" class="link-underline text-kupfer">' + STILPROBE_MAIL + "</a>" +
-            " – der Weg ist genauso gut.";
+            " – der Weg ist genauso gut. Deine Eingaben bleiben hier stehen, du kannst sie von hier kopieren.";
           box.hidden = false;
+          // Sicherstellen, dass die Meldung auch wirklich gesehen wird: in den
+          // Blick holen und den Fokus daraufsetzen (auch fuer Tastaturbedienung).
+          if (box.scrollIntoView) box.scrollIntoView({ block: "center", behavior: "smooth" });
+          if (box.focus) box.focus({ preventScroll: true });
         }
 
         function versteckeFehler(boxId) {
@@ -831,6 +857,7 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
               })
               .then(function (json) {
                 if (!json || json.status !== "ok") throw new Error("status");
+                entwurfLoeschen();
                 if (json.zustand === "warteliste") {
                   ersetzeInhalt(opts.containerId, ERFOLG_WARTELISTE);
                 } else {
@@ -848,8 +875,127 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
           });
         }
 
+        /* -------------------------------------------------------------
+           Entwurfsspeicher (Befund V5).
+
+           Das Formular verlangt drei Texte von je 200 bis 6.000 Zeichen.
+           Vorher hat ein versehentlicher Reload, ein Zurueck-Klick oder ein
+           Browserabsturz alles vernichtet — und die Anfrage kam nie an, ohne
+           dass es jemand gemerkt haette.
+
+           Der Entwurf bleibt ausschliesslich im Browser der Besucherin
+           (localStorage), er wird nirgendwohin uebertragen und nach dem
+           erfolgreichen Absenden geloescht.
+           ------------------------------------------------------------- */
+        var ENTWURF_SCHLUESSEL = "stilprobe-entwurf-v1";
+        var ENTWURF_FELDER = ["name", "email", "text_1", "text_2", "text_3", "wunschthema", "quelle"];
+
+        function speicherVerfuegbar() {
+          try {
+            var probe = "__test__";
+            window.localStorage.setItem(probe, probe);
+            window.localStorage.removeItem(probe);
+            return true;
+          } catch (e) {
+            // Privater Modus, volle Quote oder Speicher gesperrt: dann laeuft
+            // das Formular einfach wie bisher weiter, nur ohne Entwurf.
+            return false;
+          }
+        }
+
+        function entwurfLoeschen() {
+          if (!speicherVerfuegbar()) return;
+          try { window.localStorage.removeItem(ENTWURF_SCHLUESSEL); } catch (e) {}
+        }
+
+        function setupEntwurf(form) {
+          if (!form || !speicherVerfuegbar()) return;
+
+          var hinweis = document.getElementById("entwurf-hinweis");
+          var zeitZeile = document.getElementById("entwurf-zeit");
+
+          function felder() {
+            return ENTWURF_FELDER
+              .map(function (n) { return form.elements[n]; })
+              .filter(function (el) { return el && typeof el.value === "string"; });
+          }
+
+          function sichern() {
+            var daten = { gespeichert: Date.now(), werte: {} };
+            var etwasDrin = false;
+            felder().forEach(function (el) {
+              daten.werte[el.name] = el.value;
+              if (el.value.trim() !== "") etwasDrin = true;
+            });
+            try {
+              if (etwasDrin) {
+                window.localStorage.setItem(ENTWURF_SCHLUESSEL, JSON.stringify(daten));
+              } else {
+                window.localStorage.removeItem(ENTWURF_SCHLUESSEL);
+              }
+            } catch (e) {
+              // Quote ueberschritten: lieber ohne Entwurf weiterarbeiten als
+              // die Eingabe stoeren. Kein stiller Datenverlust — was im
+              // Formular steht, bleibt im Formular.
+            }
+          }
+
+          function wiederherstellen() {
+            var roh = null;
+            try { roh = window.localStorage.getItem(ENTWURF_SCHLUESSEL); } catch (e) { return; }
+            if (!roh) return;
+
+            var daten;
+            try { daten = JSON.parse(roh); } catch (e) { entwurfLoeschen(); return; }
+            if (!daten || !daten.werte) { entwurfLoeschen(); return; }
+
+            var etwasGesetzt = false;
+            felder().forEach(function (el) {
+              var wert = daten.werte[el.name];
+              if (typeof wert === "string" && wert !== "") {
+                el.value = wert;
+                el.dispatchEvent(new Event("input", { bubbles: true }));
+                etwasGesetzt = true;
+              }
+            });
+            if (!etwasGesetzt) return;
+
+            if (hinweis) {
+              if (zeitZeile && daten.gespeichert) {
+                var d = new Date(daten.gespeichert);
+                zeitZeile.textContent = d.toLocaleDateString("de-DE") + ", " +
+                  d.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) + " Uhr";
+              }
+              hinweis.hidden = false;
+            }
+          }
+
+          var timer = null;
+          form.addEventListener("input", function () {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(sichern, 400);
+          });
+
+          var verwerfen = document.getElementById("entwurf-verwerfen");
+          if (verwerfen) {
+            verwerfen.addEventListener("click", function () {
+              entwurfLoeschen();
+              felder().forEach(function (el) {
+                el.value = "";
+                el.dispatchEvent(new Event("input", { bubbles: true }));
+              });
+              if (hinweis) hinweis.hidden = true;
+              var erstes = form.elements["name"];
+              if (erstes && erstes.focus) erstes.focus();
+            });
+          }
+
+          wiederherstellen();
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
           setupZeichenzaehler();
+          setupEntwurf(document.getElementById("stilprobe-formular"));
 
           setupFormular(document.getElementById("stilprobe-formular"), {
             fehlerBoxId: "stilprobe-fehler",
@@ -874,7 +1020,7 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
     <div id="formular-warteliste" hidden>
       <h2 class="font-serif text-[1.6rem] md:text-[1.9rem] text-tinte font-medium mb-4">Der <span id="warteliste-monat">Monat</span> ist voll.</h2>
       <p class="font-sans text-[1rem] text-anthrazit leading-[1.7] mb-8">15 Proben sind vergeben – mehr gibt die Handarbeit nicht her. Trag dich ein, und du bekommst den ersten freien Platz im <span id="warteliste-folgemonat">nächsten Monat</span>, bevor er auf der Website erscheint.</p>
-      <div id="stilprobe-fehler-warteliste" class="card p-5 mb-8" hidden role="alert"></div>
+      <div id="stilprobe-fehler-warteliste" class="card p-6 mb-8" hidden role="alert" tabindex="-1"></div>
       <form id="stilprobe-formular-warteliste" method="post" action="senden.php" accept-charset="UTF-8" class="card p-7 md:p-10">
         <input type="hidden" name="warteliste" value="ja">
 
@@ -957,7 +1103,7 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
 </section>
 
 <!-- F. Leiser Abschluss -->
-<section class="section bg-pergament">
+<section id="abschluss" class="section bg-pergament">
   <div class="container-narrow text-center reveal">
     <p class="font-sans text-[1.0625rem] md:text-[1.125rem] text-anthrazit leading-relaxed">Wenn du lieber direkt sprichst: <a href="/jgc-studio-website/#kontakt" class="link-underline text-tinte/85 hover:text-kupfer transition-colors duration-200">Das Erstgespräch bleibt der kürzeste Weg.</a> →</p>
   </div>
@@ -994,9 +1140,7 @@ details.angebot-aufklapp[open] > *:not(summary){ animation:skin-accord .42s var(
         <ul class="space-y-3">
           <li><a href="/jgc-studio-website/main/impressum/" class="link-underline inline-block font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">Impressum</a></li>
           <li><a href="/jgc-studio-website/main/datenschutz/" class="link-underline inline-block font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200">Datenschutz</a></li>
-          <li><a href="https://www.linkedin.com" rel="noopener noreferrer" target="_blank" class="link-underline font-sans text-[0.95rem] text-pergament/85 hover:text-kupfer transition-colors duration-200 inline-flex items-center gap-1.5">LinkedIn
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 L9 3"></path><path d="M4 3 L9 3 L9 8"></path></svg>
-          </a></li>
+          <!-- LinkedIn-Eintrag entfernt (Befund V14): Link zeigte auf die LinkedIn-Startseite statt auf ein Profil. -->
         </ul>
       </div>
     </div>
