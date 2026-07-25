@@ -173,6 +173,13 @@ jobs:
           if [ "$fail" -ne 0 ]; then exit 1; fi
           echo "Alle Kernartefakte vorhanden."
 
+      - name: noindex auf alles ausser der Startseite
+        run: |
+          # Die Varianten 01-09 werden aus den variant/*-Branches gebaut und
+          # existieren als Datei nirgends im Repo — ein Stempel auf _site ist
+          # die einzige Stelle, an der man sie zuverlaessig erwischt.
+          node scripts/site-noindex.mjs _site
+
       - name: Qualitaetspruefung der ausgelieferten Seiten
         run: |
           # Faengt genau die Fehlerklassen, die in Runde 2 live gefunden wurden:

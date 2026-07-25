@@ -135,14 +135,40 @@ for (const s of seiten) {
 // ---------------------------------------------------------------------------
 // Regel 4 — Genau eine Variante ist indexierbar. (Fehlerklasse V9)
 // ---------------------------------------------------------------------------
-geprueft.push('nur die Hauptseite ist indexierbar');
-for (const s of seiten.filter((x) => x.variante)) {
-  const robots = (s.inhalt.slice(0, 12000).match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["']/i) || [])[1];
-  const istHauptseite = s.variante === hauptseite;
-  if (istHauptseite) {
-    if (robots && /noindex/.test(robots)) meldeFehler('robots', `${s.name} ist die Hauptseite, steht aber auf noindex.`);
-  } else if (!robots || !/noindex/.test(robots)) {
-    meldeFehler('robots', `${s.name}: alte Variante ohne noindex (steht auf "${robots || 'kein robots-Meta'}").`);
+geprueft.push('nur die Startseite ist indexierbar');
+{
+  const robotsVon = (s) => (s.inhalt.slice(0, 12000).match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["']/i) || [])[1];
+
+  if (SITE) {
+    // Deploy-Ergebnis: NUR _site/index.html darf indexierbar sein. Auch die
+    // Kopie der Hauptseiten-Variante unter /variants/<slug>/ geht auf noindex —
+    // sonst steht dieselbe Seite zweimal im Index. Gesetzt wird das von
+    // scripts/site-noindex.mjs; hier wird nur nachgeprueft.
+    for (const s of seiten.filter((x) => x.variante)) {
+      const robots = robotsVon(s);
+      if (!robots || !/noindex/.test(robots)) {
+        meldeFehler('robots', `${s.name}: ausgelieferte Variante ohne noindex (steht auf "${robots || 'kein robots-Meta'}").`);
+      }
+    }
+    const start = seiten.find((s) => s.name === 'Startseite');
+    if (start && /noindex/.test(robotsVon(start) || '')) {
+      meldeFehler('robots', 'Die Startseite steht auf noindex — sie ist die einzige Seite, die gefunden werden soll.');
+    }
+    const astro = seiten.find((s) => s.name === 'Astro-Seite');
+    if (astro && !/noindex/.test(robotsVon(astro) || '')) {
+      meldeFehler('robots', '/main/ ist indexierbar — inhaltlich aelterer Stand mit demselben Titel, also eine zweite konkurrierende Startseite.');
+    }
+  } else {
+    // Repo-Quellen: die im Manifest markierte Variante wird zur Startseite
+    // kopiert und muss dort indexierbar sein; alle uebrigen auf noindex.
+    for (const s of seiten.filter((x) => x.variante)) {
+      const robots = robotsVon(s);
+      if (s.variante === hauptseite) {
+        if (robots && /noindex/.test(robots)) meldeFehler('robots', `${s.name} wird zur Startseite kopiert, steht aber auf noindex.`);
+      } else if (!robots || !/noindex/.test(robots)) {
+        meldeFehler('robots', `${s.name}: alte Variante ohne noindex (steht auf "${robots || 'kein robots-Meta'}").`);
+      }
+    }
   }
 }
 
