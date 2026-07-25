@@ -43,10 +43,15 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 - Deploy-Check: `gh run list --workflow=deploy.yml --limit 1` (Lauf dauert ~1,5–2 min). Der Step
   „Verify build artefacts" lässt den Deploy **laut scheitern**, wenn Root-/Galerie-/`main`-/`stilprobe`-/
   `og-bild`-Artefakt fehlt. `main` ist in keinem Worktree ausgecheckt → FF-Merge via `git branch -f main HEAD`.
+- `scripts/site-noindex.mjs` stempelt danach `noindex, nofollow` auf alles unter `_site/variants/`
+  und auf `_site/main/` — **indexierbar bleiben nur die Startseite und `/stilprobe/`.** Das muss im
+  Deploy passieren: die Varianten 01–09 entstehen erst beim Build aus den `variant/*`-Branches und
+  liegen als Datei nirgends im Repo; ein Skript auf den Quellen erreicht sie nicht.
 - Danach läuft `scripts/pruefe-seiten.mjs` über `_site` und bricht den Deploy ab bei: Sprungmarke ohne
-  Ziel, fehlendem Kontaktweg, `canonical` auf localhost, indexierbarer Alt-Variante, fehlender
-  Pflicht-Meta, Reveal-Regel ohne `.js`-Schutz, Positions-Selektor, hartkodiertem Pfad. Ohne Argument
-  prüft dasselbe Skript die Repo-Quellen — so hängt es auch in `.claude/pruefen.txt`.
+  Ziel, fehlendem Kontaktweg, `canonical` auf localhost, indexierbarer Seite, fehlender Pflicht-Meta,
+  Reveal-Regel ohne `.js`-Schutz, Positions-Selektor, hartkodiertem Pfad. Ohne Argument prüft dasselbe
+  Skript die Repo-Quellen (so hängt es in `.claude/pruefen.txt`) — die Sollwerte unterscheiden sich:
+  im Repo muss die Manifest-Hauptseite indexierbar sein, im `_site` nur die Root.
 - Das Vorschaubild (`og:image`) ist eine echte Datei: `assets/og-bild.jpg` → `/og-bild.jpg`. Neu bauen
   mit `node scripts/v18/baue-og-bild.mjs` (nimmt Hero und Sigel aus V18, braucht `site/node_modules`
   für `sharp`). Ein `data:`-URI funktioniert hier NICHT — LinkedIn und Co. holen das Bild per HTTP.

@@ -1,5 +1,7 @@
 # Verbesserungen
-Stand: 2026-07-25 (Runde 2, Fokus: alles — Befunde erhoben UND umgesetzt)
+Stand: 2026-07-25 (Runde 2, Fokus: alles — Befunde erhoben, umgesetzt und live)
+
+Live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
 
 ## Vorgeschichte: drei Runden, dasselbe Ergebnis
 
@@ -153,7 +155,19 @@ Alle folgenden Punkte wurden am **2026-07-25** in Commit `f3a7d94` umgesetzt und
   `#passt`; auf der Stilprobe-Seite `#einleitung`, `#abschluss`).
 - **V9** (B) Sieben Alt-Varianten auf `index, follow` mit `canonical` auf `localhost`, vier
   weitere ohne Robots-Meta — 14 Varianten auf `noindex, nofollow` gesetzt, localhost-Adressen
-  entfernt. Die Hauptseite bleibt indexierbar; welche das ist, liest das Skript aus dem Manifest.
+  entfernt.
+  **Nachtrag am selben Tag:** Der neue Prüfschritt hat den ersten Deploy gestoppt und dabei
+  gefunden, was diese Analyse übersehen hatte — **neun weitere Varianten (01–09)** werden vom
+  Workflow aus den `variant/*`-Branches gebaut und liegen als Datei nirgends im Repo, ein
+  Quellen-Skript konnte sie also gar nicht erwischen. Sie standen unverändert auf
+  `index, follow`. Behoben mit `scripts/site-noindex.mjs`, das nach dem Build direkt auf `_site`
+  stempelt: alle Varianten (auch künftige) plus `/main/`, dessen Astro-Stand zwei Generationen
+  älter ist, aber denselben Titel trägt und damit eine zweite konkurrierende Startseite wäre.
+  Auch die Kopie der Hauptseite unter `/variants/18-lumen/` geht bewusst mit auf `noindex` —
+  dieselbe Seite soll nicht zweimal im Index stehen. **Live indexierbar sind jetzt genau zwei
+  Seiten: die Startseite und `/stilprobe/`.**
+  *Lehre: Bei diesem Repo reicht es nicht, die Quellen zu prüfen — ein Teil der ausgelieferten
+  Seiten entsteht erst im Build.*
 - **V11** (C) Primärknopf bei 3,21 : 1 unter WCAG AA — Knopffläche auf `#A55F2B` (4,79 : 1),
   Kleintexte mit Deckkraft 0,55/0,6 auf 0,70. Die Markenfarbe Kupfer bleibt für Ränder,
   Eyebrows und Akzente unverändert.
