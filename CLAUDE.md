@@ -8,7 +8,8 @@ Sales-Page für **JGC Lumen** (KI-Implementierung für Coaches/Trainer/Mentoren,
 Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter `jgc-studio-website`.
 
 ## Aufbau
-- `site/` — Astro-Hauptseite (die „aktuell beschlossene" Version), Quelle in `site/src/`.
+- `site/` — Astro-Quelle, deployt nach `/main/`. **Nicht der beschlossene Stand:** inhaltlich zwei
+  Generationen hinter Variante 18 und deshalb im Deploy auf `noindex`. Die Live-Seite ist V18.
 - `variants/standalone/<slug>/index.html` — eingefrorene Design-Varianten als **self-contained Single-File-HTML**
   (minifiziert, alle Assets als Inline-base64: Fraunces-Font ~566 KB, Hero-Bild ~322 KB).
 - `variants/standalone/manifest.json` + `VARIANTS.md` — Register aller Standalone-Varianten.
@@ -24,7 +25,9 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 - Formular (`senden.php`) und Kontingent-Badge (`kontingent.php`) zeigen auf Endpoints, die erst mit dem
   All-Inkl-Umzug existieren — bis dahin greifen by design die Fallbacks (statischer Kontingent-Satz,
   Fehlermeldung mit Mail-Ausweichweg). Feldnamen/JSON-Vertrag nicht ändern ohne `docs/stilprobe/schnittstelle.md`.
-- `stilprobe@jgc-lumen.de` ist Platzhalter (Domain unbestätigt), definiert als const in den Inline-Scripts.
+- Mailadressen: `kontakt@jgc-lumen.de` (Impressum, Erstgespräch-CTA) empfängt bestätigt. Ob das Postfach
+  `stilprobe@jgc-lumen.de` existiert, ist ungeprüft — es steht als const in den Inline-Scripts. Die Domain
+  selbst ist registriert und zeigt auf All-Inkl, liefert über HTTP aber nur eine Parkseite ohne HTTPS.
 - Interne Links tragen den GitHub-Pages-Präfix `/jgc-studio-website/…`; beim All-Inkl-Umzug per Suchen-Ersetzen
   auf `/` umstellen (Checkliste in `docs/stilprobe/schnittstelle.md`).
 - Beispiel-Ausschnitte in der `#stilprobe`-Sektion der Hauptseite sind Platzhalter (Kommentar `PLATZHALTER
@@ -69,14 +72,15 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 - **Preview:** `npm run dev` (launch.json `jgc-site`) serviert die Astro-`site/`, NICHT die Standalone-
   Variante. Für eine Variante: kleiner Node-Static-Server (kein `serve`/Python im Sandbox vorhanden)
   auf eigenem Port, in `.claude/launch.json` als zweite Config; danach wieder entfernen.
-- **Preview-Screenshot** hängt/timeoutet auf den schweren 1-MB-Variantenseiten; CSS-/SMIL-Animationen
-  pausieren zudem bei `document.visibilityState === 'hidden'`. → Verifikation über `preview_eval`
-  (DOM-Geometrie, `getComputedStyle`, `getAnimations().finish()`) statt Screenshot.
-- **Viewport prüfen, BEVOR gemessen wird.** Ein neu geöffneter Preview-Tab meldet `0×0`; jede
-  Breiten-/Höhen-/Abstandsmessung ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch).
-  Erst `resize_window` mit expliziter Breite/Höhe, dann `innerWidth` gegenprüfen. Im versteckten Pane
-  laufen `requestAnimationFrame` und IntersectionObserver gar nicht → `is-visible` wird nie gesetzt,
-  Reveal-Zustände sind dort grundsätzlich nicht prüfbar (`await` auf rAF hängt bis zum Timeout).
+- **Preview-Messungen: der Pane gilt als versteckt.** Screenshots hängen auf den 1-MB-Seiten; prüfe
+  stattdessen per JavaScript (DOM-Geometrie, `getComputedStyle`). Zwei Fallen, die beide schon
+  Fehlbefunde erzeugt haben:
+  (1) **Erst Viewport setzen, dann messen** — ein frisch geöffneter Tab meldet `0×0`, jede Geometrie
+  ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch). `resize_window` mit expliziter
+  Breite/Höhe, danach `innerWidth` gegenprüfen.
+  (2) Bei `document.visibilityState === 'hidden'` laufen `requestAnimationFrame`, IntersectionObserver
+  und Animationen **gar nicht** → `is-visible` wird nie gesetzt, Reveal-Zustände sind dort grundsätzlich
+  nicht prüfbar, und ein `await` auf rAF hängt bis zum Timeout. Solche Aussagen dann statisch belegen.
 - **Regeln, die Inhalt verstecken, brauchen den `.js`-Vorsatz** (`.js .reveal:not(.is-visible)`).
   Ohne ihn ist die Seite ohne JavaScript leer. Gilt für V18 UND `stilprobe/index.html` — die
   Unterseite erbt das CSS aus V18, ein Fehler dort taucht also zweimal auf.

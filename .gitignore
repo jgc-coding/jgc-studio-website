@@ -21,3 +21,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Claude-Worktrees: vollstaendige Repo-Kopien. Git fasst sie ohnehin nicht an,
+# aber Lint-, Test- und Suchwerkzeuge zaehlen sie sonst mit (ein Projekt meldete
+# dadurch 224 statt 16 Befunde). .claude/launch.json und .claude/pruefen.txt
+# bleiben versioniert.
+.claude/worktrees/
