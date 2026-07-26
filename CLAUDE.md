@@ -13,6 +13,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 - `variants/standalone/<slug>/index.html` — eingefrorene Design-Varianten als **self-contained Single-File-HTML**
   (minifiziert, alle Assets als Inline-base64: Fraunces-Font ~566 KB, Hero-Bild ~322 KB).
 - `variants/standalone/manifest.json` + `VARIANTS.md` — Register aller Standalone-Varianten.
+- `inhalt/lumen-inhalt.md` — **der Text der Live-Seite in lesbarer Form**, erzeugt aus V18 von
+  `scripts/v18/extrahiere-inhalt.mjs`. Nie von Hand pflegen, sondern nach jeder V18-Textänderung neu
+  erzeugen. Existiert, weil der Inhalt sonst nur im 1,2-MB-Minifikat steht und für neue Varianten,
+  Korrekturlesen oder Textarbeit nicht zugänglich ist.
 - `scripts/generate-gallery.mjs` — baut die Galerie-Startseite.
 - `stilprobe/index.html` — eigenständige Unterseite „Die Stilprobe" (lesbares Single-File-HTML im V18-Design,
   Fonts/Logos inline aus V18 extrahiert), wird vom Deploy nach `/stilprobe/` kopiert.

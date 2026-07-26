@@ -13,6 +13,8 @@ node --check scripts/pruefe-seiten.mjs
 node --check scripts/generate-gallery.mjs
 node --check scripts/copy-homepage.mjs
 node --check scripts/varianten-noindex.mjs
+node --check scripts/site-noindex.mjs
+node --check scripts/v18/extrahiere-inhalt.mjs
 node --check scripts/v18/transform-improve-runde2.mjs
 node --check scripts/v18/transform-tuvlink-schritt2.mjs
 node --check scripts/v18/baue-og-bild.mjs
