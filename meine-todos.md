@@ -10,10 +10,9 @@ Stand anzeigen:
 python "C:\Projekte\To Do Hub\werkzeug\hub.py" list --projekt "Website"
 ```
 
-Am 2026-07-25 sind aus der /improve-Runde 2 acht Punkte dazugekommen: Impressum-Angaben
-(blockiert den Launch), Datenschutz juristisch prüfen, Testmail an `kontakt@jgc-lumen.de`,
-LinkedIn-Profil-URL, echte Beispieltexte für die Stilprobe, sowie drei Entscheidungen
-(Platzhalter-Kundenstimmen, Astro-Rückführung, alten Analyse-Branch löschen).
+Hier steht bewusst keine Aufzählung der Punkte — sonst wäre genau die zweite Kopie da, die
+diese Datei vermeiden soll. Der Hub ist die einzige Quelle; jeder von `save-state` angelegte
+Eintrag trägt dort die Markierung `[save-state]`.
 
 Verwandte Register im Repo:
 

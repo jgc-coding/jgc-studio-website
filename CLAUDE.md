@@ -78,8 +78,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   Lesekopie; Änderungen über ein **assertion-guardetes Node-Transform-Skript** (jede Ersetzung mit
   erwarteter Trefferzahl prüfen, sonst werfen). Datei-I/O explizit UTF-8.
 - **Preview:** `npm run dev` (launch.json `jgc-site`) serviert die Astro-`site/`, NICHT die Standalone-
-  Variante. Für eine Variante: kleiner Node-Static-Server (kein `serve`/Python im Sandbox vorhanden)
-  auf eigenem Port, in `.claude/launch.json` als zweite Config; danach wieder entfernen.
+  Variante. Für eine Variante oder die Scroll-Reise: `node scripts/der-weg/server.mjs` (launch.json
+  `der-weg`, Port 4330, liefert die ganze Projektwurzel und schneidet das `/jgc-studio-website`-Präfix
+  weg). Die Scroll-Reise braucht ihn zwingend: unter `file://` verbietet der Browser das Laden der
+  Clips, die Seite bleibt leer.
 - **Preview-Messungen: der Pane gilt als versteckt.** Screenshots hängen auf den 1-MB-Seiten; prüfe
   stattdessen per JavaScript (DOM-Geometrie, `getComputedStyle`). Zwei Fallen, die beide schon
   Fehlbefunde erzeugt haben:
@@ -99,6 +101,8 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   sie als `text eol=lf`. NICHT auf `-text`/`binary` stellen — das würde die CRLF-Arbeitskopien wörtlich
   einchecken und die deployten Live-Bytes ändern. Vor EOL-/Attribut-Änderungen immer erst
   `git ls-files --eol` lesen; `git add --renormalize` nur mit Staging-Probelauf + Review, nie blind committen.
+  Für echte Binärdateien gilt das Gegenteil: `*.mp4 binary` steht drin, weil `text=auto` sonst je Datei
+  rät und ein falsch eingestuftes Video beim Auschecken zeilenweise umgeschrieben und damit zerstört wird.
 - **Interne Links absolut halten:** V18 wird an zwei Orten ausgeliefert (Root-Hauptseite UND
   `/variants/18-lumen/`). Ortsabhängige relative Links (`../…`) brechen an einem der beiden Orte →
   immer absolute `/jgc-studio-website/…`-Pfade verwenden.
