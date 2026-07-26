@@ -4,8 +4,12 @@
 - **Die Seite gibt es jetzt zweimal:** die Lesefassung (V18, live) und **`/der-weg/`**, eine
   Scroll-Reise durch eine Papierwelt aus sieben Videoetappen. Beschreibung, Werkzeuge und
   Austauschweg stehen in `docs/der-weg.md` — hier bewusst keine zweite Fassung davon.
-- **Nichts ist gepusht.** Neun Commits liegen auf `claude/jgc-lumen-website-variant-f82cc1`,
-  die Live-Seite ist unverändert. Der Deploy wartet auf Gabriels Freigabe (Hub).
+- **Online seit 26.07. für den mobilen Test:** `…/der-weg/` ist erreichbar, steht aber auf
+  `noindex` — die Stationstexte sind nicht abgenommen. **Die Hauptseite ist byte-identisch
+  geblieben** (live nachgemessen, 1.225.044 Zeichen, null Erwähnungen der Reise). Die drei
+  Verweise von V18 zur Reise wurden vor dem Push wieder entfernt; das Transform-Skript
+  `scripts/v18/transform-weg-umschalter.mjs` liegt bereit, sobald Gabriel die Variantenwahl
+  entschieden hat. Zum Scharfschalten: `robots` in `der-weg/index.html` auf `index, follow`.
 - **Neu im Repo:** `inhalt/lumen-inhalt.md` — der Text der Live-Seite in lesbarer Form,
   erzeugt aus dem 1,2-MB-Minifikat von V18. Vorher existierte er nirgends durchsuchbar.
 - **Material:** 100 MB Rohvideos (außerhalb des Repos) → 52 MB auslieferbar im Repo.
@@ -32,8 +36,10 @@
   **I4** (Wortmarke aufs Vorschaubild).
 
 ## Nächste Schritte (Claude)
-1. **Der Weg veröffentlichen**, sobald Gabriel Texte und Seite freigibt: `git branch -f main HEAD`
-   und pushen. Der Deploy-Workflow kopiert `der-weg/` bereits mit.
+1. **Der Weg scharfschalten**, sobald Gabriel Texte und Seite freigibt: `robots` auf
+   `index, follow`, `scripts/v18/transform-weg-umschalter.mjs` laufen lassen (setzt die
+   Verweise von der Hauptseite) und prüfen, ob ein `canonical` nötig wird, damit sich die
+   zwei Fassungen bei Google nicht gegenseitig Konkurrenz machen.
 2. **Nachgeliefertes leg 6 einarbeiten:** `node scripts/der-weg/kodiere.mjs 6`, danach zwingend
    `node scripts/der-weg/pruefe-naehte.mjs` — ein Austausch berührt immer zwei Übergänge.
 3. **Scroll-Reise auf einem echten Telefon prüfen** (Xiaomi): Datenlast messen, flüssiges
