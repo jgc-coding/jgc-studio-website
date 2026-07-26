@@ -64,12 +64,70 @@
   .wechsel .pfeil { color: var(--sw-accent); }
   @media (max-width: 520px) { .wechsel { font-size: 0.76rem; padding: 0.5rem 0.8rem; } }
 
-  /* Abspann unterhalb der Reise. Pflichtangaben und Kontakt gehoeren auf jede
-     ausgelieferte Seite, nicht nur auf die Hauptfassung. */
+  /* ------------------------------------------------------------------
+     Der Leseteil unterhalb der Reise.
+
+     Wichtig ist die Stapelhoehe: die Buehne der Engine liegt fest im Fenster
+     (z-index 10), ihre Textebene auf 20. Alles, was danach kommt, muss darueber
+     liegen und deckend sein, sonst scheint das Video hindurch und die
+     Bedienelemente der Reise stehen mitten im Text. 70 liegt ueber allem davon,
+     aber unter dem Umschalter (90), der immer erreichbar bleiben soll.
+     ------------------------------------------------------------------ */
+  .leseteil { position: relative; z-index: 70; }
+
+  /* Die letzte Szene soll ausklingen, nicht abgeschnitten werden: ein Streifen,
+     der von durchsichtig nach Pergament laeuft, schiebt sich ueber das Video. */
+  .ausklang {
+    height: clamp(9rem, 22vh, 16rem);
+    background: linear-gradient(180deg,
+      rgba(254, 252, 247, 0) 0%,
+      rgba(254, 252, 247, 0.72) 46%,
+      var(--sw-bg) 100%);
+  }
+
+  .fragen { background: var(--sw-bg); padding: 1rem 1.5rem 5rem; }
+  .fragen-innen { max-width: 46rem; margin: 0 auto; }
+  .fragen-auge {
+    font-family: var(--sw-font-display); font-weight: 700;
+    font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--sw-accent); margin: 0 0 0.6rem;
+  }
+  .fragen h2 {
+    font-family: var(--sw-font-display); font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.05;
+    margin: 0 0 2.5rem; letter-spacing: -0.01em;
+  }
+  .frage { border-top: 1px solid rgba(31, 42, 68, 0.14); }
+  .frage:last-of-type { border-bottom: 1px solid rgba(31, 42, 68, 0.14); }
+  .frage > summary {
+    display: flex; align-items: baseline; gap: 0.9rem;
+    padding: 1.15rem 2rem 1.15rem 0; cursor: pointer; list-style: none;
+    font-size: 1.05rem; line-height: 1.4; font-weight: 500;
+    position: relative;
+  }
+  .frage > summary::-webkit-details-marker { display: none; }
+  .frage > summary::after {
+    content: "+"; position: absolute; right: 0; top: 1rem;
+    font-size: 1.4rem; line-height: 1; color: var(--sw-accent);
+    transition: transform 0.25s;
+  }
+  .frage[open] > summary::after { transform: rotate(45deg); }
+  .frage > summary:hover { color: var(--sw-accent); }
+  .frage-nr {
+    font-family: ui-monospace, Menlo, monospace; font-size: 0.78rem;
+    color: var(--sw-ink-soft); flex: none;
+  }
+  .frage p {
+    margin: 0 0 1.3rem; padding-right: 2rem;
+    line-height: 1.68; color: var(--sw-ink-soft); max-width: 38rem;
+  }
+
+  /* Abspann. Kontakt und Pflichtangaben gehoeren auf jede ausgelieferte Seite,
+     nicht nur auf die Hauptfassung. Der Aufruf zum Erstgespraech steht schon als
+     letzte Station in der Reise und wird hier bewusst nicht wiederholt. */
   .abspann {
-    position: relative; z-index: 2;
     background: var(--sw-ink); color: #FEFCF7;
-    padding: 4rem 1.5rem 5rem;
+    padding: 3.5rem 1.5rem 4.5rem;
   }
   .abspann-innen { max-width: 62rem; margin: 0 auto; display: grid; gap: 2.5rem; }
   .abspann h2 { font-family: var(--sw-font-display); font-weight: 500; font-size: 1.6rem; margin: 0 0 0.75rem; }
@@ -82,7 +140,7 @@
 </head>
 <body>
 
-<a class="sprung" href="#abspann">Direkt zu Kontakt und Rechtlichem</a>
+<a class="sprung" href="#fragen">Direkt zu den Fragen und zum Kontakt</a>
 
 <a class="wechsel" href="/jgc-studio-website/">
   Lieber ohne Film lesen <span class="pfeil" aria-hidden="true">&rarr;</span>
@@ -125,26 +183,134 @@
   </section>
 </div>
 
-<footer class="abspann" id="abspann">
-  <div class="abspann-innen">
-    <div>
-      <h2>Lass uns 30 Minuten reden.</h2>
-      <p>Kostenfreies Erstgespräch, kein Verkaufsgespräch, keine Verpflichtung.
-         Schreib mir direkt an <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>
-         oder starte mit der <a href="/jgc-studio-website/stilprobe/">Stilprobe</a>.</p>
+<div class="leseteil">
+
+  <!-- Laesst die letzte Szene ausklingen, statt sie hart abzuschneiden. -->
+  <div class="ausklang" aria-hidden="true"></div>
+
+  <section class="fragen" id="fragen">
+    <div class="fragen-innen">
+      <p class="fragen-auge">Was du sonst noch wissen willst</p>
+      <h2>Häufige Fragen.</h2>
+
+      <details class="frage">
+        <summary><span class="frage-nr">01</span> Wie läuft die Zusammenarbeit ab?</summary>
+        <p>In Schritten, in deinem Tempo. Zuerst ein kostenfreies Erstgespräch von etwa
+           30 Minuten: Wir klären auf Augenhöhe, ob das zueinander passt. Dann der
+           Praxis-Check für 600 Euro, aus dem du binnen einer Woche einen schriftlichen
+           Report mit drei bis fünf priorisierten Hebeln bekommst. Danach entscheidest du
+           in Ruhe. Gehst du in die Umsetzung, rechne ich die 600 Euro vollständig an.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">02</span> Was ist die Stilprobe?</summary>
+        <p>Der Schritt vor dem ersten Gespräch, für alle, die erst sehen wollen, ob das
+           trägt. Du schickst mir drei eigene Texte und bekommst binnen 48 Stunden einen
+           Entwurf in zwei Fassungen zurück: einmal generisch, einmal in deiner
+           Handschrift, dazu drei Beobachtungen zu deiner Sprache. Kostenlos, gedeckelt
+           auf 15 Proben im Monat.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">03</span> Ich weiß schon genau, was ich will. Brauche ich den Praxis-Check trotzdem?</summary>
+        <p>Ja, und er sieht dann anders aus. Statt breit zu suchen, prüfe ich gezielt:
+           Sitzt dein Wunsch auf einem echten Engpass? Passt das Werkzeug zu deiner Praxis,
+           deiner Stimme, deinen Daten? Was bei einer Kollegin trägt, braucht bei dir einen
+           eigenen Zuschnitt. Zeigt die Prüfung, dass dein Wunsch nicht trägt, sage ich dir
+           das offen, bevor du investierst.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">04</span> Wie hältst du es mit DSGVO und EU AI Act?</summary>
+        <p>Beides ist Fundament, kein Anhang. Seit Februar 2025 verpflichtet der EU AI Act
+           jeden, der KI in seiner Arbeit einsetzt, zur KI-Kompetenz. Jede Umsetzung kommt
+           deshalb mit EU-gehosteten Modellen als Standard, mit Auftragsverarbeitungs&shy;verträgen
+           als Basis und mit einer Schulung, die deine Pflicht aus Artikel 4 abdeckt. Bei
+           Doppelqualifikationen wie Heilpraktikerin oder Therapeutin greift zusätzlich
+           Paragraf 203 StGB, das beraten wir individuell.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">05</span> Was passiert mit den Aufnahmen und Daten meiner Klient:innen?</summary>
+        <p>Sitzungs-Transkriptionen laufen über lokal gehostetes Whisper, auf einem Server,
+           den ich für dich einrichte. Die Aufnahmen verlassen den europäischen Rechtsraum
+           nie. Bei besonders sensiblen Inhalten arbeiten wir mit offenen Modellen komplett
+           auf deiner eigenen Infrastruktur. Deine Klient:innen werden vorab informiert,
+           dass KI in der Nachbereitung im Einsatz ist.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">06</span> Wie viel Zeit muss ich selbst investieren?</summary>
+        <p>Im Praxis-Check zwei bis drei Stunden insgesamt, Gespräch und Lektüre des
+           Reports. In der Umsetzung hängt es vom Umfang ab: ein einzelner Baustein braucht
+           wenig, mehrere über einige Wochen etwa vier bis sechs Stunden pro Woche, vor
+           allem am Anfang. Danach wird es deutlich weniger.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">07</span> Funktioniert das auch, wenn ich noch kein Buch und kein Programm habe?</summary>
+        <p>Für Praxis-Check und Umsetzung reichen deine bisherigen Texte, Posts,
+           Podcast-Folgen und Sitzungsnotizen. Ein fertiges Buch brauchst du nicht. Wenn
+           deine Methode noch gar nicht steht, ist die Umsetzung eher früh, dann hilft erst
+           einmal Klarheit über dein Angebot.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">08</span> Was unterscheidet das von einem Online-Kurs?</summary>
+        <p>Ich liefere keine Lektionen, sondern fertige Abläufe in deine Praxis. Du musst
+           nichts lernen, was du nicht willst. Die Schulung betrifft die Bedienung deines
+           konkreten Aufbaus, nicht KI im Allgemeinen. Wenn du einen Kurs willst, gibt es
+           gute Anbieter dafür.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">09</span> Was ist, wenn die Werkzeuge sich in einem Jahr geändert haben?</summary>
+        <p>Werkzeuge ändern sich, das gehört dazu. Mein Aufbau ist so angelegt, dass die
+           Logik bleibt, auch wenn einzelne Teile getauscht werden. Im optionalen
+           Resonanzraum ab 300 Euro pro Monat bekommst du laufende Aktualisierungen und
+           Begleitung bei Bedarf. Ohne diese Anbindung bleibt deine Umsetzung trotzdem
+           stabil, du bist nicht abhängig.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">10</span> Brauche ich eine technische Vorbildung?</summary>
+        <p>Nein. Wenn du E-Mail, Notion oder ein Buchungswerkzeug bedienen kannst, reicht
+           das. Die Schulung am Ende deckt genau ab, was du brauchst, um deinen Aufbau zu
+           pflegen.</p>
+      </details>
+
+      <details class="frage">
+        <summary><span class="frage-nr">11</span> Geht das auch, wenn ich nicht in Freiburg bin?</summary>
+        <p>Ja. Die meiste Arbeit läuft aus der Ferne, mit regelmäßigen Videogesprächen.
+           Wenn du in Freiburg oder Umgebung bist und Wert auf persönliche Treffen legst,
+           machen wir das gerne. Ich arbeite mit Coaches und Trainern im gesamten
+           DACH-Raum.</p>
+      </details>
     </div>
-    <div class="abspann-reihen">
-      <a href="/jgc-studio-website/">Lesefassung der Seite</a>
-      <a href="/jgc-studio-website/stilprobe/">Die Stilprobe</a>
-      <a href="/jgc-studio-website/main/impressum/">Impressum</a>
-      <a href="/jgc-studio-website/main/datenschutz/">Datenschutz</a>
+  </section>
+
+  <footer class="abspann" id="abspann">
+    <div class="abspann-innen">
+      <div>
+        <h2>JGC Lumen</h2>
+        <p>KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise,
+           DSGVO-konform. Schreib mir an
+           <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
+      </div>
+      <div class="abspann-reihen">
+        <a href="/jgc-studio-website/">Lesefassung der Seite</a>
+        <a href="/jgc-studio-website/stilprobe/">Die Stilprobe</a>
+        <a href="/jgc-studio-website/main/impressum/">Impressum</a>
+        <a href="/jgc-studio-website/main/datenschutz/">Datenschutz</a>
+      </div>
+      <p class="abspann-fein">
+        © 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform ·
+        Die Szenen dieser Seite sind mit KI erzeugte Papierschnitt-Illustrationen.
+      </p>
     </div>
-    <p class="abspann-fein">
-      © 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform ·
-      Die Szenen dieser Seite sind mit KI erzeugte Papierschnitt-Illustrationen.
-    </p>
-  </div>
-</footer>
+  </footer>
+
+</div>
 
 <script src="scrub-engine.js"></script>
 <script>
