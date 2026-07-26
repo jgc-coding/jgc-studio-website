@@ -6,6 +6,13 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "site"],
       "port": 4321
+    },
+    {
+      "name": "der-weg",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/der-weg/server.mjs", "4330"],
+      "port": 4330,
+      "url": "http://localhost:4330"
     }
   ]
 }

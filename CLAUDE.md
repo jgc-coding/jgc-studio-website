@@ -17,6 +17,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   `scripts/v18/extrahiere-inhalt.mjs`. Nie von Hand pflegen, sondern nach jeder V18-Textänderung neu
   erzeugen. Existiert, weil der Inhalt sonst nur im 1,2-MB-Minifikat steht und für neue Varianten,
   Korrekturlesen oder Textarbeit nicht zugänglich ist.
+- `der-weg/` — **zweite Fassung der Seite als Scroll-Reise** (Kamerafahrt durch eine
+  Papierwelt, 7 Videoetappen, ~52 MB). Eigenständige Unterseite wie `stilprobe/`, keine
+  Standalone-Variante — steht deshalb nicht im Manifest. Werkzeuge in `scripts/der-weg/`,
+  Rohvideos außerhalb des Repos. **Details und Austauschweg: `docs/der-weg.md`.**
 - `scripts/generate-gallery.mjs` — baut die Galerie-Startseite.
 - `stilprobe/index.html` — eigenständige Unterseite „Die Stilprobe" (lesbares Single-File-HTML im V18-Design,
   Fonts/Logos inline aus V18 extrahiert), wird vom Deploy nach `/stilprobe/` kopiert.

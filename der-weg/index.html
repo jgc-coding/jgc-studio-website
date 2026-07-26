@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Der Weg — JGC Lumen</title>
+<meta name="description" content="Eine Reise durch die Arbeit von JGC Lumen: KI, die deine Handschrift traegt. Fuer Coaches, Trainer und Mentoren im DACH-Raum.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://jgc-coding.github.io/jgc-studio-website/der-weg/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:url" content="https://jgc-coding.github.io/jgc-studio-website/der-weg/">
+<meta property="og:title" content="Der Weg — JGC Lumen">
+<meta property="og:description" content="Eine Reise durch die Arbeit von JGC Lumen: KI, die deine Handschrift traegt.">
+<meta property="og:image" content="https://jgc-coding.github.io/jgc-studio-website/og-bild.jpg">
+<meta property="og:image:alt" content="JGC Lumen — Mehr Raum fuer das Wesentliche">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Der Weg — JGC Lumen">
+<meta name="twitter:description" content="Eine Reise durch die Arbeit von JGC Lumen: KI, die deine Handschrift traegt.">
+<meta name="twitter:image" content="https://jgc-coding.github.io/jgc-studio-website/og-bild.jpg">
+
+<link rel="stylesheet" href="assets/schriften.css">
+<style>
+  :root, .sw-root {
+    --sw-bg: #FEFCF7;
+    --sw-ink: #1F2A44;
+    --sw-ink-soft: #4A5568;
+    --sw-accent: #C97B3F;
+    --sw-font-display: "Fraunces Variable", Georgia, serif;
+    --sw-font-body: "Inter Variable", system-ui, sans-serif;
+  }
+  body { margin: 0; background: var(--sw-bg); color: var(--sw-ink); font-family: var(--sw-font-body); }
+
+  /* Sprungmarke fuer Tastaturbedienung: unsichtbar, bis sie den Fokus bekommt. */
+  .sprung {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    transform: translateY(-120%);
+    background: var(--sw-ink); color: #FEFCF7;
+    padding: 0.75rem 1.25rem; font-size: 0.9rem; text-decoration: none;
+    border-radius: 0 0 6px 0;
+  }
+  .sprung:focus { transform: translateY(0); }
+
+  /* Der Umschalter zur Lesefassung. Bewusst leise, aber immer erreichbar:
+     wer die Videolast nicht will, darf nicht erst suchen muessen. */
+  .wechsel {
+    position: fixed; z-index: 90;
+    top: max(1rem, env(safe-area-inset-top));
+    right: max(1rem, env(safe-area-inset-right));
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.82rem; line-height: 1; text-decoration: none;
+    color: var(--sw-ink);
+    background: rgba(254, 252, 247, 0.86);
+    border: 1px solid rgba(31, 42, 68, 0.16);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .wechsel:hover, .wechsel:focus-visible {
+    border-color: var(--sw-accent);
+    background: rgba(254, 252, 247, 0.98);
+  }
+  .wechsel .pfeil { color: var(--sw-accent); }
+  @media (max-width: 520px) { .wechsel { font-size: 0.76rem; padding: 0.5rem 0.8rem; } }
+
+  /* Abspann unterhalb der Reise. Pflichtangaben und Kontakt gehoeren auf jede
+     ausgelieferte Seite, nicht nur auf die Hauptfassung. */
+  .abspann {
+    position: relative; z-index: 2;
+    background: var(--sw-ink); color: #FEFCF7;
+    padding: 4rem 1.5rem 5rem;
+  }
+  .abspann-innen { max-width: 62rem; margin: 0 auto; display: grid; gap: 2.5rem; }
+  .abspann h2 { font-family: var(--sw-font-display); font-weight: 500; font-size: 1.6rem; margin: 0 0 0.75rem; }
+  .abspann p { margin: 0 0 0.5rem; color: rgba(254, 252, 247, 0.78); line-height: 1.65; max-width: 40rem; }
+  .abspann a { color: #FEFCF7; text-decoration: underline; text-underline-offset: 3px; }
+  .abspann a:hover { color: #E8A572; }
+  .abspann-reihen { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; font-size: 0.9rem; }
+  .abspann-fein { font-size: 0.82rem; color: rgba(254, 252, 247, 0.55); }
+</style>
+</head>
+<body>
+
+<a class="sprung" href="#abspann">Direkt zu Kontakt und Rechtlichem</a>
+
+<a class="wechsel" href="/jgc-studio-website/">
+  Lieber ohne Film lesen <span class="pfeil" aria-hidden="true">&rarr;</span>
+</a>
+
+<div id="top"></div>
+<div id="world">
+  <!-- Der einzige Text, den Suchmaschinen und Besucher ohne JavaScript sehen:
+       die Reise selbst wird erst im Browser gebaut. Der Block wird beim Start
+       ausgeblendet, bleibt aber im ausgelieferten HTML stehen. -->
+  <section data-sw-seo>
+    <h1>Mehr Raum für das Wesentliche.</h1>
+    <p>KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren im DACH-Raum,
+       EU-gehostet und DSGVO-konform.</p>
+
+    <h2>Eine Einordnung vorweg: KI ist ein Werkzeug.</h2>
+    <p>Wie jedes Werkzeug taugt sie so viel wie die Hand, die es führt.</p>
+
+    <h2>Deine Woche, zwei Fassungen: Was sich wirklich ändert.</h2>
+    <p>Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.</p>
+
+    <h2>Die Stilprobe: Lies dich selbst.</h2>
+    <p>Du schickst mir drei deiner Texte und bekommst binnen 48 Stunden zwei Fassungen
+       zurück: eine generische und eine in deiner Handschrift.</p>
+
+    <h2>Schritt für Schritt: In deinem Tempo.</h2>
+    <p>Erstgespräch, ehrliche Bestandsaufnahme, dann bauen wir. Jeder Schritt entscheidet
+       über den nächsten.</p>
+
+    <h2>Wer mit dir arbeitet: Drei Welten, ein Blick.</h2>
+    <p>Mentaltrainer, Wirtschaftsingenieur, TÜV-geprüft für angewandte KI. Ich kenne die
+       innere Seite deiner Arbeit und die Technik dahinter.</p>
+
+    <h2>Wenn es passt: Lass uns 30 Minuten reden.</h2>
+    <p>Kostenfrei und ohne Verpflichtung. Wir klären auf Augenhöhe, ob das zueinander passt.</p>
+
+    <p><a href="mailto:kontakt@jgc-lumen.de">Erstgespräch anfragen</a> ·
+       <a href="/jgc-studio-website/stilprobe/">Zur Stilprobe</a> ·
+       <a href="/jgc-studio-website/">Zur Lesefassung</a></p>
+  </section>
+</div>
+
+<footer class="abspann" id="abspann">
+  <div class="abspann-innen">
+    <div>
+      <h2>Lass uns 30 Minuten reden.</h2>
+      <p>Kostenfreies Erstgespräch, kein Verkaufsgespräch, keine Verpflichtung.
+         Schreib mir direkt an <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>
+         oder starte mit der <a href="/jgc-studio-website/stilprobe/">Stilprobe</a>.</p>
+    </div>
+    <div class="abspann-reihen">
+      <a href="/jgc-studio-website/">Lesefassung der Seite</a>
+      <a href="/jgc-studio-website/stilprobe/">Die Stilprobe</a>
+      <a href="/jgc-studio-website/main/impressum/">Impressum</a>
+      <a href="/jgc-studio-website/main/datenschutz/">Datenschutz</a>
+    </div>
+    <p class="abspann-fein">
+      © 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform ·
+      Die Szenen dieser Seite sind mit KI erzeugte Papierschnitt-Illustrationen.
+    </p>
+  </div>
+</footer>
+
+<script src="scrub-engine.js"></script>
+<script>
+  mountScrollWorld(document.getElementById('world'), {
+    brand: { name: 'JGC Lumen', href: '/jgc-studio-website/' },
+    hint: 'scrollen und mitfliegen',
+    nav: true,
+    atmosphere: true,
+    diveScroll: 1.5,
+
+    /* Breiter als der Vorgabewert 0.12. Zwei Uebergaenge (werkzeug zu schreibtisch,
+       schreibtisch zu stilprobe) springen im Rohmaterial sichtbar; eine breitere
+       Ueberblendung faengt das ab. Messwerte: scripts/der-weg/pruefe-naehte.mjs. */
+    crossfade: 0.2,
+
+    sections: [
+      {
+        id: 'anflug', label: 'Ankommen',
+        clip: 'assets/anflug.mp4', clipMobile: 'assets/anflug-m.mp4',
+        poster: 'assets/anflug-poster.jpg', posterMobile: 'assets/anflug-poster-m.jpg',
+        still: 'assets/anflug-still.jpg',
+        accent: '#C97B3F',
+        eyebrow: 'Für Coaches, Trainer, Mentoren',
+        title: 'Mehr Raum für das Wesentliche.',
+        body: 'KI, die deine Handschrift trägt statt sie zu glätten.',
+        tags: ['EU-gehostet', 'TÜV-geprüft', 'DSGVO-konform'],
+      },
+      {
+        id: 'werkzeug', label: 'Haltung',
+        clip: 'assets/werkzeug.mp4', clipMobile: 'assets/werkzeug-m.mp4',
+        poster: 'assets/werkzeug-poster.jpg', posterMobile: 'assets/werkzeug-poster-m.jpg',
+        still: 'assets/werkzeug-still.jpg',
+        accent: '#8FA98A',
+        eyebrow: 'Eine Einordnung vorweg',
+        title: 'KI ist ein Werkzeug.',
+        body: 'Wie jedes Werkzeug taugt sie so viel wie die Hand, die es führt.',
+        tags: [],
+      },
+      {
+        /* Schluesselszene: die Kamera faehrt am Tisch entlang von Heute nach Morgen.
+           Mehr Scrollweg und ein Verweilen in der Mitte, damit der Text mitkommt. */
+        id: 'schreibtisch', label: 'Deine Woche',
+        clip: 'assets/schreibtisch.mp4', clipMobile: 'assets/schreibtisch-m.mp4',
+        poster: 'assets/schreibtisch-poster.jpg', posterMobile: 'assets/schreibtisch-poster-m.jpg',
+        still: 'assets/schreibtisch-still.jpg',
+        accent: '#6FA3B5',
+        scroll: 1.9, linger: 0.45,
+        eyebrow: 'Deine Woche, zwei Fassungen',
+        title: 'Was sich wirklich ändert.',
+        body: 'Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.',
+        tags: ['Sitzungsnotizen', 'Nachfassen', 'Newsletter'],
+      },
+      {
+        /* Die stärkste Karte der Seite: der einzige Beweis, den jemand anfassen kann.
+           Bekommt den längsten Scrollweg der ganzen Reise. */
+        id: 'stilprobe', label: 'Die Stilprobe',
+        clip: 'assets/stilprobe.mp4', clipMobile: 'assets/stilprobe-m.mp4',
+        poster: 'assets/stilprobe-poster.jpg', posterMobile: 'assets/stilprobe-poster-m.jpg',
+        still: 'assets/stilprobe-still.jpg',
+        accent: '#C97B3F',
+        scroll: 2.1, linger: 0.5,
+        eyebrow: 'Die Stilprobe',
+        title: 'Lies dich selbst.',
+        body: 'Du schickst mir drei deiner Texte und bekommst binnen 48 Stunden zwei Fassungen zurück: eine generische und eine in deiner Handschrift.',
+        tags: ['Kostenlos', '48 Stunden', '15 im Monat'],
+      },
+      {
+        id: 'weg', label: 'Der Weg',
+        clip: 'assets/weg.mp4', clipMobile: 'assets/weg-m.mp4',
+        poster: 'assets/weg-poster.jpg', posterMobile: 'assets/weg-poster-m.jpg',
+        still: 'assets/weg-still.jpg',
+        accent: '#6FA3B5',
+        scroll: 1.7,
+        eyebrow: 'Schritt für Schritt',
+        title: 'In deinem Tempo.',
+        body: 'Erstgespräch, ehrliche Bestandsaufnahme, dann bauen wir. Jeder Schritt entscheidet über den nächsten.',
+        tags: ['Erstgespräch kostenlos', 'Praxis-Check 600 €', 'Umsetzung ab 2.500 €'],
+      },
+      {
+        id: 'lichtung', label: 'Auf Augenhöhe',
+        clip: 'assets/lichtung.mp4', clipMobile: 'assets/lichtung-m.mp4',
+        poster: 'assets/lichtung-poster.jpg', posterMobile: 'assets/lichtung-poster-m.jpg',
+        still: 'assets/lichtung-still.jpg',
+        accent: '#8FA98A',
+        scroll: 1.6, linger: 0.35,
+        eyebrow: 'Wer mit dir arbeitet',
+        title: 'Drei Welten, ein Blick.',
+        body: 'Mentaltrainer, Wirtschaftsingenieur, TÜV-geprüft für angewandte KI. Ich kenne die innere Seite deiner Arbeit und die Technik dahinter.',
+        tags: ['Mentaltrainer', 'M.Sc. Wirtschaftsingenieur', 'TÜV Rheinland'],
+      },
+      {
+        id: 'aussicht', label: 'Weitblick',
+        clip: 'assets/aussicht.mp4', clipMobile: 'assets/aussicht-m.mp4',
+        poster: 'assets/aussicht-poster.jpg', posterMobile: 'assets/aussicht-poster-m.jpg',
+        still: 'assets/aussicht-still.jpg',
+        accent: '#C97B3F',
+        scroll: 1.9,
+        eyebrow: 'Wenn es passt',
+        title: 'Lass uns 30 Minuten reden.',
+        body: 'Kostenfrei und ohne Verpflichtung. Wir klären auf Augenhöhe, ob das zueinander passt.',
+        tags: [],
+        cta: {
+          primary: { label: 'Erstgespräch anfragen', href: 'mailto:kontakt@jgc-lumen.de' },
+          secondary: { label: 'Zur Stilprobe', href: '/jgc-studio-website/stilprobe/' },
+        },
+      },
+    ],
+
+    /* Architektur A: die sieben Etappen SIND die Reise, es gibt keine
+       Verbindungsclips dazwischen. */
+    connectors: [],
+  });
+</script>
+</body>
+</html>

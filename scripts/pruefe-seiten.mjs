@@ -38,6 +38,7 @@ function sammleSeiten() {
     const kandidaten = [
       ['Startseite', SITE + 'index.html'],
       ['Stilprobe', SITE + 'stilprobe/index.html'],
+      ['Der Weg', SITE + 'der-weg/index.html'],
       ['Galerie', SITE + 'galerie/index.html'],
       ['Astro-Seite', SITE + 'main/index.html'],
     ];
@@ -56,6 +57,11 @@ function sammleSeiten() {
   } else {
     const stil = lies(WURZEL + 'stilprobe/index.html');
     if (stil) seiten.push({ name: 'Stilprobe', pfad: 'stilprobe/index.html', inhalt: stil });
+    // Die Scroll-Reise ist wie die Stilprobe eine eigenstaendige Unterseite, keine
+    // Variante — sie faellt damit nicht unter die Regel "nur eine Seite indexierbar",
+    // wird aber auf Sprungmarken, Kontaktweg, Metas und Pfade mitgeprueft.
+    const weg = lies(WURZEL + 'der-weg/index.html');
+    if (weg) seiten.push({ name: 'Der Weg', pfad: 'der-weg/index.html', inhalt: weg });
     const standalone = WURZEL + 'variants/standalone/';
     for (const slug of readdirSync(standalone, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name)) {
       const inhalt = lies(`${standalone}${slug}/index.html`);

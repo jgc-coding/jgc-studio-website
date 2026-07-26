@@ -16,3 +16,8 @@ variants/standalone/**/*.html text eol=lf
 *.woff binary
 *.woff2 binary
 *.ico binary
+# Die Clips der Scroll-Reise. Ohne diese Zeile stuenden sie auf text=auto, und
+# Git wuerde anhand des Inhalts raten. Bei 50 MB Video ist Raten das falsche
+# Verfahren: eine falsch erkannte Datei wird beim Auschecken zeilenweise
+# umgeschrieben und ist damit unbrauchbar.
+*.mp4 binary

@@ -128,6 +128,20 @@ jobs:
             echo "No stilprobe/index.html on main"
           fi
 
+      - name: Copy Scroll-Reise → /der-weg/
+        run: |
+          # Eigenstaendige Unterseite mit eigenem Asset-Ordner (Clips, Poster,
+          # Standbilder, Schriften) — anders als die Varianten also ein rekursiver
+          # Kopierschritt, nicht eine einzelne index.html. main ist hier ausgecheckt.
+          if [ -d der-weg ]; then
+            mkdir -p _site/der-weg
+            cp -r der-weg/. _site/der-weg/
+            echo "  + der-weg: $(find _site/der-weg -type f | wc -l) Dateien, $(du -sh _site/der-weg | cut -f1)"
+          else
+            echo "::error::der-weg/ fehlt auf main — die zweite Fassung waere nicht erreichbar."
+            exit 1
+          fi
+
       - name: Copy Vorschaubild (og:image) → /og-bild.jpg
         run: |
           # og:image muss als echte Datei unter einer HTTP-Adresse liegen:
@@ -163,6 +177,9 @@ jobs:
             _site/galerie/index.html \
             _site/main/index.html \
             _site/stilprobe/index.html \
+            _site/der-weg/index.html \
+            _site/der-weg/scrub-engine.js \
+            _site/der-weg/assets/anflug.mp4 \
             _site/og-bild.jpg \
           ; do
             if [ ! -f "$f" ]; then
