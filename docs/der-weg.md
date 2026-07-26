@@ -98,8 +98,12 @@ ohne belastbare Angabe die volle Fassung.
 
 ## Offen
 
-- **Porträt in Etappe 6.** Auf der Staffelei steht ein KI-erfundenes Gesicht, nicht
-  Gabriel. Er liefert eine neue Fassung nach. Bis dahin steht dort ein Fremder auf einer
-  Seite, die „Wer mit dir arbeitet" heißt.
+- **Porträt in Etappe 6.** Auf der Staffelei steht ein generiertes Papierschnitt-Gesicht.
+  Gabriel will es durch sein eigenes ersetzen und liefert die Etappe nach. Solange das
+  aussteht, zeigt eine Seite mit dem Titel „Wer mit dir arbeitet" ein Gesicht, das die
+  Besucherin für den Gründer halten wird. Das ist die gleiche Ehrlichkeitsfrage wie bei
+  den Platzhalter-Kundenstimmen (V13) und sollte vor dem Veröffentlichen geklärt sein.
+  Eine Notiz vom 24.07. behauptete, das Portrait sei bereits einkomponiert; die dort
+  genannten Dateien (`leg 6 original.mp4`, Werkzeugordner) existieren nicht mehr.
 - Die zwei springenden Übergänge (siehe oben).
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.
