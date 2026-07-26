@@ -41,28 +41,20 @@
   }
   .sprung:focus { transform: translateY(0); }
 
-  /* Der Umschalter zur Lesefassung. Bewusst leise, aber immer erreichbar:
-     wer die Videolast nicht will, darf nicht erst suchen muessen. */
-  .wechsel {
-    position: fixed; z-index: 90;
-    top: max(1rem, env(safe-area-inset-top));
-    right: max(1rem, env(safe-area-inset-right));
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.55rem 0.95rem;
-    font-size: 0.82rem; line-height: 1; text-decoration: none;
+  /* Der Scroll-Hinweis der Engine stand als helle Grossbuchstaben auf hellem Papier
+     und war kaum zu lesen. Dunkler, etwas groesser, und mit einem Pergament-Schimmer
+     hinterlegt, der ihn vom Bild abhebt, ohne einen Kasten zu zeichnen. */
+  .sw-root .sw-hint {
     color: var(--sw-ink);
-    background: rgba(254, 252, 247, 0.86);
-    border: 1px solid rgba(31, 42, 68, 0.16);
-    border-radius: 999px;
-    backdrop-filter: blur(8px);
-    transition: border-color 0.25s, background 0.25s;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-shadow:
+      0 0 10px var(--sw-bg),
+      0 0 22px var(--sw-bg),
+      0 1px 2px rgba(254, 252, 247, 0.9);
   }
-  .wechsel:hover, .wechsel:focus-visible {
-    border-color: var(--sw-accent);
-    background: rgba(254, 252, 247, 0.98);
-  }
-  .wechsel .pfeil { color: var(--sw-accent); }
-  @media (max-width: 520px) { .wechsel { font-size: 0.76rem; padding: 0.5rem 0.8rem; } }
+  .sw-root .sw-hint i { border-color: rgba(31, 42, 68, 0.5); }
 
   /* ------------------------------------------------------------------
      Der Leseteil unterhalb der Reise.
@@ -141,10 +133,6 @@
 <body>
 
 <a class="sprung" href="#fragen">Direkt zu den Fragen und zum Kontakt</a>
-
-<a class="wechsel" href="/jgc-studio-website/">
-  Lieber ohne Film lesen <span class="pfeil" aria-hidden="true">&rarr;</span>
-</a>
 
 <div id="top"></div>
 <div id="world">
@@ -315,24 +303,30 @@
 <script src="scrub-engine.js"></script>
 <script>
   mountScrollWorld(document.getElementById('world'), {
-    brand: { name: 'JGC Lumen', href: '/jgc-studio-website/' },
+    brand: { name: 'JGC Lumen', href: '/jgc-studio-website/', logo: 'assets/sigel.png' },
     hint: 'scrollen und mitfliegen',
     nav: true,
     atmosphere: true,
-    diveScroll: 1.5,
 
-    /* Breiter als der Vorgabewert 0.12. Zwei Uebergaenge (werkzeug zu schreibtisch,
-       schreibtisch zu stilprobe) springen im Rohmaterial sichtbar; eine breitere
-       Ueberblendung faengt das ab. Messwerte: scripts/der-weg/pruefe-naehte.mjs. */
-    crossfade: 0.2,
+    /* Scrollweg je Etappe. Zusammen rund 8 Bildschirmhoehen statt vorher 12: die
+       Reise laeuft zuegiger, ohne dass eine Szene gehetzt wirkt. Die zwei
+       Schluesselszenen behalten mehr Weg als die Durchfahrten. */
+    diveScroll: 1.0,
+
+    /* Grundbreite der Ueberblendung an den Naehten. Vier der sechs Uebergaenge sind
+       sauber und brauchen wenig; die zwei springenden bekommen unten einzeln mehr,
+       damit nicht die ganze Reise weichgezeichnet wird.
+       Messwerte: scripts/der-weg/pruefe-naehte.mjs */
+    crossfade: 0.1,
 
     sections: [
       {
-        id: 'anflug', label: 'Ankommen',
+        id: 'anflug', label: 'Auftakt',
         clip: 'assets/anflug.mp4', clipMobile: 'assets/anflug-m.mp4',
         poster: 'assets/anflug-poster.jpg', posterMobile: 'assets/anflug-poster-m.jpg',
         still: 'assets/anflug-still.jpg',
         accent: '#C97B3F',
+        scroll: 1.15,
         eyebrow: 'Für Coaches, Trainer, Mentoren',
         title: 'Mehr Raum für das Wesentliche.',
         body: 'KI, die deine Handschrift trägt statt sie zu glätten.',
@@ -344,6 +338,9 @@
         poster: 'assets/werkzeug-poster.jpg', posterMobile: 'assets/werkzeug-poster-m.jpg',
         still: 'assets/werkzeug-still.jpg',
         accent: '#8FA98A',
+        /* Der Uebergang zum Schreibtisch springt (gemessen 0,30 gegen einen
+           Eigenwert von 0,96). Breitere Ueberblendung faengt das ab. */
+        crossfade: 0.38,
         eyebrow: 'Eine Einordnung vorweg',
         title: 'KI ist ein Werkzeug.',
         body: 'Wie jedes Werkzeug taugt sie so viel wie die Hand, die es führt.',
@@ -357,7 +354,10 @@
         poster: 'assets/schreibtisch-poster.jpg', posterMobile: 'assets/schreibtisch-poster-m.jpg',
         still: 'assets/schreibtisch-still.jpg',
         accent: '#6FA3B5',
-        scroll: 1.9, linger: 0.45,
+        scroll: 1.3, linger: 0.4,
+        /* Beide Naehte dieser Etappe springen — davor die Werkzeugwand,
+           danach das Stilprobe-Pult. */
+        crossfade: 0.38,
         eyebrow: 'Deine Woche, zwei Fassungen',
         title: 'Was sich wirklich ändert.',
         body: 'Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.',
@@ -371,7 +371,8 @@
         poster: 'assets/stilprobe-poster.jpg', posterMobile: 'assets/stilprobe-poster-m.jpg',
         still: 'assets/stilprobe-still.jpg',
         accent: '#C97B3F',
-        scroll: 2.1, linger: 0.5,
+        scroll: 1.45, linger: 0.45,
+        crossfade: 0.38,
         eyebrow: 'Die Stilprobe',
         title: 'Lies dich selbst.',
         body: 'Du schickst mir drei deiner Texte und bekommst binnen 48 Stunden zwei Fassungen zurück: eine generische und eine in deiner Handschrift.',
@@ -383,7 +384,7 @@
         poster: 'assets/weg-poster.jpg', posterMobile: 'assets/weg-poster-m.jpg',
         still: 'assets/weg-still.jpg',
         accent: '#6FA3B5',
-        scroll: 1.7,
+        scroll: 1.15,
         eyebrow: 'Schritt für Schritt',
         title: 'In deinem Tempo.',
         body: 'Erstgespräch, ehrliche Bestandsaufnahme, dann bauen wir. Jeder Schritt entscheidet über den nächsten.',
@@ -395,7 +396,7 @@
         poster: 'assets/lichtung-poster.jpg', posterMobile: 'assets/lichtung-poster-m.jpg',
         still: 'assets/lichtung-still.jpg',
         accent: '#8FA98A',
-        scroll: 1.6, linger: 0.35,
+        scroll: 1.1, linger: 0.3,
         eyebrow: 'Wer mit dir arbeitet',
         title: 'Drei Welten, ein Blick.',
         body: 'Mentaltrainer, Wirtschaftsingenieur, TÜV-geprüft für angewandte KI. Ich kenne die innere Seite deiner Arbeit und die Technik dahinter.',
@@ -407,7 +408,7 @@
         poster: 'assets/aussicht-poster.jpg', posterMobile: 'assets/aussicht-poster-m.jpg',
         still: 'assets/aussicht-still.jpg',
         accent: '#C97B3F',
-        scroll: 1.9,
+        scroll: 1.3,
         eyebrow: 'Wenn es passt',
         title: 'Lass uns 30 Minuten reden.',
         body: 'Kostenfrei und ohne Verpflichtung. Wir klären auf Augenhöhe, ob das zueinander passt.',

@@ -69,15 +69,33 @@ deshalb zusätzlich einen Eigenwert je Etappe (gleicher Abstand, aber innerhalb 
 Datei) und bewertet das Verhältnis. Erst das trennt „Kamera bewegt sich schnell" von
 „Kamera springt".
 
-## Abweichung in der Engine
+## Abweichungen in der Engine
 
-`der-weg/scrub-engine.js` weicht an genau einer Stelle von der Skill-Vorlage ab, im
-Quelltext als solche markiert. Die Vorlage entscheidet mit
-`Math.min(screen.width, screen.height) <= 600`, ob ein Gerät die kleine Fassung bekommt.
-Meldet der Browser die Bildschirmgröße beim Start noch nicht, ergibt das `min(0,0) = 0`
-und damit „Handy" — ein Desktop bekäme dauerhaft die 600er-Fassung. Im Vorschaufenster
-nachgewiesen: Bildschirm 2560×1440, geladen wurden trotzdem die `-m`-Dateien. Jetzt gilt
-ohne belastbare Angabe die volle Fassung.
+`der-weg/scrub-engine.js` weicht an vier Stellen von der Skill-Vorlage ab, jede im
+Quelltext als solche markiert.
+
+**1. Gerätetyp.** Die Vorlage entscheidet mit `Math.min(screen.width, screen.height) <= 600`,
+ob ein Gerät die kleine Fassung bekommt. Meldet der Browser die Bildschirmgröße beim Start
+noch nicht, ergibt das `min(0,0) = 0` und damit „Handy" — ein Desktop bekäme dauerhaft die
+600er-Fassung. Im Vorschaufenster nachgewiesen: Bildschirm 2560×1440, geladen wurden
+trotzdem die `-m`-Dateien. Jetzt gilt ohne belastbare Angabe die volle Fassung.
+
+**2. Wann ein Text erscheint.** Die Vorlage lässt den Text einer Station in der MITTE ihres
+Segments gipfeln. Das passt zu Architektur B, wo ein Segment ein Hineintauchen in eine
+fertig dastehende Szene ist. Hier gilt Architektur A: ein Segment ist die **Fahrt zu**
+seiner Szene, und die Szene steht erst am **Ende** da. Mit der Vorlagen-Kurve erschien
+jeder Text mitten im Übergang und war wieder weg, sobald das Ziel im Bild war. Konkret:
+der Werkzeugwand-Text stand zwischen Schreibtisch und Wand, und der Schreibtisch selbst
+blieb stumm. Jetzt läuft der Text zur Ankunft hin ein und hält in die nächste Etappe
+hinein, solange dieselbe Szene noch zu sehen ist.
+
+**3. Überblendung pro Etappe.** In der Vorlage ist die Breite global. Zwei der sechs Nähte
+springen, vier sind sauber; eine global breite Überblendung würde alle weichzeichnen. Über
+`crossfade` je Section bekommen nur die betroffenen Etappen mehr (0,38 statt 0,1).
+
+**4. Markenzeichen.** Die Vorlage setzt einen farbigen Klecks, der die Akzentfarbe der Szene
+trägt. Über `brand.logo` steht dort jetzt das Sigel aus V18, voll deckend; der Farbwechsel
+wandert in einen weichen Schein dahinter.
 
 ## Bewusste Abweichungen vom Briefing
 

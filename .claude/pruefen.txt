@@ -20,6 +20,7 @@ node --check scripts/der-weg/kodiere.mjs
 node --check scripts/der-weg/pruefe-naehte.mjs
 node --check scripts/der-weg/hole-schriften.mjs
 node --check scripts/der-weg/server.mjs
+node --check scripts/der-weg/hole-logo.mjs
 node --check scripts/v18/transform-improve-runde2.mjs
 node --check scripts/v18/transform-tuvlink-schritt2.mjs
 node --check scripts/v18/baue-og-bild.mjs
