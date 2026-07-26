@@ -17,8 +17,15 @@
        scrollMobileFactor: 1.2,  // extra scroll distance per segment on mobile (small
                                  // viewports read the same flight as faster; industry
                                  // pattern is a LONGER mobile scroll run)
+       copyTiming: 'auto',  // 'auto' | 'arrival' | 'middle' — WHEN each section's copy
+                            // peaks. 'auto' reads it off the config: no connectors =
+                            // architecture A = 'arrival'. See "COPY TIMING" below.
        sections: [
          { id, label, still, poster, posterMobile, clip, clipMobile, accent,
+           crossfade: 0.38,  // optional per-section dissolve width, overrides the global
+                             // `crossfade` at BOTH of this section's seams. Use it on the
+                             // sections flanking one bad seam instead of widening the
+                             // global value and softening the whole flight.
                           // `poster` = the EXTRACTED FIRST FRAME of the encoded clip
                           // (pipeline.md §5b). Shown while the clip loads, so the
                           // still→video swap is pixel-identical (no crop/render pop).
@@ -63,6 +70,27 @@
      Nothing here is required — a config with only `clip`/`connectors` still works on
      phones; the mobile variants just make it lighter and smoother.
 
+   COPY TIMING — tie it to the camera architecture, not to taste
+     Architecture B: a segment IS a scene, on screen from its first frame → copy peaks
+     mid-segment ('middle', the historical default).
+     Architecture A: a segment is the FLIGHT TO a scene; the destination only resolves at
+     the END of the clip. With 'middle' every headline lands in the no-man's-land between
+     two rooms and the scene itself reads captionless — the single most common complaint
+     on an architecture-A build. 'arrival' ramps the copy in toward the segment end and
+     holds it into the next segment, whose opening frames still show that scene; the
+     opener holds all the way to the first arrival.
+     'auto' (default) picks 'arrival' when there are no connectors. Sanity-check the
+     windows on paper before building: segment bounds are the running sum of the
+     `scroll` values × viewport height.
+
+   PAGE CONTENT BELOW THE FLIGHT — mind the stacking order
+     The stage is fixed at z-index 10, the copy layer at 20, chrome at 40–60. Anything you
+     append after the container (FAQ, footer, legal) sits BELOW that by default: the video
+     covers your footer and the route dots stand in your text. Wrap everything after the
+     flight in one container with `position:relative; z-index:70` and an OPAQUE background,
+     and lead with a gradient strip from transparent to that background so the last scene
+     fades out instead of being guillotined.
+
    THEME (CSS custom properties; set on the container or :root to override)
      --sw-bg         page background (match your scene bg for seamless posters)
      --sw-ink        primary text
@@ -99,13 +127,11 @@ function mountScrollWorld(container, config) {
   // has a desktop-class screen and decoder — it gets the 1080p master, with the touch
   // hardening above still on. screen.* is stable across rotation and window resizes;
   // a phone's short side is ≤ ~500 CSS px, tablets start at 744.
-  // ABWEICHUNG von der Skill-Vorlage (JGC Lumen, 26.07.2026):
-  // Die Vorlage rechnet `Math.min(screen.width, screen.height) <= 600`. Meldet der
-  // Browser die Bildschirmgroesse beim Start noch nicht (0), ergibt das min(0,0)=0
-  // und damit "Handy" — ein Desktop bekommt dann dauerhaft die kleine Fassung
-  // ausgeliefert. Im Vorschau-Fenster nachgewiesen: Bildschirm 2560x1440, geladen
-  // wurden trotzdem die -m-Dateien. Ohne belastbare Angabe wird jetzt die volle
-  // Fassung geliefert, nicht die schlechtere.
+  // An unknown screen must NOT read as "phone": some embedders (and any context that
+  // mounts before the browser reports screen metrics) return 0, and `min(0,0) <= 600`
+  // is true — which silently pins a desktop to the 600px mobile encode for the whole
+  // session. Verified in a preview pane: screen 2560x1440, still fetched the -m files.
+  // When the value isn't trustworthy, serve the better asset, not the worse one.
   const shortSide = Math.min(screen.width || 0, screen.height || 0);
   const phoneClass = shortSide > 0 && shortSide <= 600;
   // Network signals are Chromium-only (iOS/Safari/Firefox expose nothing) — treat them
@@ -127,6 +153,19 @@ function mountScrollWorld(container, config) {
   const N = SECTIONS.length;
   if (!N) return;
 
+  // WHEN a section's copy peaks depends on the camera architecture — see SKILL Step 4.
+  //   'middle'  (architecture B): a segment IS a scene. It's on screen from the first
+  //             frame, so the copy peaks mid-segment.
+  //   'arrival' (architecture A): a segment is the FLIGHT TO a scene. The destination
+  //             only resolves at the END. Peaking mid-segment puts every headline in the
+  //             no-man's-land between two rooms, and the scene itself reads captionless.
+  // 'auto' picks by config: no connectors means architecture A. Override explicitly with
+  // copyTiming: 'middle' | 'arrival' if your legs are shaped differently.
+  const ARCH_A = !CONNECTORS.some(Boolean);
+  const COPY_TIMING = (config.copyTiming && config.copyTiming !== 'auto')
+    ? config.copyTiming
+    : (ARCH_A ? 'arrival' : 'middle');
+
   injectCSS();
   container.classList.add('sw-root');
   // Server-rendered SEO copy (crawlers/no-JS read it from the HTML); once the
@@ -139,11 +178,10 @@ function mountScrollWorld(container, config) {
     const dive = { kind: 'dive', si: i, clip: s.clip, clipM: s.clipMobile, still: s.still,
                    poster: s.poster, posterM: s.posterMobile,
                    accent: s.accent, w: s.scroll || DIVE_W, linger: s.linger || 0,
-                   // ABWEICHUNG von der Skill-Vorlage (JGC Lumen): dort ist die Breite
-                   // der Ueberblendung global. Zwei Naehte in diesem Material springen
-                   // sichtbar, die uebrigen vier sind sauber. Eine global breite
-                   // Ueberblendung wuerde alle weichzeichnen; pro Etappe einstellbar
-                   // laesst sich genau dort mehr geben, wo es noetig ist.
+                   // Per-section dissolve width. A single bad seam otherwise forces you
+                   // to widen `crossfade` globally, which softens the whole flight to
+                   // hide one flaw. Set `crossfade` on the sections adjacent to the bad
+                   // seam instead; everything else keeps the tight global value.
                    cf: (s.crossfade != null ? s.crossfade : null) };
     SEGMENTS.push(dive);
     s._seg = dive;
@@ -173,19 +211,14 @@ function mountScrollWorld(container, config) {
   const topbar = el('div', 'sw-topbar');
   if (config.brand) {
     const brand = el('a', 'sw-brand'); brand.href = (config.brand.href || '#');
-    // ABWEICHUNG von der Skill-Vorlage (JGC Lumen): die Vorlage setzt hier einen
-    // farbigen Klecks, der die Akzentfarbe der Szene traegt. Mit `brand.logo` steht
-    // stattdessen das echte Sigel da, voll deckend; der Farbwechsel wandert in einen
-    // weichen Schein dahinter. Die Marke bleibt damit jederzeit klar erkennbar und
-    // der Szenenwechsel trotzdem spuerbar.
+    // With `brand.logo` the real mark goes here at full opacity and the per-scene accent
+    // becomes a soft glow behind it. Without it, the generic accent-coloured chip. Any
+    // brand that HAS a logo should use it — the chip reads as placeholder art.
     if (config.brand.logo) {
-      const halter = el('span', 'sw-brand__sigel');
-      const bild = el('img', 'sw-brand__logo');
-      bild.src = config.brand.logo;
-      bild.alt = '';
-      bild.setAttribute('aria-hidden', 'true');
-      halter.appendChild(bild);
-      brand.appendChild(halter);
+      const holder = el('span', 'sw-brand__sigil');
+      const img = el('img', 'sw-brand__logo');
+      img.src = config.brand.logo; img.alt = ''; img.setAttribute('aria-hidden', 'true');
+      holder.appendChild(img); brand.appendChild(holder);
     } else {
       brand.appendChild(el('span', 'sw-brand__mark'));
     }
@@ -340,33 +373,34 @@ function mountScrollWorld(container, config) {
       }
     }
 
-    // ABWEICHUNG von der Skill-Vorlage (JGC Lumen): Die Vorlage laesst den Text einer
-    // Station in der MITTE ihres Segments gipfeln. Das passt zu Architektur B, wo ein
-    // Segment ein Hineintauchen in eine fertig dastehende Szene ist. Hier gilt
-    // Architektur A: ein Segment ist die FAHRT zu seiner Szene, und die Szene steht
-    // erst am ENDE da. Mit der Vorlagen-Kurve erschien jeder Text mitten im Uebergang
-    // und war wieder weg, sobald das Ziel im Bild war — der Werkzeugwand-Text stand
-    // zwischen Schreibtisch und Wand, und der Schreibtisch selbst blieb stumm.
-    // Deshalb: Der Text laeuft zur ANKUNFT hin ein und haelt in die naechste Etappe
-    // hinein, solange dieselbe Szene noch zu sehen ist.
     for (let i = 0; i < N; i++) {
       const seg = SECTIONS[i]._seg;
-      const laenge = seg.end - seg.start;
-      const pr = clamp((y - seg.start) / laenge, 0, 1);
+      const span = seg.end - seg.start;
+      const pr = clamp((y - seg.start) / span, 0, 1);
+      const before = y < seg.start, after = y > seg.end;
       let cop;
-      if (i === 0) {
-        // Der Auftakt begruesst beim Landen und haelt ueber die ganze erste Etappe,
-        // damit auch die Ankunftsszene nicht ohne Worte dasteht.
-        cop = smooth(1 - clamp((y - seg.end) / (laenge * 0.3), 0, 1));
-      } else if (i === N - 1) {
-        cop = y < seg.start ? 0 : smooth(pr / 0.4);                    // haelt den Aufruf am Ende
+      if (i === N - 1) {
+        cop = before ? 0 : smooth(pr / 0.4);                           // holds CTA at the end
+      } else if (COPY_TIMING === 'arrival') {
+        // Copy rides the ARRIVAL: it ramps in toward the segment's end (where the
+        // destination scene finally resolves) and holds into the next segment, whose
+        // opening frames still show that same scene.
+        if (i === 0) {
+          // The opener greets on landing and holds all the way to the first arrival,
+          // so the scene you fly into isn't captionless.
+          cop = smooth(1 - clamp((y - seg.end) / (span * 0.3), 0, 1));
+        } else {
+          const nx = SECTIONS[i + 1] && SECTIONS[i + 1]._seg;
+          const rampIn = span * 0.55;
+          const rampOut = nx ? (nx.end - nx.start) * 0.34 : vh;
+          cop = y <= seg.end
+            ? smooth(1 - clamp((seg.end - y) / rampIn, 0, 1))
+            : smooth(1 - clamp((y - seg.end) / rampOut, 0, 1));
+        }
+      } else if (i === 0) {
+        cop = after ? 0 : smooth(1 - pr / 0.62);                       // greets on landing
       } else {
-        const naechste = SECTIONS[i + 1] && SECTIONS[i + 1]._seg;
-        const einlauf = laenge * 0.55;
-        const auslauf = naechste ? (naechste.end - naechste.start) * 0.34 : vh;
-        cop = y <= seg.end
-          ? smooth(1 - clamp((seg.end - y) / einlauf, 0, 1))
-          : smooth(1 - clamp((y - seg.end) / auslauf, 0, 1));
+        cop = (before || after) ? 0 : smooth(1 - Math.abs(pr - 0.5) / 0.5);
       }
       const c = copies[i];
       c.style.opacity = cop;
@@ -498,10 +532,9 @@ function injectCSS() {
   .sw-topbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:clamp(14px,2.4vw,26px) clamp(18px,5vw,64px);}
   .sw-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--sw-ink);}
   .sw-brand__mark{width:24px;height:28px;border-radius:7px 7px 10px 10px;background:linear-gradient(160deg,var(--sw-accent),color-mix(in srgb,var(--sw-accent) 60%,#000));box-shadow:0 6px 14px color-mix(in srgb,var(--sw-accent) 40%,transparent);}
-  /* Sigel statt Farbklecks: das Logo bleibt voll deckend, der Szenenakzent liegt als
-     weicher Schein dahinter und wechselt mit. */
-  .sw-brand__sigel{position:relative;flex:none;width:34px;height:34px;display:grid;place-items:center;}
-  .sw-brand__sigel::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--sw-accent) 38%,transparent) 0%,color-mix(in srgb,var(--sw-accent) 10%,transparent) 55%,transparent 72%);transition:background .7s ease;}
+  /* Real logo (config.brand.logo): stays fully opaque, the scene accent glows behind it. */
+  .sw-brand__sigil{position:relative;flex:none;width:34px;height:34px;display:grid;place-items:center;}
+  .sw-brand__sigil::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--sw-accent) 38%,transparent) 0%,color-mix(in srgb,var(--sw-accent) 10%,transparent) 55%,transparent 72%);transition:background .7s ease;}
   .sw-brand__logo{position:relative;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 1px 3px color-mix(in srgb,var(--sw-bg) 80%,transparent));}
   .sw-brand__name{font-family:var(--sw-font-display);font-weight:700;font-size:1.1rem;}
   .sw-nav{display:flex;gap:4px;padding:5px;background:color-mix(in srgb,#fff 55%,transparent);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--sw-accent) 16%,transparent);border-radius:999px;}

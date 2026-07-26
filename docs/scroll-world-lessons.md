@@ -142,7 +142,35 @@ Beides in `der-weg/scrub-engine.js` behoben und dort im Quelltext markiert.
 
 ---
 
-**Ort dieser Datei:** Sie steht im Projekt, weil sie hier entstanden ist. Die Punkte 1
-bis 9 sind aber nicht projektspezifisch und gehören eigentlich in den Skill selbst
-(`~/.claude/skills/scroll-world/`), damit sie beim nächsten Bau in einem anderen Kontext
-von allein zur Verfügung stehen.
+---
+
+## Stand: eingearbeitet
+
+Am 26.07.2026 sind alle nicht projektspezifischen Punkte in den Skill selbst geflossen
+(`~/.claude/skills/scroll-world/`):
+
+| Wohin | Was |
+|---|---|
+| `SKILL.md`, Schritt 4 | Architektur A wirft auch die Textführung um |
+| `SKILL.md`, Schritt 0b (neu) | Einstieg, wenn das Material schon vorliegt: erst messen |
+| `SKILL.md`, Schritt 6 | SSIM-Schwelle am eigenen Material kalibrieren |
+| `SKILL.md`, Schritt 7 | Stapelebene für Inhalt unter der Reise, Scrollweg, Schriften |
+| `references/pipeline.md` §5c | Kalibriertes Nahtskript, stderr-Falle |
+| `references/pipeline.md` §8 (neu) | Eine Etappe austauschen, Startbilder liefern |
+| `references/gotchas.md` | Neun Symptome mit Ursache und Abhilfe |
+| `references/scrub-engine.js` | Vier Code-Änderungen (siehe unten) |
+
+**Die Engine kann jetzt vier Dinge mehr:** `copyTiming` (erkennt Architektur A selbst am
+leeren `connectors`-Feld), `crossfade` je Section, `brand.logo`, und ein unbekannter
+Bildschirm führt nicht mehr zur kleinen Fassung. Alles rückwärtskompatibel — bestehende
+Konfigurationen mit Verbindungsclips verhalten sich unverändert.
+
+**Diese Seite nutzt seitdem die unveränderte Skill-Engine**, keine Sonderfassung mehr. Das
+war zugleich die Probe aufs Exempel: Wäre die Verallgemeinerung schlecht gewesen, hätte
+das Projekt weiter einen eigenen Zweig gebraucht.
+
+**Der Skill liegt nicht in einer Versionsverwaltung** (`~/.claude/skills/scroll-world/`
+ist kein Repo und nicht nach `C:\Projekte\Claude-Skills\` gespiegelt). Vor dieser
+Bearbeitung wurde deshalb eine Sicherung angelegt. Dauerhaft ist das eine Lücke: an einem
+Werkzeug ohne Rückkehrpunkt zu arbeiten, ist genau das, was die Projektregeln sonst
+verhindern.

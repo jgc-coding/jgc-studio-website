@@ -69,33 +69,28 @@ deshalb zusätzlich einen Eigenwert je Etappe (gleicher Abstand, aber innerhalb 
 Datei) und bewertet das Verhältnis. Erst das trennt „Kamera bewegt sich schnell" von
 „Kamera springt".
 
-## Abweichungen in der Engine
+## Engine: unveränderte Skill-Fassung
 
-`der-weg/scrub-engine.js` weicht an vier Stellen von der Skill-Vorlage ab, jede im
-Quelltext als solche markiert.
+`der-weg/scrub-engine.js` ist eine **unveränderte Kopie** aus dem Skill
+(`~/.claude/skills/scroll-world/references/scrub-engine.js`). Beim Bau dieser Seite
+entstanden vier Änderungen an der Engine; sie sind am 26.07.2026 alle in den Skill selbst
+zurückgeflossen, damit sie beim nächsten Projekt von allein zur Verfügung stehen. Diese
+Seite hat deshalb **keine Sonderfassung** mehr zu pflegen.
 
-**1. Gerätetyp.** Die Vorlage entscheidet mit `Math.min(screen.width, screen.height) <= 600`,
-ob ein Gerät die kleine Fassung bekommt. Meldet der Browser die Bildschirmgröße beim Start
-noch nicht, ergibt das `min(0,0) = 0` und damit „Handy" — ein Desktop bekäme dauerhaft die
-600er-Fassung. Im Vorschaufenster nachgewiesen: Bildschirm 2560×1440, geladen wurden
-trotzdem die `-m`-Dateien. Jetzt gilt ohne belastbare Angabe die volle Fassung.
+Was dabei in den Skill wanderte, in Kurzform:
 
-**2. Wann ein Text erscheint.** Die Vorlage lässt den Text einer Station in der MITTE ihres
-Segments gipfeln. Das passt zu Architektur B, wo ein Segment ein Hineintauchen in eine
-fertig dastehende Szene ist. Hier gilt Architektur A: ein Segment ist die **Fahrt zu**
-seiner Szene, und die Szene steht erst am **Ende** da. Mit der Vorlagen-Kurve erschien
-jeder Text mitten im Übergang und war wieder weg, sobald das Ziel im Bild war. Konkret:
-der Werkzeugwand-Text stand zwischen Schreibtisch und Wand, und der Schreibtisch selbst
-blieb stumm. Jetzt läuft der Text zur Ankunft hin ein und hält in die nächste Etappe
-hinein, solange dieselbe Szene noch zu sehen ist.
+1. **Gerätetyp.** Ein noch nicht gemeldeter Bildschirm (0) galt als „Handy", weil
+   `min(0,0) <= 600` wahr ist — ein Desktop bekam dauerhaft die kleine Fassung.
+2. **Wann ein Text erscheint** (`copyTiming`). Bei Architektur A ist eine Etappe die
+   **Fahrt zu** ihrer Szene; die Szene steht erst am Ende da. Der Text gipfelte aber in
+   der Etappenmitte, also im Niemandsland. Die Engine erkennt die Architektur jetzt selbst
+   am leeren `connectors`-Feld.
+3. **Überblendung je Etappe** (`crossfade` pro Section). Vorher global, was bei einer
+   einzigen schlechten Naht die ganze Reise weichgezeichnet hätte.
+4. **Markenzeichen** (`brand.logo`). Statt eines Farbklecks das echte Sigel, mit dem
+   Szenenakzent als weichem Schein dahinter.
 
-**3. Überblendung pro Etappe.** In der Vorlage ist die Breite global. Zwei der sechs Nähte
-springen, vier sind sauber; eine global breite Überblendung würde alle weichzeichnen. Über
-`crossfade` je Section bekommen nur die betroffenen Etappen mehr (0,38 statt 0,1).
-
-**4. Markenzeichen.** Die Vorlage setzt einen farbigen Klecks, der die Akzentfarbe der Szene
-trägt. Über `brand.logo` steht dort jetzt das Sigel aus V18, voll deckend; der Farbwechsel
-wandert in einen weichen Schein dahinter.
+Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
 
 ## Bewusste Abweichungen vom Briefing
 
