@@ -55,6 +55,18 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 
 ## Offen
 
+- [ ] **V20** (A) Stilprobe-Beispiel nennt sich „echt", ist im Quelltext aber als Platzhalter markiert
+      Beleg: `variants/standalone/18-lumen/index.html`, Sektion `#stilprobe` — zwei Kommentare
+      `PLATZHALTER Phase 6: durch Ausschnitt aus Gabriels eigener Stilprobe ersetzen` stehen über
+      Fassung A und B; unmittelbar darunter liest die Besucherin „Ausschnitt aus einer echten
+      Stilprobe – an meinen eigenen Texten erprobt, bevor ich sie anbiete."
+      Aufwand: S · Risiko: mittel
+      Warum: Die Aussage ist eine Werbeaussage über Echtheit, und nach der eigenen Projekt-Doku
+      trifft sie nicht zu. Entweder die beiden Texte durch echte Ausschnitte aus Gabriels Probe
+      ersetzen (dann stimmt der Satz) oder den Satz umformulieren („So kann das aussehen").
+      Beides ist klein — nur beides zusammen stehen zu lassen geht nicht.
+      → braucht Gabriels Entscheidung bzw. seine eigene Stilprobe.
+
 - [ ] **V3** (A) Impressum ohne Inhalt — **braucht Gabriels Daten**
       Beleg: `site/src/pages/impressum.astro:18`, live unter `/main/impressum/`
       Aufwand: S · Risiko: mittel
