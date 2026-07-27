@@ -34,6 +34,11 @@
      Beides zusammen ist bei keinem Notebook wahr. -->
 <script>
   (function () {
+    // Merkmal fuer alle Regeln, die Inhalt nur dann verstecken duerfen, wenn er
+    // per JavaScript auch wieder erreichbar ist — hier die Langfassungen der
+    // Stationen. Muss im Kopf gesetzt werden, sonst blitzen sie kurz auf.
+    document.documentElement.classList.add('js');
+
     var kurzeSeite = Math.min(screen.width || 0, screen.height || 0);
     var groberZeiger = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (kurzeSeite > 0 && kurzeSeite <= 600 && groberZeiger) {
@@ -77,6 +82,29 @@
       0 1px 2px rgba(254, 252, 247, 0.9);
   }
   .sw-root .sw-hint i { border-color: rgba(31, 42, 68, 0.5); }
+
+  /* ------------------------------------------------------------------
+     Breite Fassung: der Textblock wird wieder wirklich mittig gestellt.
+
+     Die Engine setzt dafuer `top: 50%; transform: translateY(-50%)` — und
+     ueberschreibt `transform` beim Scrollen sofort wieder mit dem wandernden
+     ±2vh. Damit faellt die Zentrierung ersatzlos weg: der Block HAENGT an der
+     Bildschirmmitte statt auf ihr zu sitzen. Auf 1440 x 900 faellt das kaum
+     auf, auf einem 1280 x 720 grossen Notebook liefen drei Stationen unten aus
+     dem Bild (gemessen 19 bis 65 px) — und abgeschnitten wurde ausgerechnet das
+     letzte Element, der "Mehr dazu"-Knopf.
+
+     `translate` ist eine eigene Eigenschaft und wird VOR `transform`
+     angewandt, statt es zu ersetzen. Die Zentrierung steht damit hier, das
+     Wandern bleibt der Engine — beides zusammen, ohne Streit.
+
+     Sichtbare Folge: der Text steht auf breiten Schirmen jetzt mittig statt
+     ab der Mitte nach unten. Hochkant und auf schmalen Schirmen gilt das
+     nicht, dort haengt der Text unten (siehe die beiden Ruecknahmen weiter
+     unten).
+     ------------------------------------------------------------------ */
+  .sw-root .sw-copy { translate: 0 -50%; }
+  @media (max-width: 860px) { .sw-root .sw-copy { translate: none; } }
 
   /* ==================================================================
      HOCHKANT-FASSUNG: Bildband oben, Text unten.
@@ -159,6 +187,9 @@
       right: clamp(18px, 5vw, 48px);
       width: auto; max-width: 34rem;
       transform: none !important;
+      /* Ruecknahme der Zentrierung der breiten Fassung: hier haengt der Block
+         unten, eine Verschiebung um die halbe eigene Hoehe waere hier falsch. */
+      translate: none;
     }
     /* Auf Pergament statt auf Bild: der Schimmer hinter der Schrift, der
        sie vom Video abheben sollte, ist hier ueberfluessig. */
@@ -180,8 +211,11 @@
      noch naeher am 4:3 der Quelle, dort sind dann rund 88 % der Bildbreite
      sichtbar. */
   @media (orientation: portrait) and (max-width: 1200px) and (max-height: 720px) {
-    :root, .sw-root { --weg-textzone: 52%; }
+    :root, .sw-root { --weg-textzone: 56%; }
     .sw-root .sw-copy { bottom: calc(clamp(62px, 9.7dvh, 84px) + env(safe-area-inset-bottom)); }
+    /* Der "Mehr dazu"-Knopf kostet rund 40 px Hoehe. Auf 360 x 640 schob er die
+       letzte Station wieder 9 px aufs rohe Bild — enger angesetzt. */
+    .sw-root .weg-mehr { margin-top: 12px; }
     /* Die Schlagwort-Chips und die zwei Schaltflaechen der letzten Station
        brechen hier auf zwei bis drei Zeilen um und schoben den Textblock
        ueber die Pergament-Kante hinaus aufs rohe Bild (gemessen: Station 6
@@ -216,6 +250,157 @@
      (keine Seite kann das) — es macht sie ertraeglich. */
   html.weg-telefon .sw-nav { display: none; }
   html.weg-telefon .sw-route__label { display: none; }
+
+  /* ==================================================================
+     "MEHR DAZU": die Langfassung einer Station als Feld in der Mitte.
+     Mechanik und Begruendung stehen in vertiefung.js.
+     ================================================================== */
+
+  /* Der Knopf unter dem Stationstext. Leise gehalten — er ist ein Angebot,
+     nicht der Hauptweg. Die Trefferflaeche wird unsichtbar auf Fingermass
+     vergroessert, ohne dass der Knopf selbst wuchtiger wird. */
+  .sw-root .weg-mehr {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 7px;
+    margin-top: 20px; padding: 0 0 3px;
+    font: inherit; font-size: 0.9rem; font-weight: 600;
+    color: var(--sw-accent); background: none; cursor: pointer;
+    border: 0; border-bottom: 1px solid color-mix(in srgb, var(--sw-accent) 40%, transparent);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .sw-root .weg-mehr::before { content: ""; position: absolute; inset: -13px -10px; }
+  .sw-root .weg-mehr svg {
+    width: 14px; height: 14px; fill: none; stroke: currentColor;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.2s;
+  }
+  .sw-root .weg-mehr:hover { color: var(--sw-ink); border-color: color-mix(in srgb, var(--sw-ink) 45%, transparent); }
+  .sw-root .weg-mehr:hover svg { transform: translateY(2px); }
+  .sw-root .weg-mehr:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 5px; border-radius: 3px; }
+
+  /* Das Feld. Liegt ueber allem: Buehne 10, Textebene 20, Bedienelemente 40-60,
+     Leseteil 70. */
+  .weg-tief { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: clamp(12px, 4vw, 40px); }
+  /* Ohne diese Zeile setzt das `display: grid` oben das `hidden`-Merkmal ausser
+     Kraft und das Feld staende dauerhaft offen. */
+  .weg-tief[hidden] { display: none; }
+
+  /* Der Grund: Pergament, in der Mitte am dichtesten, zum Rand hin duenner —
+     die Welt bleibt als Ahnung stehen, statt hinter einer Wand zu verschwinden. */
+  .weg-tief__grund {
+    position: absolute; inset: 0; cursor: pointer;
+    background: radial-gradient(125% 95% at 50% 50%,
+      color-mix(in srgb, var(--sw-bg) 97%, transparent) 0%,
+      color-mix(in srgb, var(--sw-bg) 90%, transparent) 52%,
+      color-mix(in srgb, var(--sw-bg) 60%, transparent) 100%);
+    opacity: 0; transition: opacity 0.32s ease;
+  }
+  .weg-tief.ist-offen .weg-tief__grund { opacity: 1; }
+
+  .weg-tief__feld {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    width: min(100%, 40rem); max-height: min(82dvh, 44rem);
+    background: var(--sw-bg);
+    border: 1px solid color-mix(in srgb, var(--sw-accent) 24%, transparent);
+    border-radius: 14px;
+    box-shadow: 0 26px 64px -22px rgba(31, 42, 68, 0.30), 0 2px 10px rgba(31, 42, 68, 0.06);
+    opacity: 0; transform: translateY(14px) scale(0.985);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .weg-tief.ist-offen .weg-tief__feld { opacity: 1; transform: none; }
+
+  /* Ein Hauch Pergament ueber der Unterkante zeigt an, dass noch Text folgt. */
+  .weg-tief__feld::after {
+    content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 2.4rem;
+    border-radius: 0 0 13px 13px; pointer-events: none;
+    background: linear-gradient(0deg, var(--sw-bg) 12%, transparent 100%);
+  }
+
+  .weg-tief__rolle {
+    overflow-y: auto;
+    /* Haelt den Scroll im Feld, statt ihn am Ende an die Seite weiterzureichen —
+       das Weiterreichen uebernimmt vertiefung.js bewusst selbst. */
+    overscroll-behavior: contain;
+    padding: clamp(24px, 5vw, 40px) clamp(20px, 5vw, 42px) clamp(18px, 3vw, 28px);
+  }
+  .weg-tief__rolle:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: -4px; border-radius: 13px; }
+
+  .weg-tief__zu {
+    position: absolute; top: 10px; right: 10px; z-index: 2;
+    width: 38px; height: 38px; display: grid; place-items: center;
+    border: 1px solid color-mix(in srgb, var(--sw-ink) 12%, transparent);
+    border-radius: 50%; cursor: pointer;
+    background: color-mix(in srgb, var(--sw-bg) 88%, transparent);
+    backdrop-filter: blur(4px);
+    color: var(--sw-ink-soft); transition: color 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .weg-tief__zu svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+  .weg-tief__zu:hover { color: var(--sw-ink); border-color: color-mix(in srgb, var(--sw-accent) 45%, transparent); transform: rotate(90deg); }
+  .weg-tief__zu:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 3px; }
+
+  .weg-tief__fuss {
+    margin: 1.9rem 0 0; padding-top: 0.9rem;
+    border-top: 1px solid rgba(31, 42, 68, 0.10);
+    font-size: 0.76rem; letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--sw-ink-soft) 78%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .weg-tief__grund, .weg-tief__feld { transition: opacity 0.12s linear; }
+    .weg-tief__feld { transform: none; }
+    .weg-tief__zu:hover { transform: none; }
+    .sw-root .weg-mehr:hover svg { transform: none; }
+  }
+
+  /* ------------------------------------------------------------------
+     Die Langfassungen selbst.
+
+     Sie stehen als gewoehnliches Markup in der Seite und werden erst
+     ausgeblendet, wenn JavaScript laeuft — deshalb der `.js`-Vorsatz, wie
+     ihn das Projekt auch fuer die Aufdeck-Regeln der Hauptseite verlangt.
+     Ohne JavaScript stehen sie schlicht als Lesetext untereinander, statt
+     dass die Seite die Haelfte ihres Inhalts verschluckt.
+     ------------------------------------------------------------------ */
+  .vertiefungen { background: var(--sw-bg); padding: 2.5rem 1.5rem 0; }
+  .vertiefungen > .vertiefung { max-width: 46rem; margin: 0 auto 3.5rem; }
+  .js .vertiefungen { display: none; }
+
+  .vertiefung-auge {
+    display: block; margin: 0 0 0.55rem;
+    font-family: var(--sw-font-display); font-weight: 700;
+    font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--sw-accent);
+  }
+  .vertiefung h2 {
+    font-family: var(--sw-font-display); font-weight: 700;
+    font-size: clamp(1.55rem, 4.6vw, 2rem); line-height: 1.08;
+    margin: 0 0 1rem; letter-spacing: -0.01em; color: var(--sw-ink);
+  }
+  .weg-tief .vertiefung h2 { padding-right: 2.4rem; }
+  .vertiefung h3 {
+    font-family: var(--sw-font-display); font-weight: 700;
+    font-size: 1.06rem; line-height: 1.3; color: var(--sw-ink);
+    margin: 1.7rem 0 0.4rem;
+  }
+  .vertiefung h3:first-child { margin-top: 0; }
+  .vertiefung p { margin: 0 0 0.95rem; line-height: 1.68; color: var(--sw-ink-soft); }
+  .vertiefung ul { margin: 0 0 1.1rem; padding: 0; list-style: none; }
+  .vertiefung li { position: relative; margin-bottom: 0.5rem; padding-left: 1.15rem; line-height: 1.62; color: var(--sw-ink-soft); }
+  .vertiefung li::before {
+    content: ""; position: absolute; left: 0.2rem; top: 0.72em;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--sw-accent); opacity: 0.55;
+  }
+  .vertiefung .vertiefung-preis {
+    display: block; margin: -0.15rem 0 0.55rem;
+    font-size: 0.83rem; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--sw-accent);
+  }
+  .vertiefung strong { color: var(--sw-ink); font-weight: 600; }
+  .vertiefung a { color: var(--sw-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .vertiefung a:hover { color: var(--sw-accent); }
+  .vertiefung > :last-child { margin-bottom: 0; }
 
   /* ------------------------------------------------------------------
      Der Leseteil unterhalb der Reise.
@@ -336,6 +521,221 @@
 
   <!-- Laesst die letzte Szene ausklingen, statt sie hart abzuschneiden. -->
   <div class="ausklang" aria-hidden="true"></div>
+
+  <!-- ==================================================================
+       Die Langfassungen der sieben Stationen.
+
+       Mit JavaScript unsichtbar (`.js .vertiefungen`): vertiefung.js klont
+       den passenden Artikel in das "Mehr dazu"-Feld. Ohne JavaScript stehen
+       sie hier als gewoehnlicher Lesetext — und sie stehen so oder so im
+       ausgelieferten HTML, also auch fuer Suchmaschinen.
+
+       Quelle der Texte: inhalt/lumen-inhalt.md (Auszug der Live-Hauptseite).
+       Die Zuordnung Station -> Abschnitt der Hauptseite:
+         anflug -> Hero · werkzeug -> Einordnung + Grundwerte
+         schreibtisch -> #vorher-nachher · stilprobe -> #stilprobe
+         weg -> #angebote · lichtung -> #wer · aussicht -> #passt
+       ================================================================== -->
+  <div id="vertiefungen" class="vertiefungen">
+
+    <article class="vertiefung" data-station="anflug">
+      <p class="vertiefung-auge">Für Coaches, Trainer, Mentoren</p>
+      <h2>Mehr Raum für das Wesentliche.</h2>
+      <p>KI, die deine Handschrift trägt. Ich verstärke, was dich auszeichnet — DSGVO-konform
+         und maßgeschneidert, nicht von der Stange.</p>
+      <p>Meine Mission ist, Menschen zu unterstützen, die anderen helfen. Coaches, Trainer,
+         Mentoren: Ihr leistet eine Arbeit, die zählt. Ich sorge dafür, dass die Technik euch
+         dient und Zeit zurückgibt. So habt ihr mehr Raum für das Wesentliche.</p>
+      <h3>Wofür die drei Zusagen stehen</h3>
+      <ul>
+        <li><strong>EU-gehostet.</strong> Deine Daten und die deiner Klient:innen bleiben im
+            europäischen Rechtsraum.</li>
+        <li><strong>TÜV-geprüft.</strong> Geprüfte Qualifikation „Manager für angewandte
+            KI-Transformation“, TÜV Rheinland.</li>
+        <li><strong>DSGVO- und EU-AI-Act-konform.</strong> Einschließlich der Schulung, die dich
+            seit Februar 2025 zur KI-Kompetenz verpflichtet.</li>
+      </ul>
+      <p>Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und aus
+         der Ferne.</p>
+    </article>
+
+    <article class="vertiefung" data-station="werkzeug">
+      <p class="vertiefung-auge">Eine Einordnung vorweg</p>
+      <h2>KI ist ein Werkzeug.</h2>
+      <p>Was wir daraus machen und wofür wir es einsetzen, liegt in unserer Verantwortung, so wie
+         bei jedem Werkzeug. Wir können KI nutzen, um das Positive zu verstärken. Wir können ihr
+         unsere Werte beibringen, unsere Sichtweisen, unsere Sprache.</p>
+      <h3>Meine Grundwerte, wenn ich mit KI arbeite</h3>
+      <ul>
+        <li>KI ersetzt keine echte Beziehung. Begegnung bleibt menschlich.</li>
+        <li>Klient:innen wissen, wo KI eingesetzt wird. Transparenz ist Standard.</li>
+        <li>Ich baue für dich, nicht für die Masse. Jeder Aufbau wird auf deine Methode und
+            deinen Stil zugeschnitten.</li>
+        <li>Sensible Daten werden geschützt. EU-Hosting, Auftragsverarbeitungsverträge, lokale
+            Modelle bei Bedarf.</li>
+        <li>Du bleibst Entscheider. KI macht Vorschläge, du wählst aus. Nichts geht raus, ohne
+            dass du es gesehen hast.</li>
+        <li>Deine Stimme und deine Methode bleiben erkennbar. KI verstärkt, sie ersetzt nicht.</li>
+      </ul>
+    </article>
+
+    <article class="vertiefung" data-station="schreibtisch">
+      <p class="vertiefung-auge">Deine Woche, zwei Fassungen</p>
+      <h2>Was sich wirklich ändert.</h2>
+      <h3>Heute</h3>
+      <ul>
+        <li>Sitzungsnotizen liegen verstreut auf Zetteln, in Notion, in Sprachnachrichten.</li>
+        <li>Das Nachfassen bei deiner Klientin nimmst du dir für heute Abend vor, schon zum
+            dritten Mal.</li>
+        <li>Den Newsletter verschiebst du seit drei Wochen aufs Wochenende.</li>
+      </ul>
+      <h3>Morgen</h3>
+      <ul>
+        <li>Die Sitzungszusammenfassung steht, bevor du das Notizbuch zuklappst.</li>
+        <li>Das Nachfassen geht raus, in deiner Sprache.</li>
+        <li>Der nächste Newsletter liegt im Entwurf, aus echten Themen deiner Woche.</li>
+      </ul>
+      <p>Du bekommst keine Werkzeug-Liste und keinen Online-Kurs. Du bekommst eine Begleitung, in
+         der wir gemeinsam herausarbeiten, wo KI in deiner Arbeit Substanz hat — und sie genau
+         dort einbauen.</p>
+    </article>
+
+    <article class="vertiefung" data-station="stilprobe">
+      <p class="vertiefung-auge">Die Stilprobe</p>
+      <h2>Lies dich selbst.</h2>
+      <p>Du musst mir nichts glauben. Schick mir drei deiner Texte, und du bekommst binnen
+         48 Stunden einen neuen Entwurf in zwei Fassungen zurück: einmal generisch, einmal in
+         deiner Handschrift. Dazu drei Beobachtungen zu deiner Sprache. Kostenlos, ohne Haken.</p>
+      <h3>Ein Beispiel für den Unterschied</h3>
+      <p><strong>Fassung A, ohne Handschrift.</strong> „Pausen werden oft unterschätzt. Dabei
+         zeigen Studien, dass regelmäßige Auszeiten die Leistungsfähigkeit steigern. Wer bewusst
+         innehält, arbeitet danach fokussierter und trifft bessere Entscheidungen. Deshalb gilt:
+         Plane deine Pausen genauso sorgfältig wie deine Termine.“</p>
+      <p><strong>Fassung B, deine Handschrift.</strong> „Vielleicht kennst du das: Der Kalender
+         ist voll, und ausgerechnet die Pause fühlt sich an wie Drückebergerei. Ist sie nicht.
+         Eine Pause ist kein Stillstand, sondern der Moment, in dem deine Arbeit sich setzt.
+         Du darfst anhalten.“</p>
+      <p>Das Merkmal in diesem Beispiel: die kurzen Schlusssätze. Genau solche Eigenheiten suche
+         ich in deinen Texten — und schreibe sie nicht glatt.</p>
+      <p>Fünfzehn Proben im Monat, mehr gibt die Handarbeit nicht her.
+         <a href="/jgc-studio-website/stilprobe/">Zur Stilprobe</a></p>
+    </article>
+
+    <article class="vertiefung" data-station="weg">
+      <p class="vertiefung-auge">Schritt für Schritt, in deinem Tempo</p>
+      <h2>So gehen wir gemeinsam vor.</h2>
+
+      <h3>Schritt 1 — Erstgespräch</h3>
+      <span class="vertiefung-preis">kostenlos · etwa 30 Minuten</span>
+      <p>Wir lernen uns auf Augenhöhe kennen und klären, ob das zueinander passt. Du erzählst, wo
+         dir im Alltag Zeit und Ruhe verloren gehen. Ich sage offen, was sinnvoll ist und was
+         nicht. Kein Verkaufsgespräch, keine Folien.</p>
+
+      <h3>Schritt 2 — KI-Praxis-Check</h3>
+      <span class="vertiefung-preis">600 €, voll anrechenbar</span>
+      <p>Ich schaue mir deine Praxis genau an — du bekommst eine ehrliche Orientierung, wo KI
+         dich wirklich entlastet und wo deine Werkzeuge schon reichen.</p>
+      <ul>
+        <li>90-Minuten-Gespräch</li>
+        <li>schriftlicher Report (PDF, etwa 8 bis 12 Seiten)</li>
+        <li>drei bis fünf priorisierte Hebel mit konkreten Empfehlungen</li>
+        <li>Bewertung deiner Werkzeuge auf DSGVO und EU AI Act</li>
+      </ul>
+      <p><strong>Du weißt schon genau, was du willst?</strong> Dann wird der Check kein Suchen,
+         sondern ein Prüfen: Trägt dein Wunsch? Passt das Werkzeug zu deiner Praxis, deiner
+         Stimme, deinen Daten? Was bei einer Kollegin funktioniert, braucht bei dir einen eigenen
+         Zuschnitt — genau den legen wir fest.</p>
+      <p>Entscheidest du dich für eine Umsetzung, rechne ich die 600 € vollständig an. Der Check
+         kostet dich dann nichts extra.</p>
+
+      <h3>Schritt 3 — Umsetzung</h3>
+      <span class="vertiefung-preis">ab 2.500 €</span>
+      <p>Was sich im Praxis-Check gezeigt hat, baue ich — fertig eingerichtet, DSGVO-konform, in
+         deiner Handschrift. Du wählst die Bausteine, die zu dir passen.</p>
+      <ul>
+        <li><strong>Content-Stimme, ab 4.000 €.</strong> Die KI lernt, wie du schreibst, und
+            schlägt daraus Beiträge und Newsletter vor — in deiner Sprache statt generisch.
+            Grundlage sind deine Texte, Sprachnotizen oder Sitzungs-Transkripte.</li>
+        <li><strong>Sitzungs-Nachbereitung, ab 2.500 €.</strong> Eine Zusammenfassung nach jeder
+            Sitzung, ohne dass du tippst; auf Wunsch eine klientengerechte Fassung und die
+            nächsten Schritte als sanfte Erinnerung.</li>
+        <li><strong>Begleitung zwischen den Sitzungen, ab 2.500 €.</strong> Reflexionsfragen und
+            Übungen, die deine Klient:innen zwischen den Terminen tragen, behutsame Erinnerungen
+            ans Vereinbarte, sichtbarer Fortschritt.</li>
+        <li><strong>Klienten-Aufnahme, ab 3.000 €.</strong> Ein Erstkontakt, der vorklärt, was
+            die Person mitbringt, ein Erwartungs-Bogen vor dem ersten Termin, Anfragen zeitnah in
+            deinem Ton beantwortet.</li>
+        <li><strong>Praxis-Gedächtnis, ab 2.500 €.</strong> Notizen und Material an einem
+            durchsuchbaren Ort statt verstreut; per Telegram einen Gedanken oder eine Sprachnotiz
+            schicken, die sortiert abgelegt wird.</li>
+      </ul>
+      <p>Mehrere Bausteine richte ich als ein stimmiges Ganzes ein — das ist günstiger als die
+         Summe. Welcher Zuschnitt für dich passt, klären wir im Praxis-Check.</p>
+
+      <h3>Schritt 4 — Resonanzraum, optional</h3>
+      <span class="vertiefung-preis">ab 300 € pro Monat, ab dem dritten Monat</span>
+      <ul>
+        <li>Deine Werkzeuge bleiben auf dem Stand: neue Modelle, bessere Vorlagen.</li>
+        <li>Ich halte dich auf dem Laufenden, wenn sich bei DSGVO oder EU AI Act etwas ändert,
+            das dich betrifft — verständlich, nicht als Paragrafen-Flut.</li>
+        <li>Begleitung bei Bedarf.</li>
+      </ul>
+      <p>Ohne diese Anbindung bleibt deine Umsetzung trotzdem stabil — du bist nicht abhängig.
+         Jeder Baustein ist DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten
+         werden nie zum Training von KI verwendet.</p>
+    </article>
+
+    <article class="vertiefung" data-station="lichtung">
+      <p class="vertiefung-auge">Wer mit dir arbeitet</p>
+      <h2>Drei Welten, ein Blick.</h2>
+      <p><strong>Gabriel Chimento</strong>, Gründer von JGC Lumen. Ich verstehe die innere Welt
+         deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides
+         verbinden.</p>
+      <h3>Coach-Hintergrund</h3>
+      <p>Ausgebildeter Mentaltrainer und Meditationskursleiter, in Ausbildung als Fitnesstrainer.
+         Ich kenne die innere Welt deiner Arbeit aus eigener Anschauung und Erfahrung.</p>
+      <h3>Wirtschaftsingenieur</h3>
+      <p>Master in Wirtschaftsingenieurwesen. Mein Beruf ist es, zwischen Welten zu übersetzen —
+         Technik, Wirtschaft, Mensch. Ich denke in Abläufen und Prozessen, ohne den Menschen
+         darin aus den Augen zu verlieren.</p>
+      <h3>TÜV-geprüfter KI-Experte</h3>
+      <p>Geprüfte Qualifikation „Manager für angewandte KI-Transformation“ des TÜV Rheinland,
+         Prüfzeichen-ID 0217466495, gültig bis 11.06.2029. Eigene KI-Anwendungen entwickelt und
+         in Praxen anderer eingebaut. KI ist nicht mein Hobby, sondern meine tägliche Arbeit —
+         mit der Begeisterung von jemandem, der weiß, was diese Werkzeuge können und wo ihre
+         Grenzen liegen.</p>
+      <p>Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und aus
+         der Ferne.</p>
+    </article>
+
+    <article class="vertiefung" data-station="aussicht">
+      <p class="vertiefung-auge">Ehrlich gesagt</p>
+      <h2>Lass uns schauen, ob das passt.</h2>
+      <h3>Passt für dich, wenn …</h3>
+      <ul>
+        <li>Du eine eigene Methode oder ein eigenes Programm hast, das in deiner Arbeit trägt.</li>
+        <li>Du regelmäßig Inhalte veröffentlichst — Newsletter, Podcast, Posts — und merkst, dass
+            dich das Tempo zermürbt.</li>
+        <li>Du KI nutzen willst, ohne dass dein Schreiben generisch wird.</li>
+        <li>Du tech-skeptisch bist und genau deshalb jemanden brauchst, der die Werkzeuge für
+            dich baut, statt dir Anleitungen zu schicken.</li>
+        <li>Du in einer Praxis mit Klient:innen arbeitest und dafür Rechtssicherheit brauchst,
+            die wirklich greift.</li>
+      </ul>
+      <h3>Passt nicht, wenn …</h3>
+      <ul>
+        <li>Du gerade erst startest und deine Methode noch nicht steht. Hier hilft kein Werkzeug,
+            sondern erst einmal Klarheit über dein Angebot.</li>
+        <li>Du eine Marketing-Maschine suchst, die dich ersetzt. Das baue ich nicht.</li>
+        <li>Du KI als Beziehungsersatz für deine Klient:innen einsetzen willst.</li>
+        <li>Du erwartest, dass der Aufbau ohne deine Mitarbeit funktioniert. Deine Content-Stimme
+            und die Praxis-Bausteine brauchen dich als Quelle.</li>
+      </ul>
+      <p>Kostenfreies Erstgespräch, etwa 30 Minuten. Kein Verkaufsgespräch, keine Verpflichtung.
+         Schreib mir an <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
+    </article>
+
+  </div>
 
   <section class="fragen" id="fragen">
     <div class="fragen-innen">
@@ -462,8 +862,12 @@
 </div>
 
 <script src="scrub-engine.js"></script>
+<script src="vertiefung.js"></script>
 <script>
-  mountScrollWorld(document.getElementById('world'), {
+  /* Die Konfiguration bekommt einen Namen, damit die Stationsliste fuer
+     "Mehr dazu" unten daraus abgeleitet werden kann statt ein zweites Mal
+     dazustehen — sonst laufen die beiden Reihenfolgen irgendwann auseinander. */
+  var wegKonfig = {
     brand: { name: 'JGC Lumen', href: '/jgc-studio-website/', logo: 'assets/sigel.png' },
     hint: 'scrollen und mitfliegen',
     nav: true,
@@ -584,6 +988,14 @@
     /* Architektur A: die sieben Etappen SIND die Reise, es gibt keine
        Verbindungsclips dazwischen. */
     connectors: [],
+  };
+
+  mountScrollWorld(document.getElementById('world'), wegKonfig);
+
+  /* Muss NACH mountScrollWorld laufen: es haengt seine Knoepfe an die
+     Stationstexte, die die Engine erst dabei aufbaut. */
+  mountVertiefung({
+    stationen: wegKonfig.sections.map(function (s) { return s.id; }),
   });
 </script>
 </body>

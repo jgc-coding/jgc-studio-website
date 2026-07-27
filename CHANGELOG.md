@@ -2,6 +2,48 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: „Mehr dazu" öffnet die Langfassung jeder Station
+
+Die Reise zeigt je Station drei bis vier Zeilen. Wer mehr wissen wollte, musste auf die
+Lesefassung wechseln. Jetzt steht unter jedem Stationstext ein leiser Pfeil-Knopf **„Mehr dazu"**,
+der die vollständigen Inhalte des jeweiligen Abschnitts als Feld in der Bildschirmmitte öffnet —
+auf einem Pergament-Grund, der zur Mitte hin dichter wird, sodass die Welt als Ahnung
+stehenbleibt. Alle sieben Stationen sind belegt (Quelle: `inhalt/lumen-inhalt.md`).
+
+**Der Konflikt und seine Auflösung.** Gewünscht war: weiterscrollen lässt das Feld sanft
+verschwinden. Genau so ist es. Solange es offen ist, hält die Reise aber an — sonst spult die
+Kamera hinter einem Textfeld weiter, und die längste Station („Der Weg", 2.025 px Inhalt) wäre
+überhaupt nicht lesbar. Die Regel: erst scrollt der Text im Feld; ist er zu Ende und man scrollt
+weiter, geht es zu und die Reise läuft. Dazu Schließknopf, Escape, Klick auf den Hintergrund.
+Eine kleine Schwelle (60 px) verhindert, dass ein Wackler das Feld zuschnappen lässt.
+
+**Sieben Wege hinein und hinaus, alle gemessen:** Rad im Text · Rad am Textende · Rad auf dem
+Hintergrund · Wischen in allen drei Lagen · Escape · Hintergrund-Klick · Schließknopf (Fokus
+kehrt zum auslösenden Knopf zurück) · Seite bewegt sich anderweitig. Ein Fehler kam dabei ans
+Licht: beim Wischen wurde der Bezugspunkt auf die *aktuelle* Fingerposition gesetzt statt auf die
+Stelle, an der das Feld aufhörte mitzugehen — ein Wisch auf dem Hintergrund hielt die Seite an,
+ging aber nie zu.
+
+**Ein zweiter Fund, älter als diese Änderung.** Die Engine setzt für die breite Fassung
+`top: 50%; transform: translateY(-50%)` und überschreibt `transform` beim Scrollen sofort mit dem
+wandernden ±2 vh — die Zentrierung fiel damit ersatzlos weg, der Textblock *hing* an der
+Bildschirmmitte. Auf 1440 × 900 fällt das kaum auf; auf einem 1280 × 720 großen Notebook liefen
+drei Stationen unten aus dem Bild (19 bis 65 px), und abgeschnitten wurde ausgerechnet der neue
+Knopf. Behoben über die eigenständige Eigenschaft `translate`, die **vor** `transform` wirkt statt
+es zu ersetzen: Zentrierung in der Seite, Wandern weiter in der Engine. **Sichtbare Folge: auf
+breiten Schirmen steht der Text jetzt mittig statt ab der Mitte nach unten.**
+
+**Ohne JavaScript** stehen die sieben Langfassungen schlicht als Lesetext untereinander (5.221 px),
+statt dass die Seite die Hälfte ihres Inhalts verschluckt — der `.js`-Vorsatz, den das Projekt auch
+für die Aufdeck-Regeln der Hauptseite verlangt. Sie stehen so oder so im ausgelieferten HTML.
+
+**Bewusst nicht übernommen:** die Zeile „Ausschnitt aus einer echten Stilprobe" von der
+Hauptseite. Der dortige Ausschnitt trägt im Quelltext zweimal `PLATZHALTER Phase 6` (Befund V20).
+Im neuen Feld steht deshalb „Ein Beispiel für den Unterschied" — die Fassungen A und B sind
+übernommen, die Echtheitsbehauptung nicht.
+
+`der-weg/vertiefung.js` ist neu und steht jetzt auch in der Artefakt-Prüfung des Deploys.
+
 ## 2026-07-27 — Der Weg: eigene Hochkant-Fassung (Bildband oben, Text unten)
 
 **Der Anlass war ein Trugschluss.** Ein Screenshot vom Telefon zeigte winzige Schrift und die

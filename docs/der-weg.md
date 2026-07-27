@@ -11,8 +11,9 @@ keine Verbindungsclips). Grundlage: `scroll-world-briefing.md` von Gabriel, 2026
 
 | Ort | Inhalt |
 |---|---|
-| `der-weg/index.html` | Seite, Stationstexte, Engine-Konfiguration |
-| `der-weg/scrub-engine.js` | Scroll-Engine aus dem Skill, **mit einer Abweichung** (siehe unten) |
+| `der-weg/index.html` | Seite, Stationstexte, Langfassungen, Engine-Konfiguration |
+| `der-weg/scrub-engine.js` | Scroll-Engine aus dem Skill, **unverändert** (siehe unten) |
+| `der-weg/vertiefung.js` | „Mehr dazu": öffnet die Langfassung einer Station (siehe unten) |
 | `der-weg/assets/` | 7 Etappen à 4 Dateien plus Schriften, zusammen rund 52 MB |
 | `scripts/der-weg/kodiere.mjs` | Rohvideos → auslieferbare Dateien |
 | `scripts/der-weg/pruefe-naehte.mjs` | prüft die Übergänge zwischen den Etappen |
@@ -88,13 +89,36 @@ ist. Umgekehrt braucht kein Tablet quer die Hochkant-Fassung — dort ist der Sc
 4:3, es wird also gar nichts abgeschnitten.
 
 **Nachjustieren:** genau eine Zahl, `--weg-textzone` in `der-weg/index.html` (Höhe des
-Textbereichs von unten, Standard 46 %, auf kurzen Schirmen 52 %). Bild, Verlauf und Naht leiten
-sich daraus ab. Mehr Textanteil heißt automatisch **mehr** sichtbares Bild, weil ein flacheres
-Band näher am 4:3 der Quelle liegt.
+Textbereichs von unten, Standard 46 %, auf Schirmen bis 720 px Höhe 56 %). Bild, Verlauf und Naht
+leiten sich daraus ab. Mehr Textanteil heißt automatisch **mehr** sichtbares Bild, weil ein
+flacheres Band näher am 4:3 der Quelle liegt.
 
 Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
 Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md
 unter „Preview-Messungen".
+
+## „Mehr dazu": die Langfassung einer Station
+
+Unter jedem Stationstext steht ein Pfeil-Knopf, der die vollständigen Inhalte des zugehörigen
+Abschnitts der Hauptseite als Feld in der Bildschirmmitte öffnet.
+
+**Texte ändern:** im Markup von `der-weg/index.html`, Block `<div id="vertiefungen">`, ein
+`<article data-station="…">` je Station. Kein Skript nötig, kein Build. Erlaubte Bausteine:
+`.vertiefung-auge` (Kleintext oben), `h2`, `h3`, `.vertiefung-preis`, `p`, `ul`/`li`, `strong`, `a`.
+Interne Links absolut halten (`/jgc-studio-website/…`).
+
+**Zuordnung:** über `data-station` auf den Wert von `id` in der Sektions-Konfiguration. Die
+Reihenfolge leitet `mountVertiefung` aus `wegKonfig.sections` ab, damit keine zweite Liste
+entsteht, die auseinanderlaufen kann. Fehlt zu einer Station ein Artikel, bekommt sie einfach
+keinen Knopf — kein Fehler.
+
+**Verhalten beim Scrollen** (der einzige Punkt, an dem man sich vertun kann): Solange das Feld
+offen ist, hält die Reise an. Erst scrollt der Text im Feld; ist er zu Ende und man scrollt
+weiter, geht es zu und die Reise läuft weiter. Dazu Schließknopf, Escape und Klick auf den
+Hintergrund. Würde die Kamera weiterlaufen, wäre eine lange Station gar nicht lesbar.
+
+**Ohne JavaScript** stehen die Langfassungen als gewöhnlicher Lesetext untereinander — die Regel
+`.js .vertiefungen { display: none }` blendet sie nur aus, wenn sie per Knopf erreichbar sind.
 
 ## Engine: unveränderte Skill-Fassung
 
@@ -143,10 +167,16 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
   aussteht, zeigt eine Seite mit dem Titel „Wer mit dir arbeitet" ein Gesicht, das die
   Besucherin für den Gründer halten wird. Das ist die gleiche Ehrlichkeitsfrage wie bei
   den Platzhalter-Kundenstimmen (V13) und sollte vor dem Veröffentlichen geklärt sein.
+  **Seit dem „Mehr dazu"-Feld schärfer:** dort steht jetzt Gabriels Name, sein Werdegang und
+  seine TÜV-Prüfzeichen-ID neben dem erfundenen Gesicht. Was vorher eine Andeutung war, ist damit
+  eine ausdrückliche Zuschreibung.
   Eine Notiz vom 24.07. behauptete, das Portrait sei bereits einkomponiert; die dort
   genannten Dateien (`leg 6 original.mp4`, Werkzeugordner) existieren nicht mehr.
 - Die zwei springenden Übergänge (siehe oben).
-- **Hochkant-Fassung in den Skill zurückgeben.** Das 4:3-auf-9:19,5-Problem trifft jede
-  Scroll-Welt, nicht nur diese Seite. Solange die Fassung nur hier steht, muss sie beim nächsten
-  Projekt neu erfunden werden. Erst nach Gabriels Urteil am echten Gerät.
+- **Drei Dinge in den Skill zurückgeben**, sobald sie sich bewährt haben: die Hochkant-Fassung
+  (das 4:3-auf-9:19,5-Problem trifft jede Scroll-Welt), das „Mehr dazu"-Feld, und vor allem die
+  verlorene Zentrierung der breiten Fassung — die ist ein echter Fehler der Engine, kein
+  Geschmack, und trifft jedes Projekt, das den Skill benutzt (`top: 50%` plus
+  `transform: translateY(-50%)`, während die Engine `transform` beim Scrollen überschreibt;
+  Abhilfe ist die eigenständige Eigenschaft `translate`). Erst nach Gabriels Urteil am Gerät.
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.

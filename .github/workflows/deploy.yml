@@ -179,6 +179,7 @@ jobs:
             _site/stilprobe/index.html \
             _site/der-weg/index.html \
             _site/der-weg/scrub-engine.js \
+            _site/der-weg/vertiefung.js \
             _site/der-weg/assets/anflug.mp4 \
             _site/og-bild.jpg \
           ; do
