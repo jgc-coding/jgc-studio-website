@@ -83,6 +83,17 @@
   }
   .sw-root .sw-hint i { border-color: rgba(31, 42, 68, 0.5); }
 
+  /* Der aktive Reiter der Engine-Nav ist weiss auf der Szenenfarbe — gemessen
+     3,3:1 auf Kupfer, 2,6:1 auf Salbei, 2,8:1 auf Quellwasser, noetig sind
+     4,5:1. Ausgerechnet der aktive Abschnitt war damit der unleserlichste.
+     Tinte statt Szenenfarbe (13,9:1), wie beim Hauptseiten-Knopf aus Runde 2. */
+  .sw-root .sw-nav__item.is-active { background: var(--sw-ink); }
+
+  /* Dasselbe bei den Schlagwort-Chips: die Textfarbe mischt die Szenenfarbe
+     mit Schwarz, und auf der Salbei-Station blieben 4,34:1 uebrig. Eine Stufe
+     dunkler gemischt liegen alle drei Szenenfarben ueber 4,5:1 (Salbei 5,8). */
+  .sw-root .sw-copy__tags li { color: color-mix(in srgb, var(--sw-accent) 58%, #000); }
+
   /* ------------------------------------------------------------------
      Breite Fassung: der Textblock wird wieder wirklich mittig gestellt.
 
@@ -151,10 +162,17 @@
 
        `max()` loest das ohne Stufen: der Streifen bekommt 36 % der Hoehe,
        mindestens aber so viele Pixel, wie die laengste Station braucht.
-       Auf 852 px greift der Anteil (307 px), auf 706 px die Mindesthoehe —
-       das Bild bekommt dort alles, was uebrig bleibt, statt auf einen
-       Notwert fuer kleine Geraete zu fallen. */
-    :root, .sw-root { --weg-textzone: max(36%, 270px); }
+       Massgeblich ist die Schluss-Station mit ihren zwei gestapelten Knoepfen:
+       rund 314 px Inhalt, gemessen bei 375×812 — vorher ragte sie dort und
+       auf den 390er-iPhones 14 px oben ins Bild. Mit 320 px Zone bleiben je
+       3 px Rest oben (im noch deckenden Teil des Verlaufs, unsichtbar) und
+       unten (in der 14-px-Marge) — bewusst so gelassen, denn jede weitere
+       Zonen-Erhoehung kostet ALLE Telefone Bildhoehe, und die Knoepfe selbst
+       schrumpfen kommt nicht in Frage: 42 px sind schon die Untergrenze fuer
+       eine Fingerflaeche. Ab 889 px Schirmhoehe uebernimmt der Anteil,
+       darunter die Mindesthoehe. Niedrige Schirme (unter 780 px) setzen die
+       Schrift eine Stufe kleiner und duerfen auf 300 px herunter. */
+    :root, .sw-root { --weg-textzone: max(36%, 320px); }
 
     /* Das Bild endet an der Oberkante des Textbereichs. Prozente beziehen
        sich auf die Buehne, und die liegt fest im Fenster — anders als vh
@@ -201,17 +219,6 @@
     .sw-root .sw-hint i { width: 15px; height: 24px; border-radius: 8px; }
     .sw-root .sw-hint i::after { height: 5px; }
 
-    /* Der Text sitzt unten im Pergament.
-
-       `transform` mit Nachdruck: die Engine schreibt beim Scrollen laufend
-       ein `translateY` von +2vh bis -2vh direkt ins Element (scrub-engine.js,
-       Funktion read()). Ueber einem bildschirmfuellenden Video ist dieses
-       Mitschwimmen ein schoenes Detail; in einem festen Textfeld neben einem
-       festen Bildband sind es nur 34 px Wandern, die ueberall als Luft
-       eingeplant werden muessten — und die zuerst dem Scroll-Hinweis in die
-       Quere kommen (gemessen). Direkt am Element gesetzte Angaben schlagen
-       normale Regeln, deshalb hier ausnahmsweise `!important`. Das Ein- und
-       Ausblenden bleibt unberuehrt, nur das Wandern haelt an. */
     /* Der Text fuellt den Streifen unter dem Bild und wird darin zentriert.
 
        Vorher hing er an der Unterkante. Bei einer kurzen Station (etwa
@@ -255,9 +262,6 @@
        nur der Winkel bleibt kupfern. Damit: zwei Familien, eine gesperrte
        Zeile, zwei kupferne Elemente. */
     .sw-root .sw-copy__num { display: none; }
-    /* Etwas enger gesperrt als in der breiten Fassung: der laengste Kleintext
-       ("Für Coaches, Trainer, Mentoren") muss sich die Zeile mit dem
-       "Mehr dazu"-Knopf teilen — bei 0,13em brach sie um. */
     /* Etwas kleiner und enger gesperrt als in der breiten Fassung: der laengste
        Kleintext ("Für Coaches, Trainer, Mentoren") teilt sich die Zeile mit dem
        "Mehr"-Knopf. Bei 0,8rem/0,13em brach sie um. */
@@ -266,6 +270,15 @@
        ergibt 385 von 354 verfuegbaren. Ohne "dazu" sind es 343 — die Kopfzeile
        bleibt damit auf ALLEN sieben Stationen einzeilig. */
     .sw-root .weg-mehr__zusatz { display: none; }
+    /* Unter 393 px reicht auch das nicht mehr: bei 375 stehen nur 337 px zur
+       Verfuegung (Kleintext 269 + Knopf 74 + Abstand 10 = 353) — die Kopfzeile
+       der ERSTEN Station brach zweizeilig um. Eine Stufe kleiner und enger
+       gesperrt schafft den Platz. Gemessen bei 375 und 390; bei 320 bricht sie
+       weiterhin um (Kleintext fast so breit wie die Zeile) — dort faengt
+       flex-wrap den Knopf ordentlich in einer eigenen Zeile auf. */
+    @media (max-width: 392px) {
+      .sw-root .sw-copy__eyebrow { font-size: 0.66rem; letter-spacing: 0.09em; }
+    }
 
     /* Auf Pergament statt auf Bild: der Schimmer hinter der Schrift, der
        sie vom Video abheben sollte, ist hier ueberfluessig.
@@ -304,13 +317,6 @@
     }
   }
 
-  /* Schmale Schirme brauchen eine hoehere Mindesthoehe: derselbe Satz bricht
-     dort auf mehr Zeilen um. Gemessen an der laengsten Station — bei 393 px
-     Breite passt sie in 270 px, bei 360 px braucht sie 300 px. */
-  @media (orientation: portrait) and (max-width: 379px) {
-    :root, .sw-root { --weg-textzone: max(36%, 300px); }
-  }
-
   /* Niedrige Schirme: eine Stufe kleiner setzen.
 
      Die Schriftgroessen skalieren mit der BREITE (vw). Auf einem Telefon mit
@@ -321,6 +327,9 @@
      rund 260 px — und genau diese Zahl ist oben die Mindesthoehe des
      Streifens. Weniger Schrift heisst hier also unmittelbar mehr Bild. */
   @media (orientation: portrait) and (max-width: 1200px) and (max-height: 780px) {
+    /* Kleinere Schrift heisst kuerzere Stationen: hier reichen 300 px
+       Mindesthoehe (gemessen bei 320×640 und 360×640: laengste Station 286). */
+    :root, .sw-root { --weg-textzone: max(36%, 300px); }
     .sw-root .sw-copy__title { font-size: clamp(1.6rem, 7.1vw, 2.3rem); margin-top: 8px; }
     .sw-root .sw-copy__body { font-size: clamp(0.92rem, 3.85vw, 1.05rem); margin-top: 10px; }
     .sw-root .sw-copy__tags { margin-top: 12px; gap: 6px; }
@@ -419,7 +428,11 @@
   .weg-tief__feld {
     position: relative; z-index: 1;
     display: flex; flex-direction: column;
-    width: min(100%, 40rem); max-height: min(82dvh, 44rem);
+    width: min(100%, 40rem);
+    /* Zwei Zeilen mit Absicht: Browser ohne dvh behalten die vh-Zeile,
+       statt ganz ohne Hoehenbegrenzung dazustehen. */
+    max-height: min(82vh, 44rem);
+    max-height: min(82dvh, 44rem);
     background: var(--sw-bg);
     border: 1px solid color-mix(in srgb, var(--sw-accent) 24%, transparent);
     border-radius: 14px;
@@ -469,7 +482,13 @@
     .weg-tief__grund, .weg-tief__feld { transition: opacity 0.12s linear; }
     .weg-tief__feld { transform: none; }
     .weg-tief__zu:hover { transform: none; }
-    .sw-root .weg-mehr:hover svg { transform: none; }
+    /* Das Plus im Knopf ist ein <i>, kein <svg> — die alte Regel zielte ins
+       Leere und das Zeichen drehte trotz abgeschalteter Bewegung weiter. */
+    .sw-root .weg-mehr i { transition: none; }
+    .sw-root .weg-mehr:hover i { transform: none; }
+    /* Das FAQ-Plus behaelt seinen Zustand (gedreht = offen), wechselt ihn
+       aber ohne Drehbewegung. */
+    .frage > summary::after { transition: none; }
   }
 
   /* ------------------------------------------------------------------
@@ -503,9 +522,11 @@
     margin: 1.7rem 0 0.4rem;
   }
   .vertiefung h3:first-child { margin-top: 0; }
-  .vertiefung p { margin: 0 0 0.95rem; line-height: 1.68; color: var(--sw-ink-soft); }
+  /* Textmass fuer p und li: ohne Grenze liefen die Zeilen im No-JS-Fluss auf
+     102 Zeichen (736-px-Container), lesbar sind bis etwa 75. 32rem = ~74. */
+  .vertiefung p { margin: 0 0 0.95rem; line-height: 1.68; color: var(--sw-ink-soft); max-width: 32rem; }
   .vertiefung ul { margin: 0 0 1.1rem; padding: 0; list-style: none; }
-  .vertiefung li { position: relative; margin-bottom: 0.5rem; padding-left: 1.15rem; line-height: 1.62; color: var(--sw-ink-soft); }
+  .vertiefung li { position: relative; margin-bottom: 0.5rem; padding-left: 1.15rem; line-height: 1.62; color: var(--sw-ink-soft); max-width: 32rem; }
   .vertiefung li::before {
     content: ""; position: absolute; left: 0.2rem; top: 0.72em;
     width: 5px; height: 5px; border-radius: 50%;
@@ -527,8 +548,8 @@
      Wichtig ist die Stapelhoehe: die Buehne der Engine liegt fest im Fenster
      (z-index 10), ihre Textebene auf 20. Alles, was danach kommt, muss darueber
      liegen und deckend sein, sonst scheint das Video hindurch und die
-     Bedienelemente der Reise stehen mitten im Text. 70 liegt ueber allem davon,
-     aber unter dem Umschalter (90), der immer erreichbar bleiben soll.
+     Bedienelemente der Reise stehen mitten im Text. 70 liegt ueber allem davon;
+     darueber stehen nur die Sprungmarke (100) und das "Mehr dazu"-Feld (200).
      ------------------------------------------------------------------ */
   .leseteil { position: relative; z-index: 70; }
 
@@ -576,7 +597,9 @@
   }
   .frage p {
     margin: 0 0 1.3rem; padding-right: 2rem;
-    line-height: 1.68; color: var(--sw-ink-soft); max-width: 38rem;
+    line-height: 1.68; color: var(--sw-ink-soft);
+    /* 38rem ergaben 88 Zeichen je Zeile, lesbar sind bis etwa 75 → 32rem = ~74. */
+    max-width: 32rem;
   }
 
   /* Abspann. Kontakt und Pflichtangaben gehoeren auf jede ausgelieferte Seite,
@@ -1191,9 +1214,11 @@
     }
 
     /* Gemessene Geschwindigkeit in Bytes je Sekunde — oder null, wenn zu wenig
-       uebertragen wurde. Zu wenig heisst in aller Regel: alles kam aus dem
-       Zwischenspeicher des Browsers. Dann kostet das Video nichts mehr und
-       darf laufen. */
+       fuer eine belastbare Aussage uebertragen wurde: unter 40 KB besteht der
+       Messwert vor allem aus Latenz (die drei sicher fertigen Dateien wiegen
+       zusammen nur 19 KB gzip). Ob "zu wenig" Zwischenspeicher oder schlicht
+       eine langsame Erstverbindung heisst, entscheidet ausCache() — vorher
+       gab genau diese Verwechslung den langsamsten Leitungen das Video frei. */
     function gemessen() {
       if (!window.performance || !performance.getEntriesByType) return null;
       var bytes = 0, start = Infinity, ende = 0;
@@ -1227,13 +1252,36 @@
       }
     }
 
+    /* Wiederbesuch erkennen: Eintraege ohne uebertragene Bytes, deren Inhalt
+       trotzdem da ist, kamen aus dem Zwischenspeicher. Ab drei solcher
+       Kerndateien ist es ein Wiederbesuch — dann kostet auch das Video nichts
+       mehr. (Alte Safari melden transferSize immer als 0 und fallen damit wie
+       bisher auf die grosszuegige Seite.) */
+    function ausCache() {
+      if (!window.performance || !performance.getEntriesByType) return false;
+      var n = 0;
+      performance.getEntriesByType('resource').forEach(function (r) {
+        if (r.transferSize === 0 && r.decodedBodySize > 0) n++;
+      });
+      return n >= 3;
+    }
+
     function pruefe(letzterVersuch) {
       if (endgueltig) return;
       var tempo = gemessen();
-      if (tempo === null || tempo >= SCHWELLE) {
+      if (tempo !== null && tempo >= SCHWELLE) {
+        welt.allowClips();
+        endgueltig = true;
+      } else if (tempo === null && ausCache()) {
         welt.allowClips();
         endgueltig = true;
       } else if (letzterVersuch) {
+        // Auch tempo === null landet nach 6 s hier: wenn bis dahin nicht
+        // einmal 40 KB fertig wurden und nichts im Zwischenspeicher lag,
+        // traegt die Leitung kein Video. Auf einer schnellen Erstverbindung
+        // sind die Schriften (~100 KB) dagegen laengst beim 1,8-s-Lauf fertig,
+        // die Messung liefert dort also einen echten Wert und niemand wartet
+        // laenger als vorher.
         welt.enterStillsMode();
         endgueltig = true;
       }
@@ -1258,7 +1306,10 @@
 
     if (schalter) {
       schalter.addEventListener('click', function () {
-        var neu = (welt.mode() === 'video') ? 'sparsam' : 'voll';
+        // 'waiting' zaehlt zur Sparsam-Seite: in der Pruefphase verspricht der
+        // Knopf "Auf datensparsam umstellen" — vorher speicherte er dort 'voll',
+        // also das Gegenteil. Nur wer schon Standbilder sieht, will Video.
+        var neu = (welt.mode() === 'stills') ? 'voll' : 'sparsam';
         try { localStorage.setItem(SPEICHER, neu); } catch (e) {}
         // Neu laden statt mitten im Flug umschalten: halb geladene Clips und
         // freigegebene Zwischenspeicher sauber loszuwerden ist die Muehe nicht

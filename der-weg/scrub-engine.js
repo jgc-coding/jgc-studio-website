@@ -370,7 +370,13 @@ function mountScrollWorld(container, config) {
         v.addEventListener('seeked', () => { s.el.classList.add('has-clip'); }, { once: true });
         v.addEventListener('loadeddata', () => { try { v.pause(); } catch (e) {} if (userReady) primeVideo(v); });
         s.el.appendChild(v); s.video = v; s.hasClip = true;
-      }).catch(() => { s.loading = false; });
+      }).catch(() => {
+        // Allow a retry on transient failures, but cap it: read() runs per scroll
+        // frame, so a permanently missing clip (404) would otherwise refetch in a
+        // tight loop for as long as the leg stays near the viewport.
+        s.tries = (s.tries || 0) + 1;
+        if (s.tries < 3) s.loading = false;
+      });
   }
 
   function read() {
@@ -429,6 +435,12 @@ function mountScrollWorld(container, config) {
       }
       const c = copies[i];
       c.style.opacity = cop;
+      // visibility as well: opacity alone leaves the faded-out copy clickable and
+      // focusable — its CTA links re-enable themselves via `pointer-events:auto`,
+      // and links/buttons stay in the tab order regardless of pointer-events. An
+      // invisible mailto trap on the very first screen, and nine invisible tab
+      // stops for keyboard users (measured via elementFromPoint/focus()).
+      c.style.visibility = cop > 0.01 ? '' : 'hidden';
       c.style.transform = reduce ? 'none' : `translateY(${(0.5 - pr) * 4}vh)`;
       c.style.pointerEvents = cop > 0.5 ? 'auto' : 'none';
     }

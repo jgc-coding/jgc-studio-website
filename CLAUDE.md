@@ -83,7 +83,7 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   weg). Die Scroll-Reise braucht ihn zwingend: unter `file://` verbietet der Browser das Laden der
   Clips, die Seite bleibt leer.
 - **Preview-Messungen: der Pane gilt als versteckt.** Screenshots hängen auf den 1-MB-Seiten; prüfe
-  stattdessen per JavaScript (DOM-Geometrie, `getComputedStyle`). Zwei Fallen, die beide schon
+  stattdessen per JavaScript (DOM-Geometrie, `getComputedStyle`). Drei Fallen, die alle schon
   Fehlbefunde erzeugt haben:
   (1) **Erst Viewport setzen, dann messen** — ein frisch geöffneter Tab meldet `0×0`, jede Geometrie
   ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch). `resize_window` mit expliziter
@@ -91,6 +91,11 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   (2) Bei `document.visibilityState === 'hidden'` laufen `requestAnimationFrame`, IntersectionObserver
   und Animationen **gar nicht** → `is-visible` wird nie gesetzt, Reveal-Zustände sind dort grundsätzlich
   nicht prüfbar, und ein `await` auf rAF hängt bis zum Timeout. Solche Aussagen dann statisch belegen.
+  (3) **CSS-Übergänge frieren im versteckten Pane am STARTWERT ein.** Eine Eigenschaft mit
+  `transition` misst sich als ihr Ausgangswert — eine Knopffläche als `rgba(0,0,0,0)` statt der
+  Zielfarbe — und selbst inline gesetzte Werte scheinen ignoriert (die eingefrorene Transition
+  überdeckt sie). Vor Farb-/Zustandsmessungen `element.style.transition='none'` setzen, danach
+  zurücksetzen. So entstand am 27.07. der Schein-Befund „Nav-Reiter transparent".
 - **Regeln, die Inhalt verstecken, brauchen den `.js`-Vorsatz** (`.js .reveal:not(.is-visible)`).
   Ohne ihn ist die Seite ohne JavaScript leer. Gilt für V18 UND `stilprobe/index.html` — die
   Unterseite erbt das CSS aus V18, ein Fehler dort taucht also zweimal auf.

@@ -117,7 +117,7 @@ Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-H
 sich daraus ab.
 
 ```
---weg-textzone: max(36%, 270px);     /* schmaler als 380 px: 300px statt 270px */
+--weg-textzone: max(36%, 320px);     /* niedrige Schirme (unter 780 px Hoehe): 300px */
 ```
 
 **Anteil oder Mindesthöhe, je nachdem was größer ist** — und das ist der ganze Trick. Die
@@ -129,9 +129,9 @@ denselben Fehler in klein: Gabriels Gerät fiel in die unterste Stufe und sah ke
 
 | Schirm | Streifen | Band | Szene sichtbar |
 |---|---|---|---|
-| 393 × 852 | 307 px (36 %) | 64 % | 54 % |
-| 393 × 706 | 270 px (38 %) | 62 % | 68 % |
-| 360 × 640 | 300 px (47 %) | 53 % | 79 % |
+| 393 × 852 | 320 px (Mindesthöhe) | 62 % | 55 % |
+| 393 × 706 | 300 px (niedrige Stufe) | 58 % | 73 % |
+| 360 × 640 | 300 px (niedrige Stufe) | 53 % | 79 % |
 | 430 × 932 | 336 px (36 %) | 64 % | 54 % |
 | 820 × 1180 | 425 px (36 %) | 64 % | 80 % |
 
@@ -139,12 +139,16 @@ Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — e
 liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wird dabei nur
 kleiner dargestellt, nicht knapper.
 
-Maßgeblich für die Mindesthöhe ist die **längste Station** (6 oder 7, je nach Breite): passt sie
-nicht in den Streifen, wird unten etwas abgeschnitten. Nach jeder Änderung an Zahl, Schriftgröße
-oder Stationstext also die längste Station nachmessen. Zwei weitere Hebel stehen daneben — unter
-`max-height: 780px` ist die Schrift eine Stufe kleiner, und der „Mehr"-Knopf sitzt in der
-Kopfzeile statt in einer eigenen Zeile. Beides senkt die längste Station und heißt damit
-unmittelbar mehr Bild.
+Maßgeblich für die Mindesthöhe ist die **Schluss-Station** mit ihren zwei gestapelten Knöpfen
+(rund 314 px Inhalt, gemessen bei 375 × 812 — Runde 3 fand sie auf 375er- und 390er-iPhones
+14 px oben ins Bild ragend). Passt eine Station nicht in den Streifen, ragt sie oben und unten
+je zur Hälfte heraus; bis ~3 px verschwindet das im deckenden Teil des Verlaufs. Nach jeder
+Änderung an Zahl, Schriftgröße oder Stationstext also die längste Station nachmessen. Zwei
+weitere Hebel stehen daneben — unter `max-height: 780px` ist die Schrift eine Stufe kleiner
+(dort reichen 300 px), und der „Mehr"-Knopf sitzt in der Kopfzeile statt in einer eigenen
+Zeile. Unter 393 px Breite ist der Stations-Kleintext zusätzlich eine Stufe kleiner gesperrt,
+sonst bricht die Kopfzeile der ersten Station um; bei 320 px bricht sie trotzdem — das fängt
+`flex-wrap` ordentlich auf und bleibt als Grenze bewusst stehen.
 
 ## Der Ausklang
 
@@ -231,17 +235,19 @@ Stellschrauben in `der-weg/index.html`, Block „Datenmodus": `SCHWELLE`, die be
 und in der Konfiguration `prefetch: 0.8` (wie viele Bildschirmhöhen im Voraus geladen wird —
 0.8 lädt beim Öffnen eine Etappe, der Standard 1.6 lädt zwei).
 
-## Engine: zwei Zusätze gegenüber dem Skill
+## Engine: Zusätze gegenüber dem Skill
 
 `der-weg/scrub-engine.js` war bis zum 27.07.2026 eine unveränderte Kopie aus dem Skill
-(`~/.claude/skills/scroll-world/references/scrub-engine.js`). Seitdem trägt sie **zwei
-Zusätze**, beide rückwärtskompatibel — eine Konfiguration ohne sie verhält sich wie vorher:
+(`~/.claude/skills/scroll-world/references/scrub-engine.js`). Seitdem trägt sie diese
+Zusätze, alle rückwärtskompatibel — eine Konfiguration ohne sie verhält sich wie vorher:
 
 | Zusatz | Wirkung |
 |---|---|
 | `clipStart: 'gated'` | mountet im Standbild-Modus und lädt **kein** Video, bis die Seite `allowClips()` ruft |
 | `prefetch: 0.8` | Vorausladen in Bildschirmhöhen (Standard 1.6) |
 | Rückgabewert | `{ allowClips(), enterStillsMode(), mode() }` — vorher gab die Funktion nichts zurück |
+| `visibility` an Stationen | ausgeblendete Stationstexte waren nur durchsichtig, aber weiter klickbar (die CTA-Knöpfe der Schluss-Station fingen auf Schirm 1 unsichtbar Klicks — mailto!) und tastatur-fokussierbar; jetzt schaltet `read()` zusätzlich `visibility` (V21, Runde 3) |
+| Nachlade-Deckel | ein dauerhaft fehlender Clip (404) löste bei jedem Scroll-Bild einen neuen Abruf aus; jetzt höchstens drei Versuche je Etappe (V28, Runde 3) |
 
 Die Trennung ist Absicht: die **Engine** bringt die Mechanik, die **Seite** die Politik
 (Schwelle, Messzeitpunkte, gemerkte Wahl, Schalter). Damit ist der Zusatz für jedes
@@ -297,14 +303,19 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
   Eine Notiz vom 24.07. behauptete, das Portrait sei bereits einkomponiert; die dort
   genannten Dateien (`leg 6 original.mp4`, Werkzeugordner) existieren nicht mehr.
 - Die zwei springenden Übergänge (siehe oben).
-- **Vier Dinge in den Skill zurückgeben**, sobald sie sich bewährt haben:
-  1. `clipStart: 'gated'` + `prefetch` + Rückgabewert — steht bereits **in** der Engine, muss also
-     nur noch in die Skill-Fassung übernommen werden. Bis dahin ist `der-weg/scrub-engine.js`
-     eine Sonderfassung, und ein Update aus dem Skill würde sie überschreiben.
+- **In den Skill zurückgeben**, sobald sie sich bewährt haben:
+  1. `clipStart: 'gated'` + `prefetch` + Rückgabewert, die `visibility`-Kopplung der
+     Stationstexte (V21) und der Nachlade-Deckel (V28) — stehen bereits **in** der Engine,
+     müssen also nur noch in die Skill-Fassung übernommen werden. Bis dahin ist
+     `der-weg/scrub-engine.js` eine Sonderfassung, und ein Update aus dem Skill würde sie
+     überschreiben.
   2. Die verlorene Zentrierung der breiten Fassung — ein echter Fehler der Engine, kein
      Geschmack, und er trifft jedes Projekt, das den Skill benutzt (`top: 50%` plus
      `transform: translateY(-50%)`, während die Engine `transform` beim Scrollen überschreibt;
      Abhilfe ist die eigenständige Eigenschaft `translate`).
   3. Die Hochkant-Fassung — das 4:3-auf-9:19,5-Problem trifft jede Scroll-Welt.
   4. Das „Mehr"-Feld.
+  5. Der Kontrast des aktiven Nav-Reiters: Weiß auf Szenenakzent misst 2,6–3,3:1 —
+     diese Seite überschreibt ihn auf Tinte (V24); im Skill sollte der Default selbst
+     dunkel genug sein.
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.

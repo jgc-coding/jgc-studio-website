@@ -27,7 +27,7 @@ import { join, resolve } from 'node:path';
 /* Rohmaterial liegt bewusst ausserhalb des Repos — 100 MB Quelldateien gehoeren
  * nicht in die Versionsverwaltung. Nur die kodierten Assets werden eingecheckt. */
 const ROH = process.env.DERWEG_ROH || 'C:/Projekte/JGC Studio/Scroll World/legs';
-const ZIEL = resolve(process.argv[2]?.startsWith('--') ? 'der-weg/assets' : 'der-weg/assets');
+const ZIEL = resolve('der-weg/assets');
 
 /* Reihenfolge und Namen der Etappen. Der Name ist die Szene, in der die Etappe
  * ANKOMMT — die Kamera faehrt waehrend der Etappe dorthin. */
@@ -146,7 +146,7 @@ function main() {
     /* Eine ausdruecklich genannte Nummer wird immer neu gemacht — das ist der
      * Nachreich-Fall. Ohne Nummer zaehlt nur, was fehlt. */
     const neu = alles || Boolean(nurNr);
-    if (!neu && existsSync(desk) && existsSync(mobil) && existsSync(poster) && existsSync(still)) {
+    if (!neu && existsSync(desk) && existsSync(mobil) && existsSync(poster) && existsSync(posterM) && existsSync(still)) {
       console.log(`  --  ${name}: liegt schon vor`);
       uebersprungen++;
       continue;

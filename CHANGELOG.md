@@ -2,6 +2,44 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: acht Befunde der Verbesserungsrunde 3 behoben (V21–V28)
+
+Runde 3 von `/improve` (Fokus Scroll-Reise, Haltung „Nur messbare Fehler", Lupe emil-design-eng)
+fand vier B-, zwei C- und zwei D-Befunde; alle acht sind umgesetzt und im Browser nachgemessen.
+
+- **V21 — Unsichtbares war klickbar.** Ausgeblendete Stationstexte blieben klick- und
+  tastatur-erreichbar; auf Schirm 1 fingen die zwei unsichtbaren Knöpfe der Schluss-Station
+  Klicks (einer davon öffnet das Mailprogramm). Die Engine schaltet jetzt `visibility` mit.
+  Nachgemessen: Punktprobe trifft die sichtbare Station, `focus()` auf Unsichtbares scheitert.
+- **V22 — Datenspar-Schalter log in der Prüfphase.** Vor der Messentscheidung speicherte
+  „Auf datensparsam umstellen" den Wert `voll`. Jetzt zählt „waiting" zur Sparsam-Seite.
+- **V23 — Tempo-Messung verwechselte langsam mit Zwischenspeicher.** Unter 40 KB übertragener
+  Daten galt „alles im Cache → Video frei" — auf einer langsamen Erstverbindung ist nach 1,8 s
+  aber schlicht nichts fertig (die drei sicher fertigen Dateien wiegen live nur 19 KB gzip).
+  Wiederbesuch wird jetzt an `transferSize === 0`-Einträgen erkannt; ohne belastbaren Messwert
+  fällt die Entscheidung erst beim 6-s-Lauf. End-to-End geprüft: feste Wahl „sparsam" lädt
+  null Videos, Lagezeile und Schaltertext stimmen in allen drei Zuständen.
+- **V24 — Aktiver Nav-Reiter unter WCAG AA.** Weiß auf Szenenfarbe maß 3,29/2,56/2,77:1
+  (Kupfer/Salbei/Quellwasser). Die Fläche ist jetzt Tinte (14,26:1, nachgemessen); die
+  Schlagwort-Chips mischen eine Stufe dunkler (Salbei 4,34 → 5,8).
+- **V25 — Hochkant-Kalibrierung für 375er- und 390er-iPhones.** Die Kopfzeile der ersten
+  Station brach unter 393 px um (Kleintext eine Stufe kleiner gesperrt: bis 360 px runter
+  einzeilig, 320 bleibt als dokumentierte Grenze zweizeilig), und die Schluss-Station ragte
+  14 px ins Bild (Mindesthöhe des Textstreifens 320 px statt 300/270; niedrige Schirme
+  unter 780 px bleiben bei 300). Nachgemessen auf 320/360/375/390/393/768.
+- **V26 — Lesetext auf Maß.** FAQ-Antworten liefen 88, die Langfassungen ohne JavaScript
+  102 Zeichen je Zeile; Textmaß jetzt 32rem → gemessen 61 bzw. 59 im Schnitt.
+- **V27 — Reduce-Motion-Regel zielte auf `svg`, der Knopf enthält `i`.** Plus-Drehungen
+  („Mehr"-Knopf, FAQ) stehen bei abgeschalteter Bewegung jetzt still; Zustände bleiben ablesbar.
+- **V28 — Redaktionsreste und Werkzeug-Lücken.** Doppelkommentare und der Verweis auf den
+  entfernten Umschalter sind raus; `kodiere.mjs` prüft jetzt auch das Handy-Poster im
+  Idempotenz-Check; das „Mehr"-Feld hat eine vh-Rückfalllinie für Browser ohne `dvh`;
+  die Engine bricht Clip-Abrufe nach drei Fehlversuchen ab statt bei jedem Scroll-Bild neu.
+
+Engine-Änderungen (V21, Nachlade-Deckel) und der Nav-Kontrast stehen in `docs/der-weg.md`
+auf der Rückgabe-Liste für den scroll-world-Skill. Neue Preview-Messfalle dokumentiert
+(CLAUDE.md): CSS-Übergänge frieren im versteckten Pane am Startwert ein.
+
 ## 2026-07-27 — Der Weg: Datenmodus — erst leicht, dann aufrüsten
 
 Vorbereitung darauf, dass die Reise die Hauptseite wird: dann landen Besucher unangekündigt auf
