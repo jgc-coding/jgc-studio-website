@@ -2,6 +2,34 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: „Mehr" in die Kopfzeile, Ausklang scrollt mit
+
+**„Mehr dazu" kostet keine eigene Zeile mehr.** Der Knopf sitzt jetzt in *einer* Zeile mit dem
+Kleintext über der Überschrift, rechts außen — Abschnittsname links, Aktion rechts. Das spart
+rund 50 px an der längsten Station, und weil genau die die Mindesthöhe des Textstreifens
+bestimmt, geht der Platz direkt ans Bild: **auf einem 393 × 706 großen Schirm 58 % → 62 %
+Bildhöhe** (Mindesthöhe 296 → 270 px, auf schmalen Schirmen 322 → 300 px).
+
+**Der Pfeil nach unten ist weg.** Er versprach ein Aufklappen an Ort und Stelle, tatsächlich
+öffnet sich ein Feld in der Bildschirmmitte. Jetzt ein **Plus** — dasselbe Zeichen, das die Seite
+unten bei den häufigen Fragen für dieselbe Handlung benutzt. Statt Textlink mit Unterstrich eine
+leise Pille, damit er auf Papier wie auf Bild als antippbar liest; das Plus dreht sich beim
+Überfahren.
+
+Damit die Kopfzeile auf allen sieben Stationen einzeilig bleibt, fällt hochkant das Wort „dazu"
+weg („Mehr +"), und der Kleintext ist eine Spur kleiner und enger gesperrt gesetzt. Gemessen: der
+längste Kleintext („Für Coaches, Trainer, Mentoren") plus voller Knopf brauchte 385 px von
+354 verfügbaren. Auf der breiten Fassung steht weiter „Mehr dazu +".
+
+**Der Ausklang: die Reise verabschiedet sich, statt abzubrechen.** Bühne und Textebene liegen
+fest im Fenster; der Leseteil schob sich bisher darüber und deckte den letzten Stationstext
+(„Lass uns 30 Minuten reden") einfach zu, während der stehen blieb. Jetzt wandert die ganze
+Textebene — Pergament-Verlauf **und** Schrift — genau so weit nach oben, wie der Leseteil schon
+ins Bild gekommen ist. Die Unterkante des Verlaufs liegt damit immer bündig auf der Oberkante des
+Leseteils, es klafft nie eine Lücke (bei 393 × 706 und 1440 × 900 über den ganzen Weg auf 1 px
+genau nachgemessen). Das Video bleibt bewusst stehen: es ist der Hintergrund, vor dem der Text
+abzieht, und wird vom deckenden Leseteil ohnehin verdeckt.
+
 ## 2026-07-27 — Der Weg: Aufteilung an die echte Bildschirmhöhe gekoppelt, Naht 2→3 verbessert
 
 **Warum die letzte Änderung auf Gabriels Telefon nichts bewirkt hat.** Sein Gerät meldet trotz

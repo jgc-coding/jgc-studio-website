@@ -117,7 +117,7 @@ Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-H
 sich daraus ab.
 
 ```
---weg-textzone: max(36%, 296px);     /* schmaler als 380 px: 322px statt 296px */
+--weg-textzone: max(36%, 270px);     /* schmaler als 380 px: 300px statt 270px */
 ```
 
 **Anteil oder Mindesthöhe, je nachdem was größer ist** — und das ist der ganze Trick. Die
@@ -130,8 +130,9 @@ denselben Fehler in klein: Gabriels Gerät fiel in die unterste Stufe und sah ke
 | Schirm | Streifen | Band | Szene sichtbar |
 |---|---|---|---|
 | 393 × 852 | 307 px (36 %) | 64 % | 54 % |
-| 393 × 706 | 296 px (42 %) | 58 % | 72 % |
-| 360 × 640 | 322 px (50 %) | 50 % | 85 % |
+| 393 × 706 | 270 px (38 %) | 62 % | 68 % |
+| 360 × 640 | 300 px (47 %) | 53 % | 79 % |
+| 430 × 932 | 336 px (36 %) | 64 % | 54 % |
 | 820 × 1180 | 425 px (36 %) | 64 % | 80 % |
 
 Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — ein flacheres Band
@@ -139,10 +140,24 @@ liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wi
 kleiner dargestellt, nicht knapper.
 
 Maßgeblich für die Mindesthöhe ist die **längste Station** (6 oder 7, je nach Breite): passt sie
-nicht in den Streifen, wird unten der „Mehr dazu"-Knopf abgeschnitten. Nach jeder Änderung an
-Zahl, Schriftgröße oder Stationstext also die längste Station nachmessen. Ein zweiter Hebel steht
-daneben: unter `max-height: 780px` ist die Schrift eine Stufe kleiner, was die längste Station von
-302 auf 260 px senkt — weniger Schrift heißt hier unmittelbar mehr Bild.
+nicht in den Streifen, wird unten etwas abgeschnitten. Nach jeder Änderung an Zahl, Schriftgröße
+oder Stationstext also die längste Station nachmessen. Zwei weitere Hebel stehen daneben — unter
+`max-height: 780px` ist die Schrift eine Stufe kleiner, und der „Mehr"-Knopf sitzt in der
+Kopfzeile statt in einer eigenen Zeile. Beides senkt die längste Station und heißt damit
+unmittelbar mehr Bild.
+
+## Der Ausklang
+
+Bühne und Textebene liegen fest im Fenster, der Leseteil (Fragen, Abspann) schiebt sich darüber.
+Ohne Zutun bliebe der letzte Stationstext dabei stehen und würde einfach zugedeckt — das liest
+sich wie ein Abbruch. Ein kleiner Block am Ende von `der-weg/index.html` verschiebt deshalb die
+ganze Textebene (Pergament-Verlauf **und** Schrift) genau so weit nach oben, wie der Leseteil
+schon ins Bild gekommen ist. Beide bewegen sich im Gleichschritt, die Unterkante des Verlaufs
+liegt immer bündig auf der Oberkante des Leseteils.
+
+Das Video bleibt bewusst stehen: es ist der Hintergrund, vor dem der Text abzieht, und wird vom
+deckenden Leseteil ohnehin verdeckt. Kopfleiste und Wegpunkte brauchen nichts — sie liegen unter
+dem Leseteil (Stapelhöhe 50 und 40 gegen 70).
 
 Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
 Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md
@@ -150,8 +165,17 @@ unter „Preview-Messungen".
 
 ## „Mehr dazu": die Langfassung einer Station
 
-Unter jedem Stationstext steht ein Pfeil-Knopf, der die vollständigen Inhalte des zugehörigen
-Abschnitts der Hauptseite als Feld in der Bildschirmmitte öffnet.
+In der Kopfzeile jeder Station — rechts neben dem Kleintext — steht ein Knopf „Mehr +", der die
+vollständigen Inhalte des zugehörigen Abschnitts der Hauptseite als Feld in der Bildschirmmitte
+öffnet.
+
+**Warum dort und warum ein Plus.** Unter dem Text kostete er eine ganze Zeile (rund 50 px), und
+weil die längste Station die Mindesthöhe des Textstreifens bestimmt, ging dieser Platz direkt vom
+Bild ab. Ein Pfeil nach unten wäre außerdem gelogen: der Inhalt klappt nicht an Ort und Stelle
+auf, sondern öffnet ein Feld in der Mitte. Das Plus ist dasselbe Zeichen, das die häufigen Fragen
+weiter unten für dieselbe Handlung benutzen. Hochkant fällt das Wort „dazu" weg, damit die
+Kopfzeile auf allen sieben Stationen einzeilig bleibt — der längste Kleintext plus voller Knopf
+braucht 385 px, verfügbar sind bei 393 px Schirmbreite nur 354.
 
 **Texte ändern:** im Markup von `der-weg/index.html`, Block `<div id="vertiefungen">`, ein
 `<article data-station="…">` je Station. Kein Skript nötig, kein Build. Erlaubte Bausteine:
