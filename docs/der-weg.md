@@ -46,22 +46,44 @@ woanders anfängt oder aufhört als das alte, zerreißt die Fahrt an dieser Stel
 Die Nummern: 1 anflug · 2 werkzeug · 3 schreibtisch · 4 stilprobe · 5 weg · 6 lichtung ·
 7 aussicht.
 
-## Stand der Übergänge (Messung 26.07.2026)
+## Stand der Übergänge (Messung 27.07.2026)
 
-Vier von sechs Übergängen tragen, zwei springen sichtbar:
+Vier von sechs Übergängen tragen, zwei springen sichtbar — beide um Etappe 3 herum:
 
 ```
-anflug -> werkzeug          trägt
-werkzeug -> schreibtisch    SPRUNG
-schreibtisch -> stilprobe   SPRUNG
-stilprobe -> weg            trägt
-weg -> lichtung             trägt
-lichtung -> aussicht        trägt
+anflug -> werkzeug          0.742   trägt
+werkzeug -> schreibtisch    0.423   SPRUNG   (war 0.304, per Vorlauf-Schnitt verbessert)
+schreibtisch -> stilprobe   0.281   SPRUNG   (durch Schneiden NICHT zu retten)
+stilprobe -> weg            0.620   trägt
+weg -> lichtung             0.855   trägt
+lichtung -> aussicht        0.833   trägt
 ```
 
-Abgefangen wird das derzeit durch eine breitere Überblendung (`crossfade: 0.2` statt
-0.12). Sauber wäre, die Etappen 3 und 4 neu zu erzeugen, jeweils mit dem echten letzten
-Bild der Vorgängeretappe als Startbild.
+Abgefangen wird das in der Seite durch eine breitere Überblendung (`crossfade: 0.38` auf
+den beiden Etappen an der Naht).
+
+**Naht 2 → 3: gebessert.** Etappe 3 hatte einen Anlauf — die Kamera driftet in den ersten
+drei Bildern von der Anschlussstelle weg und kommt dann zurück. `kodiere.mjs` schneidet
+diese drei Bilder jetzt weg (Feld `vorlauf`, 1,6 % der Etappe).
+
+**Naht 3 → 4: nur durch Neuerzeugung.** Ein 12 × 12-Vergleich aller Bildpaare rund um die
+Naht liegt flach bei 0,10 bis 0,12 — es gibt kein besseres Schnittbild. Im Standbildvergleich
+sieht man warum: derselbe Schreibtisch, aber die Kamera springt **rückwärts und nach oben**.
+Eine Richtungsumkehr lässt sich nicht wegschneiden.
+
+**Für die Neuerzeugung** liegen die exakten Anschlussbilder bereit (aus dem Rohmaterial, volle
+Auflösung, außerhalb des Repos):
+
+```
+C:\Projekte\JGC Studio\Scroll World\legs\anschlussbilder\
+  startbild-fuer-leg-3.png    letztes Bild von leg 2
+  startbild-fuer-leg-4.png    letztes Bild von leg 3
+```
+
+Neu erzeugen mit dem passenden Startbild, Rohdatei ersetzen, dann
+`node scripts/der-weg/kodiere.mjs 4` und `node scripts/der-weg/pruefe-naehte.mjs`.
+Bei einer neuen Etappe 3 zusätzlich das Feld `vorlauf` in `kodiere.mjs` auf 0 zurücksetzen —
+es korrigiert einen Fehler, den genau diese Rohdatei hat.
 
 **Zum Messverfahren:** Der Skill verlangt einen festen Ähnlichkeitswert von 0,90 je Naht.
 Dieses Maß ist bei fein strukturiertem Papier zu streng — schon zwei benachbarte Bilder
@@ -90,21 +112,37 @@ hochkant ist 1024 px breit und fiel vorher auf die breite Fassung, obwohl der Sc
 ist. Umgekehrt braucht kein Tablet quer die Hochkant-Fassung — dort ist der Schirm breiter als
 4:3, es wird also gar nichts abgeschnitten.
 
-**Nachjustieren:** genau eine Zahl, `--weg-textzone` in `der-weg/index.html` — die Höhe des
-Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Höhe des Scroll-Hinweises leiten
-sich daraus ab. Gestaffelt nach Bildschirmhöhe, weil die Textmenge gleich bleibt:
+**Nachjustieren:** eine Zahl, `--weg-textzone` in `der-weg/index.html` — die Höhe des
+Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-Hinweises leiten
+sich daraus ab.
 
-| Bildschirmhöhe | `--weg-textzone` | Band | Szene sichtbar |
+```
+--weg-textzone: max(36%, 296px);     /* schmaler als 380 px: 322px statt 296px */
+```
+
+**Anteil oder Mindesthöhe, je nachdem was größer ist** — und das ist der ganze Trick. Die
+Textmenge einer Station ist fest, ihre Höhe hängt an der Schriftgröße, nicht an der Schirmhöhe.
+Ein Telefon mit hoher Pixeldichte meldet nur rund 700 CSS-Pixel Höhe; derselbe Text frisst dort
+einen viel größeren Anteil als auf 850. Ein fester Prozentwert müsste sich am schlechtesten Fall
+orientieren und hielte das Bild überall sonst unnötig klein. Eine Staffelung in Stufen hatte
+denselben Fehler in klein: Gabriels Gerät fiel in die unterste Stufe und sah keine Änderung.
+
+| Schirm | Streifen | Band | Szene sichtbar |
 |---|---|---|---|
-| über 820 px | 36 % | 64 % | 54 % |
-| bis 820 px | 42 % | 58 % | 64 % |
-| bis 720 px | 56 % | 44 % | 96 % |
+| 393 × 852 | 307 px (36 %) | 64 % | 54 % |
+| 393 × 706 | 296 px (42 %) | 58 % | 72 % |
+| 360 × 640 | 322 px (50 %) | 50 % | 85 % |
+| 820 × 1180 | 425 px (36 %) | 64 % | 80 % |
 
 Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — ein flacheres Band
 liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wird dabei nur
-kleiner dargestellt, nicht knapper. Maßgeblich für die Untergrenze ist die längste Station (7,
-mit zwei Schaltflächen): passt sie nicht in den Streifen, wird unten der „Mehr dazu"-Knopf
-abgeschnitten. Nach jeder Änderung an dieser Zahl also die letzte Station nachmessen.
+kleiner dargestellt, nicht knapper.
+
+Maßgeblich für die Mindesthöhe ist die **längste Station** (6 oder 7, je nach Breite): passt sie
+nicht in den Streifen, wird unten der „Mehr dazu"-Knopf abgeschnitten. Nach jeder Änderung an
+Zahl, Schriftgröße oder Stationstext also die längste Station nachmessen. Ein zweiter Hebel steht
+daneben: unter `max-height: 780px` ist die Schrift eine Stufe kleiner, was die längste Station von
+302 auf 260 px senkt — weniger Schrift heißt hier unmittelbar mehr Bild.
 
 Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
 Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md

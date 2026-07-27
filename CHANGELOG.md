@@ -2,6 +2,44 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: Aufteilung an die echte Bildschirmhöhe gekoppelt, Naht 2→3 verbessert
+
+**Warum die letzte Änderung auf Gabriels Telefon nichts bewirkt hat.** Sein Gerät meldet trotz
+hoher Auflösung nur rund **700 CSS-Pixel Höhe** — es fiel damit in die Stufe „kleine Geräte", und
+die stand vorher wie nachher bei 56 % Textanteil. Aus dem Screenshot nachgemessen: Bildband 43,5 %,
+also exakt der Wert dieser Stufe. Die Staffelung war an der falschen Größe aufgehängt.
+
+**Die Stufen sind weg.** Der Textstreifen bekommt jetzt `max(36%, 296px)` — Anteil **oder**
+Mindesthöhe, je nachdem was größer ist. Der Grund: die Textmenge einer Station ist fest, ihre Höhe
+hängt an der Schriftgröße, nicht an der Schirmhöhe. Eine feste Prozentzahl müsste sich am
+schlechtesten Fall orientieren und hielte das Bild auf allen anderen Geräten unnötig klein. Auf
+852 px greift der Anteil (307 px), auf 706 px die Mindesthöhe — das Bild bekommt dort alles, was
+übrig bleibt. Schmale Schirme (< 380 px) brauchen 322 px, weil derselbe Satz auf mehr Zeilen
+umbricht.
+
+**Dazu eine Stufe kleinere Schrift auf niedrigen Schirmen** (`max-height: 780px`): die Größen
+skalieren mit der Breite, aber auf einem dichten Display ist nur die Höhe knapp. Überschrift dort
+28 statt 32 px. Das senkt die längste Station von 302 auf 260 px — und die Zahl ist unmittelbar
+die Mindesthöhe des Streifens, weniger Schrift heißt hier also direkt mehr Bild.
+
+Gemessen auf einem 393 × 706 großen Schirm: **Bildband 44 % → 58 %**, sichtbare Bildbreite 95 % →
+72 %. Auf 393 × 852 unverändert 64 %. Auf 360 × 640: 50 %. Keine abgeschnittene Station, knappster
+Fall 9 px Reserve. Breite Fassung, Tablet quer und Handy quer unberührt.
+
+**Naht Haltung → Deine Woche.** Etappe 3 hat einen Anlauf: die Kamera driftet in den ersten drei
+Bildern von der Anschlussstelle weg und kommt dann zurück. Am Rohmaterial gemessen (SSIM gegen das
+letzte Bild von Etappe 2): Bild 0 → 0,38 · Bild 1 → 0,39 · **Bild 3 → 0,60** · Bild 4 → 0,45.
+`kodiere.mjs` kennt jetzt ein Feld `vorlauf` und schneidet diese drei Bilder weg (1,6 % der
+Etappe). Die Naht steigt damit von **0,30 auf 0,42** — messbar besser, aber weiter unter der
+Schwelle. Poster und Standbild kommen aus der kodierten Datei und wandern automatisch mit.
+
+**Naht Deine Woche → Die Stilprobe ist durch Schneiden nicht zu retten.** Ein 12 × 12-Vergleich
+aller Bildpaare rund um die Naht liegt flach bei 0,10 bis 0,12 — es gibt kein besseres Schnittbild.
+Der Grund ist im Standbildvergleich zu sehen: derselbe Schreibtisch, aber die Kamera springt
+**rückwärts und nach oben**. Eine Richtungsumkehr lässt sich nicht wegschneiden. Sauber ist nur
+eine neue Etappe 4 mit dem letzten Bild von Etappe 3 als Startbild. Beide Anschlussbilder liegen
+jetzt bereit unter `Scroll World/legs/anschlussbilder/`.
+
 ## 2026-07-27 — Der Weg: Bild zurück in die Hauptrolle, Hero aufgeräumt
 
 Gabriels Urteil am Gerät nach der ersten Hochkant-Fassung: „Vorher war das Video die Website, die

@@ -31,10 +31,21 @@ const ZIEL = resolve(process.argv[2]?.startsWith('--') ? 'der-weg/assets' : 'der
 
 /* Reihenfolge und Namen der Etappen. Der Name ist die Szene, in der die Etappe
  * ANKOMMT — die Kamera faehrt waehrend der Etappe dorthin. */
+/* `vorlauf` schneidet Bilder am ANFANG einer Etappe weg. Manche Etappen haben
+ * einen kurzen Anlauf, in dem die Kamera erst von der Anschlussstelle wegdriftet
+ * und dann zurueckkommt — genau das erzeugt den sichtbaren Ruck an der Naht
+ * davor. Gemessen am Rohmaterial (SSIM gegen das letzte Bild der Vor-Etappe):
+ *
+ *   Etappe 3, Bild 0: 0.38  Bild 1: 0.39  Bild 2: 0.59  Bild 3: 0.60  Bild 4: 0.45
+ *
+ * Ab Bild 4 faellt es wieder — Bild 3 ist also der beste Anschluss, nicht Bild 0.
+ * Drei Bilder von 193 sind 1,6 % der Etappe, inhaltlich also nichts.
+ * Zum Nachmessen: scripts/der-weg/pruefe-naehte.mjs
+ */
 const ETAPPEN = [
   { nr: 1, name: 'anflug' },
   { nr: 2, name: 'werkzeug' },
-  { nr: 3, name: 'schreibtisch' },
+  { nr: 3, name: 'schreibtisch', vorlauf: 3 },
   { nr: 4, name: 'stilprobe' },
   { nr: 5, name: 'weg' },
   { nr: 6, name: 'lichtung' },
@@ -62,12 +73,18 @@ function mb(datei) {
   return (statSync(datei).size / 1048576).toFixed(1);
 }
 
+/* Schneidet die ersten `vorlauf` Bilder weg. `setpts` setzt die Zeitachse danach
+ * wieder auf null — ohne das begaenne die Datei mit einer Luecke. */
+function vorlaufSchnitt(vorlauf) {
+  return vorlauf > 0 ? `select=gte(n\\,${vorlauf}),setpts=PTS-STARTPTS,` : '';
+}
+
 /* Desktop: native Aufloesung behalten. Hochskalieren wuerde nur Bytes kosten und
  * keine Bildinformation hinzufuegen — das Rohmaterial ist, was es ist. */
-function kodiereDesktop(quelle, ziel) {
+function kodiereDesktop(quelle, ziel, vorlauf = 0) {
   ff('ffmpeg', [
     '-v', 'error', '-y', '-i', quelle,
-    '-an', '-vf', 'unsharp=5:5:0.8:5:5:0.0',
+    '-an', '-vf', vorlaufSchnitt(vorlauf) + 'unsharp=5:5:0.8:5:5:0.0',
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '20',
     '-pix_fmt', 'yuv420p',
     '-g', '8', '-keyint_min', '8', '-sc_threshold', '0',
@@ -78,10 +95,10 @@ function kodiereDesktop(quelle, ziel) {
 /* Handy: kleineres Bild UND doppelt so viele Ankerbilder. Der zweite Punkt ist der
  * wichtigere — beim Scrubben muss der Decoder ab dem naechsten Ankerbild neu
  * aufbauen, und genau das ist auf Telefonen teuer. */
-function kodiereMobil(quelle, ziel) {
+function kodiereMobil(quelle, ziel, vorlauf = 0) {
   ff('ffmpeg', [
     '-v', 'error', '-y', '-i', quelle,
-    '-an', '-vf', 'scale=-2:600,unsharp=5:5:0.6:5:5:0.0',
+    '-an', '-vf', vorlaufSchnitt(vorlauf) + 'scale=-2:600,unsharp=5:5:0.6:5:5:0.0',
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '23',
     '-pix_fmt', 'yuv420p',
     '-g', '4', '-keyint_min', '4', '-sc_threshold', '0',
@@ -113,7 +130,7 @@ function main() {
   let getan = 0;
   let uebersprungen = 0;
 
-  for (const { nr, name } of zuTun) {
+  for (const { nr, name, vorlauf = 0 } of zuTun) {
     const quelle = join(ROH, `leg ${nr}.mp4`);
     if (!existsSync(quelle)) {
       console.error(`::warnung:: Etappe ${nr} (${name}): Quelldatei fehlt: ${quelle}`);
@@ -135,10 +152,11 @@ function main() {
       continue;
     }
 
-    process.stdout.write(`  ->  ${name} (Etappe ${nr}, ${mass(quelle)}) `);
-    kodiereDesktop(quelle, desk);
+    process.stdout.write(`  ->  ${name} (Etappe ${nr}, ${mass(quelle)}`
+      + (vorlauf ? `, ${vorlauf} Bilder Vorlauf ab` : '') + ') ');
+    kodiereDesktop(quelle, desk, vorlauf);
     process.stdout.write('Desktop ');
-    kodiereMobil(quelle, mobil);
+    kodiereMobil(quelle, mobil, vorlauf);
     process.stdout.write('Handy ');
 
     // Poster kommen aus den KODIERTEN Dateien, damit das erste gezeigte Bild

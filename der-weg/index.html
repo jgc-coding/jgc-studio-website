@@ -139,7 +139,22 @@
      ist der Schirm breiter als 4:3, es wird also gar nichts abgeschnitten.
      ================================================================== */
   @media (orientation: portrait) and (max-width: 1200px) {
-    :root, .sw-root { --weg-textzone: 36%; }
+    /* Anteil ODER Mindesthoehe, je nachdem was groesser ist.
+
+       Warum nicht einfach ein Prozentwert: die Textmenge einer Station ist
+       fest, ihre Hoehe haengt an der Schriftgroesse, nicht an der Schirmhoehe.
+       Auf einem Telefon mit hoher Pixeldichte meldet der Browser nur rund
+       700 CSS-Pixel Hoehe — derselbe Text frisst dort also einen viel
+       groesseren Anteil als auf 850. Eine feste Prozentzahl muesste sich am
+       schlechtesten Fall orientieren und wuerde das Bild auf allen anderen
+       Geraeten unnoetig klein halten.
+
+       `max()` loest das ohne Stufen: der Streifen bekommt 36 % der Hoehe,
+       mindestens aber so viele Pixel, wie die laengste Station braucht.
+       Auf 852 px greift der Anteil (307 px), auf 706 px die Mindesthoehe —
+       das Bild bekommt dort alles, was uebrig bleibt, statt auf einen
+       Notwert fuer kleine Geraete zu fallen. */
+    :root, .sw-root { --weg-textzone: max(36%, 296px); }
 
     /* Das Bild endet an der Oberkante des Textbereichs. Prozente beziehen
        sich auf die Buehne, und die liegt fest im Fenster — anders als vh
@@ -282,27 +297,31 @@
     }
   }
 
-  /* Kuerzere Schirme: dieselbe Textmenge auf weniger Hoehe. Der Streifen
-     braucht deshalb einen groesseren Anteil — in Stufen, damit ein Telefon
-     mittlerer Hoehe nicht gleich auf den Notwert kleiner Geraete faellt.
-     Das kostet weniger Bild, als es klingt: ein flacheres Band liegt naeher
-     am 4:3 der Quelle, sichtbar bleibt also MEHR von der Szene (54 % bei
-     36 %, 65 % bei 42 %, 96 % bei 56 %) — sie wird nur kleiner dargestellt.
-     Massgeblich ist die laengste Station (7, mit zwei Schaltflaechen); die
-     Werte sind so gewaehlt, dass sie ohne Abschneiden hineinpasst. */
-  @media (orientation: portrait) and (max-width: 1200px) and (max-height: 820px) {
-    :root, .sw-root { --weg-textzone: 42%; }
+  /* Schmale Schirme brauchen eine hoehere Mindesthoehe: derselbe Satz bricht
+     dort auf mehr Zeilen um. Gemessen an der laengsten Station — bei 393 px
+     Breite passt sie in 296 px, bei 360 px braucht sie 322 px. */
+  @media (orientation: portrait) and (max-width: 379px) {
+    :root, .sw-root { --weg-textzone: max(36%, 322px); }
   }
 
-  /* Kleine Telefone (bis 720 px hoch). Chips und Schaltflaechen brechen auf
-     dieser Breite auf zwei Zeilen um und werden deshalb kompakter angesetzt. */
-  @media (orientation: portrait) and (max-width: 1200px) and (max-height: 720px) {
-    :root, .sw-root { --weg-textzone: 56%; }
+  /* Niedrige Schirme: eine Stufe kleiner setzen.
+
+     Die Schriftgroessen skalieren mit der BREITE (vw). Auf einem Telefon mit
+     hoher Pixeldichte ist der Schirm aber knapp und nur die Hoehe verraet
+     das: rund 700 CSS-Pixel statt 850. Dort steht der Text also in voller
+     Groesse in einem um ein Fuenftel kuerzeren Fenster und draengt das Bild
+     zusammen. Eine Stufe kleiner senkt die laengste Station von 302 auf
+     rund 260 px — und genau diese Zahl ist oben die Mindesthoehe des
+     Streifens. Weniger Schrift heisst hier also unmittelbar mehr Bild. */
+  @media (orientation: portrait) and (max-width: 1200px) and (max-height: 780px) {
+    .sw-root .sw-copy__title { font-size: clamp(1.6rem, 7.1vw, 2.3rem); margin-top: 8px; }
+    .sw-root .sw-copy__body { font-size: clamp(0.92rem, 3.85vw, 1.05rem); margin-top: 10px; }
+    .sw-root .sw-copy__eyebrow { font-size: 0.74rem; }
     .sw-root .sw-copy__tags { margin-top: 12px; gap: 6px; }
-    .sw-root .sw-copy__tags li { font-size: 0.76rem; padding: 5px 11px; }
+    .sw-root .sw-copy__tags li { font-size: 0.73rem; padding: 5px 10px; }
     .sw-root .sw-copy__cta { margin-top: 14px; gap: 9px; }
-    .sw-root .sw-btn { padding: 11px 18px; font-size: 0.88rem; }
-    .sw-root .weg-mehr { margin-top: 12px; }
+    .sw-root .sw-btn { padding: 11px 18px; font-size: 0.87rem; }
+    .sw-root .weg-mehr { margin-top: 12px; font-size: 0.86rem; }
   }
 
   /* Handy quer. Hier greift die Hochkant-Fassung bewusst nicht: quer ist der
