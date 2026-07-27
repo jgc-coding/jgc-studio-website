@@ -70,6 +70,24 @@
      Nothing here is required — a config with only `clip`/`connectors` still works on
      phones; the mobile variants just make it lighter and smoother.
 
+   DATA BUDGET (clipStart / prefetch + the returned handle)
+     A seven-leg flight is tens of megabytes. Loading it at all is a decision that
+     belongs to the visitor's connection, not to the page — but the browser only
+     admits to a slow line on Chromium (saveData / effectiveType); iOS says nothing.
+     So the engine offers the MECHANISM and leaves the POLICY to the host:
+       clipStart: 'gated'  — mount in stills mode and download NO video until the
+                             host calls allowClips() on the returned handle. The
+                             host can measure the real throughput first (e.g. from
+                             Resource Timing over what the page already fetched),
+                             read a stored preference, or ask. Default 'auto'
+                             keeps the historical behaviour.
+       prefetch: 0.8       — viewport-heights of look-ahead for fetching clips
+                             (default 1.6). Lower = a cheaper first screen, at the
+                             price of arriving at a leg before it finished loading
+                             (the poster covers that).
+     mountScrollWorld returns { allowClips(), enterStillsMode(), mode() }. Ignoring
+     the return value is fine — everything else works exactly as before.
+
    COPY TIMING — tie it to the camera architecture, not to taste
      Architecture B: a segment IS a scene, on screen from its first frame → copy peaks
      mid-segment ('middle', the historical default).
@@ -144,6 +162,13 @@ function mountScrollWorld(container, config) {
   // load, no decode. Entered up-front for prefers-reduced-motion and data-saver, and at
   // runtime when iOS Low Power Mode blocks video (see enterStillsMode/primeVideo).
   let stillsOnly = reduce || dataSaver;
+  // CLIP GATE — hold the clips back until someone says the line can carry them.
+  // With `clipStart: 'gated'` the page renders in stills mode and downloads no
+  // video at all until it calls allowClips() on the returned handle. That lets
+  // the HOST decide the policy (measure the real throughput, read a stored
+  // preference, ask the visitor) while the engine keeps the mechanism. Default
+  // 'auto' is the historical behaviour: clips load as soon as they're near.
+  let clipsAllowed = (config.clipStart !== 'gated');
   const SECTIONS = config.sections || [];
   const CONNECTORS = config.connectors || [];
   const CONNECTORS_M = config.connectorsMobile || [];
@@ -326,7 +351,7 @@ function mountScrollWorld(container, config) {
   }
 
   function loadClip(s) {
-    if (stillsOnly || s.loading || !s.clip) return;
+    if (stillsOnly || !clipsAllowed || s.loading || !s.clip) return;
     s.loading = true;
     // Serve the lighter mobile encode on phone-class devices when one was provided
     // (tablets and desktops get the full master — see phoneClass above).
@@ -356,7 +381,7 @@ function mountScrollWorld(container, config) {
 
     // On a slow connection (Chromium signal only) shrink the prefetch window: fetch the
     // clip you're in, not the neighbourhood. Everyone else prefetches ±1.6 viewports.
-    const lookahead = slowNet ? 0.4 : 1.6;
+    const lookahead = slowNet ? 0.4 : (config.prefetch != null ? config.prefetch : 1.6);
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (y > s.start - lookahead * vh && y < s.end + lookahead * vh) loadClip(s);
@@ -480,6 +505,25 @@ function mountScrollWorld(container, config) {
   window.addEventListener('load', layout);
   layout();
   requestAnimationFrame(raf);
+
+  // ---- handle for the host page ----
+  // Only needed for `clipStart: 'gated'` and for a visitor-facing data switch;
+  // ignoring the return value keeps the historical usage working unchanged.
+  return {
+    // Release the clips. Returns false if stills mode is already permanent
+    // (reduced-motion, data-saver, an OS that blocks video) — those decisions
+    // are not ours to overrule.
+    allowClips() {
+      if (stillsOnly || clipsAllowed) return false;
+      clipsAllowed = true;
+      read();
+      return true;
+    },
+    // Drop to stills for good: releases every loaded clip and its blob.
+    enterStillsMode,
+    // 'stills' | 'waiting' (gated, nothing downloaded yet) | 'video'
+    mode() { return stillsOnly ? 'stills' : (clipsAllowed ? 'video' : 'waiting'); },
+  };
 
   // ---- helpers ----
   function el(tag, cls) { const n = document.createElement(tag); if (cls) n.className = cls; return n; }

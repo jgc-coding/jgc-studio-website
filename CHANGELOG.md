@@ -2,6 +2,54 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: Datenmodus — erst leicht, dann aufrüsten
+
+Vorbereitung darauf, dass die Reise die Hauptseite wird: dann landen Besucher unangekündigt auf
+ihr, auch unterwegs mit schlechtem Netz.
+
+**Zuerst die Zahlen, weil die Annahme falsch war.** Die Seite lud nie „30 bis 50 MB auf einmal" —
+sie holt Etappe für Etappe. Gemessen im Handy-Format waren es beim Öffnen 5,3 MB (die ersten zwei
+Etappen), durchgescrollt 17 MB. Auf 4G unauffällig, auf schwachem 3G 53 Sekunden bis zum ersten
+Bild.
+
+**Die Seite entscheidet jetzt selbst — und lädt bis dahin kein Video.** Der übliche Weg wäre, den
+Browser zu fragen (`saveData`, `effectiveType`); das tut die Engine auch, nur verrät es außer
+Chrome auf Android niemand. Ein iPhone im schlechten Netz bekam also die volle Fassung — genau
+dort, wo sie am meisten weh tut. Stattdessen wird **gemessen statt gefragt**: die Seite lädt
+ohnehin rund 340 KB, bevor das erste Video dran wäre; wie lange das gedauert hat, steht im
+Browser (Resource Timing). Daraus fällt die tatsächliche Geschwindigkeit ab, ohne ein einziges
+zusätzliches Byte. Ab 375 KB/s (rund 3 Mbit/s) werden die Clips freigegeben, darunter bleibt es
+bei Standbildern. Gemessen wird zweimal — nach 1,8 s und nach 6 s, weil der erste Wert
+Namensauflösung und Verbindungsaufbau enthält und eine schnelle Leitung unterschätzen kann.
+Kam nichts über die Leitung, liegt alles im Zwischenspeicher, kostet also nichts mehr und wird
+freigegeben.
+
+| | Datenmenge (Handy) | schwaches 3G |
+|---|---|---|
+| Standbilder, ganze Reise | 0,37 MB | 3,7 s |
+| Einstieg mit Video — **vorher** | 5,3 MB | 53 s |
+| Einstieg mit Video — **jetzt** | 3,2 MB | 32 s |
+
+Der Einstieg ist billiger, weil beim Öffnen nur noch **eine** Etappe vorausgeladen wird statt
+zwei (`prefetch: 0.8` statt 1.6). Die zweite beginnt nach dem ersten Fingerwisch zu laden und ist
+lange vor dem Ankommen fertig; bis dahin steht das Standbild.
+
+**Niemand sieht je einen leeren Bildschirm oder einen Ladebalken.** Die Standbilder sind sofort
+da, das Video schaltet sich still dazu. Und niemand wird gefragt: der Schalter dafür steht im
+Abspann, merkt sich die Wahl im Browser und überschreibt die Messung — wer nichts tut, bekommt
+die Messung.
+
+**Die Engine bekommt dafür zwei rückwärtskompatible Zusätze:** `clipStart: 'gated'` (mounten,
+aber kein Video laden, bis die Seite es freigibt), `prefetch` (Vorausladen in Bildschirmhöhen)
+und einen Rückgabewert `{ allowClips(), enterStillsMode(), mode() }`. Die Trennung ist Absicht:
+die Engine bringt die Mechanik, die Seite die Politik (Schwelle, Zeitpunkte, gemerkte Wahl).
+Damit ist `der-weg/scrub-engine.js` wieder eine Sonderfassung gegenüber dem Skill — die
+Rückgabe steht in `docs/der-weg.md` unter „Offen".
+
+Geprüft: bei fester Wahl „datensparsam" wird auch nach dem Scrollen bis ans Ende der Reise
+**kein einziges Video** geladen; bei „voll" sofort eines; automatisch entscheidet die Messung.
+Standbilder kommen aus den kleinen Handy-Postern (0,37 MB für alle sieben), nicht aus den großen.
+
 ## 2026-07-27 — Der Weg: „Mehr" in die Kopfzeile, Ausklang scrollt mit
 
 **„Mehr dazu" kostet keine eigene Zeile mehr.** Der Knopf sitzt jetzt in *einer* Zeile mit dem

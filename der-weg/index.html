@@ -593,6 +593,18 @@
   .abspann a:hover { color: #E8A572; }
   .abspann-reihen { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; font-size: 0.9rem; }
   .abspann-fein { font-size: 0.82rem; color: rgba(254, 252, 247, 0.55); }
+
+  .daten { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.1rem; }
+  .daten-lage { margin: 0; font-size: 0.86rem; color: rgba(254, 252, 247, 0.72); }
+  .daten-schalter {
+    font: inherit; font-size: 0.82rem; font-weight: 600;
+    color: #FEFCF7; background: transparent; cursor: pointer;
+    border: 1px solid rgba(254, 252, 247, 0.30);
+    border-radius: 999px; padding: 7px 15px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .daten-schalter:hover { background: rgba(254, 252, 247, 0.10); border-color: rgba(254, 252, 247, 0.55); }
+  .daten-schalter:focus-visible { outline: 2px solid #E8A572; outline-offset: 3px; }
 </style>
 </head>
 <body>
@@ -971,6 +983,14 @@
         <a href="/jgc-studio-website/main/impressum/">Impressum</a>
         <a href="/jgc-studio-website/main/datenschutz/">Datenschutz</a>
       </div>
+      <!-- Datenmodus. Steht bewusst hier unten und nicht in der Reise: wer ihn
+           sucht, sucht ihn gezielt, und die Reise selbst bleibt frei von
+           Bedienelementen. Ohne JavaScript ist er sinnlos und darum verborgen. -->
+      <div class="daten" hidden>
+        <p class="daten-lage">Ansicht wird geprüft …</p>
+        <button type="button" class="daten-schalter">Datensparsam einschalten</button>
+      </div>
+
       <p class="abspann-fein">
         © 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform ·
         Die Szenen dieser Seite sind mit KI erzeugte Papierschnitt-Illustrationen.
@@ -996,6 +1016,16 @@
        Reise laeuft zuegiger, ohne dass eine Szene gehetzt wirkt. Die zwei
        Schluesselszenen behalten mehr Weg als die Durchfahrten. */
     diveScroll: 1.0,
+
+    /* Wie weit im Voraus Clips geholt werden, in Bildschirmhoehen. Der Standard
+       1.6 laedt beim Oeffnen ZWEI Etappen (gemessen 5,3 MB), 0.8 nur eine
+       (3,1 MB). Die zweite beginnt dann nach einem Fingerwisch zu laden und ist
+       lange vor dem Ankommen fertig; bis dahin steht das Standbild. */
+    prefetch: 0.8,
+
+    /* Kein Video, bis die Seite selbst entschieden hat, dass die Leitung es
+       traegt — siehe den Block "Datenmodus" unter der Konfiguration. */
+    clipStart: 'gated',
 
     /* Grundbreite der Ueberblendung an den Naehten. Vier der sechs Uebergaenge sind
        sauber und brauchen wenig; die zwei springenden bekommen unten einzeln mehr,
@@ -1109,13 +1139,134 @@
     connectors: [],
   };
 
-  mountScrollWorld(document.getElementById('world'), wegKonfig);
+  var welt = mountScrollWorld(document.getElementById('world'), wegKonfig);
 
   /* Muss NACH mountScrollWorld laufen: es haengt seine Knoepfe an die
      Stationstexte, die die Engine erst dabei aufbaut. */
   mountVertiefung({
     stationen: wegKonfig.sections.map(function (s) { return s.id; }),
   });
+
+  /* ==================================================================
+     DATENMODUS: erst leicht, dann aufruesten.
+
+     Die Reise kostet auf einem Telefon rund 17 MB, wenn man sie ganz
+     durchscrollt, und beim blossen Oeffnen 3 MB fuer die erste Etappe. Auf
+     4G ist das unauffaellig, auf schwachem 3G sind das Minuten.
+
+     Der uebliche Weg waere, den Browser zu fragen (`saveData`,
+     `effectiveType`). Das tut die Engine auch — nur verraet das ausser
+     Chrome auf Android niemand. Ein iPhone im schlechten Netz bekaeme also
+     die volle Fassung, und genau dort tut sie am meisten weh.
+
+     Deshalb hier: NICHT fragen, sondern MESSEN. Die Seite laedt ohnehin rund
+     340 KB, bevor das erste Video ueberhaupt drankaeme (Programm, Schriften,
+     erstes Standbild). Wie lange das gedauert hat, steht im Browser
+     (Resource Timing) — daraus faellt die tatsaechliche Geschwindigkeit ab,
+     ohne ein einziges zusaetzliches Byte. Traegt die Leitung, werden die
+     Clips freigegeben; traegt sie nicht, bleibt es bei den Standbildern.
+     Die kosten fuer die ganze Reise 0,6 MB, und niemand sieht je einen
+     leeren Bildschirm oder einen Ladebalken.
+
+     Zweimal gemessen: nach 1,8 s und noch einmal nach 6 s. Der erste Wert
+     enthaelt Namensaufloesung und Verbindungsaufbau und kann eine schnelle
+     Leitung unterschaetzen; der zweite korrigiert das. Erst danach faellt
+     die Entscheidung endgueltig.
+
+     Wer selbst bestimmen will, findet im Abspann einen Schalter. Seine Wahl
+     wird im Browser gemerkt (localStorage), es fragt also nie jemand zweimal.
+     ================================================================== */
+  (function datenmodus() {
+    var SPEICHER = 'weg-datenmodus';
+    var SCHWELLE = 375 * 1024;      // Bytes je Sekunde, rund 3 Mbit/s
+    var MINDESTMENGE = 40 * 1024;   // darunter ist keine Aussage moeglich
+
+    var lage = document.querySelector('.daten-lage');
+    var schalter = document.querySelector('.daten-schalter');
+    var block = document.querySelector('.daten');
+    var endgueltig = false;
+
+    function wunsch() {
+      try { return localStorage.getItem(SPEICHER); } catch (e) { return null; }
+    }
+
+    /* Gemessene Geschwindigkeit in Bytes je Sekunde — oder null, wenn zu wenig
+       uebertragen wurde. Zu wenig heisst in aller Regel: alles kam aus dem
+       Zwischenspeicher des Browsers. Dann kostet das Video nichts mehr und
+       darf laufen. */
+    function gemessen() {
+      if (!window.performance || !performance.getEntriesByType) return null;
+      var bytes = 0, start = Infinity, ende = 0;
+      performance.getEntriesByType('resource').forEach(function (r) {
+        if (!r.transferSize || !r.responseEnd) return;
+        bytes += r.transferSize;
+        if (r.startTime < start) start = r.startTime;
+        if (r.responseEnd > ende) ende = r.responseEnd;
+      });
+      if (bytes < MINDESTMENGE) return null;
+      return bytes / Math.max(0.05, (ende - start) / 1000);
+    }
+
+    function zeigeLage() {
+      if (!lage || !schalter) return;
+      var modus = welt.mode();
+      var gewaehlt = wunsch();
+      if (modus === 'video') {
+        lage.textContent = gewaehlt === 'voll'
+          ? 'Ansicht: mit Video, fest eingestellt.'
+          : 'Ansicht: mit Video — die Verbindung trägt es.';
+        schalter.textContent = 'Auf datensparsam umstellen';
+      } else if (modus === 'stills') {
+        lage.textContent = gewaehlt === 'sparsam'
+          ? 'Ansicht: Standbilder, fest eingestellt. Die ganze Reise kostet so rund 0,6 statt 17 Megabyte.'
+          : 'Ansicht: Standbilder — die Verbindung war für Video zu langsam. Die ganze Reise kostet so rund 0,6 statt 17 Megabyte.';
+        schalter.textContent = 'Video trotzdem laden';
+      } else {
+        lage.textContent = 'Ansicht wird geprüft — bis dahin Standbilder.';
+        schalter.textContent = 'Auf datensparsam umstellen';
+      }
+    }
+
+    function pruefe(letzterVersuch) {
+      if (endgueltig) return;
+      var tempo = gemessen();
+      if (tempo === null || tempo >= SCHWELLE) {
+        welt.allowClips();
+        endgueltig = true;
+      } else if (letzterVersuch) {
+        welt.enterStillsMode();
+        endgueltig = true;
+      }
+      zeigeLage();
+    }
+
+    // ---- Feste Wahl der Besucherin schlaegt jede Messung ----
+    var gewaehlt = wunsch();
+    if (gewaehlt === 'sparsam') {
+      welt.enterStillsMode();
+      endgueltig = true;
+    } else if (gewaehlt === 'voll') {
+      welt.allowClips();
+      endgueltig = true;
+    } else {
+      setTimeout(function () { pruefe(false); }, 1800);
+      setTimeout(function () { pruefe(true); }, 6000);
+    }
+
+    if (block) block.hidden = false;
+    zeigeLage();
+
+    if (schalter) {
+      schalter.addEventListener('click', function () {
+        var neu = (welt.mode() === 'video') ? 'sparsam' : 'voll';
+        try { localStorage.setItem(SPEICHER, neu); } catch (e) {}
+        // Neu laden statt mitten im Flug umschalten: halb geladene Clips und
+        // freigegebene Zwischenspeicher sauber loszuwerden ist die Muehe nicht
+        // wert, und ein bewusster Moduswechsel darf einen Augenblick dauern.
+        location.reload();
+      });
+    }
+  })();
 
   /* ------------------------------------------------------------------
      Der Ausklang: die Textebene faehrt mit dem Leseteil hoch.

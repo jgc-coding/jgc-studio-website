@@ -195,13 +195,62 @@ Hintergrund. Würde die Kamera weiterlaufen, wäre eine lange Station gar nicht 
 **Ohne JavaScript** stehen die Langfassungen als gewöhnlicher Lesetext untereinander — die Regel
 `.js .vertiefungen { display: none }` blendet sie nur aus, wenn sie per Knopf erreichbar sind.
 
-## Engine: unveränderte Skill-Fassung
+## Datenmodus: erst leicht, dann aufrüsten
 
-`der-weg/scrub-engine.js` ist eine **unveränderte Kopie** aus dem Skill
-(`~/.claude/skills/scroll-world/references/scrub-engine.js`). Beim Bau dieser Seite
-entstanden vier Änderungen an der Engine; sie sind am 26.07.2026 alle in den Skill selbst
-zurückgeflossen, damit sie beim nächsten Projekt von allein zur Verfügung stehen. Diese
-Seite hat deshalb **keine Sonderfassung** mehr zu pflegen.
+Die Reise kostet auf einem Telefon rund 17 MB, wenn man sie ganz durchscrollt. Auf 4G ist
+das unauffällig, auf schwachem 3G sind es Minuten. Deshalb entscheidet die Seite selbst,
+ob sie Video lädt — **und lädt bis zu dieser Entscheidung keines.**
+
+| Zustand | Datenmenge (Handy) | auf schwachem 3G |
+|---|---|---|
+| Standbilder, ganze Reise | 0,37 MB | 3,7 s |
+| Einstieg mit Video (eine Etappe) | 3,2 MB | 32 s |
+| ganze Reise mit Video | 17 MB | 170 s |
+
+**Wie entschieden wird: durch Messen, nicht durch Fragen.** Der übliche Weg wäre, den
+Browser zu befragen (`saveData`, `effectiveType`) — das tut die Engine auch, nur verrät das
+außer Chrome auf Android niemand. Ein iPhone im schlechten Netz bekäme also die volle
+Fassung, und genau dort tut sie am meisten weh.
+
+Die Seite lädt ohnehin rund 340 KB, bevor das erste Video überhaupt dran wäre (Programm,
+Schriften, erstes Standbild). Wie lange das gedauert hat, steht im Browser (Resource
+Timing); daraus fällt die tatsächliche Geschwindigkeit ab, ohne ein einziges zusätzliches
+Byte. Gemessen wird zweimal — nach 1,8 s und noch einmal nach 6 s, weil der erste Wert
+Namensauflösung und Verbindungsaufbau enthält und eine schnelle Leitung unterschätzen kann.
+Schwelle: **375 KB/s (rund 3 Mbit/s)**.
+
+Kam wenig bis nichts über die Leitung, liegt alles im Zwischenspeicher des Browsers — dann
+kostet das Video nichts mehr und wird freigegeben.
+
+**Der Schalter im Abspann** überschreibt die Messung und merkt sich die Wahl im Browser
+(`localStorage`, Schlüssel `weg-datenmodus`: `sparsam` oder `voll`). Er lädt die Seite neu,
+statt mitten im Flug umzuschalten. Es wird nie jemand gefragt — wer nichts tut, bekommt die
+Messung.
+
+Stellschrauben in `der-weg/index.html`, Block „Datenmodus": `SCHWELLE`, die beiden Zeitpunkte,
+und in der Konfiguration `prefetch: 0.8` (wie viele Bildschirmhöhen im Voraus geladen wird —
+0.8 lädt beim Öffnen eine Etappe, der Standard 1.6 lädt zwei).
+
+## Engine: zwei Zusätze gegenüber dem Skill
+
+`der-weg/scrub-engine.js` war bis zum 27.07.2026 eine unveränderte Kopie aus dem Skill
+(`~/.claude/skills/scroll-world/references/scrub-engine.js`). Seitdem trägt sie **zwei
+Zusätze**, beide rückwärtskompatibel — eine Konfiguration ohne sie verhält sich wie vorher:
+
+| Zusatz | Wirkung |
+|---|---|
+| `clipStart: 'gated'` | mountet im Standbild-Modus und lädt **kein** Video, bis die Seite `allowClips()` ruft |
+| `prefetch: 0.8` | Vorausladen in Bildschirmhöhen (Standard 1.6) |
+| Rückgabewert | `{ allowClips(), enterStillsMode(), mode() }` — vorher gab die Funktion nichts zurück |
+
+Die Trennung ist Absicht: die **Engine** bringt die Mechanik, die **Seite** die Politik
+(Schwelle, Messzeitpunkte, gemerkte Wahl, Schalter). Damit ist der Zusatz für jedes
+Scroll-Welt-Projekt brauchbar, ohne dass eine Datenschutz- oder Netzannahme mit in den
+Skill wandert.
+
+Beim Bau dieser Seite entstanden davor bereits vier Änderungen an der Engine; sie sind am
+26.07.2026 alle in den Skill zurückgeflossen. Diese beiden hier stehen noch aus (siehe
+„Offen").
 
 Was dabei in den Skill wanderte, in Kurzform:
 
@@ -248,10 +297,14 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
   Eine Notiz vom 24.07. behauptete, das Portrait sei bereits einkomponiert; die dort
   genannten Dateien (`leg 6 original.mp4`, Werkzeugordner) existieren nicht mehr.
 - Die zwei springenden Übergänge (siehe oben).
-- **Drei Dinge in den Skill zurückgeben**, sobald sie sich bewährt haben: die Hochkant-Fassung
-  (das 4:3-auf-9:19,5-Problem trifft jede Scroll-Welt), das „Mehr dazu"-Feld, und vor allem die
-  verlorene Zentrierung der breiten Fassung — die ist ein echter Fehler der Engine, kein
-  Geschmack, und trifft jedes Projekt, das den Skill benutzt (`top: 50%` plus
-  `transform: translateY(-50%)`, während die Engine `transform` beim Scrollen überschreibt;
-  Abhilfe ist die eigenständige Eigenschaft `translate`). Erst nach Gabriels Urteil am Gerät.
+- **Vier Dinge in den Skill zurückgeben**, sobald sie sich bewährt haben:
+  1. `clipStart: 'gated'` + `prefetch` + Rückgabewert — steht bereits **in** der Engine, muss also
+     nur noch in die Skill-Fassung übernommen werden. Bis dahin ist `der-weg/scrub-engine.js`
+     eine Sonderfassung, und ein Update aus dem Skill würde sie überschreiben.
+  2. Die verlorene Zentrierung der breiten Fassung — ein echter Fehler der Engine, kein
+     Geschmack, und er trifft jedes Projekt, das den Skill benutzt (`top: 50%` plus
+     `transform: translateY(-50%)`, während die Engine `transform` beim Scrollen überschreibt;
+     Abhilfe ist die eigenständige Eigenschaft `translate`).
+  3. Die Hochkant-Fassung — das 4:3-auf-9:19,5-Problem trifft jede Scroll-Welt.
+  4. Das „Mehr"-Feld.
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.
