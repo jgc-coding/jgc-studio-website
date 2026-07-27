@@ -91,11 +91,22 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   (2) Bei `document.visibilityState === 'hidden'` laufen `requestAnimationFrame`, IntersectionObserver
   und Animationen **gar nicht** → `is-visible` wird nie gesetzt, Reveal-Zustände sind dort grundsätzlich
   nicht prüfbar, und ein `await` auf rAF hängt bis zum Timeout. Solche Aussagen dann statisch belegen.
+  Auch **Scroll-Ereignisse werden nicht zugestellt** (gemessen: null bei `window.scrollTo`) — Position
+  setzen und `dispatchEvent(new Event('scroll'))` bzw. `resize` selbst auslösen. Und: Code mit dem
+  üblichen rAF-Riegel (`if (!ticking) { ticking = true; requestAnimationFrame(…) }`) verklemmt sich
+  dort beim ERSTEN Ereignis dauerhaft. Zum Testen `window.requestAnimationFrame` vorher auf synchron
+  umbiegen, dann läuft der echte Code-Pfad statt einer Nachbildung.
   (3) **CSS-Übergänge frieren im versteckten Pane am STARTWERT ein.** Eine Eigenschaft mit
   `transition` misst sich als ihr Ausgangswert — eine Knopffläche als `rgba(0,0,0,0)` statt der
   Zielfarbe — und selbst inline gesetzte Werte scheinen ignoriert (die eingefrorene Transition
   überdeckt sie). Vor Farb-/Zustandsmessungen `element.style.transition='none'` setzen, danach
   zurücksetzen. So entstand am 27.07. der Schein-Befund „Nav-Reiter transparent".
+- **Headless Chrome misst hier falsch, wenn man nicht nachrechnet.** `--window-size` ist nicht der
+  CSS-Viewport: es gehen 26 px Breite und 156 px Höhe für das Fensterwerk ab, und unter **526 CSS-px
+  Breite klemmt Chrome auf ein Minimum** — ein angefordertes 393er Handyfenster rendert als 526 px
+  und schneidet Text ab, der real passt. Vor jedem Beweisbild einmal mit einer Mess-Seite
+  (`innerWidth` ins DOM schreiben, `--dump-dom`) gegenprüfen. Für echte Handybreiten taugt der Weg
+  nicht — dort nur DOM-Geometrie messen.
 - **Regeln, die Inhalt verstecken, brauchen den `.js`-Vorsatz** (`.js .reveal:not(.is-visible)`).
   Ohne ihn ist die Seite ohne JavaScript leer. Gilt für V18 UND `stilprobe/index.html` — die
   Unterseite erbt das CSS aus V18, ein Fehler dort taucht also zweimal auf.
