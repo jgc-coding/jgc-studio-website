@@ -1,7 +1,10 @@
 # Verbesserungen
-Stand: 2026-07-25 (Runde 2, Fokus: alles — Befunde erhoben, umgesetzt und live)
+Stand: 2026-07-27 (Runde 3, Fokus: Scroll-Reise `der-weg/` — Code + Design,
+Haltung: Nur messbare Fehler, Lupe: emil-design-eng)
 
-Live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
+Runde 2 (Fokus: alles) ist live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
+Runde 3 hat nur `der-weg/` und seine Werkzeuge angesehen; V18/Hauptseite, `site/`, `stilprobe/`
+blieben unangetastet. Teil 3 (Ausbau-Ideen) lief in Runde 3 nicht — der Fokus war Code + Design.
 
 ## Vorgeschichte: drei Runden, dasselbe Ergebnis
 
@@ -53,6 +56,25 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 8. **Deploy-Kette** — erwartet: Push auf `main` → Action grün, alle Kernartefakte vorhanden ·
    zuletzt: läuft (letzte 5 Läufe grün, ~1 min 45 s)
 
+### Scroll-Reise `der-weg/` (seit Runde 3; im versteckten Preview-Pane sind nur
+### Aufbau, Zustände und Geometrie prüfbar — die Kamerafahrt selbst nicht)
+
+9. **Reise mountet** — erwartet: 7 Szenen, 7 Stationen, kein Konsolenfehler ·
+   zuletzt: läuft (2026-07-27, alle Requests 200)
+10. **Datenmodus entscheidet selbst** — erwartet: erst Standbilder, Freigabe nach Messung,
+    Lagezeile im Abspann stimmt · zuletzt: läuft (lokal: „mit Video — die Verbindung trägt es"),
+    aber zwei Logik-Befunde V22/V23
+11. **Video-Nachladen** — erwartet: Clip als Blob geholt, Poster bis zum ersten Frame ·
+    zuletzt: läuft (anflug.mp4 geladen; `has-clip` braucht rAF → am Gerät prüfen)
+12. **„Mehr dazu"-Feld** — erwartet: öffnet, Fokus wandert hinein, Escape schließt,
+    Fokus kehrt zum Knopf zurück · zuletzt: läuft (2026-07-27, alles gemessen)
+13. **Hochkant-Fassung** — erwartet: Bildband oben, Text unten, kein seitlicher Überlauf ·
+    zuletzt: läuft bei 320/393/768; bei 375×812 zwei Kalibrier-Befunde (V25)
+14. **Ohne JavaScript** — erwartet: SEO-Block und Langfassungen als Lesetext ·
+    zuletzt: läuft (`.js`-Klasse ab-/angeschaltet und gemessen)
+15. **Kamerafahrt/Scrubbing** — nicht prüfbar im versteckten Pane (rAF läuft dort nicht);
+    steht als Telefontest auf Gabriels Hub-Liste
+
 ## Offen
 
 - [ ] **V20** (A) Stilprobe-Beispiel nennt sich „echt", ist im Quelltext aber als Platzhalter markiert
@@ -81,6 +103,47 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
       Warum: Keines dieser Pakete läuft im Browser der Besucherin — die Seite ist statisches
       HTML. Die Behebung verlangt Astro 7 (Breaking Change) und gehört zu I2.
 
+- [ ] **V21** (B) Reise: unsichtbare Stationen bleiben klick- und tastatur-erreichbar
+      Beleg: `scrub-engine.js:432-433` setzt beim Ausblenden nur `opacity` und `pointer-events`
+      auf die Station; das Engine-CSS `.sw-copy__cta{pointer-events:auto}` (`scrub-engine.js:601`)
+      schaltet die CTA-Kinder wieder scharf. Gemessen am 27.07. (Desktop 1280×720, Scroll ganz
+      oben): `elementFromPoint` auf x64–437/y485–532 trifft die zwei unsichtbaren Knöpfe
+      „Erstgespräch anfragen" (mailto) und „Zur Stilprobe" der Station 7 — Parent-Opacity 0.
+      `focus()` auf beide und auf die „Mehr"-Knöpfe aller inaktiven Stationen gelingt ebenfalls.
+      Aufwand: S · betrifft die Engine → gehört mit in die ohnehin offene Skill-Rückgabe.
+      Fix-Idee: in `read()` zusätzlich `visibility` schalten (`cop > 0.01 ? '' : 'hidden'`) —
+      nimmt Klick UND Fokus, rückwärtskompatibel.
+
+- [ ] **V22** (B) Datenmodus: Schalter speichert in der Prüfphase das Gegenteil seiner Beschriftung
+      Beleg: `der-weg/index.html:1225-1226` — im Zustand „waiting" zeigt der Schalter
+      „Auf datensparsam umstellen"; der Klick-Handler `index.html:1261` speichert aber
+      `(mode() === 'video') ? 'sparsam' : 'voll'`, und „waiting" fällt in den 'voll'-Zweig.
+      Fenster: bis zur Entscheidung (max. 6 s), erreichbar z. B. über die Sprungmarke direkt
+      zum Abspann. Aufwand: S — „waiting" explizit behandeln oder Schalter bis zur
+      Entscheidung deaktivieren.
+
+- [ ] **V23** (B) Datenmodus: Cache-Vermutung gibt gerade den langsamsten Leitungen das Video frei
+      Beleg: `der-weg/index.html:1206` — unter 40 KB übertragener Daten gilt „alles aus dem
+      Zwischenspeicher" → `allowClips()` + `endgueltig = true` (Z. 1233-1234); der 6-s-Kontrolllauf
+      findet nie statt. Die drei Ressourcen, die vor dem Skript sicher fertig sind, wiegen live
+      aber nur 19.066 Bytes gzip (scrub-engine 14.535 + vertiefung 4.051 + schriften.css 480,
+      Live-Abruf 27.07.). Auf einer Leitung unter ~25 KB/s ist nach 1,8 s sonst nichts fertig
+      (Fonts ~50–100 KB je Datei, Poster lazy) → Messung „null" → volle Fassung genau dort, wo
+      sie laut eigenem Kommentar „am meisten weh tut" (iPhone ohne Netz-Signale). Aufwand: S —
+      „null" beim ersten Lauf nicht endgültig werten, Cache stattdessen an
+      `transferSize === 0`-Einträgen erkennen.
+
+- [ ] **V24** (B) Engine-Nav: aktiver Reiter unter WCAG AA, Chips auf Salbei knapp darunter
+      Beleg: `.sw-nav__item.is-active{color:#fff;background:var(--sw-accent)}`
+      (`scrub-engine.js:586`) — gemessen bei 13,1 px: Weiß auf Kupfer #C97B3F = 3,29:1,
+      auf Salbei #8FA98A = 2,56:1, auf Quellwasser #6FA3B5 = 2,77:1 (Soll: 4,5:1).
+      Nebenbefund: Schlagwort-Chips der Salbei-Station 4,34:1 (`scrub-engine.js:600`), Kupfer
+      5,19 und Quellwasser 4,60 bestehen. Aufwand: S — Pill-Fläche auf Tinte #1F2A44 statt
+      Szenenakzent (13,9:1), eine Override-Zeile in der Seite + Skill-Rückgabe.
+      **Benannter Widerspruch, nicht neu bewertet:** die Kupfer-Kleintexte (Eyebrows, 3,21:1
+      bei 12,8 px fett) stehen seit Runde 2 als bewusste Marken-Entscheidung („Eyebrows bleiben
+      Kupfer", V11) — auf der Reise gilt dieselbe Lage; auflösen kann das nur Gabriel.
+
 - [ ] **V13** (C) Drei erfundene Kundenstimmen mit Platzhalter-Label — **Gabriels Entscheidung**
       Beleg: Sektion „Was Kunden über die Arbeit sagen." in V18 · Aufwand: S · Risiko: gering
       Warum: Die Kennzeichnung ist ehrlich, sagt der Zielgruppe aber dreimal hintereinander
@@ -101,6 +164,22 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
       volle Megabyte. Sinnvoll erst beim All-Inkl-Umzug und gebündelt mit I2 (externe Dateien
       mit Caching, Font-Subsets auf latin/latin-ext ≈ 60–80 KB). Stand seit 27.06. offen.
 
+- [ ] **V25** (C) Reise hochkant: die 375er-Gerätebreite fällt zwischen die Messpunkte 360 und 393
+      Beleg: gemessen am 27.07. bei 375×812 (iPhone-X/12-mini-Klasse): (a) Kopfzeile der
+      ERSTEN Station bricht zweizeilig um (43 px statt 25 px — der längste Kleintext plus
+      „Mehr +" braucht ~353 px, verfügbar sind 337; die Messung in `index.html:265-267` galt
+      393 px); ebenso bei 320. (b) Die LETZTE Station überläuft ihren Textstreifen um 12 px
+      (Inhalt 298 px, Platz 286 px) und ragt oben ins Bildband. Gegenprobe 393×852: alles
+      einzeilig, nichts läuft über. Aufwand: M — Kalibrierung der `max-width: 379px`-Stufe
+      (`index.html:310-312`) und der Schriftstufen auf 375–392 nachziehen und nachmessen.
+
+- [ ] **V26** (C) Zeilenlängen im Leseteil über dem Richtwert von 75 Zeichen
+      Beleg: gemessen am 27.07. (Desktop 1280): FAQ-Antworten 88 Zeichen in der ersten Zeile
+      (`.frage p`, max-width 38rem, `index.html:577-580`); Langfassungen ohne JavaScript
+      102 Zeichen (`.vertiefungen`-Fluss, 736 px, `index.html:484-485`). Das „Mehr dazu"-Feld
+      selbst liegt mit 66 Zeichen im grünen Bereich. Aufwand: S — Textmaß der FAQ auf ~34rem,
+      No-JS-Fluss auf ~40rem begrenzen.
+
 - [ ] **V19** (D) Alter Analyse-Branch `claude/sharp-herschel-f7c5e1` kann weg
       Beleg: `git log main..claude/sharp-herschel-f7c5e1` — 1 Commit vom 07.07., einziger
       Eigenwert war `WEBSITE-AENDERUNGEN.md`; dessen Inhalt steht jetzt hier · Aufwand: S
@@ -108,6 +187,24 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
       vollständig ist. Branches werden nie ungefragt gelöscht.
       **Nicht anfassen:** die neun `variant/*`-Branches. Der Deploy-Workflow baut sie bei jedem
       Lauf; ein Löschen würde die Galerie beschädigen.
+
+- [ ] **V27** (D) Reduced-Motion-Regel zielt auf ein Element, das es nicht gibt
+      Beleg: `der-weg/index.html:472` neutralisiert `.weg-mehr:hover svg` — der Knopf enthält
+      aber ein `<i>` (Z. 389-392, Rotation in Z. 397). Wer Bewegung abgeschaltet hat, sieht das
+      Plus trotzdem drehen. Gleiche Familie: das FAQ-Plus (`.frage summary::after`, Z. 566-571)
+      hat gar keinen Reduce-Fallback. Aufwand: S. Mikrobewegungen — aber die Regel existiert ja
+      und verfehlt nur ihr Ziel.
+
+- [ ] **V28** (D) Redaktionsreste und kleine Werkzeug-Lücken
+      Beleg: doppelte, einander widersprechende Kommentarblöcke `der-weg/index.html:204-232`
+      und `258-263`; Kommentar „unter dem Umschalter (90)" (Z. 531) verweist auf den längst
+      entfernten Umschalter; `scripts/der-weg/kodiere.mjs:30` enthält einen Ternary mit zwei
+      identischen Zweigen; im Idempotenz-Check `kodiere.mjs:149` fehlt `posterM` — fehlt nur
+      das Handy-Poster, meldet das Skript „liegt schon vor". Dazu zwei Engine-Notizen für die
+      Skill-Rückgabe: `loadClip` versucht es nach einem Fehlschlag bei jedem Scroll-Frame
+      erneut (`scrub-engine.js:373`, Request-Flut bei dauerhaftem 404), und
+      `max-height: min(82dvh, 44rem)` (`index.html:422`) hat keine vh-Rückfalllinie für
+      Browser ohne `dvh`. Aufwand: S.
 
 ## Ideen
 
