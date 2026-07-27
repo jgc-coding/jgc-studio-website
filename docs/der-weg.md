@@ -69,6 +69,33 @@ deshalb zusätzlich einen Eigenwert je Etappe (gleicher Abstand, aber innerhalb 
 Datei) und bewertet das Verhältnis. Erst das trennt „Kamera bewegt sich schnell" von
 „Kamera springt".
 
+## Zwei Fassungen der Seite: breit und hochkant
+
+Ab 27.07.2026 sieht die Reise hochkant anders aus als auf einem breiten Schirm — nicht aus
+Geschmack, sondern weil das Material 4:3 ist (1112 × 834). Auf einem 393 × 852 großen Telefon
+bleiben formatfüllend nur **35 % der Bildbreite** übrig.
+
+| | breit (PC, Tablet quer) | hochkant (Telefon, Tablet hochkant) |
+|---|---|---|
+| Bild | ganzer Schirm | oberes Band, Rest ist Textfläche |
+| Text | linke Spalte, Verlauf nach rechts | unten, Pergament-Verlauf nach oben |
+| sichtbar von der Szene | 100 % | 64 % (393 × 852) bis 100 % (1024 × 1366) |
+| greift bei | alles andere | `orientation: portrait` **und** ≤ 1200 px |
+
+Die Grenze hängt bewusst an der Ausrichtung, nicht allein an der Breite: ein iPad Pro 12.9"
+hochkant ist 1024 px breit und fiel vorher auf die breite Fassung, obwohl der Schirm hochkant
+ist. Umgekehrt braucht kein Tablet quer die Hochkant-Fassung — dort ist der Schirm breiter als
+4:3, es wird also gar nichts abgeschnitten.
+
+**Nachjustieren:** genau eine Zahl, `--weg-textzone` in `der-weg/index.html` (Höhe des
+Textbereichs von unten, Standard 46 %, auf kurzen Schirmen 52 %). Bild, Verlauf und Naht leiten
+sich daraus ab. Mehr Textanteil heißt automatisch **mehr** sichtbares Bild, weil ein flacheres
+Band näher am 4:3 der Quelle liegt.
+
+Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
+Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md
+unter „Preview-Messungen".
+
 ## Engine: unveränderte Skill-Fassung
 
 `der-weg/scrub-engine.js` ist eine **unveränderte Kopie** aus dem Skill
@@ -119,4 +146,7 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
   Eine Notiz vom 24.07. behauptete, das Portrait sei bereits einkomponiert; die dort
   genannten Dateien (`leg 6 original.mp4`, Werkzeugordner) existieren nicht mehr.
 - Die zwei springenden Übergänge (siehe oben).
+- **Hochkant-Fassung in den Skill zurückgeben.** Das 4:3-auf-9:19,5-Problem trifft jede
+  Scroll-Welt, nicht nur diese Seite. Solange die Fassung nur hier steht, muss sie beim nächsten
+  Projekt neu erfunden werden. Erst nach Gabriels Urteil am echten Gerät.
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.

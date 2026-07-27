@@ -24,6 +24,24 @@
 <meta name="twitter:image" content="https://jgc-coding.github.io/jgc-studio-website/og-bild.jpg">
 
 <link rel="stylesheet" href="assets/schriften.css">
+
+<!-- Muss VOR dem ersten Aufbau laufen, sonst blitzt kurz die falsche Fassung auf.
+     Hintergrund: Chrome auf Android kann per Einstellung "Desktop-Website" der
+     Seite eine PC-Breite (rund 980 px) vorspiegeln und das Ergebnis auf die
+     Handybreite schrumpfen. Die Seite kann diese Einstellung nicht aufheben —
+     aber sie kann sie erkennen: ein echtes Telefon hat eine kurze
+     Bildschirmseite von hoechstens 600 px UND einen groben Zeiger (Finger).
+     Beides zusammen ist bei keinem Notebook wahr. -->
+<script>
+  (function () {
+    var kurzeSeite = Math.min(screen.width || 0, screen.height || 0);
+    var groberZeiger = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (kurzeSeite > 0 && kurzeSeite <= 600 && groberZeiger) {
+      document.documentElement.classList.add('weg-telefon');
+    }
+  })();
+</script>
+
 <style>
   :root, .sw-root {
     --sw-bg: #FEFCF7;
@@ -59,6 +77,145 @@
       0 1px 2px rgba(254, 252, 247, 0.9);
   }
   .sw-root .sw-hint i { border-color: rgba(31, 42, 68, 0.5); }
+
+  /* ==================================================================
+     HOCHKANT-FASSUNG: Bildband oben, Text unten.
+
+     Warum ueberhaupt: die Etappen sind 1112 x 834, also fast quadratisch
+     (4:3). Ein Telefon ist hochkant (393 x 852). Damit ein 4:3-Bild einen
+     so schmalen Schirm ganz fuellt, muss der Browser links und rechts
+     abschneiden — sichtbar bleiben rund 35 % der Bildbreite. Zwei Drittel
+     jeder Szene sind dann weg, und genau das war auf dem Geraet der
+     Hauptbefund: "man erkennt die Bilder kaum".
+
+     Die Abhilfe: das Bild bekommt nur noch das obere Band. Ein flacheres
+     Band ist naeher am 4:3 der Quelle, also faellt der Beschnitt kleiner
+     aus — bei 54 % Bandhoehe sind rund 64 % der Bildbreite sichtbar statt
+     35 %. Der frei werdende Platz unten traegt den Text, der dort groesser
+     stehen darf als ueber dem Bild.
+
+     EINE Zahl steuert das: --weg-textzone (Hoehe des Textbereichs, von
+     unten gemessen). Bild, Verlauf und Naht leiten sich daraus ab; zum
+     Nachjustieren reicht es, sie zu aendern.
+
+     Wann die Fassung greift: hochkant und schmaler als 1200 px. Damit
+     bekommen Telefone und ALLE Tablets hochkant (auch das 12,9"-iPad mit
+     1024 px) diese Aufteilung, waehrend jedes Tablet quer und jeder
+     PC-Bildschirm bei der breiten Fassung mit Text links bleibt — dort
+     ist der Schirm breiter als 4:3, es wird also gar nichts abgeschnitten.
+     ================================================================== */
+  @media (orientation: portrait) and (max-width: 1200px) {
+    :root, .sw-root { --weg-textzone: 46%; }
+
+    /* Das Bild endet an der Oberkante des Textbereichs. Prozente beziehen
+       sich auf die Buehne, und die liegt fest im Fenster — anders als vh
+       wackelt das also nicht, wenn die Adressleiste ein- und ausfaehrt. */
+    .sw-root .sw-scene { bottom: var(--weg-textzone); }
+
+    /* Naht und Textgrund in einem Zug: Pergament, das von unten deckend
+       hochlaeuft und die Unterkante des Bandes auf den letzten 14 % der
+       Schirmhoehe aufloest. Kein harter Strich zwischen Bild und Text.
+       Die Stopps haengen an derselben Zahl wie das Band, sie wandern beim
+       Nachjustieren also von allein mit. */
+    .sw-root .sw-copylayer::before {
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: auto; height: 100%;
+      background: linear-gradient(0deg,
+        var(--sw-bg) 0%,
+        var(--sw-bg) var(--weg-textzone),
+        color-mix(in srgb, var(--sw-bg) 55%, transparent) calc(var(--weg-textzone) + 8%),
+        transparent calc(var(--weg-textzone) + 14%));
+    }
+
+    /* Der Scroll-Hinweis steht in der ersten Szene unten in der Mitte und
+       damit auf derselben Zeile wie die Schlagworte — gemessen 23 px
+       Ueberlappung. Statt den Text weiter nach oben ins Bild zu schieben,
+       legt sich der Hinweis flach: Schrift und Maus-Symbol nebeneinander
+       statt uebereinander, 26 px hoch statt 80. */
+    .sw-root .sw-hint {
+      flex-direction: row; align-items: center; gap: 9px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+    /* Nur Groesse — `top` des Punktes steuert die Laufanimation, eine Regel
+       dafuer waere wirkungslos (Animationen schlagen normale Angaben). */
+    .sw-root .sw-hint i { width: 15px; height: 24px; border-radius: 8px; }
+    .sw-root .sw-hint i::after { height: 5px; }
+
+    /* Der Text sitzt unten im Pergament.
+
+       `transform` mit Nachdruck: die Engine schreibt beim Scrollen laufend
+       ein `translateY` von +2vh bis -2vh direkt ins Element (scrub-engine.js,
+       Funktion read()). Ueber einem bildschirmfuellenden Video ist dieses
+       Mitschwimmen ein schoenes Detail; in einem festen Textfeld neben einem
+       festen Bildband sind es nur 34 px Wandern, die ueberall als Luft
+       eingeplant werden muessten — und die zuerst dem Scroll-Hinweis in die
+       Quere kommen (gemessen). Direkt am Element gesetzte Angaben schlagen
+       normale Regeln, deshalb hier ausnahmsweise `!important`. Das Ein- und
+       Ausblenden bleibt unberuehrt, nur das Wandern haelt an. */
+    .sw-root .sw-copy {
+      top: auto;
+      bottom: calc(clamp(56px, 7.5dvh, 92px) + env(safe-area-inset-bottom));
+      left: clamp(18px, 5vw, 48px);
+      right: clamp(18px, 5vw, 48px);
+      width: auto; max-width: 34rem;
+      transform: none !important;
+    }
+    /* Auf Pergament statt auf Bild: der Schimmer hinter der Schrift, der
+       sie vom Video abheben sollte, ist hier ueberfluessig. */
+    .sw-root .sw-copy__title {
+      font-size: clamp(2.05rem, 8.8vw, 3.1rem);
+      line-height: 1.02; text-shadow: none;
+    }
+    .sw-root .sw-copy__body {
+      margin-top: 14px; max-width: 34ch; text-shadow: none;
+      font-size: clamp(1.02rem, 4.4vw, 1.2rem);
+    }
+    .sw-root .sw-copy__eyebrow { margin-top: 14px; }
+    .sw-root .sw-copy__tags { margin-top: 18px; }
+    .sw-root .sw-copy__cta { margin-top: 22px; }
+  }
+
+  /* Kurze Schirme (kleine Telefone, 640 px hoch): der Text braucht mehr
+     Anteil. Das kostet kein Bild, im Gegenteil — ein flacheres Band liegt
+     noch naeher am 4:3 der Quelle, dort sind dann rund 88 % der Bildbreite
+     sichtbar. */
+  @media (orientation: portrait) and (max-width: 1200px) and (max-height: 720px) {
+    :root, .sw-root { --weg-textzone: 52%; }
+    .sw-root .sw-copy { bottom: calc(clamp(62px, 9.7dvh, 84px) + env(safe-area-inset-bottom)); }
+    /* Die Schlagwort-Chips und die zwei Schaltflaechen der letzten Station
+       brechen hier auf zwei bis drei Zeilen um und schoben den Textblock
+       ueber die Pergament-Kante hinaus aufs rohe Bild (gemessen: Station 6
+       ragte 11 px darueber). Etwas kompaktere Chips loesen das an der
+       Ursache, statt den Bildrand weiter weichzuzeichnen. */
+    .sw-root .sw-copy__tags { margin-top: 12px; gap: 6px; }
+    .sw-root .sw-copy__tags li { font-size: 0.76rem; padding: 5px 11px; }
+    .sw-root .sw-copy__cta { margin-top: 16px; gap: 9px; }
+    .sw-root .sw-btn { padding: 12px 20px; font-size: 0.9rem; }
+  }
+
+  /* Handy quer. Hier greift die Hochkant-Fassung bewusst nicht: quer ist der
+     Schirm breiter als 4:3, es wird also gar nichts abgeschnitten, und ein
+     Bildband oben waere bei 393 px Hoehe ein Streifen. Die Engine schaltet
+     unter 860 px Breite aber auf "Text unten", und dort stapelt sich der
+     Textblock auf den Scroll-Hinweis (gemessen 36 px Ueberlappung, schon vor
+     dieser Aenderung). Der Hinweis ist das Entbehrlichere — quer sieht man
+     ohnehin sofort, dass es weitergeht. */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .sw-root .sw-hint { display: none; }
+    .sw-root .sw-copy {
+      transform: none !important;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Notnagel fuer "Desktop-Website": der Browser meldet dann PC-Breite, also
+     greifen die Handy-Regeln der Engine (max-width 860px) nicht mehr — die
+     Reiter-Leiste steht ploetzlich auf dem Telefon. Die Aufteilung oben
+     greift trotzdem, weil 980 px unter 1200 liegen; hier kommt nur dazu,
+     was sonst an der 860er-Grenze haengt. Das heilt die Schrumpfung NICHT
+     (keine Seite kann das) — es macht sie ertraeglich. */
+  html.weg-telefon .sw-nav { display: none; }
+  html.weg-telefon .sw-route__label { display: none; }
 
   /* ------------------------------------------------------------------
      Der Leseteil unterhalb der Reise.

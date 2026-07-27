@@ -2,6 +2,54 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: eigene Hochkant-Fassung (Bildband oben, Text unten)
+
+**Der Anlass war ein Trugschluss.** Ein Screenshot vom Telefon zeigte winzige Schrift und die
+Reiter-Leiste, die dort gar nicht stehen dürfte. Nachgemessen bei 393 px: die Handy-Regeln der
+Engine greifen einwandfrei (Reiter aus, Überschrift 30,4 px, Verlauf unten). Die Live-Datei trägt
+das korrekte `viewport`-Meta. Es bleibt genau eine Erklärung: im Browser war „Desktop-Website"
+aktiv — eine Einstellung, die pro Seite gespeichert bleibt und die keine Seite aufheben kann.
+
+**Der zweite Befund war echt.** Die Etappen sind 1112 × 834 (4:3), ein Telefon ist 393 × 852.
+Formatfüllend bleiben davon **35 % der Bildbreite** sichtbar; zwei Drittel jeder Szene fallen
+weg. Das galt auch in der korrekten Handy-Fassung. Neu: hochkant bekommt das Bild nur noch das
+obere Band, der Text den Rest. Ein flacheres Band liegt näher am 4:3 der Quelle, der Beschnitt
+fällt also kleiner aus. Gemessen: **393 × 852 → 64 % statt 35 %**, 360 × 640 → 88 %,
+iPad hochkant 820 × 1180 → 95 %, iPad Pro 1024 × 1366 → 100 %. Überschrift 30,4 → 34,6 px,
+Fließtext 15,7 → 17,3 px. Zwischen Bild und Text kein harter Strich, sondern ein
+Pergament-Verlauf, der die Unterkante des Bandes auflöst.
+
+**Eine Zahl steuert das:** `--weg-textzone` in `der-weg/index.html`. Bild, Verlauf und Naht
+leiten sich daraus ab. Auf kurzen Schirmen (≤ 720 px) geht sie von 46 % auf 52 %.
+
+**Umschaltpunkt.** Bisher entschied allein die Breite (≤ 860 px). Ein iPad Pro 12.9" hochkant
+(1024 px) fiel damit auf die breite Fassung, obwohl der Schirm hochkant ist. Jetzt: hochkant
+**und** schmaler als 1200 px. Jedes Tablet quer und jeder PC-Bildschirm bleiben unverändert bei
+Text links — dort ist der Schirm breiter als 4:3, es wird also ohnehin nichts abgeschnitten.
+Bei 1440 × 900 gegengeprüft: Textspalte, Verlaufsrichtung und Bildfläche byte-gleich wie vorher.
+
+**Drei Kollisionen, die erst die Messung zeigte.** (1) Der Scroll-Hinweis stand auf derselben
+Zeile wie die Schlagworte — er legt sich hochkant flach (26 px statt 80). (2) Die Engine schreibt
+beim Scrollen ein wanderndes `translateY` von ±2 vh direkt ins Element; in einem festen Textfeld
+sind das nur 34 px Unruhe, die überall als Luft eingeplant werden müssten — hochkant angehalten,
+das Ein- und Ausblenden bleibt. (3) Auf 360 × 640 schoben die umbrechenden Schlagwort-Chips
+Station 6 um 11 px aufs rohe Bild; kompaktere Chips lösen das an der Ursache, statt den Bildrand
+weichzuzeichnen.
+
+**Nebenbei mitgenommen.** Handy quer (852 × 393) hatte schon vorher 36 px Überlappung zwischen
+Text und Scroll-Hinweis. Dort ist der Hinweis jetzt ausgeblendet — quer sieht man ohnehin sofort,
+dass es weitergeht.
+
+**Notnagel für „Desktop-Website".** Ein Skript im Kopf erkennt ein echtes Telefon an der kurzen
+Bildschirmseite (≤ 600 px) **und** grobem Zeiger — beides zusammen ist auf keinem Notebook wahr —
+und blendet wenigstens die Reiter-Leiste aus. Das heilt die Schrumpfung nicht, keine Seite kann
+das; es macht sie erträglich.
+
+**Die Engine bleibt unangetastet.** `der-weg/scrub-engine.js` ist weiter die unveränderte Kopie
+aus dem Skill; sie wickelt ihr CSS bewusst in eine Kaskadenschicht, damit Seiten-CSS gewinnt.
+Die Hochkant-Fassung steht deshalb vollständig in `der-weg/index.html`. Bewährt sie sich, gehört
+sie in den Skill zurück — das ist ein eigener Schritt.
+
 ## 2026-07-25 — /improve-Runde 2: 13 Befunde behoben
 
 **Kontaktweg (der Blocker).** Der Knopf „Erstgespräch anfragen" in der Final-CTA-Sektion zeigte auf `#kontakt` — also auf die Sektion, in der er selbst steht. Zusammen mit fehlendem `mailto:`, `tel:` und Formular konnte die Seite keine einzige Anfrage erzeugen. Jetzt E-Mail-Link an `kontakt@jgc-lumen.de` mit vorbelegtem Betreff und Rumpf, darunter die sichtbare Adresse als zweiter Weg. Der Punkt stand seit dem 27.06.2026 in drei aufeinanderfolgenden Analysen.
