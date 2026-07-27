@@ -2,6 +2,49 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-27 — Der Weg: Bild zurück in die Hauptrolle, Hero aufgeräumt
+
+Gabriels Urteil am Gerät nach der ersten Hochkant-Fassung: „Vorher war das Video die Website, die
+Schrift Zusatz. Jetzt ist die Schrift der Hauptteil und das Video Zusatz." Das Bild wirkte wie ein
+eingesetztes Fenster über einer Textseite. Beides stimmt — die 54-%-Bandhöhe war zu weit gegangen.
+
+**Neue Aufteilung: Band 64 %, Textstreifen 36 %.** Sichtbar bleiben rund **54 % der Bildbreite** —
+gegen 35 % im Ursprungszustand und 64 % in der ersten Fassung, also der gesuchte Mittelweg.
+Schrift entsprechend zurück: Überschrift 34,6 → **31,8 px** (vorher 30,4), Fließtext 17,3 →
+**16,3 px** (vorher 15,7).
+
+**Der Textstreifen wird nicht mehr unten verankert, sondern mittig gefüllt.** Bei einer kurzen
+Station („KI ist ein Werkzeug", drei Zeilen) klaffte sonst eine große leere Pergamentfläche
+zwischen Bild und Text — auf dem zweiten Screenshot der Hauptgrund für den Fenster-Eindruck.
+Gemessen bei 412 × 915: aus 66 px oben / 80 px unten statt rund 250 px einseitig.
+
+**Hero aufgeräumt.** Auf dem ersten Schirm standen sieben Schriftbehandlungen übereinander: Zähler
+in Schreibmaschinenschrift, gesperrte Versalien-Zeile, Serifen-Überschrift, Fließtext, Chips,
+„Mehr dazu" und der Scroll-Hinweis in gesperrten Versalien — drei Schriftfamilien, zwei gesperrte
+Versalienzeilen, drei kupferfarbene Elemente. Jetzt: der **Zähler entfällt** hochkant (die Punkte
+am rechten Rand zeigen dasselbe, und die Schreibmaschinenschrift war die dritte Familie), der
+**Scroll-Hinweis zieht auf den unteren Bildrand** und zählt damit nicht mehr im Textstapel mit,
+**„Mehr dazu" steht in Tinte** statt Kupfer, nur der Winkel bleibt kupfern. Ergebnis: zwei
+Familien, eine gesperrte Zeile, zwei kupferne Elemente.
+
+**Ein Fehler nebenbei behoben:** Der Scroll-Hinweis brach auf dem Gerät auf zwei Zeilen um. Grund:
+Bei `left: 50%` reicht der verfügbare Platz nur bis zum rechten Fensterrand, also über die halbe
+Breite — „scrollen und mitfliegen" braucht 202 px, die Hälfte von 393 px sind 196. Über die volle
+Breite gelegt und darin zentriert passt er in eine Zeile.
+
+**Marke lesbar auf jeder Szene.** Über der Werkstatt-Wand (Etappe 2) war „JGC Lumen" praktisch
+unlesbar. Ein zarter Pergament-Dunst über dem oberen Bildrand plus derselbe Schein hinter der
+Schrift, den der Scroll-Hinweis schon trägt. Auf hellen Szenen fällt der Dunst nicht auf.
+
+**Die Aufteilung ist jetzt gestaffelt statt zweistufig**, damit ein Telefon mittlerer Höhe nicht
+gleich auf den Notwert kleiner Geräte fällt: über 820 px Höhe 36 %, bis 820 px 42 %, bis 720 px
+56 %. Maßgeblich ist die längste Station (7, mit zwei Schaltflächen); bei 36 % lief sie auf
+360 × 640 unten aus dem Bild — dort wurde der „Mehr dazu"-Knopf abgeschnitten. Gemessen bei
+360/393/412/430 × 640/800/852/915/932 sowie iPad hochkant: keine abgeschnittene Station mehr,
+knappster Fall 16 px Reserve.
+
+Breite Fassung, Tablet quer und Handy quer unverändert (bei 1440 × 900 und 852 × 393 gegengeprüft).
+
 ## 2026-07-27 — Der Weg: „Mehr dazu" öffnet die Langfassung jeder Station
 
 Die Reise zeigt je Station drei bis vier Zeilen. Wer mehr wissen wollte, musste auf die

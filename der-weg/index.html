@@ -117,14 +117,20 @@
      Hauptbefund: "man erkennt die Bilder kaum".
 
      Die Abhilfe: das Bild bekommt nur noch das obere Band. Ein flacheres
-     Band ist naeher am 4:3 der Quelle, also faellt der Beschnitt kleiner
-     aus — bei 54 % Bandhoehe sind rund 64 % der Bildbreite sichtbar statt
-     35 %. Der frei werdende Platz unten traegt den Text, der dort groesser
-     stehen darf als ueber dem Bild.
+     Band ist naeher am 4:3 der Quelle, also faellt der Beschnitt kleiner aus.
+
+     WIE FLACH — das ist die eigentliche Entscheidung. Bei 54 % Bandhoehe
+     waren 64 % der Bildbreite sichtbar, aber die Seite kippte: das Bild wirkte
+     wie ein eingesetztes Fenster ueber einer Textseite, statt dass der Text im
+     Bild steht. Gabriels Urteil am Geraet: "vorher war das Video die Website,
+     die Schrift Zusatz; jetzt ist die Schrift der Hauptteil". Deshalb 64 %
+     Band — sichtbar bleiben rund 54 % der Bildbreite, gegen 35 % im ersten
+     Zustand und 64 % im zweiten. Der Mittelweg kostet zehn Prozentpunkte
+     Bildbreite und gibt dem Bild ein Fuenftel mehr Hoehe.
 
      EINE Zahl steuert das: --weg-textzone (Hoehe des Textbereichs, von
-     unten gemessen). Bild, Verlauf und Naht leiten sich daraus ab; zum
-     Nachjustieren reicht es, sie zu aendern.
+     unten gemessen). Bild, Verlauf, Naht und die Hoehe des Scroll-Hinweises
+     leiten sich daraus ab; zum Nachjustieren reicht es, sie zu aendern.
 
      Wann die Fassung greift: hochkant und schmaler als 1200 px. Damit
      bekommen Telefone und ALLE Tablets hochkant (auch das 12,9"-iPad mit
@@ -133,7 +139,7 @@
      ist der Schirm breiter als 4:3, es wird also gar nichts abgeschnitten.
      ================================================================== */
   @media (orientation: portrait) and (max-width: 1200px) {
-    :root, .sw-root { --weg-textzone: 46%; }
+    :root, .sw-root { --weg-textzone: 36%; }
 
     /* Das Bild endet an der Oberkante des Textbereichs. Prozente beziehen
        sich auf die Buehne, und die liegt fest im Fenster — anders als vh
@@ -155,14 +161,25 @@
         transparent calc(var(--weg-textzone) + 14%));
     }
 
-    /* Der Scroll-Hinweis steht in der ersten Szene unten in der Mitte und
-       damit auf derselben Zeile wie die Schlagworte — gemessen 23 px
-       Ueberlappung. Statt den Text weiter nach oben ins Bild zu schieben,
-       legt sich der Hinweis flach: Schrift und Maus-Symbol nebeneinander
-       statt uebereinander, 26 px hoch statt 80. */
+    /* Der Scroll-Hinweis zieht auf den unteren Bildrand um.
+
+       Zwei Gruende. Erstens Platz: unten im Textstreifen stand er auf
+       derselben Zeile wie die Schlagworte und zwang den Textblock nach oben.
+       Am Bildrand stoert er niemanden und liest sich als das, was er ist —
+       "hier geht die Fahrt weiter". Zweitens Ruhe: er ist die siebte
+       Schriftbehandlung auf dem ersten Schirm; ausserhalb des Textblocks
+       zaehlt er nicht mehr in dessen Stapel mit.
+
+       `left/right: 0` statt `left: 50%`: bei `left: 50%` reicht der
+       verfuegbare Platz nur bis zum rechten Fensterrand, also ueber die
+       halbe Breite. "scrollen und mitfliegen" braucht 202 px, die Haelfte
+       von 393 px sind 196 — deshalb brach der Hinweis auf dem Geraet auf
+       zwei Zeilen um. Ueber die volle Breite gelegt und darin zentriert
+       passt er. */
     .sw-root .sw-hint {
+      left: 0; right: 0; transform: none; justify-content: center;
       flex-direction: row; align-items: center; gap: 9px;
-      bottom: calc(16px + env(safe-area-inset-bottom));
+      bottom: calc(var(--weg-textzone) + 1.4rem);
     }
     /* Nur Groesse — `top` des Punktes steuert die Laufanimation, eine Regel
        dafuer waere wirkungslos (Animationen schlagen normale Angaben). */
@@ -180,51 +197,112 @@
        Quere kommen (gemessen). Direkt am Element gesetzte Angaben schlagen
        normale Regeln, deshalb hier ausnahmsweise `!important`. Das Ein- und
        Ausblenden bleibt unberuehrt, nur das Wandern haelt an. */
+    /* Der Text fuellt den Streifen unter dem Bild und wird darin zentriert.
+
+       Vorher hing er an der Unterkante. Bei einer kurzen Station (etwa
+       "KI ist ein Werkzeug", drei Zeilen) klaffte dadurch eine grosse leere
+       Pergamentflaeche zwischen Bild und Text — genau das liess das Bild wie
+       ein eingesetztes Fenster wirken. Zentriert verteilt sich der Rest auf
+       beide Seiten und bleibt unauffaellig. Zu hohe Stationen ragen dabei
+       oben und unten je zur Haelfte heraus statt einseitig unten aus dem
+       Bild zu laufen.
+
+       `transform` mit Nachdruck: die Engine schreibt beim Scrollen laufend
+       ein `translateY` von +2vh bis -2vh direkt ins Element (scrub-engine.js,
+       Funktion read()). Ueber einem bildschirmfuellenden Video ist dieses
+       Mitschwimmen ein schoenes Detail; in einem festen Textstreifen sind es
+       nur 34 px Wandern, die ueberall als Luft eingeplant werden muessten.
+       Direkt am Element gesetzte Angaben schlagen normale Regeln, deshalb
+       hier ausnahmsweise `!important`. Das Ein- und Ausblenden bleibt
+       unberuehrt, nur das Wandern haelt an. */
     .sw-root .sw-copy {
-      top: auto;
-      bottom: calc(clamp(56px, 7.5dvh, 92px) + env(safe-area-inset-bottom));
+      top: calc(100% - var(--weg-textzone));
+      bottom: calc(14px + env(safe-area-inset-bottom));
       left: clamp(18px, 5vw, 48px);
       right: clamp(18px, 5vw, 48px);
       width: auto; max-width: 34rem;
+      display: flex; flex-direction: column; justify-content: center;
       transform: none !important;
-      /* Ruecknahme der Zentrierung der breiten Fassung: hier haengt der Block
-         unten, eine Verschiebung um die halbe eigene Hoehe waere hier falsch. */
+      /* Ruecknahme der Zentrierung der breiten Fassung: die verschiebt um die
+         halbe EIGENE Hoehe, hier zentriert stattdessen der Streifen. */
       translate: none;
     }
+
+    /* ---- Aufraeumen: weniger Schriftbehandlungen auf einem Schirm ----
+       Auf der ersten Szene standen sieben verschiedene uebereinander: Zaehler
+       (Schreibmaschinenschrift), Kleintext gesperrt in Versalien, Ueberschrift
+       in der Serifenschrift, Fliesstext, Schlagwort-Chips, "Mehr dazu" und der
+       Scroll-Hinweis gesperrt in Versalien. Drei Schriftfamilien, zwei
+       gesperrte Versalienzeilen, drei kupferfarbene Elemente. Es bleiben:
+       Zaehler raus (die Punkte am rechten Rand zeigen dasselbe und die
+       Schreibmaschinenschrift war die dritte Familie), Hinweis raus aus dem
+       Stapel (steht jetzt am Bildrand), "Mehr dazu" in Tinte statt Kupfer,
+       nur der Winkel bleibt kupfern. Damit: zwei Familien, eine gesperrte
+       Zeile, zwei kupferne Elemente. */
+    .sw-root .sw-copy__num { display: none; }
+    .sw-root .sw-copy__eyebrow { margin-top: 0; letter-spacing: 0.13em; }
+
     /* Auf Pergament statt auf Bild: der Schimmer hinter der Schrift, der
-       sie vom Video abheben sollte, ist hier ueberfluessig. */
+       sie vom Video abheben sollte, ist hier ueberfluessig.
+       Groesse: zwischen dem ersten Zustand (30,4 px) und dem zweiten
+       (34,6 px) — bei 393 px sind es jetzt 31,8 px. */
     .sw-root .sw-copy__title {
-      font-size: clamp(2.05rem, 8.8vw, 3.1rem);
-      line-height: 1.02; text-shadow: none;
+      font-size: clamp(1.9rem, 8.1vw, 2.85rem);
+      line-height: 1.04; text-shadow: none; margin-top: 10px;
     }
     .sw-root .sw-copy__body {
-      margin-top: 14px; max-width: 34ch; text-shadow: none;
-      font-size: clamp(1.02rem, 4.4vw, 1.2rem);
+      margin-top: 12px; max-width: 34ch; text-shadow: none;
+      font-size: clamp(0.98rem, 4.15vw, 1.14rem);
     }
-    .sw-root .sw-copy__eyebrow { margin-top: 14px; }
-    .sw-root .sw-copy__tags { margin-top: 18px; }
-    .sw-root .sw-copy__cta { margin-top: 22px; }
+    .sw-root .sw-copy__tags { margin-top: 14px; gap: 6px; }
+    .sw-root .sw-copy__tags li { font-size: 0.76rem; padding: 5px 11px; }
+    .sw-root .sw-copy__cta { margin-top: 18px; gap: 10px; }
+    .sw-root .sw-btn { padding: 12px 20px; font-size: 0.9rem; }
+    .sw-root .weg-mehr {
+      align-self: flex-start;   /* sonst zieht die Spalte den Knopf auf volle Breite */
+      margin-top: 16px;
+      color: var(--sw-ink-soft);
+      border-bottom-color: color-mix(in srgb, var(--sw-ink) 22%, transparent);
+    }
+    .sw-root .weg-mehr svg { color: var(--sw-accent); }
+
+    /* Dunst ueber dem oberen Bildrand. Auf der Werkstatt-Szene stand die Marke
+       auf einer Wand voller Werkzeuge und war praktisch unlesbar; auf der
+       ersten Szene faellt der Dunst im hellen Himmel nicht auf. Dazu derselbe
+       Pergament-Schein hinter der Schrift, den der Scroll-Hinweis schon hat. */
+    .sw-root .sw-copylayer::after {
+      content: ""; position: absolute; left: 0; right: 0; top: 0; height: 17%;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--sw-bg) 58%, transparent) 0%,
+        color-mix(in srgb, var(--sw-bg) 22%, transparent) 55%,
+        transparent 100%);
+    }
+    .sw-root .sw-brand__name {
+      text-shadow: 0 0 10px var(--sw-bg), 0 0 22px var(--sw-bg);
+    }
   }
 
-  /* Kurze Schirme (kleine Telefone, 640 px hoch): der Text braucht mehr
-     Anteil. Das kostet kein Bild, im Gegenteil — ein flacheres Band liegt
-     noch naeher am 4:3 der Quelle, dort sind dann rund 88 % der Bildbreite
-     sichtbar. */
+  /* Kuerzere Schirme: dieselbe Textmenge auf weniger Hoehe. Der Streifen
+     braucht deshalb einen groesseren Anteil — in Stufen, damit ein Telefon
+     mittlerer Hoehe nicht gleich auf den Notwert kleiner Geraete faellt.
+     Das kostet weniger Bild, als es klingt: ein flacheres Band liegt naeher
+     am 4:3 der Quelle, sichtbar bleibt also MEHR von der Szene (54 % bei
+     36 %, 65 % bei 42 %, 96 % bei 56 %) — sie wird nur kleiner dargestellt.
+     Massgeblich ist die laengste Station (7, mit zwei Schaltflaechen); die
+     Werte sind so gewaehlt, dass sie ohne Abschneiden hineinpasst. */
+  @media (orientation: portrait) and (max-width: 1200px) and (max-height: 820px) {
+    :root, .sw-root { --weg-textzone: 42%; }
+  }
+
+  /* Kleine Telefone (bis 720 px hoch). Chips und Schaltflaechen brechen auf
+     dieser Breite auf zwei Zeilen um und werden deshalb kompakter angesetzt. */
   @media (orientation: portrait) and (max-width: 1200px) and (max-height: 720px) {
     :root, .sw-root { --weg-textzone: 56%; }
-    .sw-root .sw-copy { bottom: calc(clamp(62px, 9.7dvh, 84px) + env(safe-area-inset-bottom)); }
-    /* Der "Mehr dazu"-Knopf kostet rund 40 px Hoehe. Auf 360 x 640 schob er die
-       letzte Station wieder 9 px aufs rohe Bild — enger angesetzt. */
-    .sw-root .weg-mehr { margin-top: 12px; }
-    /* Die Schlagwort-Chips und die zwei Schaltflaechen der letzten Station
-       brechen hier auf zwei bis drei Zeilen um und schoben den Textblock
-       ueber die Pergament-Kante hinaus aufs rohe Bild (gemessen: Station 6
-       ragte 11 px darueber). Etwas kompaktere Chips loesen das an der
-       Ursache, statt den Bildrand weiter weichzuzeichnen. */
     .sw-root .sw-copy__tags { margin-top: 12px; gap: 6px; }
     .sw-root .sw-copy__tags li { font-size: 0.76rem; padding: 5px 11px; }
-    .sw-root .sw-copy__cta { margin-top: 16px; gap: 9px; }
-    .sw-root .sw-btn { padding: 12px 20px; font-size: 0.9rem; }
+    .sw-root .sw-copy__cta { margin-top: 14px; gap: 9px; }
+    .sw-root .sw-btn { padding: 11px 18px; font-size: 0.88rem; }
+    .sw-root .weg-mehr { margin-top: 12px; }
   }
 
   /* Handy quer. Hier greift die Hochkant-Fassung bewusst nicht: quer ist der

@@ -78,9 +78,11 @@ bleiben formatfüllend nur **35 % der Bildbreite** übrig.
 
 | | breit (PC, Tablet quer) | hochkant (Telefon, Tablet hochkant) |
 |---|---|---|
-| Bild | ganzer Schirm | oberes Band, Rest ist Textfläche |
-| Text | linke Spalte, Verlauf nach rechts | unten, Pergament-Verlauf nach oben |
-| sichtbar von der Szene | 100 % | 64 % (393 × 852) bis 100 % (1024 × 1366) |
+| Bild | ganzer Schirm | oberes Band, Rest ist Textstreifen |
+| Text | linke Spalte, Verlauf nach rechts | im Streifen zentriert, Pergament-Verlauf nach oben |
+| sichtbar von der Szene | 100 % | 54 % (393 × 852) bis 96 % (360 × 640) |
+| Zähler „01 / 07" | sichtbar | ausgeblendet (die Punkte rechts zeigen dasselbe) |
+| Scroll-Hinweis | unten mittig | auf dem unteren Bildrand, einzeilig |
 | greift bei | alles andere | `orientation: portrait` **und** ≤ 1200 px |
 
 Die Grenze hängt bewusst an der Ausrichtung, nicht allein an der Breite: ein iPad Pro 12.9"
@@ -88,10 +90,21 @@ hochkant ist 1024 px breit und fiel vorher auf die breite Fassung, obwohl der Sc
 ist. Umgekehrt braucht kein Tablet quer die Hochkant-Fassung — dort ist der Schirm breiter als
 4:3, es wird also gar nichts abgeschnitten.
 
-**Nachjustieren:** genau eine Zahl, `--weg-textzone` in `der-weg/index.html` (Höhe des
-Textbereichs von unten, Standard 46 %, auf Schirmen bis 720 px Höhe 56 %). Bild, Verlauf und Naht
-leiten sich daraus ab. Mehr Textanteil heißt automatisch **mehr** sichtbares Bild, weil ein
-flacheres Band näher am 4:3 der Quelle liegt.
+**Nachjustieren:** genau eine Zahl, `--weg-textzone` in `der-weg/index.html` — die Höhe des
+Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Höhe des Scroll-Hinweises leiten
+sich daraus ab. Gestaffelt nach Bildschirmhöhe, weil die Textmenge gleich bleibt:
+
+| Bildschirmhöhe | `--weg-textzone` | Band | Szene sichtbar |
+|---|---|---|---|
+| über 820 px | 36 % | 64 % | 54 % |
+| bis 820 px | 42 % | 58 % | 64 % |
+| bis 720 px | 56 % | 44 % | 96 % |
+
+Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — ein flacheres Band
+liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wird dabei nur
+kleiner dargestellt, nicht knapper. Maßgeblich für die Untergrenze ist die längste Station (7,
+mit zwei Schaltflächen): passt sie nicht in den Streifen, wird unten der „Mehr dazu"-Knopf
+abgeschnitten. Nach jeder Änderung an dieser Zahl also die letzte Station nachmessen.
 
 Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
 Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md
