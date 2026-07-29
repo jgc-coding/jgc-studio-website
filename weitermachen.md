@@ -29,22 +29,22 @@
   `docs/der-weg.md`). Ein Update aus dem Skill würde sie überschreiben.
 - **Die Reise ist in der jetzigen Fassung auf keinem echten Telefon geprüft** — Gabriel hat
   die letzten Deploys (inkl. Runde 3: minimal mehr Textzone auf hohen Telefonen) nicht gesehen.
-- **Gabriels PC-Durchgang (27.07.) ist notiert, nicht gebaut:** **V29** doppelte Weganzeige am
-  PC · **V30** Sigel zu groß und schief zum Schriftzug · **V31** verdrehter Schulungs-Satz raus ·
-  **V32** „DSGVO-konform" als pauschales Etikett → bedingte Formulierung (Wortlaut-Vorschlag
-  steht in `verbesserungen.md`, braucht sein Ok) · **V33** TÜV-Siegel mit Prüf-Link ins
-  „Mehr"-Feld der Station „Wer mit dir arbeitet".
-- Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** ·
-  **V29**–**V33**.
+- **Gabriels PC-Durchgang (V29–V33) ist am 29.07. gebaut und nachgemessen, aber noch nicht
+  deployt** — der Stand liegt auf `claude/doppelte-weganzeige-pc-41faea`, `main` ist unberührt.
+  Zwei Entscheidungen habe ich dabei nach meiner Empfehlung getroffen, beide leicht zu drehen:
+  die **Punktleiste** führt (nicht die Reiter), und der DSGVO-Chip heißt **„Deine Daten
+  DSGVO-konform"**. Wenn Gabriel es anders will, ist es je eine Zeile.
+- **V34 offen:** dieselbe DSGVO-Sprachregelung fehlt noch in der Lesefassung V18, auf
+  `stilprobe/` und der Datenschutzseite — dort steht weiter das pauschale Etikett.
+- Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** · **V34**.
 - Offene Ideen: **I2** (V18 → Astro, löst V10 und V18 mit) · **I3** (Kosten-FAQ) ·
   **I4** (Wortmarke aufs Vorschaubild).
 
 ## Nächste Schritte (Claude)
-1. **Gabriels Rückmeldung zur überarbeiteten Reise einarbeiten** — jetzt konkret **V29–V33**
-   (Zuruf vom 27.07., liegt notiert vor). V29 und V32 brauchen vorher seine Entscheidung:
-   welche der zwei Weganzeigen führt, und der DSGVO-Wortlaut. V30/V31/V33 sind ohne Rückfrage
-   baubar. Der Bildanteil hängt weiter an einer Zahl (`--weg-textzone`, `max(36%, 320px)`,
-   niedrige Schirme 300 px).
+1. **V29–V33 nach `main` bringen**, sobald Gabriel die zwei Geschmacksfragen bestätigt
+   (Punktleiste statt Reiter, Chip-Wortlaut): `git branch -f main HEAD` und pushen. Der
+   Bildanteil hängt weiter an einer Zahl (`--weg-textzone`, `max(36%, 320px)`, niedrige
+   Schirme 300 px).
 2. **Die Reise zur Hauptseite machen**, sobald Gabriel Texte und Umfang freigibt: `robots` auf
    `index, follow`, `scripts/copy-homepage.mjs` bzw. Manifest umstellen, `canonical` prüfen, und
    entscheiden, was mit `/main/` und der Lesefassung passiert.

@@ -3,9 +3,10 @@ Stand: 2026-07-27 (Runde 3, Fokus: Scroll-Reise `der-weg/` — Code + Design,
 Haltung: Nur messbare Fehler, Lupe: emil-design-eng — **alle acht Befunde am selben Tag
 umgesetzt und nachgemessen**, Details im CHANGELOG)
 
-**Nachtrag 2026-07-27:** Gabriels PC-Durchgang durch die Reise hat fünf weitere Punkte ergeben
-(**V29–V33**, oben unter „Offen"). Ausdrücklich nur notiert — auf seinen Wunsch ist nichts davon
-umgesetzt.
+**Nachtrag 2026-07-29:** Gabriels PC-Durchgang durch die Reise hat fünf weitere Punkte ergeben
+(**V29–V33**). Sie waren zunächst nur notiert und sind am 29.07. in der Scroll-Reise umgesetzt
+und nachgemessen; aus V32 ist **V34** hervorgegangen — dieselbe Sprachregelung außerhalb von
+`der-weg/` steht noch aus. Rollback-Punkt vor der Umsetzung: Commit `4734cde`.
 
 Runde 2 (Fokus: alles) ist live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
 Runde 3 hat nur `der-weg/` und seine Werkzeuge angesehen; V18/Hauptseite, `site/`, `stilprobe/`
@@ -84,80 +85,22 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 
 ## Offen
 
-**V29–V33 sind kein Analyse-Ergebnis, sondern Gabriels Zuruf nach seinem PC-Durchgang durch die
-Reise am 27.07.2026** — ausdrücklich nur notiert, nichts davon ist umgesetzt. Alles Weitere
-darunter stammt aus den Analyse-Runden.
+**V29–V33 kamen aus Gabriels PC-Durchgang am 27.07.2026 und sind am 29.07. umgesetzt** — sie
+stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
+DSGVO-Linie außerhalb der Reise.
 
-- [ ] **V29** (C) Die PC-Fassung zeigt zweimal an, wo man gerade ist
-      Beleg: `der-weg/scrub-engine.js` — die Reiter in der Kopfzeile (`.sw-nav__item.is-active`,
-      Zeile 598) und die Punktleiste rechts (`.sw-route__dot.is-active`, Zeile 622) markieren
-      dieselbe Station; gesetzt werden beide in derselben Schleife (Zeilen 453–454). Ab 860 px
-      Breite sind beide sichtbar, darunter blendet die Medienregel in Zeile 631 die Reiter aus —
-      auf dem Telefon gibt es die Anzeige also genau einmal, nur am PC doppelt.
-      Aufwand: S · Risiko: gering
-      Warum: Dieselbe Auskunft an zwei Stellen kostet jedes Mal einen zweiten Blick, ohne etwas
-      hinzuzufügen. Eine der beiden muss führen. Empfehlung: die Punktleiste behalten (sie ist
-      auf allen Größen da und zeigt zusätzlich, wie weit die Reise noch geht) und den Reitern
-      die Aktiv-Markierung nehmen — sie bleiben dann ein reines Sprungmenü. Umgekehrt ginge
-      auch. → Gabriels Geschmacksentscheidung, welche der beiden führt.
-
-- [ ] **V30** (C) Sigel in der Kopfzeile zu groß und nicht auf einer Höhe mit dem Schriftzug
-      Beleg: `der-weg/scrub-engine.js:592` — `.sw-brand__sigil` ist 34 × 34 px, der Schriftzug
-      „JGC Lumen" daneben steht bei 1,1 rem ≈ 17,6 px. Das Bild ist damit rund doppelt so hoch
-      wie die Schrift. Ausgerichtet wird über `align-items:center` (Zeile 589), also über die
-      beiden Kästchen — nicht über die Mitte der Buchstaben, weshalb das Sigel optisch
-      danebensteht. Es ist das einzige Logo der Reise (`der-weg/index.html:1033`).
-      Aufwand: S · Risiko: gering
-      Warum: Die Kopfzeile ist das Erste, was auf jedem Schirm steht und über allen sieben
-      Etappen stehen bleibt — ein schiefes Markenzeichen fällt dort dauerhaft auf. Zwei
-      Stellschrauben: Größe (etwa 26–28 px statt 34) und ein kleiner optischer Versatz statt
-      reiner Kästchen-Zentrierung. Beides in der Engine, die für diese Seite ohnehin eine
-      Sonderfassung ist — Änderung also hier, nicht im Skill.
-
-- [ ] **V31** (C) Verdrehter Satz über die Schulungspflicht — **Gabriels Zuruf: streichen**
-      Beleg: `der-weg/index.html:709`, im „Mehr"-Feld der ersten Station (Hero): „DSGVO- und
-      EU-AI-Act-konform. Einschließlich der Schulung, die dich seit Februar 2025 zur
-      KI-Kompetenz verpflichtet." Grammatisch verpflichtet dort die *Schulung*; gemeint ist die
-      Pflicht aus dem EU AI Act. Richtig und vollständig steht dieselbe Sache in FAQ 04
-      (`der-weg/index.html:928`).
-      Aufwand: S · Risiko: gering
-      Warum: Gabriel konnte den eigenen Satz nicht mehr auflösen — dann kann es eine Besucherin
-      erst recht nicht. Ersatzloses Streichen verliert nichts, weil FAQ 04 den Punkt trägt.
-      Der Listenpunkt bleibt als „DSGVO- und EU-AI-Act-konform." stehen (Wortlaut dann nach V32).
-
-- [ ] **V32** (A) „DSGVO-konform" steht als pauschales Etikett über der ganzen Seite
-      Beleg: In der Reise sechsmal als unbedingte Zusage — Chip in der Hero-Zeile
-      (`der-weg/index.html:1070`), Vorspann (645), Hero-Langtext (698, 709), Bausteine (838),
-      Fußzeile (1018). In der Lesefassung V18 dasselbe: `inhalt/lumen-inhalt.md` Zeilen 10, 34,
-      139, 197, 366, 383.
+- [ ] **V34** (A) Pauschales „DSGVO-konform" steht weiter auf der Lesefassung V18
+      Beleg: `inhalt/lumen-inhalt.md` Zeilen 10, 34, 139, 197, 366, 383 — Kurzbeschreibung,
+      Hero-Zeile, Bausteine, Fußzeile tragen dieselbe unbedingte Zusage, die in der Reise am
+      29.07. durch die datenbezogene Fassung ersetzt wurde (V32). `stilprobe/index.html` und
+      die Datenschutzseite sind ebenfalls nicht abgeglichen.
       Aufwand: M · Risiko: mittel
-      Warum: Das Etikett verspricht der Leserin Konformität für alles, was Gabriel tut. Ein Teil
-      seiner Arbeit läuft aber über Werkzeuge außerhalb des europäischen Rechtsraums (Claude);
-      für die trägt der Satz nicht. Eine an eine Bedingung geknüpfte Zusage ist ehrlicher und
-      rechtlich ruhiger als ein Pauschalversprechen — und verkauft sich besser, weil sie erklärt,
-      *wann* es zählt, statt es zu behaupten.
-      Vorschlag, Wortlaut braucht Gabriels Ok: Leitsatz „Sobald personenbezogene Daten im Spiel
-      sind — deine oder die deiner Klient:innen — wird DSGVO-konform gebaut: EU-Hosting,
-      Auftragsverarbeitung, auf Wunsch Modelle auf deiner eigenen Infrastruktur. Wo keine solchen
-      Daten anfallen, entscheidet, welches Werkzeug die beste Arbeit macht." · Chip kurz:
-      „DSGVO-konform, wo Daten im Spiel sind".
-      Reichweite einer Umsetzung: `der-weg/`, V18 (assertion-guardetes Transform-Skript),
-      `stilprobe/index.html`, Datenschutzseite, Meta-Beschreibung — danach
-      `inhalt/lumen-inhalt.md` neu erzeugen.
-
-- [ ] **V33** (C) TÜV-Zertifikat fehlt im „Mehr"-Feld der Station „Wer mit dir arbeitet"
-      Beleg: `der-weg/index.html:855–860` nennt Qualifikation, Prüfzeichen-ID 0217466495 und
-      Gültigkeit bis 11.06.2029 nur als Fließtext — kein Siegel, kein Prüf-Link. Die Lesefassung
-      V18 hat beides: Siegelbild mit Link auf
-      `https://www.certipedia.com/quality_marks/0217466495?locale=de`, eingebaut von
-      `scripts/v18/transform-tuvlink-schritt2.mjs`. Bild liegt bereit:
-      `Bildmaterial/TUEV Zertifikat/tuev-siegel-web.png` (73 KB).
-      Aufwand: S · Risiko: gering
-      Warum: Das Siegel ist der einzige Vertrauensbeleg der Seite, den jemand unabhängig
-      nachprüfen kann, statt Gabriel glauben zu müssen — und ausgerechnet in der Fassung, die
-      Hauptseite werden soll, fehlt er. Siegel ins Feld, Link aufs Bild, `target="_blank"` mit
-      `rel="noopener noreferrer"` wie in V18. Dieselbe Station zeigt bis zum Bildaustausch noch
-      ein erfundenes Gesicht (Etappe 6) — beides gehört in einen Zug.
+      Warum: Solange beide Fassungen live sind, sagt dieselbe Marke an zwei Orten zwei
+      verschiedene Dinge — und die ältere sagt das, was nicht trägt. Der Wortlaut steht fest
+      (V32, in der Reise gebaut), hier ist es Übertragungsarbeit. Klein ist sie trotzdem nicht:
+      V18 ist minifiziert, braucht also ein assertion-guardetes Transform-Skript, und danach
+      muss `inhalt/lumen-inhalt.md` neu erzeugt werden.
+      → Sinnvoll gebündelt mit der Entscheidung, ob die Lesefassung überhaupt bestehen bleibt.
 
 - [ ] **V20** (A) Stilprobe-Beispiel nennt sich „echt", ist im Quelltext aber als Platzhalter markiert
       Beleg: `variants/standalone/18-lumen/index.html`, Sektion `#stilprobe` — zwei Kommentare
@@ -245,6 +188,28 @@ darunter stammt aus den Analyse-Runden.
 *(noch keine Einträge — Gabriel hat bisher keinen Punkt ausdrücklich abgelehnt)*
 
 ## Erledigt
+
+### Gabriels PC-Durchgang — umgesetzt am 2026-07-29 (nur `der-weg/`; Messwerte im CHANGELOG)
+
+- **V29** (C) Am PC zeigten Reiter und Punktleiste dieselbe Station — die Punktleiste führt
+  jetzt allein, die Reiter sind reines Sprungmenü. Nachgemessen: aktiver und passiver Reiter
+  identisch, genau ein aktiver Punkt. **Erledigt damit auch V24** (die kontrastschwache
+  Aktiv-Fläche gibt es nicht mehr).
+- **V30** (C) Sigel zu groß und zu tief — und beides war ein Fehler: `height:100%` konnte der
+  Browser gegen die automatisch hohe Rasterzeile nicht auflösen und fiel auf die natürliche
+  Form zurück, das hochkante Sigel lief **16 px unten aus seinem Kasten**. Jetzt feste Maße im
+  Bildverhältnis (18×26 px). Nachgemessen: kein Überstand, Bildmitte und Versalmitte auf
+  derselben Linie (0,00 px), Zeichen genau doppelt so hoch wie die Großbuchstaben.
+- **V31** (C) Der verdrehte Satz zur Schulungspflicht ist ersatzlos raus; FAQ 04 sagt dasselbe
+  richtig.
+- **V32** (A) „DSGVO-konform" ist kein pauschales Etikett mehr, sondern an die Daten geknüpft —
+  neue Linie „was bei dir läuft, hält den Standard ein; womit ich baue, ist davon getrennt" in
+  Chip, Vorspann, Hero-Langtext, Bausteinen, Fußzeile und FAQ 04. Der längere Chip kostet auf
+  dem Telefon eine Zeile: nachgemessen auf 320/360/375, die engsten Stationen bleiben
+  unberührt. **Rest außerhalb der Reise → V34.**
+- **V33** (C) TÜV-Prüfzeichen mit Certipedia-Link im „Mehr"-Feld der Station „Wer mit dir
+  arbeitet"; Bild von 73 auf 26 KB gebracht, lädt erst beim Öffnen des Felds. Nachgemessen:
+  Bild 560×207 geladen, 297×110 dargestellt, Link mit `rel="noopener noreferrer"`.
 
 ### Runde 3 — umgesetzt am 2026-07-27 (Scroll-Reise; Messwerte und Details im CHANGELOG)
 

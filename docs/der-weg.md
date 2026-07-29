@@ -317,5 +317,15 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
   4. Das „Mehr"-Feld.
   5. Der Kontrast des aktiven Nav-Reiters: Weiß auf Szenenakzent misst 2,6–3,3:1 —
      diese Seite überschreibt ihn auf Tinte (V24); im Skill sollte der Default selbst
-     dunkel genug sein.
+     dunkel genug sein. **Nachtrag 29.07.:** Diese Seite hat die Aktiv-Markierung des
+     Reiters ganz entfernt (V29), weil die Punktleiste dasselbe schon sagt. Für den Skill
+     ist das eine Geschmacksfrage, der Kontrast-Default bleibt trotzdem zu korrigieren.
+  6. **Ein echter Engine-Fehler bei jedem nicht-quadratischen Logo** (gefunden über V30):
+     `.sw-brand__logo` bekommt `width:100%; height:100%` in einem Kasten, der ein Raster mit
+     automatisch hoher Zeile ist. Gegen eine solche Zeile kann der Browser keine Prozenthöhe
+     auflösen — er nimmt die natürliche Form des Bildes. Ein hochkantes Sigel (hier 504×747)
+     wird damit anderthalbmal so hoch wie sein Kasten und läuft unten heraus; `object-fit`
+     greift nie, weil der Kasten selbst mitwächst. Trifft jedes Projekt mit einem Logo, das
+     nicht quadratisch ist. Abhilfe im Skill: die Kastenhöhe fest setzen und die Breite aus
+     dem Bildverhältnis ableiten, statt beides über Prozent zu führen.
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.

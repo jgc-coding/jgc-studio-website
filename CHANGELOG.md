@@ -2,6 +2,51 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-29 — Der Weg: Gabriels PC-Durchgang umgesetzt (V29–V33)
+
+Fünf Punkte aus seinem eigenen Durchgang am PC. Nur die Scroll-Reise (`der-weg/`), die
+Lesefassung V18 blieb unangetastet. Alles im Browser nachgemessen (1280×800 sowie 375/360/320
+für die Hochkant-Fassung); Screenshots gehen im versteckten Pane weiterhin nicht.
+
+- **V29 — Dieselbe Auskunft stand zweimal auf dem Schirm.** Am PC markierten der aktive Reiter
+  oben UND der aktive Punkt rechts dieselbe Station; auf dem Telefon gab es das nie, dort ist
+  das Reitermenü ab 861 px ausgeblendet. Die Punktleiste führt jetzt auf allen Größen (sie
+  zeigt zusätzlich, wie viel Reise noch kommt), die Reiter sind reines Sprungmenü.
+  Nachgemessen: aktiver und passiver Reiter identisch (`rgba(0,0,0,0)` / `rgb(74,85,104)`),
+  genau ein aktiver Punkt. Erledigt damit auch V24 aus Runde 3: die kontrastschwache
+  Aktiv-Fläche, die dort auf Tinte gesetzt wurde, gibt es nicht mehr.
+- **V30 — Sigel zu groß und zu tief, und beides war derselbe Fehler.** Die Engine gibt dem
+  Bild `height:100%` in einem quadratischen Kasten — gegen eine automatisch hohe Rasterzeile
+  kann der Browser das nicht auflösen und fällt auf die natürliche Form zurück. Das Sigel ist
+  hochkant (504×747), 34 px Breite ergaben also **50,4 px Höhe: 16 px liefen unten aus dem
+  Kasten**, die Bildmitte lag 5,3 px unter der Schriftmitte. Jetzt beide Maße fest im
+  Bildverhältnis (18×26 px). Nachgemessen: kein Überstand mehr (0,00 px), Bildmitte und Mitte
+  der Großbuchstaben auf derselben Linie (0,00 px), Zeichenhöhe genau das Doppelte der
+  Versalhöhe (26 zu 13 px).
+- **V31 — Verdrehter Satz über die Schulungspflicht raus.** „Einschließlich der Schulung, die
+  dich seit Februar 2025 zur KI-Kompetenz verpflichtet" — grammatisch verpflichtete dort die
+  Schulung. Gemeint ist der EU AI Act, und genau so steht es in FAQ 04. Ersatzlos gestrichen.
+- **V32 — „DSGVO-konform" ist kein Etikett mehr, sondern eine Zusage mit Bezug.** Der Satz
+  stand sechsmal unbedingt über allem (Chip, Vorspann, Hero-Langtext, Bausteine, Fußzeile).
+  Er gilt aber dort, wo er zählt: bei Daten. Neue Linie auf der ganzen Reise — **was bei dir
+  läuft, hält den Standard ein; womit ich baue, ist davon getrennt.** Chip jetzt „Deine Daten
+  DSGVO-konform", Bausteine-Absatz an die Daten geknüpft, Fußzeilen-Label raus, FAQ 04 um den
+  Werkstatt-Absatz ergänzt. Nachgemessen, weil der längere Chip eine Zeile mehr kostet:
+  die Auftakt-Station braucht auf 360×640 jetzt 227 statt 195 px in einem 286-px-Streifen
+  (29 px Luft), auf 320×568 244 px (21 px Luft), auf 375×812 bleiben 29 px Luft. Die engsten
+  Stationen sind unverändert „Der Weg" (4 px) und „Weitblick" (1 px) — an beiden wurde nichts
+  geändert. Kein seitlicher Überlauf auf 320/360/375/1280.
+- **V33 — TÜV-Prüfzeichen im „Mehr"-Feld von „Wer mit dir arbeitet".** Bisher stand die
+  Prüfzeichen-ID nur als Fließtext. Jetzt das Siegelbild mit Link auf den Certipedia-Eintrag
+  des TÜV Rheinland, wie ihn die Lesefassung V18 schon führt — der einzige Beleg der Seite,
+  den jemand unabhängig nachprüfen kann. `der-weg/assets/tuev-siegel.png`, aus dem Original
+  in `Bildmaterial/` mit Palette-Kompression von 73 auf 26 KB, `loading="lazy"` (lädt erst
+  beim Öffnen des Felds). Nachgemessen: Feld öffnet auf Station `lichtung`, Bild 560×207
+  geladen und mit 297×110 dargestellt, Link `target="_blank"` mit `rel="noopener noreferrer"`.
+
+Offen bleibt: dieselbe DSGVO-Linie in der Lesefassung V18, auf `stilprobe/` und der
+Datenschutzseite (dort weiter das pauschale Etikett) — steht als V34 in `verbesserungen.md`.
+
 ## 2026-07-27 — Der Weg: acht Befunde der Verbesserungsrunde 3 behoben (V21–V28)
 
 Runde 3 von `/improve` (Fokus Scroll-Reise, Haltung „Nur messbare Fehler", Lupe emil-design-eng)

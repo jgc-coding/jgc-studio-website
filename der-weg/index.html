@@ -83,11 +83,43 @@
   }
   .sw-root .sw-hint i { border-color: rgba(31, 42, 68, 0.5); }
 
-  /* Der aktive Reiter der Engine-Nav ist weiss auf der Szenenfarbe — gemessen
-     3,3:1 auf Kupfer, 2,6:1 auf Salbei, 2,8:1 auf Quellwasser, noetig sind
-     4,5:1. Ausgerechnet der aktive Abschnitt war damit der unleserlichste.
-     Tinte statt Szenenfarbe (13,9:1), wie beim Hauptseiten-Knopf aus Runde 2. */
-  .sw-root .sw-nav__item.is-active { background: var(--sw-ink); }
+  /* V29: Am PC stand dieselbe Auskunft zweimal auf dem Schirm — der aktive
+     Reiter oben UND der aktive Punkt in der Leiste rechts markierten die
+     gleiche Station. Auf dem Telefon gab es das nie, dort ist das Reitermenue
+     ausgeblendet (861 px Schwelle) und die Punktleiste allein zustaendig.
+
+     Die Punktleiste fuehrt jetzt auf allen Groessen: sie zeigt nicht nur, wo
+     man ist, sondern auch, wie viel Reise noch kommt. Die Reiter bleiben
+     Sprungmenue, ohne Zustandsanzeige.
+
+     Damit erledigt sich V24 aus Runde 3 mit: die weisse Aktiv-Flaeche auf
+     Szenenfarbe (gemessen 2,6-3,3:1 statt noetiger 4,5:1) wurde damals auf
+     Tinte gesetzt — jetzt gibt es sie gar nicht mehr, der Kontrast ist der
+     des normalen Reiters. */
+  .sw-root .sw-nav__item.is-active { background: transparent; color: var(--sw-ink-soft); }
+  .sw-root .sw-nav__item.is-active:hover { color: var(--sw-ink); }
+
+  /* V30: Das Sigel wirkte zu gross und sass nicht auf einer Hoehe mit dem
+     Schriftzug. Im Browser nachgemessen war beides derselbe Fehler.
+
+     Die Engine gibt dem Bild `width:100%; height:100%` in einem quadratischen
+     Kasten (34 px). Die Hoehenangabe in Prozent geht dort aber ins Leere: der
+     Kasten ist ein Raster mit automatisch hoher Zeile, und gegen eine solche
+     Zeile kann der Browser keine Prozenthoehe aufloesen — er faellt auf die
+     natuerliche Form des Bildes zurueck. Das Sigel ist hochkant (504 x 747),
+     34 px Breite ergaben also 50 px Hoehe: es lief 16 px unten aus seinem
+     Kasten heraus. Neben Grossbuchstaben von 13 px stand damit ein fast
+     vierfach so hohes Zeichen, dessen Mitte 5,3 px unter der Schriftmitte lag.
+
+     Darum jetzt beide Masse fest und im Verhaeltnis des Bildes (504:747), ohne
+     Prozentangabe. 26 px Hoehe sind das Doppelte der Versalhoehe — genug
+     Gewicht fuer eine Marke, ohne die Zeile zu dominieren. Da der Kasten das
+     Bild nicht mehr ueberragt, traegt die vorhandene Zentrierung der Zeile von
+     selbst; ein Versatz ist nicht noetig (nachgemessen: beide Mitten auf
+     derselben Linie). */
+  .sw-root .sw-brand__sigil { width: 18px; height: 26px; }
+  .sw-root .sw-brand__sigil::before { inset: -7px -9px; }
+  .sw-root .sw-brand__logo { width: 18px; height: 26px; }
 
   /* Dasselbe bei den Schlagwort-Chips: die Textfarbe mischt die Szenenfarbe
      mit Schwarz, und auf der Salbei-Station blieben 4,34:1 uebrig. Eine Stufe
@@ -537,6 +569,25 @@
     font-size: 0.83rem; font-weight: 600; letter-spacing: 0.02em;
     color: var(--sw-accent);
   }
+  /* Das TUEV-Pruefzeichen in der Station "Wer mit dir arbeitet" (V33).
+     Das Bild bringt seinen eigenen weissen Grund mit; ein feiner Rahmen setzt
+     ihn gegen das Pergament ab, statt ihn als hellen Fleck stehen zu lassen. */
+  .vertiefung-siegel { margin: 0.2rem 0 1.2rem; max-width: 19rem; }
+  .vertiefung-siegel a {
+    display: block; border-radius: 8px; overflow: hidden;
+    border: 1px solid rgba(31, 42, 68, 0.12);
+    background: #fff; text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .vertiefung-siegel a:hover { border-color: color-mix(in srgb, var(--sw-accent) 55%, transparent); transform: translateY(-1px); }
+  .vertiefung-siegel a:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 3px; }
+  .vertiefung-siegel img { display: block; width: 100%; height: auto; }
+  .vertiefung-siegel figcaption {
+    margin-top: 0.5rem; font-size: 0.78rem; line-height: 1.5;
+    color: color-mix(in srgb, var(--sw-ink-soft) 85%, transparent);
+  }
+  @media (prefers-reduced-motion: reduce) { .vertiefung-siegel a:hover { transform: none; } }
+
   .vertiefung strong { color: var(--sw-ink); font-weight: 600; }
   .vertiefung a { color: var(--sw-ink); text-decoration: underline; text-underline-offset: 3px; }
   .vertiefung a:hover { color: var(--sw-accent); }
@@ -641,8 +692,8 @@
        ausgeblendet, bleibt aber im ausgelieferten HTML stehen. -->
   <section data-sw-seo>
     <h1>Mehr Raum für das Wesentliche.</h1>
-    <p>KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren im DACH-Raum,
-       EU-gehostet und DSGVO-konform.</p>
+    <p>KI, die deine Handschrift trägt. Für Coaches, Trainer und Mentoren im DACH-Raum.
+       Deine Daten und die deiner Klient:innen: EU-gehostet und DSGVO-konform.</p>
 
     <h2>Eine Einordnung vorweg: KI ist ein Werkzeug.</h2>
     <p>Wie jedes Werkzeug taugt sie so viel wie die Hand, die es führt.</p>
@@ -695,8 +746,8 @@
     <article class="vertiefung" data-station="anflug">
       <p class="vertiefung-auge">Für Coaches, Trainer, Mentoren</p>
       <h2>Mehr Raum für das Wesentliche.</h2>
-      <p>KI, die deine Handschrift trägt. Ich verstärke, was dich auszeichnet — DSGVO-konform
-         und maßgeschneidert, nicht von der Stange.</p>
+      <p>KI, die deine Handschrift trägt. Ich verstärke, was dich auszeichnet — maßgeschneidert
+         und auf deine Praxis zugeschnitten, nicht von der Stange.</p>
       <p>Meine Mission ist, Menschen zu unterstützen, die anderen helfen. Coaches, Trainer,
          Mentoren: Ihr leistet eine Arbeit, die zählt. Ich sorge dafür, dass die Technik euch
          dient und Zeit zurückgibt. So habt ihr mehr Raum für das Wesentliche.</p>
@@ -706,9 +757,15 @@
             europäischen Rechtsraum.</li>
         <li><strong>TÜV-geprüft.</strong> Geprüfte Qualifikation „Manager für angewandte
             KI-Transformation“, TÜV Rheinland.</li>
-        <li><strong>DSGVO- und EU-AI-Act-konform.</strong> Einschließlich der Schulung, die dich
-            seit Februar 2025 zur KI-Kompetenz verpflichtet.</li>
+        <li><strong>Deine Daten DSGVO-konform.</strong> Sobald personenbezogene Daten im Spiel
+            sind — deine oder die deiner Klient:innen — wird nach DSGVO und EU AI Act gebaut:
+            EU-Hosting, Auftragsverarbeitung, auf Wunsch Modelle auf deiner eigenen
+            Infrastruktur.</li>
       </ul>
+      <p>Womit ich baue, ist nicht, womit du arbeitest. Beim Entwerfen und Ausprobieren nehme
+         ich das Werkzeug, das die beste Arbeit macht — dort liegen keine Daten von dir oder
+         deinen Klient:innen. Was am Ende bei dir läuft, hält den Standard ein, und zwar
+         nachweisbar.</p>
       <p>Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und aus
          der Ferne.</p>
     </article>
@@ -835,8 +892,9 @@
         <li>Begleitung bei Bedarf.</li>
       </ul>
       <p>Ohne diese Anbindung bleibt deine Umsetzung trotzdem stabil — du bist nicht abhängig.
-         Jeder Baustein ist DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten
-         werden nie zum Training von KI verwendet.</p>
+         Jeder Baustein, der mit deinen Daten oder denen deiner Klient:innen arbeitet, ist
+         DSGVO- und EU-AI-Act-konform, mit EU-Datenspeicherung. Deine Daten werden nie zum
+         Training von KI verwendet.</p>
     </article>
 
     <article class="vertiefung" data-station="lichtung">
@@ -858,6 +916,19 @@
          in Praxen anderer eingebaut. KI ist nicht mein Hobby, sondern meine tägliche Arbeit —
          mit der Begeisterung von jemandem, der weiß, was diese Werkzeuge können und wo ihre
          Grenzen liegen.</p>
+      <!-- Das Pruefzeichen als Bild und als Link auf den Certipedia-Eintrag: der einzige
+           Beleg dieser Seite, den jemand unabhaengig nachpruefen kann, statt ihn glauben zu
+           muessen. Die Lesefassung V18 fuehrt denselben Link (scripts/v18/transform-tuvlink-
+           schritt2.mjs). `loading="lazy"` laedt das Bild erst, wenn das Feld geoeffnet wird. -->
+      <figure class="vertiefung-siegel">
+        <a href="https://www.certipedia.com/quality_marks/0217466495?locale=de"
+           target="_blank" rel="noopener noreferrer">
+          <img src="assets/tuev-siegel.png" width="560" height="207" loading="lazy"
+               alt="Prüfzeichen TÜV Rheinland: Geprüfte Qualifikation Manager für angewandte KI-Transformation, ID 0217466495, gültig bis 11.06.2029">
+        </a>
+        <figcaption>Prüfzeichen bei Certipedia nachschlagen — die Datenbank des TÜV Rheinland,
+          nicht meine Seite.</figcaption>
+      </figure>
       <p>Mein Standort ist Freiburg im Breisgau. Ich arbeite im DACH-Raum, persönlich und aus
          der Ferne.</p>
     </article>
@@ -931,6 +1002,11 @@
            als Basis und mit einer Schulung, die deine Pflicht aus Artikel 4 abdeckt. Bei
            Doppelqualifikationen wie Heilpraktikerin oder Therapeutin greift zusätzlich
            Paragraf 203 StGB, das beraten wir individuell.</p>
+        <p>Der Maßstab sind dabei die Daten, nicht das Etikett: Wo personenbezogene Daten
+           fließen, gilt die Regel ohne Ausnahme — in allem, was ich für dich baue und was
+           anschließend bei dir läuft. Für meine eigene Werkstatt, also Entwürfe, Code und
+           Textarbeit ohne Personenbezug, nehme ich das Werkzeug, das die beste Arbeit macht.
+           Deine Daten sehen diese Werkzeuge nicht.</p>
       </details>
 
       <details class="frage">
@@ -996,8 +1072,8 @@
     <div class="abspann-innen">
       <div>
         <h2>JGC Lumen</h2>
-        <p>KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise,
-           DSGVO-konform. Schreib mir an
+        <p>KI-Implementierung für Coaches, Trainer und Mentoren. Ruhig, präzise, mit Respekt
+           vor deinen Daten. Schreib mir an
            <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
       </div>
       <div class="abspann-reihen">
@@ -1015,7 +1091,7 @@
       </div>
 
       <p class="abspann-fein">
-        © 2026 · JGC Lumen · Freiburg im Breisgau · DSGVO-konform ·
+        © 2026 · JGC Lumen · Freiburg im Breisgau ·
         Die Szenen dieser Seite sind mit KI erzeugte Papierschnitt-Illustrationen.
       </p>
     </div>
@@ -1067,7 +1143,9 @@
         eyebrow: 'Für Coaches, Trainer, Mentoren',
         title: 'Mehr Raum für das Wesentliche.',
         body: 'KI, die deine Handschrift trägt statt sie zu glätten.',
-        tags: ['EU-gehostet', 'TÜV-geprüft', 'DSGVO-konform'],
+        /* Kein pauschales "DSGVO-konform" mehr: die Zusage haengt an den Daten,
+           und genau so steht sie jetzt auch da (V32). */
+        tags: ['EU-gehostet', 'TÜV-geprüft', 'Deine Daten DSGVO-konform'],
       },
       {
         id: 'werkzeug', label: 'Haltung',
