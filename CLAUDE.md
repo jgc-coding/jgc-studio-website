@@ -107,6 +107,11 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   und schneidet Text ab, der real passt. Vor jedem Beweisbild einmal mit einer Mess-Seite
   (`innerWidth` ins DOM schreiben, `--dump-dom`) gegenprüfen. Für echte Handybreiten taugt der Weg
   nicht — dort nur DOM-Geometrie messen.
+- **Hochkant-Layouts in `svh` rechnen, nicht in `vh` oder `%`.** Chrome auf Android misst
+  `position: fixed` am GROSSEN Fenster (ohne Adressleiste); steht die Leiste, liegen rund 110 px
+  davon unter dem sichtbaren Rand, und alles, was dort unten verankert ist, wird abgeschnitten.
+  `dvh` ist die falsche Abhilfe — es skaliert bei jedem Ein-/Ausfahren neu und lässt Bildbänder
+  zucken. Fallback für alte Browser über `@supports (height: 100svh)`.
 - **Regeln, die Inhalt verstecken, brauchen den `.js`-Vorsatz** (`.js .reveal:not(.is-visible)`).
   Ohne ihn ist die Seite ohne JavaScript leer. Gilt für V18 UND `stilprobe/index.html` — die
   Unterseite erbt das CSS aus V18, ein Fehler dort taucht also zweimal auf.
