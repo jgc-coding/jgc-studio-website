@@ -183,13 +183,14 @@ function mountVertiefung(optionen) {
 
   // ---- Knopf an jede Station haengen ----
   //
-  // Er sitzt in EINER Zeile mit dem Kleintext ueber der Ueberschrift, rechts
-  // aussen. Zwei Gruende: er kostet dort rund 10 px statt einer ganzen Zeile
-  // (37 px), und der gewonnene Platz geht direkt ans Bild — die Mindesthoehe
-  // des Textstreifens haengt an der laengsten Station. Ausserdem liest sich
-  // "Abschnittsname links, Aktion rechts" als Kopfzeile, nicht als Nachtrag.
-  // Bricht die Zeile auf schmalen Schirmen um, rutscht der Knopf von selbst
-  // darunter — deshalb `flex-wrap` in der Regel dazu.
+  // Er steht am ENDE der Station, unter dem Text. Vorher sass er in einer Zeile
+  // mit dem Kleintext ueber der Ueberschrift, weil er dort rund 10 px statt
+  // einer ganzen Zeile kostete und der Platz direkt ans Bild ging. Am Geraet
+  // hat sich das nicht bewaehrt: rechts aussen laeuft die Wegpunkt-Leiste, und
+  // der Knopf lag genau darauf — zwei Bedienelemente an derselben Stelle, eines
+  // davon halb verdeckt. Unten steht er frei, in Leserichtung nach dem Text,
+  // den er vertieft. Die Rechnung dafuer steht in der Textzonen-Regel in
+  // index.html: der Streifen ist um eine Knopfzeile hoeher.
   //
   // Das Zeichen ist ein PLUS, kein Pfeil nach unten. Ein Pfeil nach unten
   // verspricht Aufklappen an Ort und Stelle; hier oeffnet sich ein Feld in der
@@ -203,25 +204,20 @@ function mountVertiefung(optionen) {
     knopf.className = 'weg-mehr';
     knopf.setAttribute('aria-haspopup', 'dialog');
     knopf.setAttribute('aria-expanded', 'false');
-    // "dazu" faellt auf schmalen Schirmen per CSS weg: der laengste Kleintext
-    // ("Für Coaches, Trainer, Mentoren", 269 px) und der volle Knopf passen dort
-    // nicht nebeneinander, und eine umgebrochene Kopfzeile bei zwei von sieben
-    // Stationen sieht unaufgeraeumt aus. "Mehr +" bleibt eindeutig.
+    // "dazu" steht wieder ueberall: der Knopf teilt sich keine Zeile mehr mit
+    // dem Kleintext, der Platz dafuer ist da. "Mehr dazu" sagt, was passiert;
+    // "Mehr" allein liest sich wie eine Mengenangabe.
     knopf.innerHTML = '<span>Mehr<span class="weg-mehr__zusatz"> dazu</span></span>'
       + '<i aria-hidden="true">+</i>';
     knopf.addEventListener('click', function () { oeffne(i, knopf); });
     // Bewusst KEIN pointer-events:auto: der Knopf erbt damit den Zustand seiner
     // Station und ist nur anklickbar, solange die auch sichtbar ist.
-    var augenbraue = kopie.querySelector('.sw-copy__eyebrow');
-    if (augenbraue) {
-      var zeile = document.createElement('div');
-      zeile.className = 'weg-kopfzeile';
-      kopie.insertBefore(zeile, augenbraue);
-      zeile.appendChild(augenbraue);
-      zeile.appendChild(knopf);
-    } else {
-      kopie.appendChild(knopf);   // Station ohne Kleintext: wie bisher unten
-    }
+    //
+    // Vor die Handlungsknoepfe, nicht dahinter: die Schluss-Station endet mit
+    // "Erstgespraech anfragen". Was jemand als Letztes liest, soll der Weg nach
+    // vorn sein und nicht das Angebot, noch mehr zu lesen.
+    var handlung = kopie.querySelector('.sw-copy__cta');
+    if (handlung) kopie.insertBefore(knopf, handlung); else kopie.appendChild(knopf);
   });
 }
 

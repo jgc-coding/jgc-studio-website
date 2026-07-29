@@ -29,11 +29,14 @@
   `docs/der-weg.md`). Ein Update aus dem Skill würde sie überschreiben.
 - **Die Reise ist in der jetzigen Fassung auf keinem echten Telefon geprüft** — Gabriel hat
   die letzten Deploys (inkl. Runde 3: minimal mehr Textzone auf hohen Telefonen) nicht gesehen.
-- **Gabriels PC-Durchgang (V29–V33) ist am 29.07. gebaut und nachgemessen, aber noch nicht
-  deployt** — der Stand liegt auf `claude/doppelte-weganzeige-pc-41faea`, `main` ist unberührt.
-  Zwei Entscheidungen habe ich dabei nach meiner Empfehlung getroffen, beide leicht zu drehen:
-  die **Punktleiste** führt (nicht die Reiter), und der DSGVO-Chip heißt **„Deine Daten
-  DSGVO-konform"**. Wenn Gabriel es anders will, ist es je eine Zeile.
+- **V29–V33 (PC) und V35–V37 (Telefon) sind am 29.07. gebaut, nachgemessen und live.**
+  Zwei Geschmacksentscheidungen stehen noch zur Bestätigung, beide leicht zu drehen: die
+  **Punktleiste** führt (nicht die Reiter), und der DSGVO-Chip heißt **„Deine Daten
+  DSGVO-konform"**.
+- **Offene Abwägung aus V36:** Der „Mehr dazu"-Knopf steht jetzt unter dem Text und kostet
+  rund 60 px Bildhöhe (Band 55 % statt 62 % bei 393×852). Die Alternative — Knopf zurück in
+  die Kopfzeile, dafür die Punktleiste aus seinem Weg rücken — ist nicht gebaut und wartet
+  auf Gabriels Urteil, wie ihm die jetzige Fassung am Gerät gefällt.
 - **V34 offen:** dieselbe DSGVO-Sprachregelung fehlt noch in der Lesefassung V18, auf
   `stilprobe/` und der Datenschutzseite — dort steht weiter das pauschale Etikett.
 - Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** · **V34**.
@@ -68,9 +71,13 @@
 
 ## Stolperfallen (sofort wichtig)
 - **Der Bildanteil hängt an genau einer Zahl:** `--weg-textzone` in `der-weg/index.html`,
-  `max(36%, 320px)` (Schirme unter 780 px Höhe: 300 px). Nach jeder Änderung an Schrift oder
-  Stationstext die Schluss-Station nachmessen (bestimmt die Mindesthöhe; ~314 px Inhalt).
-  Tabelle und Begründung in `docs/der-weg.md`.
+  seit 29.07. `max(36svh, 380px)` (Schirme unter 780 px Höhe: 350 px). Nach jeder Änderung an
+  Schrift oder Stationstext die längste Station nachmessen — das ist jetzt „Auf Augenhöhe"
+  (299 px bei 393×852). Tabelle und Begründung in `docs/der-weg.md`.
+- **Hochkant rechnet in `svh`, nicht in `vh` oder `%`:** Chrome auf Android misst feste
+  Elemente am großen Fenster; alles, was unten am Rand hängt, steht mit ausgefahrener
+  Adressleiste rund 110 px unter dem Sichtbaren. Genau daran ist der Textstreifen am 29.07.
+  aufgelaufen (V35).
 - V18 = minifiziertes Single-File-HTML: nie direkt editieren; assertion-guardetes Transform-Skript
   (Vorbilder in `scripts/v18/`). Interne Links absolut (`/jgc-studio-website/…`), nie relativ.
 - **Vor jedem Zugende `node scripts/pruefe-seiten.mjs`** (steckt in `pruefen.txt`). Ohne Argument

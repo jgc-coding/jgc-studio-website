@@ -117,8 +117,19 @@ Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-H
 sich daraus ab.
 
 ```
---weg-textzone: max(36%, 320px);     /* niedrige Schirme (unter 780 px Hoehe): 300px */
+--weg-textzone: max(36svh, 380px);   /* niedrige Schirme (unter 780 px Hoehe): 350px */
 ```
+
+**Seit 29.07.2026 in `svh` statt `%`, und das ist keine Kosmetik.** Chrome auf Android misst feste
+Elemente am *großen* Fenster — dem ohne Adressleiste. Steht die Leiste, ragt die Unterkante eines
+`position: fixed; inset: 0` rund 110 px unter den sichtbaren Rand, und genau dort hing die
+Unterkante des Textstreifens: Was nicht mehr in den Rest passte, stand unter dem Bildschirmrand
+(Gabriels Screenshots vom 29.07.: derselbe Auftakt dreimal, einmal mit abgeschnittenem letzten
+Schlagwort). Weil die Leiste beim Scrollen ein- und ausfährt, wanderte die Aufteilung außerdem
+während der Fahrt mit. `100svh` ist die *kleinste* mögliche Fensterhöhe und ändert sich nie — die
+Aufteilung steht damit fest, und fährt die Leiste aus, kommt unten nur Pergament dazu.
+`dvh` wäre falsch: es ist die jeweils aktuelle Höhe, das Bildband würde bei jedem Ein- und
+Ausfahren neu skaliert. Browser ohne `svh` behalten die alten Prozentregeln (`@supports`).
 
 **Anteil oder Mindesthöhe, je nachdem was größer ist** — und das ist der ganze Trick. Die
 Textmenge einer Station ist fest, ihre Höhe hängt an der Schriftgröße, nicht an der Schirmhöhe.
@@ -127,13 +138,15 @@ einen viel größeren Anteil als auf 850. Ein fester Prozentwert müsste sich am
 orientieren und hielte das Bild überall sonst unnötig klein. Eine Staffelung in Stufen hatte
 denselben Fehler in klein: Gabriels Gerät fiel in die unterste Stufe und sah keine Änderung.
 
-| Schirm | Streifen | Band | Szene sichtbar |
+Gemessen am 29.07.2026, nachdem der „Mehr"-Knopf unter den Text gezogen ist (eine Zeile mehr,
+darum 380 statt 320 px). Die Schirmhöhe ist hier die **sichtbare** Höhe (`svh`), also die mit
+ausgefahrener Adressleiste — das ist der Fall, den man auf dem Telefon zuerst sieht:
+
+| Schirm (sichtbar) | Streifen | Band | Szene sichtbar |
 |---|---|---|---|
-| 393 × 852 | 320 px (Mindesthöhe) | 62 % | 55 % |
-| 393 × 706 | 300 px (niedrige Stufe) | 58 % | 73 % |
-| 360 × 640 | 300 px (niedrige Stufe) | 53 % | 79 % |
-| 430 × 932 | 336 px (36 %) | 64 % | 54 % |
-| 820 × 1180 | 425 px (36 %) | 64 % | 80 % |
+| 393 × 852 | 380 px | 55 % | 62 % |
+| 360 × 640 | 350 px (niedrige Stufe) | 45 % | 93 % |
+| 320 × 568 | 350 px (niedrige Stufe) | 38 % | 100 % (dafür oben/unten beschnitten) |
 
 Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — ein flacheres Band
 liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wird dabei nur
@@ -141,14 +154,14 @@ kleiner dargestellt, nicht knapper.
 
 Maßgeblich für die Mindesthöhe ist die **Schluss-Station** mit ihren zwei gestapelten Knöpfen
 (rund 314 px Inhalt, gemessen bei 375 × 812 — Runde 3 fand sie auf 375er- und 390er-iPhones
-14 px oben ins Bild ragend). Passt eine Station nicht in den Streifen, ragt sie oben und unten
-je zur Hälfte heraus; bis ~3 px verschwindet das im deckenden Teil des Verlaufs. Nach jeder
-Änderung an Zahl, Schriftgröße oder Stationstext also die längste Station nachmessen. Zwei
-weitere Hebel stehen daneben — unter `max-height: 780px` ist die Schrift eine Stufe kleiner
-(dort reichen 300 px), und der „Mehr"-Knopf sitzt in der Kopfzeile statt in einer eigenen
-Zeile. Unter 393 px Breite ist der Stations-Kleintext zusätzlich eine Stufe kleiner gesperrt,
-sonst bricht die Kopfzeile der ersten Station um; bei 320 px bricht sie trotzdem — das fängt
-`flex-wrap` ordentlich auf und bleibt als Grenze bewusst stehen.
+14 px oben ins Bild ragend). Seit dem 29.07. ist es die Station „Auf Augenhöhe" mit 299 px
+(393 × 852) bzw. 307 px (360 × 640) — der „Mehr"-Knopf steht jetzt unter dem Text und braucht
+seine eigene Zeile. Passt eine Station nicht in den Streifen, ragt sie oben und unten je zur
+Hälfte heraus; bis ~3 px verschwindet das im deckenden Teil des Verlaufs. Nach jeder Änderung an
+Zahl, Schriftgröße oder Stationstext also die längste Station nachmessen — Stand 29.07. bleiben
+überall mindestens 14 px Luft. Ein weiterer Hebel steht daneben: unter `max-height: 780px` ist
+die Schrift eine Stufe kleiner (dort reichen 350 px), unter 393 px Breite zusätzlich der
+Stations-Kleintext.
 
 ## Der Ausklang
 
@@ -163,23 +176,35 @@ Das Video bleibt bewusst stehen: es ist der Hintergrund, vor dem der Text abzieh
 deckenden Leseteil ohnehin verdeckt. Kopfleiste und Wegpunkte brauchen nichts — sie liegen unter
 dem Leseteil (Stapelhöhe 50 und 40 gegen 70).
 
+**Seit 29.07.2026 verschwindet das Video ausschließlich dadurch, dass die Fragen darüber
+hochwandern.** Vorher blendete die Engine die letzte Szene nach ihrem Ende zusätzlich selbst aus
+(rund 80 px Scrollweg bei `crossfade: 0.1`), der Leseteil kommt aber erst einen ganzen Bildschirm
+später — dazwischen stand eine leere Pergamentfläche, die Reise endete im Nichts. Die Engine hält
+die letzte Szene jetzt stehen (`i < NSEG - 1` in der Deckkraft-Schleife), und der Ausklang-Streifen
+ist von 22vh auf 34vh gewachsen, weil er die ganze Überblendung allein trägt. Nachgemessen: die
+letzte Szene steht bei jedem Messpunkt von 900 px vor dem Bahnende bis 700 px danach auf
+Deckkraft 1,000 (vorher wäre sie 400 px vor dem Bahnende bereits bei 0 gewesen).
+
 Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
 Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md
 unter „Preview-Messungen".
 
 ## „Mehr dazu": die Langfassung einer Station
 
-In der Kopfzeile jeder Station — rechts neben dem Kleintext — steht ein Knopf „Mehr +", der die
-vollständigen Inhalte des zugehörigen Abschnitts der Hauptseite als Feld in der Bildschirmmitte
-öffnet.
+Am Ende jeder Station steht ein Knopf „Mehr dazu +", der die vollständigen Inhalte des
+zugehörigen Abschnitts der Hauptseite als Feld in der Bildschirmmitte öffnet. Auf der
+Schluss-Station steht er **vor** den Handlungsknöpfen: was jemand als Letztes liest, soll
+„Erstgespräch anfragen" sein und nicht das Angebot, noch mehr zu lesen.
 
-**Warum dort und warum ein Plus.** Unter dem Text kostete er eine ganze Zeile (rund 50 px), und
-weil die längste Station die Mindesthöhe des Textstreifens bestimmt, ging dieser Platz direkt vom
-Bild ab. Ein Pfeil nach unten wäre außerdem gelogen: der Inhalt klappt nicht an Ort und Stelle
-auf, sondern öffnet ein Feld in der Mitte. Das Plus ist dasselbe Zeichen, das die häufigen Fragen
-weiter unten für dieselbe Handlung benutzen. Hochkant fällt das Wort „dazu" weg, damit die
-Kopfzeile auf allen sieben Stationen einzeilig bleibt — der längste Kleintext plus voller Knopf
-braucht 385 px, verfügbar sind bei 393 px Schirmbreite nur 354.
+**Warum unten und warum ein Plus.** Bis zum 29.07.2026 saß er in einer Kopfzeile rechts neben dem
+Stations-Kleintext. Das kostete rund 10 px statt einer ganzen Zeile, und weil die längste Station
+die Mindesthöhe des Textstreifens bestimmt, ging der gesparte Platz direkt ans Bild. Am Gerät hat
+sich das nicht bewährt: rechts außen läuft die Wegpunkt-Leiste, und der Knopf lag genau darauf —
+zwei Bedienelemente an derselben Stelle, eines davon halb verdeckt. Unten steht er frei, in
+Leserichtung nach dem Text, den er vertieft. **Der Preis dafür steht in der Tabelle oben: eine
+Knopfzeile, also 380 statt 320 px Streifen und rund 60 px weniger Bild.** Ein Pfeil nach unten
+wäre außerdem gelogen: der Inhalt klappt nicht an Ort und Stelle auf, sondern öffnet ein Feld in
+der Mitte. Das Plus ist dasselbe Zeichen, das die häufigen Fragen weiter unten benutzen.
 
 **Texte ändern:** im Markup von `der-weg/index.html`, Block `<div id="vertiefungen">`, ein
 `<article data-station="…">` je Station. Kein Skript nötig, kein Build. Erlaubte Bausteine:
@@ -248,6 +273,7 @@ Zusätze, alle rückwärtskompatibel — eine Konfiguration ohne sie verhält si
 | Rückgabewert | `{ allowClips(), enterStillsMode(), mode() }` — vorher gab die Funktion nichts zurück |
 | `visibility` an Stationen | ausgeblendete Stationstexte waren nur durchsichtig, aber weiter klickbar (die CTA-Knöpfe der Schluss-Station fingen auf Schirm 1 unsichtbar Klicks — mailto!) und tastatur-fokussierbar; jetzt schaltet `read()` zusätzlich `visibility` (V21, Runde 3) |
 | Nachlade-Deckel | ein dauerhaft fehlender Clip (404) löste bei jedem Scroll-Bild einen neuen Abruf aus; jetzt höchstens drei Versuche je Etappe (V28, Runde 3) |
+| Letzte Szene bleibt stehen | jede Szene blendete nach ihrem Ende aus — auch die letzte, obwohl danach nichts mehr kommt außer dem Leseteil. Die Reise endete darum in einer leeren Fläche. Jetzt gilt die Ausblendung nur für `i < NSEG - 1` (V37, 29.07.) |
 
 Die Trennung ist Absicht: die **Engine** bringt die Mechanik, die **Seite** die Politik
 (Schwelle, Messzeitpunkte, gemerkte Wahl, Schalter). Damit ist der Zusatz für jedes
@@ -320,7 +346,14 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
      dunkel genug sein. **Nachtrag 29.07.:** Diese Seite hat die Aktiv-Markierung des
      Reiters ganz entfernt (V29), weil die Punktleiste dasselbe schon sagt. Für den Skill
      ist das eine Geschmacksfrage, der Kontrast-Default bleibt trotzdem zu korrigieren.
-  6. **Ein echter Engine-Fehler bei jedem nicht-quadratischen Logo** (gefunden über V30):
+  6. **Die letzte Szene stehen lassen** (V37) — der Fehler trifft jede Scroll-Welt, die unter
+     der Reise noch etwas anderes hat: die Schluss-Szene blendet aus, bevor der nachfolgende
+     Inhalt da ist, und dazwischen steht eine leere Seite. Einzeiler in der Deckkraft-Schleife.
+  7. **Die Aufteilung hochkant an `svh` binden** (V35) — feste Elemente rechnen in Chrome auf
+     Android am grossen Fenster; alles, was unten am Rand haengt, steht mit ausgefahrener
+     Adressleiste unter dem sichtbaren Bereich. Betrifft jede Scroll-Welt mit einem
+     Textstreifen am unteren Rand.
+  8. **Ein echter Engine-Fehler bei jedem nicht-quadratischen Logo** (gefunden über V30):
      `.sw-brand__logo` bekommt `width:100%; height:100%` in einem Kasten, der ein Raster mit
      automatisch hoher Zeile ist. Gegen eine solche Zeile kann der Browser keine Prozenthöhe
      auflösen — er nimmt die natürliche Form des Bildes. Ein hochkantes Sigel (hier 504×747)

@@ -2,6 +2,40 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-29 — Der Weg: Gabriels Telefon-Durchgang (V35–V37)
+
+Drei Befunde von seinem Gerät, mit Screenshots belegt. Der erste war eine Folge des Vormittags:
+der längere DSGVO-Chip (V32) kostete eine Zeile, und die hatte der Textstreifen nicht mehr.
+
+- **V35 — Der Textstreifen stand teilweise unter dem Bildschirmrand.** Auf drei Screenshots
+  desselben Auftakts saß der Text drei verschiedene Male anders, einmal war das letzte
+  Schlagwort abgeschnitten. Ursache: **Chrome auf Android misst feste Elemente am großen
+  Fenster** — dem ohne Adressleiste. Steht die Leiste, ragt die Unterkante eines
+  `position: fixed; inset: 0` rund 110 px unter den sichtbaren Rand, und genau dort hing der
+  Streifen. Weil die Leiste beim Scrollen ein- und ausfährt, wanderte die Aufteilung außerdem
+  mit — Gabriels „er scrollt die komplette Seite und nicht nur das Video". Die Aufteilung
+  rechnet jetzt in `100svh` (kleinste mögliche Fensterhöhe, ändert sich nie) statt in Prozent
+  des großen Fensters; `dvh` wäre falsch, es würde das Bildband bei jedem Ein- und Ausfahren
+  neu skalieren. Browser ohne `svh` behalten die alten Regeln (`@supports`).
+- **V36 — „Mehr dazu" lag auf der Wegpunkt-Leiste.** Der Knopf saß rechts außen in der
+  Kopfzeile der Station, genau dort läuft die Punktleiste — zwei Bedienelemente an derselben
+  Stelle. Er steht jetzt unter dem Text, auf der Schluss-Station vor den Handlungsknöpfen
+  („Erstgespräch anfragen" bleibt das Letzte). Das Wort „dazu" ist wieder überall da.
+  **Der Preis: eine Knopfzeile, also 380 statt 320 px Textstreifen und rund 60 px weniger
+  Bild** (393×852: Band 55 % statt 62 %). Nachgemessen: 227 px Abstand zur Punktleiste.
+- **V37 — Das Ende wurde weiß, bevor die Fragen kamen.** Die Engine blendete auch die letzte
+  Szene nach ihrem Ende aus (rund 80 px Scrollweg), der Leseteil kommt aber erst einen ganzen
+  Bildschirm später — dazwischen stand eine leere Pergamentfläche. Die letzte Szene bleibt
+  jetzt stehen (`i < NSEG - 1`), das Video verschwindet nur noch dadurch, dass die Fragen
+  darüber hochwandern; der Ausklang-Verlauf trägt die Überblendung jetzt allein und ist von
+  22vh auf 34vh gewachsen. Nachgemessen: Deckkraft 1,000 an jedem Punkt von 900 px vor bis
+  700 px nach dem Bahnende — vorher wäre sie 400 px **vor** dem Ende schon bei 0 gewesen.
+
+Nachgemessen auf 393×852, 360×640, 320×568 und 1280×800: keine Station läuft aus ihrem
+Streifen (mindestens 14 px Luft), kein seitlicher Überlauf, keine Konsolenfehler. Zwei
+Doku-Stellen in `docs/der-weg.md` waren nach der Änderung falsch (Knopf-Platzierung,
+Streifen-Tabelle) und sind mitgezogen.
+
 ## 2026-07-29 — Der Weg: Gabriels PC-Durchgang umgesetzt (V29–V33)
 
 Fünf Punkte aus seinem eigenen Durchgang am PC. Nur die Scroll-Reise (`der-weg/`), die

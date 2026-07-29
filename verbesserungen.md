@@ -189,6 +189,22 @@ DSGVO-Linie außerhalb der Reise.
 
 ## Erledigt
 
+### Gabriels Telefon-Durchgang — umgesetzt am 2026-07-29 (Messwerte im CHANGELOG)
+
+- **V35** (B) Der Textstreifen stand teilweise unter dem Bildschirmrand, die Aufteilung
+  wanderte beim Scrollen mit. Chrome auf Android misst feste Elemente am großen Fenster;
+  mit ausgefahrener Adressleiste liegen rund 110 px davon außerhalb des Sichtbaren. Die
+  Aufteilung rechnet jetzt in `100svh`. Ausgelöst hatte es der längere DSGVO-Chip aus V32 —
+  eine Zeile mehr, die der Streifen nicht mehr hatte.
+- **V36** (C) „Mehr dazu" lag auf der Wegpunkt-Leiste — Knopf steht jetzt unter dem Text
+  (auf der Schluss-Station vor den Handlungsknöpfen). Kostet eine Knopfzeile: Streifen 380
+  statt 320 px, rund 60 px weniger Bild. **Falls das Bild wichtiger ist:** Knopf zurück in
+  die Kopfzeile und stattdessen die Punktleiste aus seinem Weg rücken — dann bleibt das
+  Band groß und die Kollision ist trotzdem weg.
+- **V37** (B) Das Ende wurde weiß, bevor die Fragen kamen — die Engine blendete auch die
+  letzte Szene aus, obwohl der Leseteil erst einen Bildschirm später kommt. Sie bleibt jetzt
+  stehen; die Fragen wandern darüber, der Ausklang-Verlauf trägt die Überblendung allein.
+
 ### Gabriels PC-Durchgang — umgesetzt am 2026-07-29 (nur `der-weg/`; Messwerte im CHANGELOG)
 
 - **V29** (C) Am PC zeigten Reiter und Punktleiste dieselbe Station — die Punktleiste führt

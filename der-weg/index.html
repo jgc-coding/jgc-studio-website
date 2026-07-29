@@ -294,20 +294,13 @@
        nur der Winkel bleibt kupfern. Damit: zwei Familien, eine gesperrte
        Zeile, zwei kupferne Elemente. */
     .sw-root .sw-copy__num { display: none; }
-    /* Etwas kleiner und enger gesperrt als in der breiten Fassung: der laengste
-       Kleintext ("Für Coaches, Trainer, Mentoren") teilt sich die Zeile mit dem
-       "Mehr"-Knopf. Bei 0,8rem/0,13em brach sie um. */
+    /* Kleiner und enger gesperrt als in der breiten Fassung. Der Grund war
+       urspruenglich Platz — der Kleintext teilte sich die Zeile mit dem
+       "Mehr"-Knopf. Seit dem 29.07. steht der Knopf unten, die Zeile gehoert
+       dem Kleintext allein; die kleinere Stufe bleibt trotzdem, weil eine
+       gesperrte Versalzeile neben der grossen Ueberschrift in klein ruhiger
+       steht. Nachgemessen einzeilig bis 320 px herunter. */
     .sw-root .sw-copy__eyebrow { margin-top: 0; font-size: 0.72rem; letter-spacing: 0.1em; }
-    /* Gemessen bei 393 px: Kleintext 269 px + voller Knopf 107 px + Abstand
-       ergibt 385 von 354 verfuegbaren. Ohne "dazu" sind es 343 — die Kopfzeile
-       bleibt damit auf ALLEN sieben Stationen einzeilig. */
-    .sw-root .weg-mehr__zusatz { display: none; }
-    /* Unter 393 px reicht auch das nicht mehr: bei 375 stehen nur 337 px zur
-       Verfuegung (Kleintext 269 + Knopf 74 + Abstand 10 = 353) — die Kopfzeile
-       der ERSTEN Station brach zweizeilig um. Eine Stufe kleiner und enger
-       gesperrt schafft den Platz. Gemessen bei 375 und 390; bei 320 bricht sie
-       weiterhin um (Kleintext fast so breit wie die Zeile) — dort faengt
-       flex-wrap den Knopf ordentlich in einer eigenen Zeile auf. */
     @media (max-width: 392px) {
       .sw-root .sw-copy__eyebrow { font-size: 0.66rem; letter-spacing: 0.09em; }
     }
@@ -328,10 +321,9 @@
     .sw-root .sw-copy__tags li { font-size: 0.76rem; padding: 5px 11px; }
     .sw-root .sw-copy__cta { margin-top: 18px; gap: 10px; }
     .sw-root .sw-btn { padding: 12px 20px; font-size: 0.9rem; }
-    /* Sitzt in der Kopfzeile; nur falls eine Station keinen Kleintext hat und
-       er darum unten landet, darf ihn die Spalte nicht auf volle Breite ziehen. */
+    /* Steht am Ende der Station. `align-self` verhindert, dass die Spalte ihn
+       auf volle Breite zieht — er soll so breit sein wie seine Schrift. */
     .sw-root .weg-mehr { align-self: flex-start; margin-top: 14px; }
-    .sw-root .weg-kopfzeile .weg-mehr { margin-top: 0; }
 
     /* Dunst ueber dem oberen Bildrand. Auf der Werkstatt-Szene stand die Marke
        auf einer Wand voller Werkzeuge und war praktisch unlesbar; auf der
@@ -346,6 +338,56 @@
     }
     .sw-root .sw-brand__name {
       text-shadow: 0 0 10px var(--sw-bg), 0 0 22px var(--sw-bg);
+    }
+
+    /* ---- Die Aufteilung haengt an der KLEINSTEN Fensterhoehe (100svh) ----
+
+       Der Fehler, den das behebt (Gabriels Screenshots vom 29.07.2026: derselbe
+       Auftakt dreimal, jedes Mal anders hoch, einmal mit abgeschnittenem
+       letzten Schlagwort):
+
+       Chrome auf Android misst feste Elemente am GROSSEN Fenster — dem ohne
+       Adressleiste. Steht die Leiste, ragt die Unterkante eines
+       `position: fixed; inset: 0` also rund 110 px unter den sichtbaren Rand.
+       Der Textstreifen hing genau dort: oben an der Bandkante, unten 14 px ueber
+       dieser unsichtbaren Kante. Was nicht mehr in den Rest passte, stand unter
+       dem Bildschirmrand. Und weil die Leiste beim Scrollen ein- und ausfaehrt,
+       wanderte die ganze Aufteilung waehrend der Fahrt mit — der Eindruck, dass
+       "die ganze Seite scrollt und nicht nur das Video".
+
+       Warum `svh` und nicht `dvh`: `dvh` ist die JEWEILS aktuelle Hoehe, damit
+       wuerde das Bildband bei jedem Ein- und Ausfahren der Leiste neu skaliert —
+       ein sichtbares Zucken mitten in der Kamerafahrt. `svh` ist die kleinste
+       moegliche Hoehe und aendert sich nie. Die Aufteilung steht damit fest;
+       faehrt die Leiste aus, kommt unten Pergament dazu, sonst nichts.
+
+       Der Pergamentgrund selbst bleibt am grossen Fenster (`inset: 0`), damit
+       in diesem Fall unten keine Luecke aufreisst — nur die Kanten darin
+       rechnen in `svh`. Alte Browser ohne `svh` behalten die Regeln oben. */
+    @supports (height: 100svh) {
+      :root, .sw-root {
+        --weg-textzone: max(36svh, 380px);
+        /* Das Bildband: alles, was der Text nicht braucht. */
+        --weg-band: calc(100svh - var(--weg-textzone));
+      }
+      .sw-root .sw-scene { bottom: auto; height: var(--weg-band); }
+      /* Dieselbe Naht wie oben, nur von der Bandkante aus gerechnet statt von
+         der Fensterunterkante: durchsichtig ueber dem Bild, auf den letzten
+         14 % der kleinen Fensterhoehe zu Pergament, darunter deckend bis ganz
+         nach unten. */
+      .sw-root .sw-copylayer::before {
+        background: linear-gradient(180deg,
+          transparent 0,
+          transparent calc(var(--weg-band) - 14svh),
+          color-mix(in srgb, var(--sw-bg) 55%, transparent) calc(var(--weg-band) - 6svh),
+          var(--sw-bg) var(--weg-band),
+          var(--sw-bg) 100%);
+      }
+      .sw-root .sw-copy {
+        top: var(--weg-band); bottom: auto;
+        height: calc(var(--weg-textzone) - 14px - env(safe-area-inset-bottom));
+      }
+      .sw-root .sw-hint { bottom: auto; top: calc(var(--weg-band) - 2.6rem); }
     }
   }
 
@@ -362,6 +404,12 @@
     /* Kleinere Schrift heisst kuerzere Stationen: hier reichen 300 px
        Mindesthoehe (gemessen bei 320×640 und 360×640: laengste Station 286). */
     :root, .sw-root { --weg-textzone: max(36%, 300px); }
+    /* Gleiche Umstellung wie oben, nur eine Stufe kleiner (siehe den langen
+       Block zu 100svh). Der Knopf steht seit dem 29.07. unter dem Text und
+       braucht seine eigene Zeile — deshalb hier 350 statt 300 px. */
+    @supports (height: 100svh) {
+      :root, .sw-root { --weg-textzone: max(36svh, 350px); }
+    }
     .sw-root .sw-copy__title { font-size: clamp(1.6rem, 7.1vw, 2.3rem); margin-top: 8px; }
     .sw-root .sw-copy__body { font-size: clamp(0.92rem, 3.85vw, 1.05rem); margin-top: 10px; }
     .sw-root .sw-copy__tags { margin-top: 12px; gap: 6px; }
@@ -400,13 +448,10 @@
      Mechanik und Begruendung stehen in vertiefung.js.
      ================================================================== */
 
-  /* Kopfzeile der Station: Kleintext links, "Mehr dazu" rechts. Umbricht auf
-     schmalen Schirmen, statt sich zu ueberlappen. */
-  .sw-root .weg-kopfzeile {
-    display: flex; flex-wrap: wrap; gap: 4px 10px;
-    align-items: baseline; justify-content: space-between;
-  }
-  .sw-root .weg-kopfzeile .sw-copy__eyebrow { margin-top: 0; }
+  /* Der Knopf stand bis zum 29.07.2026 in einer Kopfzeile neben dem Kleintext
+     (`.weg-kopfzeile`). Am Geraet lag er dort auf der Wegpunkt-Leiste am
+     rechten Rand — zwei Bedienelemente an derselben Stelle. Jetzt steht er am
+     Ende der Station; die Kopfzeile gibt es nicht mehr. */
 
   /* Der Knopf. Leise gehalten — er ist ein Angebot, nicht der Hauptweg — aber
      als Flaeche erkennbar, damit er auf Papier und Foto gleichermassen als
@@ -605,9 +650,18 @@
   .leseteil { position: relative; z-index: 70; }
 
   /* Die letzte Szene soll ausklingen, nicht abgeschnitten werden: ein Streifen,
-     der von durchsichtig nach Pergament laeuft, schiebt sich ueber das Video. */
+     der von durchsichtig nach Pergament laeuft, schiebt sich ueber das Video.
+
+     Seit dem 29.07.2026 ist dieser Streifen der EINZIGE Abgang der Reise. Vorher
+     blendete die Engine die letzte Szene nach ihrem Ende selbst aus (rund 80 px
+     Scrollweg), und weil der Leseteil erst einen ganzen Bildschirm spaeter kommt,
+     stand dazwischen eine leere Pergamentflaeche — die Fahrt endete im Nichts,
+     bevor die Fragen da waren. Die Engine haelt die letzte Szene jetzt stehen
+     (scrub-engine.js, `i < NSEG - 1`); das Video verschwindet nur noch dadurch,
+     dass die Fragen darueber hochwandern. Dafuer ist der Streifen laenger als
+     vorher (22vh -> 34vh): er ist die ganze Ueberblendung. */
   .ausklang {
-    height: clamp(9rem, 22vh, 16rem);
+    height: clamp(12rem, 34vh, 22rem);
     background: linear-gradient(180deg,
       rgba(254, 252, 247, 0) 0%,
       rgba(254, 252, 247, 0.72) 46%,

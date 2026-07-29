@@ -394,7 +394,13 @@ function mountScrollWorld(container, config) {
       const local = clamp((y - s.start) / (s.end - s.start), 0, 1);
       s.target = s.linger ? lingerEase(local, s.linger) : local;
       let outside = 0;
-      if (y < s.start) outside = s.start - y; else if (y > s.end) outside = y - s.end;
+      // The LAST scene never fades on the way out. Past its end the reading part
+      // slides up over it, and that is the only exit it should have: fading it
+      // first left a blank page for the length of the crossfade, and the whole
+      // journey ended in white before the next section had even arrived.
+      // (Entering is untouched — every scene still fades IN from its start.)
+      if (y < s.start) outside = s.start - y;
+      else if (y > s.end && i < NSEG - 1) outside = y - s.end;
       const op = smooth(1 - outside / (s.cf != null ? s.cf * vh : fade));
       s.el.style.opacity = op; s.visible = op > 0.001;
       s.el.style.zIndex = (i === ci) ? '120' : String(100 + Math.round(op * 10));
