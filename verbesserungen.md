@@ -7,6 +7,9 @@ umgesetzt und nachgemessen**, Details im CHANGELOG)
 (**V29–V33**). Sie waren zunächst nur notiert und sind am 29.07. in der Scroll-Reise umgesetzt
 und nachgemessen; aus V32 ist **V34** hervorgegangen — dieselbe Sprachregelung außerhalb von
 `der-weg/` steht noch aus. Rollback-Punkt vor der Umsetzung: Commit `4734cde`.
+Am Nachmittag desselben Tages kam sein **Telefon-Durchgang** dazu (**V35–V37**: Textstreifen
+unter dem Bildschirmrand, „Mehr dazu" auf der Wegpunkt-Leiste, weißes Ende) — ebenfalls
+umgesetzt, siehe Erledigt. Beide Durchgänge sind Zurufe am Gerät, keine Analyse-Runden.
 
 Runde 2 (Fokus: alles) ist live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
 Runde 3 hat nur `der-weg/` und seine Werkzeuge angesehen; V18/Hauptseite, `site/`, `stilprobe/`
@@ -237,9 +240,13 @@ DSGVO-Linie außerhalb der Reise.
 - **V23** (B) Tempo-Messung las „unter 40 KB übertragen" als Cache und gab langsamen
   Erstverbindungen das Video frei — Wiederbesuch wird an `transferSize === 0` erkannt,
   ohne belastbaren Wert entscheidet erst der 6-s-Lauf. Alle drei Zustände end-to-end geprüft.
-- **V24** (B) Aktiver Nav-Reiter 2,6–3,3:1 — Fläche jetzt Tinte (nachgemessen 14,26:1),
+- **V24** (B) Aktiver Nav-Reiter 2,6–3,3:1 — Fläche zunächst auf Tinte (nachgemessen 14,26:1),
   Chips eine Stufe dunkler (Salbei 4,34 → 5,8). Der Kupfer-Kleintext-Widerspruch zu V11
   bleibt benannt und unangetastet (Gabriels Marken-Entscheid).
+  **Überholt am 29.07. durch V29:** die Aktiv-Fläche gibt es gar nicht mehr, der aktive Reiter
+  sieht aus wie jeder andere. Die Tinte-Zeile ist damit Geschichte — die Chips gelten weiter.
+  Für den Skill-Rückfluss zählt der Befund trotzdem: der Engine-**Default** ist unverändert
+  Weiß auf Szenenakzent (`scrub-engine.js:604`), nur diese Seite überschreibt ihn.
 - **V25** (C) 375er-/390er-iPhones: Kopfzeile der ersten Station brach um, Schluss-Station
   ragte 14 px ins Bild — Kleintext unter 393 px eine Stufe kleiner, Mindesthöhe des
   Textstreifens 320 px (niedrige Schirme 300). Gemessen auf 320/360/375/390/393/768;

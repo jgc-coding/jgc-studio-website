@@ -100,7 +100,9 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   `transition` misst sich als ihr Ausgangswert — eine Knopffläche als `rgba(0,0,0,0)` statt der
   Zielfarbe — und selbst inline gesetzte Werte scheinen ignoriert (die eingefrorene Transition
   überdeckt sie). Vor Farb-/Zustandsmessungen `element.style.transition='none'` setzen, danach
-  zurücksetzen. So entstand am 27.07. der Schein-Befund „Nav-Reiter transparent".
+  zurücksetzen. So entstand am 27.07. die Fehlmessung, die Aktiv-Fläche des Nav-Reiters sei
+  durchsichtig — sie war es nicht. (Seit dem 29.07. ist sie es wirklich, per Absicht: die
+  Punktleiste zeigt den Standort allein. Der alte Messfehler bleibt trotzdem lehrreich.)
 - **Headless Chrome misst hier falsch, wenn man nicht nachrechnet.** `--window-size` ist nicht der
   CSS-Viewport: es gehen 26 px Breite und 156 px Höhe für das Fensterwerk ab, und unter **526 CSS-px
   Breite klemmt Chrome auf ein Minimum** — ein angefordertes 393er Handyfenster rendert als 526 px
