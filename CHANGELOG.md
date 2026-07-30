@@ -2,6 +2,56 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-30 — Der Weg: Gabriels zweiter Telefon-Durchgang (V38–V41)
+
+Vier Befunde von seinem Gerät, zwei davon Folgeschäden der Änderungen vom Vortag. Nur die
+Scroll-Reise (`der-weg/`), die Lesefassung V18 blieb unangetastet.
+
+- **V38 — Die Kamera bremste genau da, wo niemand liest.** Gabriel: „zäh, als müsste man mehr
+  scrollen, um beim Video voranzukommen" (rund um „Was sich wirklich ändert"). Drei Stationen
+  trugen ein `linger` — die Engine bremst damit die Kamera in der **Mitte** einer Etappe. Das
+  ergibt nur bei der Textführung `'middle'` Sinn; diese Seite läuft auf `'arrival'`, wo der
+  Stationstext erst zum **Ende** der Etappe einblendet. Gemessen an „Was sich wirklich ändert"
+  (Etappe 1329 px, `linger: 0.4`): die mittleren 40 % des Scrollwegs — 532 px — brachten 27 %
+  des Films (Rate 0,62), und die Textdeckkraft lag dort noch bei 0. An der Naht dagegen, wo der
+  Text ankommt und wo zwei der sechs Übergänge ohnehin springen, raste die Kamera mit Rate 1,58.
+  Genau umgekehrt zur Absicht. `linger` ist jetzt überall entfernt, jede Etappe läuft mit Rate
+  1,0 durch. Ein Verweilen bei der Ankunft braucht es nicht extra — `'arrival'` hält den Text
+  ohnehin in die nächste Etappe hinein, deren erste Bilder dieselbe Szene zeigen.
+- **V39 — Vor den Fragen tauchte das Video noch einmal auf.** Der Ausklang-Streifen (V37, seit
+  gestern 34vh) läuft von durchsichtig nach Pergament und lag unter der Textebene. Richtig,
+  solange die Textebene *stehenblieb* — seit sie im Gleichschritt mit den Fragen hochfährt, liegt
+  sein durchsichtiger Teil genau über dem Bildband, das noch auf Deckkraft 1 steht. Statt
+  zuzudecken **gab er das Video wieder frei**: ein Band der letzten Szene zwischen zwei weißen
+  Flächen, sichtbar über rund 290 px Scrollweg. Hochkant fällt der Streifen deshalb weg; der
+  Pergament-Verlauf der Textebene hat oben ohnehin eine weiche Kante und wischt das Band beim
+  Hochfahren allein weg. Nachgemessen an neun Punkten: Abstand zwischen Textebene und Leseteil
+  durchgehend **0 px**, Leerlauf zwischen letztem Filmbild und Fragen von 1142 auf 852 px
+  gefallen (1,34 → genau ein Bildschirm). Breit bleibt der Streifen — dort füllt das Video den
+  Schirm und er ist der einzige Abgang der Szene.
+- **V40 — „Mehr dazu" stand auf einer eigenen Zeile.** Er sitzt jetzt auf der **letzten Zeile
+  des Stationstextes**: bei Stationen mit Schlagworten als letztes Element in deren Zeile, bei
+  den zwei ohne („KI ist ein Werkzeug", „Lass uns 30 Minuten reden") hinten am letzten Satz.
+  Beides endet vor den Handlungsknöpfen, „Erstgespräch anfragen" bleibt das Letzte. Gemessen bei
+  393×852: Knopf 107 px breit, letzte Schlagwortzeile endet bei x=216, Textrand bei 374 — er
+  passt mit 51 px Rest daneben, und die Wegpunkt-Leiste (x 353–387) liegt auf halber Schirmhöhe,
+  also weit über der Schlagwortzeile. Damit ist V36 zurückgezahlt: **der Textstreifen sinkt von
+  380 auf 360 px** (niedrige Schirme 350 → 335), das Bildband wächst von 55 auf 59 % des Schirms.
+  Gegenrechnung ehrlichkeitshalber: ein höheres Band beschneidet die 4:3-Quelle seitlich stärker,
+  die sichtbare Szenenbreite sinkt von 62 auf 60 % (23 von 1112 Quellpixeln).
+- **V41 — Die Leiste oben sah aus wie ein Ladebalken.** 3 px hoch, volle Breite, blasse
+  Kupferrinne — und beim Öffnen steht die Füllung auf Null. „Dadurch hat man anfangs das Gefühl,
+  die Seite lädt nicht." Ersatzlos entfernt statt umgefärbt, weil die Punktleiste rechts den
+  Stand bereits zeigt — dieselbe Begründung wie bei V29. Nur die Anzeige fällt weg, die Engine
+  rechnet ihren Wert weiter aus.
+
+Nachgemessen auf 320×568, 360×640, 360×800, 375×812, 393×852, 412×915 und 1280×720/800: keine
+Station läuft aus ihrem Streifen (20–42 px Luft je Seite statt bisher mindestens 14), der
+„Mehr"-Knopf sitzt auf allen sechs Hochkant-Maßen und breit auf der letzten Zeile, auf 1280×720
+passen alle sieben Stationen mit mindestens 166 px Rand ins Fenster, keine Konsolenfehler,
+`pruefe-seiten.mjs` grün. `docs/der-weg.md` mitgezogen (neuer Abschnitt zum Fahrttempo, Ausklang,
+Knopf, Streifen-Tabellen, zwei neue Punkte für die Skill-Rückgabe).
+
 ## 2026-07-29 — Der Weg: Gabriels Telefon-Durchgang (V35–V37)
 
 Drei Befunde von seinem Gerät, mit Screenshots belegt. Der erste war eine Folge des Vormittags:

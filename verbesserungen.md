@@ -78,9 +78,15 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
     zuletzt: läuft (anflug.mp4 geladen; `has-clip` braucht rAF → am Gerät prüfen)
 12. **„Mehr dazu"-Feld** — erwartet: öffnet, Fokus wandert hinein, Escape schließt,
     Fokus kehrt zum Knopf zurück · zuletzt: läuft (2026-07-27, alles gemessen)
-13. **Hochkant-Fassung** — erwartet: Bildband oben, Text unten, kein seitlicher Überlauf ·
-    zuletzt: läuft (2026-07-27, gemessen bei 320/360/375/390/393/768 — V25 behoben;
+13. **Hochkant-Fassung** — erwartet: Bildband oben, Text unten, kein seitlicher Überlauf,
+    jede Station passt in den Textstreifen · zuletzt: läuft (2026-07-30, gemessen bei
+    320×568/360×640/360×800/375×812/393×852/412×915 — 20 bis 42 px Luft je Seite;
     320 bricht die Kopfzeile bewusst um, dokumentierte Grenze)
+16. **Abgang der Reise zu den Fragen** — erwartet: zwischen letztem Filmbild und den
+    häufigen Fragen keine Lücke und kein zweites Auftauchen des Videos; Unterkante
+    Textebene und Oberkante Leseteil auf 0 px · zuletzt: läuft (2026-07-30, neun
+    Messpunkte). **Hier ist schon zweimal etwas gerissen** (V37, V39) — nach jeder
+    Änderung an Ausklang, Textebene oder Leseteil erneut messen.
 14. **Ohne JavaScript** — erwartet: SEO-Block und Langfassungen als Lesetext ·
     zuletzt: läuft (`.js`-Klasse ab-/angeschaltet und gemessen)
 15. **Kamerafahrt/Scrubbing** — nicht prüfbar im versteckten Pane (rAF läuft dort nicht);
@@ -192,6 +198,29 @@ DSGVO-Linie außerhalb der Reise.
 
 ## Erledigt
 
+### Gabriels zweiter Telefon-Durchgang — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
+
+- **V38** (B) Die Fahrt wirkte zäh rund um „Was sich wirklich ändert" — man musste mehr
+  scrollen, um im Video voranzukommen. Drei Stationen trugen ein `linger`, das die Kamera in
+  der **Etappenmitte** bremst; diese Seite blendet den Stationstext aber erst am **Ende** der
+  Etappe ein (`copyTiming: 'arrival'`). Die Bremse saß also im leeren Teil (mittlere 40 % des
+  Scrollwegs = 27 % des Films bei Textdeckkraft 0), an der Naht raste die Kamera. `linger`
+  überall entfernt. **Merksatz für neue Stationen:** `linger` nur zusammen mit `'middle'`.
+- **V39** (B) Zwischen „Erstgespräch anfragen" und den häufigen Fragen tauchte das Video noch
+  einmal als Band auf, dazwischen viel Weiß. Der Ausklang-Streifen aus V37 gab das Bildband
+  wieder frei, seit die Textebene mit den Fragen hochfährt. Hochkant entfällt er; Leerlauf von
+  1142 auf 852 px gefallen. Breit bleibt er (dort füllt das Video den Schirm).
+- **V40** (C) „Mehr dazu" stand auf einer eigenen Zeile statt in der letzten Textzeile. Sitzt
+  jetzt in der Schlagwortzeile bzw. am Ende des letzten Satzes. Zahlt V36 zurück: Streifen
+  360 statt 380 px, Band 59 statt 55 % des Schirms. **Gegenrechnung:** ein höheres Band
+  beschneidet die 4:3-Quelle seitlich stärker (sichtbare Breite 60 statt 62 %) — wer das
+  umgekehrt will, dreht `--weg-textzone` in `der-weg/index.html` zurück auf 380/350.
+- **V41** (C) Die Fortschrittsleiste am oberen Rand sah aus wie ein Ladebalken, der nicht
+  vorankommt („man hat anfangs das Gefühl, die Seite lädt nicht"). Ersatzlos entfernt, weil
+  die Punktleiste den Stand schon zeigt (wie V29). **Falls sie doch fehlt:** eine Zeile in
+  `der-weg/index.html` (`.sw-scrollbar { display: none }`) — sinnvoller wäre dann, nur die
+  leere Rinne wegzulassen und die Füllung ab dem ersten Scrollen einzublenden.
+
 ### Gabriels Telefon-Durchgang — umgesetzt am 2026-07-29 (Messwerte im CHANGELOG)
 
 - **V35** (B) Der Textstreifen stand teilweise unter dem Bildschirmrand, die Aufteilung
@@ -201,9 +230,8 @@ DSGVO-Linie außerhalb der Reise.
   eine Zeile mehr, die der Streifen nicht mehr hatte.
 - **V36** (C) „Mehr dazu" lag auf der Wegpunkt-Leiste — Knopf steht jetzt unter dem Text
   (auf der Schluss-Station vor den Handlungsknöpfen). Kostet eine Knopfzeile: Streifen 380
-  statt 320 px, rund 60 px weniger Bild. **Falls das Bild wichtiger ist:** Knopf zurück in
-  die Kopfzeile und stattdessen die Punktleiste aus seinem Weg rücken — dann bleibt das
-  Band groß und die Kollision ist trotzdem weg.
+  statt 320 px, rund 60 px weniger Bild. — *Überholt durch V40 (30.07.): der Knopf sitzt
+  jetzt auf der letzten Textzeile, die Knopfzeile ist damit wieder frei.*
 - **V37** (B) Das Ende wurde weiß, bevor die Fragen kamen — die Engine blendete auch die
   letzte Szene aus, obwohl der Leseteil erst einen Bildschirm später kommt. Sie bleibt jetzt
   stehen; die Fragen wandern darüber, der Ausklang-Verlauf trägt die Überblendung allein.

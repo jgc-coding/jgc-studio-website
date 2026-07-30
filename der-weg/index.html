@@ -126,6 +126,22 @@
      dunkler gemischt liegen alle drei Szenenfarben ueber 4,5:1 (Salbei 5,8). */
   .sw-root .sw-copy__tags li { color: color-mix(in srgb, var(--sw-accent) 58%, #000); }
 
+  /* V41: die Fortschrittsleiste der Engine ganz oben faellt weg.
+
+     Sie ist 3 px hoch, laeuft ueber die volle Breite und zeigt eine blasse
+     Kupferrinne, in der eine kupferne Fuellung mitwaechst. Beim Oeffnen steht
+     die Fuellung auf Null — was man sieht, ist eine leere Rinne quer ueber den
+     Schirm. Das ist Zeichen fuer Zeichen ein Ladebalken, und weil er nicht
+     vorankommt, liest er sich als "die Seite laedt nicht"
+     (Gabriels Telefon-Durchgang vom 30.07.2026).
+
+     Ersatzlos statt umgefaerbt, weil die Punktleiste rechts den Stand bereits
+     zeigt — dieselbe Begruendung, aus der V29 die Aktiv-Markierung der Reiter
+     entfernt hat: zwei Anzeigen fuer denselben Stand, eine davon missverstaendlich.
+     Nur die Anzeige faellt weg; die Engine rechnet ihren Wert weiter aus, ein
+     Rueckbau ist also eine Zeile. */
+  .sw-root .sw-scrollbar { display: none; }
+
   /* ------------------------------------------------------------------
      Breite Fassung: der Textblock wird wieder wirklich mittig gestellt.
 
@@ -226,6 +242,28 @@
         transparent calc(var(--weg-textzone) + 14%));
     }
 
+    /* Kein Ausklang-Streifen hochkant — er gibt das Video wieder frei, statt es
+       zuzudecken (V39, Gabriels Telefon-Durchgang vom 30.07.2026).
+
+       Der Streifen laeuft von durchsichtig nach Pergament und sass unter der
+       Textebene. Das war richtig, solange die Textebene STEHENBLIEB und das
+       Video darunter weglief. Seit dem 29.07. faehrt sie im Gleichschritt mit
+       dem Leseteil hoch (Block "Der Ausklang" ganz unten) — und damit liegt der
+       durchsichtige Teil des Streifens genau ueber dem Bildband, das noch auf
+       Deckkraft 1 steht. Gemessen bei 393x852: ein Band der letzten Szene
+       zwischen zwei weissen Flaechen, sichtbar ueber rund 290 px Scrollweg.
+
+       Hochkant braucht es ihn auch gar nicht: der Pergament-Verlauf der
+       Textebene hat oben schon eine weiche Kante und wischt das Bildband beim
+       Hochfahren von allein weg. Ohne den Streifen liegen die Fragen buendig an
+       dieser Kante — dazwischen ist nichts mehr, und der Leerlauf zwischen
+       letztem Filmbild und Fragen schrumpft von 1142 auf 852 px.
+
+       Breit bleibt der Streifen: dort fuellt das Video den ganzen Schirm, der
+       Verlauf der Textebene deckt nur die linken 58 % ab, und der Streifen ist
+       der einzige Abgang, den die Szene hat. */
+    .ausklang { display: none; }
+
     /* Der Scroll-Hinweis zieht auf den unteren Bildrand um.
 
        Zwei Gruende. Erstens Platz: unten im Textstreifen stand er auf
@@ -321,9 +359,6 @@
     .sw-root .sw-copy__tags li { font-size: 0.76rem; padding: 5px 11px; }
     .sw-root .sw-copy__cta { margin-top: 18px; gap: 10px; }
     .sw-root .sw-btn { padding: 12px 20px; font-size: 0.9rem; }
-    /* Steht am Ende der Station. `align-self` verhindert, dass die Spalte ihn
-       auf volle Breite zieht — er soll so breit sein wie seine Schrift. */
-    .sw-root .weg-mehr { align-self: flex-start; margin-top: 14px; }
 
     /* Dunst ueber dem oberen Bildrand. Auf der Werkstatt-Szene stand die Marke
        auf einer Wand voller Werkzeuge und war praktisch unlesbar; auf der
@@ -363,10 +398,26 @@
 
        Der Pergamentgrund selbst bleibt am grossen Fenster (`inset: 0`), damit
        in diesem Fall unten keine Luecke aufreisst — nur die Kanten darin
-       rechnen in `svh`. Alte Browser ohne `svh` behalten die Regeln oben. */
+       rechnen in `svh`. Alte Browser ohne `svh` behalten die Regeln oben.
+
+       380 -> 360 px am 30.07.2026, nachdem der "Mehr dazu"-Knopf in die letzte
+       Textzeile gezogen ist (V40) und keine eigene Zeile mehr braucht. Neu
+       gemessen wurde die HOECHSTE Station auf vier Geraetemassen, denn nur sie
+       bestimmt die Zahl:
+
+         360x800   306 px      375x812   306 px
+         393x852   262 px      412x915   270 px
+
+       Massgeblich bleibt die Schluss-Station ("Lass uns 30 Minuten reden") —
+       ihre Hoehe haengt an den zwei gestapelten Handlungsknoepfen, nicht am
+       Knopf, sie hat also am wenigsten gewonnen. Deshalb 360 und nicht weniger:
+       der Textkasten ist damit 346 px hoch, im schlechtesten Fall bleiben
+       20 px Luft je Seite (bei 393 px Breite sind es 42). 350 px waeren auch
+       noch gegangen, lassen aber nur 15 px — und ueber diese Reserve ist die
+       Zahl am 29.07. schon einmal gestolpert. */
     @supports (height: 100svh) {
       :root, .sw-root {
-        --weg-textzone: max(36svh, 380px);
+        --weg-textzone: max(36svh, 360px);
         /* Das Bildband: alles, was der Text nicht braucht. */
         --weg-band: calc(100svh - var(--weg-textzone));
       }
@@ -405,10 +456,16 @@
        Mindesthoehe (gemessen bei 320×640 und 360×640: laengste Station 286). */
     :root, .sw-root { --weg-textzone: max(36%, 300px); }
     /* Gleiche Umstellung wie oben, nur eine Stufe kleiner (siehe den langen
-       Block zu 100svh). Der Knopf steht seit dem 29.07. unter dem Text und
-       braucht seine eigene Zeile — deshalb hier 350 statt 300 px. */
+       Block zu 100svh).
+
+       350 -> 335 px am 30.07.2026, gleiche Rechnung wie oben. Hoechste Station
+       hier 277 px (gemessen bei 320x568 UND 360x640, beide Male die
+       Schluss-Station) — der Kasten ist mit 335 noch 321 px hoch, es bleiben
+       22 px Luft je Seite. Dass die kleinere Schrift trotzdem nicht viel
+       kuerzer ausfaellt als oben, liegt an der Breite: 320 px lassen jede Zeile
+       frueher umbrechen. */
     @supports (height: 100svh) {
-      :root, .sw-root { --weg-textzone: max(36svh, 350px); }
+      :root, .sw-root { --weg-textzone: max(36svh, 335px); }
     }
     .sw-root .sw-copy__title { font-size: clamp(1.6rem, 7.1vw, 2.3rem); margin-top: 8px; }
     .sw-root .sw-copy__body { font-size: clamp(0.92rem, 3.85vw, 1.05rem); margin-top: 10px; }
@@ -469,6 +526,19 @@
     transition: background 0.2s, color 0.2s;
   }
   .sw-root .weg-mehr::before { content: ""; position: absolute; inset: -11px -8px; }
+
+  /* Die Zelle, in der der Knopf in der Schlagwortzeile sitzt (V40). Sie ist ein
+     <li>, damit die Liste gueltig bleibt — aber kein Schlagwort, also faellt die
+     Chip-Optik der Engine hier wieder weg. `align-items: center` stellt den
+     flacheren Knopf (25 px) auf die Mitte der Chips (31 px) statt an ihre
+     Oberkante. */
+  .sw-root .sw-copy__tags li.weg-mehr-zelle {
+    padding: 0; border: 0; background: none; border-radius: 0;
+    display: flex; align-items: center;
+  }
+  /* Steht der Knopf mangels Schlagworten im Fliesstext, sitzt er sonst auf der
+     Grundlinie und haengt damit optisch zu tief. */
+  .sw-root .sw-copy__body .weg-mehr { vertical-align: -0.28em; }
   /* Ein Plus, kein Pfeil nach unten: der Inhalt klappt nicht an Ort und Stelle
      auf, sondern oeffnet sich als Feld in der Mitte. Dasselbe Zeichen benutzt
      die Seite unten bei den haeufigen Fragen fuer dieselbe Handlung. */
@@ -1167,7 +1237,30 @@
 
     /* Scrollweg je Etappe. Zusammen rund 8 Bildschirmhoehen statt vorher 12: die
        Reise laeuft zuegiger, ohne dass eine Szene gehetzt wirkt. Die zwei
-       Schluesselszenen behalten mehr Weg als die Durchfahrten. */
+       Schluesselszenen behalten mehr Weg als die Durchfahrten.
+
+       KEIN `linger` mehr — und das ist der Punkt, an dem man sich vertut (V38,
+       Gabriels Telefon-Durchgang vom 30.07.2026: "zaeh, als muesste man mehr
+       scrollen, um beim Video voranzukommen").
+
+       `linger` bremst die Kamera in der MITTE einer Etappe. Sinn hat das nur bei
+       der Textfuehrung 'middle', wo der Stationstext ebendort aufblueht. Diese
+       Seite laeuft aber auf 'arrival' (Architektur A, leeres `connectors`-Feld):
+       der Text blendet erst zum ENDE der Etappe ein. Gemessen an "Was sich
+       wirklich aendert" (Etappe 1329 px, linger 0.4):
+
+         Scrollanteil   0.3 -> 0.7   =  532 px Scrollweg
+         Filmanteil     0.367 -> 0.633 = 27 % des Clips   (Rate 0.62)
+         Textdeckkraft  0.000 bis 0.431                   (also unlesbar)
+
+       Die Bremse sass damit im leeren Teil, und an der Naht — dort, wo der Text
+       ankommt und wo zwei der sechs Uebergaenge ohnehin springen — raste die
+       Kamera mit Rate 1.58. Genau umgekehrt zur Absicht. Ohne `linger` laeuft
+       jede Etappe gleichmaessig (Rate 1.0 durchgehend).
+
+       Ein Verweilen bei der Ankunft braucht es nicht extra: 'arrival' haelt den
+       Text ohnehin in die naechste Etappe hinein (`rampOut`), deren erste Bilder
+       dieselbe Szene zeigen. */
     diveScroll: 1.0,
 
     /* Wie weit im Voraus Clips geholt werden, in Bildschirmhoehen. Der Standard
@@ -1217,13 +1310,14 @@
       },
       {
         /* Schluesselszene: die Kamera faehrt am Tisch entlang von Heute nach Morgen.
-           Mehr Scrollweg und ein Verweilen in der Mitte, damit der Text mitkommt. */
+           Mehr Scrollweg, damit der Text mitkommt — aber KEIN `linger`, siehe die
+           Notiz ueber `diveScroll`. */
         id: 'schreibtisch', label: 'Deine Woche',
         clip: 'assets/schreibtisch.mp4', clipMobile: 'assets/schreibtisch-m.mp4',
         poster: 'assets/schreibtisch-poster.jpg', posterMobile: 'assets/schreibtisch-poster-m.jpg',
         still: 'assets/schreibtisch-still.jpg',
         accent: '#6FA3B5',
-        scroll: 1.3, linger: 0.4,
+        scroll: 1.3,
         /* Beide Naehte dieser Etappe springen — davor die Werkzeugwand,
            danach das Stilprobe-Pult. */
         crossfade: 0.38,
@@ -1240,7 +1334,7 @@
         poster: 'assets/stilprobe-poster.jpg', posterMobile: 'assets/stilprobe-poster-m.jpg',
         still: 'assets/stilprobe-still.jpg',
         accent: '#C97B3F',
-        scroll: 1.45, linger: 0.45,
+        scroll: 1.45,
         crossfade: 0.38,
         eyebrow: 'Die Stilprobe',
         title: 'Lies dich selbst.',
@@ -1265,7 +1359,7 @@
         poster: 'assets/lichtung-poster.jpg', posterMobile: 'assets/lichtung-poster-m.jpg',
         still: 'assets/lichtung-still.jpg',
         accent: '#8FA98A',
-        scroll: 1.1, linger: 0.3,
+        scroll: 1.1,
         eyebrow: 'Wer mit dir arbeitet',
         title: 'Drei Welten, ein Blick.',
         body: 'Mentaltrainer, Wirtschaftsingenieur, TÜV-geprüft für angewandte KI. Ich kenne die innere Seite deiner Arbeit und die Technik dahinter.',

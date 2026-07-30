@@ -183,14 +183,24 @@ function mountVertiefung(optionen) {
 
   // ---- Knopf an jede Station haengen ----
   //
-  // Er steht am ENDE der Station, unter dem Text. Vorher sass er in einer Zeile
-  // mit dem Kleintext ueber der Ueberschrift, weil er dort rund 10 px statt
-  // einer ganzen Zeile kostete und der Platz direkt ans Bild ging. Am Geraet
-  // hat sich das nicht bewaehrt: rechts aussen laeuft die Wegpunkt-Leiste, und
-  // der Knopf lag genau darauf — zwei Bedienelemente an derselben Stelle, eines
-  // davon halb verdeckt. Unten steht er frei, in Leserichtung nach dem Text,
-  // den er vertieft. Die Rechnung dafuer steht in der Textzonen-Regel in
-  // index.html: der Streifen ist um eine Knopfzeile hoeher.
+  // Er reitet auf der LETZTEN Zeile der Station, nie auf einer eigenen (V40,
+  // Gabriels Telefon-Durchgang vom 30.07.2026).
+  //
+  // Die Vorgeschichte in zwei Stationen: bis zum 29.07. sass er in einer
+  // Kopfzeile rechts neben dem Kleintext — dort lag er am Geraet auf der
+  // Wegpunkt-Leiste am rechten Rand, zwei Bedienelemente an derselben Stelle.
+  // Danach stand er unter dem Text, frei, aber auf einer eigenen Zeile: rund
+  // 39 px, die ueber die Mindesthoehe des Textstreifens direkt vom Bild abgehen.
+  //
+  // Jetzt beides zugleich. Gemessen bei 393x852: der Knopf ist 107 px breit, die
+  // letzte Schlagwortzeile endet bei x=216, der Textrand liegt bei 374 — er
+  // passt also mit 51 px Rest daneben. Die Wegpunkt-Leiste (x 353-387) ist kein
+  // Thema mehr: sie liegt auf halber Schirmhoehe, die Schlagwortzeile im
+  // Textstreifen darunter.
+  //
+  // Zwei Stationen haben keine Schlagworte ("KI ist ein Werkzeug", "Lass uns
+  // 30 Minuten reden"). Dort haengt er hinten an den letzten Satz — dieselbe
+  // Regel, nur eine Zeile hoeher. Fehlt beides, bleibt es beim alten Weg.
   //
   // Das Zeichen ist ein PLUS, kein Pfeil nach unten. Ein Pfeil nach unten
   // verspricht Aufklappen an Ort und Stelle; hier oeffnet sich ein Feld in der
@@ -213,11 +223,29 @@ function mountVertiefung(optionen) {
     // Bewusst KEIN pointer-events:auto: der Knopf erbt damit den Zustand seiner
     // Station und ist nur anklickbar, solange die auch sichtbar ist.
     //
-    // Vor die Handlungsknoepfe, nicht dahinter: die Schluss-Station endet mit
-    // "Erstgespraech anfragen". Was jemand als Letztes liest, soll der Weg nach
-    // vorn sein und nicht das Angebot, noch mehr zu lesen.
-    var handlung = kopie.querySelector('.sw-copy__cta');
-    if (handlung) kopie.insertBefore(knopf, handlung); else kopie.appendChild(knopf);
+    // Beide Wege enden VOR den Handlungsknoepfen — Schlagwortliste und
+    // Fliesstext stehen ohnehin darueber. Das ist Absicht: die Schluss-Station
+    // endet mit "Erstgespraech anfragen". Was jemand als Letztes liest, soll der
+    // Weg nach vorn sein und nicht das Angebot, noch mehr zu lesen.
+    var tags = kopie.querySelector('.sw-copy__tags');
+    var text = kopie.querySelector('.sw-copy__body');
+    if (tags) {
+      // Eine <ul> darf als Kind nur <li> haben, deshalb die Zelle. Sie ist kein
+      // Schlagwort und traegt darum eine eigene Klasse, die die Chip-Optik
+      // (Flaeche, Rahmen, Polsterung) wieder abraeumt — siehe index.html.
+      var zelle = document.createElement('li');
+      zelle.className = 'weg-mehr-zelle';
+      zelle.appendChild(knopf);
+      tags.appendChild(zelle);
+    } else if (text) {
+      // Ein gewoehnliches Leerzeichen, kein geschuetztes: der Knopf soll auf die
+      // naechste Zeile rutschen duerfen, wenn der letzte Satz die Zeile fuellt.
+      text.appendChild(document.createTextNode(' '));
+      text.appendChild(knopf);
+    } else {
+      var handlung = kopie.querySelector('.sw-copy__cta');
+      if (handlung) kopie.insertBefore(knopf, handlung); else kopie.appendChild(knopf);
+    }
   });
 }
 
