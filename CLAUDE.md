@@ -87,7 +87,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   Fehlbefunde erzeugt haben:
   (1) **Erst Viewport setzen, dann messen** — ein frisch geöffneter Tab meldet `0×0`, jede Geometrie
   ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch). `resize_window` mit expliziter
-  Breite/Höhe, danach `innerWidth` gegenprüfen.
+  Breite/Höhe, danach `innerWidth` gegenprüfen. **Danach `resize` selbst auslösen:** die Scroll-Engine
+  rechnet ihre Bahnhöhe nur in `layout()` und schreibt sie als festen Pixelwert — ohne das Ereignis
+  misst man die Bahn des ALTEN Fensters (30.07.: 8822 statt 11509 px Seitenhöhe, und damit jede
+  Scrollposition daneben).
   (2) Bei `document.visibilityState === 'hidden'` laufen `requestAnimationFrame`, IntersectionObserver
   und Animationen **gar nicht** → `is-visible` wird nie gesetzt, Reveal-Zustände sind dort grundsätzlich
   nicht prüfbar, und ein `await` auf rAF hängt bis zum Timeout. Solche Aussagen dann statisch belegen.
@@ -95,14 +98,18 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   setzen und `dispatchEvent(new Event('scroll'))` bzw. `resize` selbst auslösen. Und: Code mit dem
   üblichen rAF-Riegel (`if (!ticking) { ticking = true; requestAnimationFrame(…) }`) verklemmt sich
   dort beim ERSTEN Ereignis dauerhaft. Zum Testen `window.requestAnimationFrame` vorher auf synchron
-  umbiegen, dann läuft der echte Code-Pfad statt einer Nachbildung.
+  umbiegen, dann läuft der echte Code-Pfad statt einer Nachbildung. Der Ersatz muss dabei
+  **Wiedereintritt verweigern** (Merker setzen, verschachtelte Aufrufe verwerfen): die Engine hat
+  eine rAF-Endlosschleife, die sich selbst nachbestellt — synchron ausgeführt reißt sie sonst
+  sofort den Aufrufstapel ein.
   (3) **CSS-Übergänge frieren im versteckten Pane am STARTWERT ein.** Eine Eigenschaft mit
   `transition` misst sich als ihr Ausgangswert — eine Knopffläche als `rgba(0,0,0,0)` statt der
   Zielfarbe — und selbst inline gesetzte Werte scheinen ignoriert (die eingefrorene Transition
   überdeckt sie). Vor Farb-/Zustandsmessungen `element.style.transition='none'` setzen, danach
   zurücksetzen. So entstand am 27.07. die Fehlmessung, die Aktiv-Fläche des Nav-Reiters sei
-  durchsichtig — sie war es nicht. (Seit dem 29.07. ist sie es wirklich, per Absicht: die
-  Punktleiste zeigt den Standort allein. Der alte Messfehler bleibt trotzdem lehrreich.)
+  durchsichtig — sie war es nicht. **Am 30.07. dieselbe Falle noch einmal**, an derselben Fläche:
+  eine frisch gesetzte Tinte-Fläche maß sich als `rgba(0,0,0,0)`. Diese Falle schnappt zuverlässig
+  wieder zu — vor jeder Farbmessung `transition` abschalten, ohne Ausnahme.
 - **Headless Chrome misst hier falsch, wenn man nicht nachrechnet.** `--window-size` ist nicht der
   CSS-Viewport: es gehen 26 px Breite und 156 px Höhe für das Fensterwerk ab, und unter **526 CSS-px
   Breite klemmt Chrome auf ein Minimum** — ein angefordertes 393er Handyfenster rendert als 526 px

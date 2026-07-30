@@ -1,66 +1,37 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (30.07.2026, abends — Rückmeldung zur Runde davor, V42–V46, live)
-- Fünf Punkte von Gabriel, PC und Telefon, unmittelbar nach dem Deploy von V38–V41.
-- **V43/V44 zeigen auf denselben Bau:** der Abgang der Reise wird von ZWEI Verläufen getragen,
-  die verschiedenen Elementen gehören — der Schleier der Textebene fährt mit ihr hoch, der
-  Ausklang gehört zum Leseteil. Am PC gab das eine harte Kante quer über den Schirm, am
-  Telefon ein Aufblitzen des Videos beim schnellen Wischen. Beides geheilt durch die
-  **Schürze**: der Verlauf reicht jetzt um die Länge des Ausklangs unter die Textebene hinaus.
-  Geprüft bis 260 px künstlichem Verzug. Dazu läuft die Nachführung direkt im Scroll-Lauscher.
-- **V42** „Mehr dazu" hängt jetzt überall hinten am letzten Satz, nicht mehr mal so, mal so.
-- **V45** Wegmarkierung im Reitermenü am PC zurück (ab 861 px), am Telefon weiterhin ohne.
-- **V46** Textstreifen auf 355 px (niedrige Schirme 325) — das Minimum, mehr geht nicht.
-- **Live**, Deploy grün. Hauptseite V18 unberührt, Reise weiter auf `noindex`.
-- Messwerte: CHANGELOG-Eintrag vom 30.07. (V42–V46), `docs/der-weg.md` (Abschnitt
-  „Die Schürze", Streifen-Tabelle, „Mehr dazu"), Register: `verbesserungen.md`.
-
-## Vorheriger Stand (30.07.2026, mittags — zweiter Telefon-Durchgang, V38–V41, live)
-- Vier Befunde von Gabriels Gerät, **zwei davon Folgeschäden des Vortags** — beide entstanden
-  dadurch, dass eine Änderung eine Annahme aufhob, auf der eine ältere Regel stand:
-  - **V38** Die Fahrt wirkte zäh. `linger` bremst die Kamera in der *Etappenmitte*, der Text
-    kommt hier aber erst am *Ende* (`copyTiming: 'arrival'`). Bremse im leeren Teil, Rasen an
-    der Naht. `linger` überall raus.
-  - **V39** Vor den Fragen tauchte das Video noch einmal als Band auf: der Ausklang-Streifen aus
-    V37 *gab* das Bildband frei, seit die Textebene mit den Fragen hochfährt. Hochkant entfällt
-    er; Leerlauf 1142 → 852 px.
-  - **V40** „Mehr dazu" sitzt auf der letzten Textzeile statt auf einer eigenen. Zahlt V36
-    zurück: Streifen 380 → 360 px, Band 55 → 59 % des Schirms.
-  - **V41** Die Fortschrittsleiste oben ist weg — sie las sich als hängender Ladebalken.
-- **Live**, Deploy grün (`23e2e4c`). Hauptseite V18 unberührt, Reise weiter auf `noindex`.
-- Nachgemessen auf sechs Hochkant-Maßen (320–412 px) und 1280×720/800. **Nicht prüfbar im
-  versteckten Pane bleibt die Kamerafahrt selbst** — ob sich V38 richtig anfühlt, sieht nur
-  Gabriel am Gerät.
-- Messwerte: CHANGELOG-Eintrag vom 30.07., `docs/der-weg.md` (neuer Abschnitt „Das Tempo der
-  Fahrt", Ausklang, Knopf, Streifen-Tabellen), Register: `verbesserungen.md`.
-
-## Vorheriger Stand (29.07.2026 — Gabriels PC- und Telefon-Durchgang, acht Befunde, alles live)
-- **Vormittag, PC-Durchgang (V29–V33):** doppelte Weganzeige aufgelöst (die Punktleiste führt,
-  die Reiter sind reines Sprungmenü — erledigt V24 mit), Sigel 18×26 statt 34×34, verdrehter
-  Schulungs-Satz raus, TÜV-Prüfzeichen mit Certipedia-Link im „Mehr"-Feld.
-- **V32 war der größte Eingriff:** „DSGVO-konform" ist kein pauschales Etikett mehr, sondern an
-  die Daten geknüpft — Linie: *was bei dir läuft, hält den Standard ein; womit ich baue, ist
-  davon getrennt.* Sechs Stellen in der Reise plus ein neuer FAQ-Absatz.
-- **Nachmittag, Telefon-Durchgang (V35–V37)** nach Gabriels Screenshots: der Textstreifen stand
-  teilweise unter dem Bildschirmrand (Chrome/Android misst feste Elemente am großen Fenster) —
-  die Hochkant-Aufteilung rechnet jetzt in `100svh`. „Mehr dazu" lag auf der Wegpunkt-Leiste
-  und steht jetzt unter dem Text. Das Ende wird nicht mehr weiß: die letzte Szene bleibt stehen,
-  die Fragen wandern darüber.
-- **Beides live**, zwei Deploys grün (`a277780`, `03c1185`), an der ausgelieferten Seite
-  nachgeprüft. Hauptseite bitgenau unverändert (1.225.044 Zeichen), Reise weiter auf `noindex`.
-- Messwerte und Begründungen: CHANGELOG (zwei Einträge vom 29.07.), `docs/der-weg.md`
-  (Tabelle, Knopf, Ausklang, Engine-Liste), Register: `verbesserungen.md`.
+## Stand (30.07.2026 — zwei Rückmeldungsrunden zur Scroll-Reise, V38–V46, alles live)
+- **Runde 1 (V38–V41)**, Gabriels Telefon-Durchgang: `linger` überall entfernt (die Bremse saß in
+  der Etappenmitte, der Text kommt hier aber erst am Ende — die Fahrt wirkte deshalb zäh) · der
+  Ausklang-Streifen entfällt hochkant, weil er das Video wieder freigab statt es zuzudecken ·
+  „Mehr dazu" von seiner eigenen Zeile geholt · die Fortschrittsleiste oben entfernt, sie las
+  sich als hängender Ladebalken. Deploy `23e2e4c`.
+- **Runde 2 (V42–V46)**, seine Rückmeldung direkt danach: **V43/V44 zeigten auf denselben Bau** —
+  der Abgang der Reise wird von ZWEI Verläufen getragen, die verschiedenen Elementen gehören und
+  aneinanderstießen statt sich zu überlappen. Am PC gab das eine harte Kante quer über den Schirm,
+  am Telefon ein Aufblitzen des Videos beim schnellen Wischen. Beides heilt die **Schürze** (der
+  Verlauf reicht unter die Textebene hinaus, geprüft bis 260 px Verzug) plus eine Nachführung
+  direkt im Scroll-Lauscher. Dazu: „Mehr dazu" überall hinten am letzten Satz (V42) ·
+  Wegmarkierung im Reitermenü am PC zurück, ab 861 px (V45) · Textstreifen auf 355 px, niedrige
+  Schirme 325 (V46). Deploy `5b613e6`.
+- **Beide Runden live und an der ausgelieferten Seite bitgenau gegengeprüft.** Hauptseite V18
+  unberührt (1.225.044 Zeichen), Reise weiter auf `noindex`.
+- Nachgemessen auf 320×568, 360×640, 360×800, 375×812, 393×852, 412×915, 820×700 und 1280×720/800.
+- **Nicht prüfbar im versteckten Pane bleibt das Gefühl der Kamerafahrt** — ob V38 sitzt und ob
+  das Flackern wirklich weg ist, sieht nur Gabriel am Gerät.
+- Messwerte: zwei CHANGELOG-Einträge vom 30.07., `docs/der-weg.md` (neue Abschnitte „Das Tempo der
+  Fahrt" und „Die Schürze", Streifen-Tabellen, „Mehr dazu"), Register: `verbesserungen.md`.
 
 ## Offen (unfertig / wartet auf Zulieferung)
 - **Impressum ist weiter leer (V3)** — braucht Gabriels Daten, liegt im Hub. Größter Blocker.
-- **Zwei Geschmacksentscheidungen dieser Session sind ungeprüft**, beide je eine Zeile zu
-  drehen: die Punktleiste führt (statt der Reiter), und der Chip heißt „Deine Daten
-  DSGVO-konform". Liegt als Frage im Hub.
-- ~~Offene Abwägung aus V36 (Knopf kostet eine Zeile Bildhöhe)~~ — **erledigt am 30.07. mit
-  V40/V42/V46:** der Knopf steht im Fließtext, der Streifen ist von 380 auf **355 px** herunter
-  (niedrige Schirme 325). Zwei Abwägungen bleiben an derselben Stelle: das höhere Band
-  beschneidet die 4:3-Quelle seitlich etwas stärker (60 statt 62 % sichtbare Breite), und
-  weiter herunter geht es nur über die zwei Handlungsknöpfe der Schluss-Station — **V47**.
+- **V47 wartet auf Gabriels Entscheidung:** die zwei Handlungsknöpfe der Schluss-Station passen
+  auf keinem Telefon nebeneinander und legen damit die Höhe des Textstreifens für **alle** sieben
+  Stationen fest (rund 25 px Bild). Drei Wege stehen in `verbesserungen.md`.
+- **Eine Geschmacksentscheidung ist weiter unbestätigt:** der Chip auf der ersten Szene heißt
+  „Deine Daten DSGVO-konform". Liegt als Frage im Hub. (Die zweite — Punktleiste statt Reiter —
+  ist mit V45 entschieden: am PC markieren beide, am Telefon nur die Punktleiste.)
+- **Runde 2 hat Gabriel noch nicht am Gerät gesehen** — seine letzten Screenshots zeigen den Stand
+  nach V38–V41, nicht nach V42–V46.
 - **V34 offen:** die neue DSGVO-Sprachregelung fehlt in der Lesefassung V18, auf `stilprobe/`
   und der Datenschutzseite. Hängt an der Hub-Frage, ob die Lesefassung überhaupt bleibt.
 - **Formular und Badge der Stilprobe laufen weiter auf Fallbacks** — `senden.php` und
@@ -69,18 +40,17 @@
   noch schärfer: Prüfzeichen, Name und Werdegang stehen jetzt neben dem erfundenen Gesicht.
 - **Naht 3→4 springt weiter** — nur durch eine neue Etappe 4 zu heilen, Startbild liegt bereit
   (`Scroll World\legs\anschlussbilder\`). Naht 2→3 gebessert, aber unter der Schwelle.
-- **`der-weg/scrub-engine.js` ist eine Sonderfassung** — inzwischen sechs Zusätze (Liste in
+- **`der-weg/scrub-engine.js` ist eine Sonderfassung** — sechs Zusätze (Liste in
   `docs/der-weg.md`). Ein Update aus dem Skill würde sie überschreiben.
-- **Die korrigierte Fassung hat Gabriel noch nicht gesehen** — seine Screenshots zeigen den
-  Stand *vor* V35–V37.
-- Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** · **V34**.
+- Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** · **V34** ·
+  **V47**.
 - Offene Ideen: **I2** (V18 → Astro, löst V10 und V18 mit) · **I3** (Kosten-FAQ) ·
   **I4** (Wortmarke aufs Vorschaubild).
 
 ## Nächste Schritte (Claude)
-1. **Gabriels Urteil zur korrigierten Reise einarbeiten.** Wenn ihm das Bildband zu klein ist:
-   Knopf zurück in die Kopfzeile und stattdessen die Punktleiste versetzen (V36-Alternative,
-   gibt rund 60 px Bild zurück).
+1. **Gabriels Urteil zu Runde 2 einarbeiten** und **V47 umsetzen**, sobald er einen der drei Wege
+   wählt. Sein Feedback kommt erfahrungsgemäß als Screenshot plus Fließtext — erst messen, dann
+   Plan zeigen, das hat zweimal getragen.
 2. **Die Reise zur Hauptseite machen**, sobald Gabriel Texte und Umfang freigibt: `robots` auf
    `index, follow`, `scripts/copy-homepage.mjs` bzw. Manifest umstellen, `canonical` prüfen, und
    entscheiden, was mit `/main/` und der Lesefassung passiert.
@@ -90,8 +60,9 @@
    danach zwingend `node scripts/der-weg/pruefe-naehte.mjs`. Bei einer neuen Etappe 3 zusätzlich
    das Feld `vorlauf` in `kodiere.mjs` auf 0 zurücksetzen.
 5. **In den `scroll-world`-Skill zurückgeben** — die Liste in `docs/der-weg.md`, Abschnitt
-   „Offen", ist auf **acht** Punkte gewachsen (neu: letzte Szene stehen lassen, `svh`-Aufteilung,
-   Prozenthöhe beim Logo). In einem Rutsch, wenn die Seite steht.
+   „Offen", ist auf **elf** Punkte gewachsen (neu aus dieser Session: `linger` gegen `copyTiming`
+   absichern, die Fortschrittsleiste am oberen Rand, zwei Verläufe an einer Naht müssen sich
+   überlappen). In einem Rutsch, wenn die Seite steht.
 6. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker.
 7. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen → macht Formular und
    Badge scharf. Vertrag: `docs/stilprobe/schnittstelle.md`.
@@ -107,21 +78,19 @@
 ## Stolperfallen (sofort wichtig)
 - **Der Bildanteil hängt an genau einer Zahl:** `--weg-textzone` in `der-weg/index.html`, seit
   30.07. `max(36svh, 355px)` (Schirme unter 780 px Höhe: 325 px) — **ausgereizt**, es bleiben
-  19 px Luft. Nach jeder Änderung an Schrift oder Stationstext die längste Station nachmessen —
-  das ist die Schluss-Station „Lass uns 30 Minuten reden" (304 px bei 360×800 und 375×812,
-  274 px auf der niedrigen Stufe), weil ihre Höhe an den zwei gestapelten Handlungsknöpfen
-  hängt (offener Punkt V47). Tabellen in `docs/der-weg.md`.
-- **Nicht jeder Leerraum unter dem Text ist ein Fehler.** Rund 60 px davon sind die Reserve,
-  die `100svh` frei lässt, sobald Chrome die Adressleiste einfährt — der Preis dafür, dass die
-  Aufteilung während der Fahrt nicht wandert. Mit `dvh` wäre der Leerraum weg und der Text
-  würde bei jedem Ein- und Ausfahren um rund 30 px wandern. Bewusste Wahl, keine Schlamperei.
-- **Zwei Verläufe an einer Naht müssen sich überlappen, nicht aneinanderstoßen.** Sie gehören
-  verschiedenen Elementen, die sich unabhängig bewegen — siehe „Die Schürze" in
-  `docs/der-weg.md` (V43/V44). An dieser Naht ist inzwischen dreimal etwas gerissen.
-- **`linger` nur mit `copyTiming: 'middle'`.** Die Bremse in der Etappenmitte war für die
-  Textführung 'middle' gebaut; diese Seite läuft auf 'arrival' (Text kommt am Etappenende), dort
-  bremst sie im leeren Teil und lässt die Naht rasen. Deshalb steht nirgends mehr ein `linger`
-  (V38). Wer eine Szene betonen will, verlängert `scroll` — nicht `linger`.
+  19 px Luft. Nach jeder Änderung an Schrift oder Stationstext die längste Station nachmessen:
+  die Schluss-Station „Lass uns 30 Minuten reden" (304 px bei 360×800 und 375×812, 274 px auf der
+  niedrigen Stufe). Tabellen in `docs/der-weg.md`.
+- **Nicht jeder Leerraum unter dem Text ist ein Fehler.** Rund 60 px davon sind die Reserve, die
+  `100svh` frei lässt, sobald Chrome die Adressleiste einfährt — der Preis dafür, dass die
+  Aufteilung während der Fahrt nicht wandert. Mit `dvh` wäre der Leerraum weg und der Text würde
+  bei jedem Ein- und Ausfahren um rund 30 px wandern. Bewusste Wahl, keine Schlamperei.
+- **Zwei Verläufe an einer Naht müssen sich überlappen, nicht aneinanderstoßen** — sie gehören
+  verschiedenen Elementen, die sich unabhängig bewegen. Siehe „Die Schürze" in `docs/der-weg.md`.
+  An dieser einen Naht ist inzwischen dreimal etwas gerissen (V37, V39, V43/V44).
+- **`linger` nur mit `copyTiming: 'middle'`.** Diese Seite läuft auf `'arrival'`; dort bremst
+  `linger` im leeren Teil und lässt die Naht rasen (V38). Wer eine Szene betonen will, verlängert
+  `scroll` — nicht `linger`.
 - **Der Arbeitsordner einer Sitzung kann zwischen zwei Zügen ausgetauscht werden.** Am 29.07.
   verschwand `.claude/worktrees/website-about-me-image-30c238` mitten in der Sitzung; der Commit
   überlebte auf seinem Branch, aber der Pfad war weg. Bei „No such file or directory" auf einen
@@ -130,23 +99,27 @@
   (Vorbilder in `scripts/v18/`). Interne Links absolut (`/jgc-studio-website/…`), nie relativ.
 - **Vor jedem Zugende `node scripts/pruefe-seiten.mjs`** (steckt in `pruefen.txt`). Ohne Argument
   prüft er die Repo-Quellen, mit `_site` das Deploy-Ergebnis — die Sollwerte unterscheiden sich.
-- **Browser-Preview:** erst Viewport setzen, dann messen. Scroll-Ereignisse, rAF, Animationen UND
-  Transitions laufen im versteckten Pane nicht bzw. frieren am Startwert ein; Screenshots laufen
-  dort in einen Timeout. Details in der CLAUDE.md unter „Preview-Messungen".
+- **Browser-Preview:** erst Viewport setzen, **dann `resize` selbst auslösen** (sonst misst man die
+  Bahn des alten Fensters), dann messen. Scroll-Ereignisse, rAF, Animationen und Transitions laufen
+  im versteckten Pane nicht bzw. frieren am Startwert ein. Details in der CLAUDE.md unter
+  „Preview-Messungen" — die Transition-Falle hat am 30.07. zum zweiten Mal zugeschlagen.
 - **Scroll-Reise lokal ansehen:** `node scripts/der-weg/server.mjs`, dann
   `http://localhost:4330/der-weg/`. Der Server muss aus dem Worktree laufen, in dem gearbeitet
   wird — der Hauptordner steht auf `variant/09-cinematic-bausteine` und hat kein `der-weg/`.
   Port belegt: als Argument mitgeben (`… server.mjs 4331`).
 - Deploy = Push auf `main` (`main` in keinem Worktree → `git branch -f main HEAD`).
+- **Commit-Messages mit Sonderzeichen in eine Datei schreiben und `git commit -F` nutzen** —
+  ein PowerShell-Here-String mit Anführungszeichen darin ist am 30.07. auseinandergefallen.
 - Gabriels eigene Aufgaben liegen im **Hub, Karte „Website"** — nicht in einer Datei im Repo.
 
 ## Aufräumen — wartet auf Gabriels Freigabe
-6 Worktrees (5 unter „JGC Studio", 1 unter „Scroll World"). Ungemergt gegen `main` sind die
-neun `variant/*`-Branches (**müssen bleiben** — der Deploy baut sie, Löschen beschädigt die
-Galerie) und dieselben drei `claude/*`-Branches wie am 27.07., alle geprüft, keine verlorene
-Arbeit: `sharp-herschel-f7c5e1` (V19, Inhalt übernommen) · `website-variant-18-homepage-c16a97`
-(nur Altstand) · `world-scroll-mobile-expand-9b5250` (save-state-Doku, übernommen — braucht
-`-D`, weil nie gemergt). Die Arbeit dieser Session liegt vollständig in `main`.
+Unverändert gegenüber dem 29.07.: 6 Worktrees (5 unter „JGC Studio", 1 unter „Scroll World").
+Ungemergt gegen `main` sind die neun `variant/*`-Branches (**müssen bleiben** — der Deploy baut
+sie, Löschen beschädigt die Galerie) und dieselben drei `claude/*`-Branches, alle geprüft, keine
+verlorene Arbeit: `sharp-herschel-f7c5e1` (V19, Inhalt übernommen) ·
+`website-variant-18-homepage-c16a97` (nur Altstand) · `world-scroll-mobile-expand-9b5250`
+(save-state-Doku, übernommen — braucht `-D`, weil nie gemergt). Die Arbeit dieser Session liegt
+vollständig in `main`.
 
 ```
 git worktree remove ".claude/worktrees/<name>"
