@@ -2,6 +2,59 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-30 — Der Weg: Rückmeldung zur Runde davor (V42–V46)
+
+Fünf Punkte aus Gabriels Durchgang am PC und am Telefon, unmittelbar nach dem Deploy von V38–V41.
+Zwei davon zeigen auf dieselbe Stelle im Bau: den Abgang der Reise, der von **zwei** Verläufen
+getragen wird, die verschiedenen Elementen gehören.
+
+- **V43 — Am PC stand eine Kante quer über dem Übergang zu den Fragen.** Gabriels Beschreibung
+  traf den Bau genau: „einmal Farbverlauf von links, einmal von unten, dazwischen kein Verlauf."
+  Der Schleier der Textebene liegt breit links (58 vw, waagerecht) und endete hart an ihrer
+  Unterkante — genau dort fängt der Ausklang an, der aber von unten aufhellt.
+- **V44 — Am Telefon blitzte bei schnellem Wischen der Videohintergrund auf.** Dieselbe Naht,
+  eine Stufe subtiler: die Textebene wird per JavaScript nachgeführt, der Rest der Seite scrollt
+  nativ. Bei einem schnellen Wisch hinkt sie ein Einzelbild hinterher, und in diesem Bild klafft
+  die Lücke.
+- **Beides mit einer Maßnahme: die „Schürze".** Der Verlauf der Textebene reicht jetzt um die
+  Länge des Ausklang-Streifens unter ihre Unterkante hinaus (`--weg-schuerze`, dieselbe Zahl wie
+  dessen Höhe). Am PC überlappen sich die zwei Verläufe damit auf ganzer Streifenlänge statt
+  aneinanderzustoßen — nachgemessen an drei Scrollständen liegen beide Unterkanten auf demselben
+  Pixel. Am Telefon füllt sie die Lücke unabhängig vom Zeitverhalten: mit künstlichem Rückstand
+  geprüft, bis **260 px** Verzug bleibt gedeckt (die Schürze ist 290 px lang), ein Einzelbild
+  sind selbst bei hastigem Wischen weniger als 100. Zusätzlich läuft die Nachführung jetzt direkt
+  im Scroll-Lauscher statt in `requestAnimationFrame`, der Verzug entsteht also gar nicht erst —
+  möglich, weil dort nichts mehr gemessen wird (die Schwelle steht einmal je Layout).
+- **V42 — „Mehr dazu" stand mal hinter dem Text, mal unter den Schlagworten.** Die Regel von
+  V38–V41 wählte den Ort je nach Station; am Gerät las sich das als Zufall. Er hängt jetzt
+  **überall** hinten am letzten Satz des Fließtextes, die Schlagworte darunter. Kostet fast
+  nichts: die höchste Station hat gar keine Schlagworte.
+- **V45 — Die Wegmarkierung im Reitermenü ist am PC zurück.** V29 hatte sie entfernt, weil sie
+  dasselbe sagt wie die Punktleiste. Gabriels Urteil am Gerät: die Doppelung störte auf dem
+  **Telefon**, wo Menü und Punktleiste um knappen Platz konkurrieren — am PC ist das Menü ohnehin
+  eingeblendet und der Stand in Worten leichter zu lesen als in Punkten. Ab 861 px, derselben
+  Schwelle, an der die Engine das Menü überhaupt einblendet; unterhalb ändert sich nichts.
+  **Nicht** zurück kommt die alte Fläche in Szenenfarbe (2,6–3,3:1, Befund V24) — Weiß auf Tinte
+  misst nachgemessen 14,26:1.
+- **V46 — Textstreifen auf das Minimum: 355 px (niedrige Schirme 325).** Gabriel sah wieder zu
+  viel Leerraum. Die Messung gibt ihm halb recht und zeigt zugleich die Grenze: maßgeblich ist
+  die Schluss-Station mit 304 px (360 × 800 und 375 × 812), mehr als 355 geht nicht herunter,
+  ohne unter 18 px Luft zu fallen. Der Rest des Leerraums hat zwei andere Ursachen, die in
+  `docs/der-weg.md` stehen: die zwei Handlungsknöpfe, die auf keinem Telefon nebeneinander passen
+  (87 statt 40 px, offener Punkt V47), und die rund 60 px, die `100svh` unten frei lässt, sobald
+  Chrome die Adressleiste einfährt — der Preis für eine Aufteilung, die während der Fahrt nicht
+  wandert.
+- **Keine Änderung: die einfahrende Adressleiste.** Chrome auf Android macht das bei jeder Seite,
+  die länger als der Schirm ist; ein Schalter dafür existiert nicht. Verhindern ließe es sich nur,
+  indem die Seite selbst nicht mehr scrollt und ein Kasten in ihrem Inneren scrollt — genau darauf
+  baut die Scroll-Engine auf.
+
+Nachgemessen auf 320 × 568, 360 × 640, 360 × 800, 375 × 812, 393 × 852, 412 × 915 sowie 820 × 700
+und 1280 × 800: keine Station läuft aus ihrem Streifen (19–37 px Luft je Seite), der „Mehr"-Knopf
+sitzt überall auf der letzten Textzeile, die Wegmarkierung erscheint unter 861 px nicht,
+„Mehr dazu"-Feld öffnet und schließt mit Fokusrückgabe, keine Konsolenfehler,
+`pruefe-seiten.mjs` grün. Hauptseite V18 unberührt.
+
 ## 2026-07-30 — Der Weg: Gabriels zweiter Telefon-Durchgang (V38–V41)
 
 Vier Befunde von seinem Gerät, zwei davon Folgeschäden der Änderungen vom Vortag. Nur die

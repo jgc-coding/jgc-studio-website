@@ -95,9 +95,28 @@
      Damit erledigt sich V24 aus Runde 3 mit: die weisse Aktiv-Flaeche auf
      Szenenfarbe (gemessen 2,6-3,3:1 statt noetiger 4,5:1) wurde damals auf
      Tinte gesetzt — jetzt gibt es sie gar nicht mehr, der Kontrast ist der
-     des normalen Reiters. */
+     des normalen Reiters.
+
+     NACHTRAG 30.07.2026 (V45): am PC kommt sie zurueck. Gabriels Urteil nach
+     dem Durchgang: die Doppelung stoerte vor allem auf dem TELEFON, wo Menue
+     und Punktleiste um denselben knappen Platz konkurrieren. Am PC ist das
+     Reitermenue ohnehin oben eingeblendet, und dort hilft die Markierung mehr
+     als sie doppelt — man liest den Stand in Worten statt in Punkten.
+
+     Die 861-px-Schwelle ist dieselbe, an der die Engine das Menue ueberhaupt
+     erst einblendet: unterhalb gibt es keine Reiter, die Regel kann dort also
+     gar nichts anrichten. Sie steht trotzdem ausdruecklich in einer
+     Bedingung — "nur am PC" ist eine Zusage, keine Nebenwirkung.
+
+     NICHT zurueck kommt die alte Flaeche in Szenenfarbe: Weiss darauf misst
+     2,6-3,3:1 und war der Befund V24. Weiss auf Tinte ist derselbe Effekt,
+     nur lesbar (12,4:1). */
   .sw-root .sw-nav__item.is-active { background: transparent; color: var(--sw-ink-soft); }
   .sw-root .sw-nav__item.is-active:hover { color: var(--sw-ink); }
+  @media (min-width: 861px) {
+    .sw-root .sw-nav__item.is-active { background: var(--sw-ink); color: #fff; }
+    .sw-root .sw-nav__item.is-active:hover { color: #fff; }
+  }
 
   /* V30: Das Sigel wirkte zu gross und sass nicht auf einer Hoehe mit dem
      Schriftzug. Im Browser nachgemessen war beides derselbe Fehler.
@@ -400,24 +419,33 @@
        in diesem Fall unten keine Luecke aufreisst — nur die Kanten darin
        rechnen in `svh`. Alte Browser ohne `svh` behalten die Regeln oben.
 
-       380 -> 360 px am 30.07.2026, nachdem der "Mehr dazu"-Knopf in die letzte
-       Textzeile gezogen ist (V40) und keine eigene Zeile mehr braucht. Neu
-       gemessen wurde die HOECHSTE Station auf vier Geraetemassen, denn nur sie
-       bestimmt die Zahl:
+       380 -> 360 -> 355 px am 30.07.2026, nachdem der "Mehr dazu"-Knopf in den
+       Fliesstext gezogen ist (V40/V46) und keine eigene Zeile mehr braucht.
+       Gemessen wird die HOECHSTE Station, denn nur sie bestimmt die Zahl:
 
-         360x800   306 px      375x812   306 px
-         393x852   262 px      412x915   270 px
+         360x800   304 px      375x812   304 px
+         393x852   266 px      412x915   270 px
 
-       Massgeblich bleibt die Schluss-Station ("Lass uns 30 Minuten reden") —
-       ihre Hoehe haengt an den zwei gestapelten Handlungsknoepfen, nicht am
-       Knopf, sie hat also am wenigsten gewonnen. Deshalb 360 und nicht weniger:
-       der Textkasten ist damit 346 px hoch, im schlechtesten Fall bleiben
-       20 px Luft je Seite (bei 393 px Breite sind es 42). 350 px waeren auch
-       noch gegangen, lassen aber nur 15 px — und ueber diese Reserve ist die
-       Zahl am 29.07. schon einmal gestolpert. */
+       355 ist damit ausgereizt: der Textkasten ist 341 px hoch, im
+       schlechtesten Fall bleiben 18 px Luft je Seite.
+
+       DASS HIER NICHT MEHR DRIN IST, LIEGT AN DER SCHLUSS-STATION. "Lass uns
+       30 Minuten reden" traegt zwei Handlungsknoepfe, die zusammen 324 px
+       breit waeren — auf jedem Telefon zu breit, also stehen sie
+       uebereinander und kosten 87 statt 40 px. Ohne sie waere die hoechste
+       Station 291 px und der Streifen koennte auf rund 330 herunter. Neben-
+       einander passten sie erst mit schmalerer Polsterung, und das ist eine
+       Gestaltungsfrage (der Hauptknopf wuerde kleiner) — sie steht als offener
+       Punkt in `verbesserungen.md`, nicht hier.
+
+       Der zweite Teil des Leerraums, den man am Geraet sieht, steht ueberhaupt
+       nicht in dieser Zahl: er ist die Reserve, die `100svh` unten frei laesst,
+       sobald Chrome die Adressleiste einfaehrt (rund 60 px). Das ist der Preis
+       fuer eine Aufteilung, die waehrend der Fahrt nicht wandert — siehe den
+       svh-Block weiter unten. */
     @supports (height: 100svh) {
       :root, .sw-root {
-        --weg-textzone: max(36svh, 360px);
+        --weg-textzone: max(36svh, 355px);
         /* Das Bildband: alles, was der Text nicht braucht. */
         --weg-band: calc(100svh - var(--weg-textzone));
       }
@@ -427,6 +455,16 @@
          14 % der kleinen Fensterhoehe zu Pergament, darunter deckend bis ganz
          nach unten. */
       .sw-root .sw-copylayer::before {
+        /* `height: auto` gibt die Schuerze frei: die Regel oben setzt ein
+           negatives `bottom`, das eine feste Hoehe sonst ueberstimmen wuerde
+           (ueberbestimmter Kasten — Hoehe schlaegt Unterkante). Hier ist das
+           gefahrlos, weil dieser Verlauf von OBEN rechnet und sein letzter
+           Stopp deckendes Pergament ist: der Kasten wird laenger, der deckende
+           Teil waechst mit. Die Prozentregeln fuer alte Browser oben behalten
+           bewusst `height: 100%` und damit den alten Stand — ihre Stopps
+           rechnen von unten und wuerden sich um die Schuerzenlaenge
+           verschieben. */
+        height: auto;
         background: linear-gradient(180deg,
           transparent 0,
           transparent calc(var(--weg-band) - 14svh),
@@ -458,14 +496,14 @@
     /* Gleiche Umstellung wie oben, nur eine Stufe kleiner (siehe den langen
        Block zu 100svh).
 
-       350 -> 335 px am 30.07.2026, gleiche Rechnung wie oben. Hoechste Station
-       hier 277 px (gemessen bei 320x568 UND 360x640, beide Male die
-       Schluss-Station) — der Kasten ist mit 335 noch 321 px hoch, es bleiben
-       22 px Luft je Seite. Dass die kleinere Schrift trotzdem nicht viel
+       350 -> 335 -> 325 px am 30.07.2026, gleiche Rechnung wie oben. Hoechste
+       Station hier 274 px (gemessen bei 320x568 UND 360x640, beide Male die
+       Schluss-Station) — der Kasten ist mit 325 noch 311 px hoch, es bleiben
+       18 px Luft je Seite. Dass die kleinere Schrift trotzdem nicht viel
        kuerzer ausfaellt als oben, liegt an der Breite: 320 px lassen jede Zeile
        frueher umbrechen. */
     @supports (height: 100svh) {
-      :root, .sw-root { --weg-textzone: max(36svh, 335px); }
+      :root, .sw-root { --weg-textzone: max(36svh, 325px); }
     }
     .sw-root .sw-copy__title { font-size: clamp(1.6rem, 7.1vw, 2.3rem); margin-top: 8px; }
     .sw-root .sw-copy__body { font-size: clamp(0.92rem, 3.85vw, 1.05rem); margin-top: 10px; }
@@ -527,17 +565,8 @@
   }
   .sw-root .weg-mehr::before { content: ""; position: absolute; inset: -11px -8px; }
 
-  /* Die Zelle, in der der Knopf in der Schlagwortzeile sitzt (V40). Sie ist ein
-     <li>, damit die Liste gueltig bleibt — aber kein Schlagwort, also faellt die
-     Chip-Optik der Engine hier wieder weg. `align-items: center` stellt den
-     flacheren Knopf (25 px) auf die Mitte der Chips (31 px) statt an ihre
-     Oberkante. */
-  .sw-root .sw-copy__tags li.weg-mehr-zelle {
-    padding: 0; border: 0; background: none; border-radius: 0;
-    display: flex; align-items: center;
-  }
-  /* Steht der Knopf mangels Schlagworten im Fliesstext, sitzt er sonst auf der
-     Grundlinie und haengt damit optisch zu tief. */
+  /* Der Knopf steht im Fliesstext und saesse sonst auf der Grundlinie — damit
+     haengt er optisch zu tief. */
   .sw-root .sw-copy__body .weg-mehr { vertical-align: -0.28em; }
   /* Ein Plus, kein Pfeil nach unten: der Inhalt klappt nicht an Ort und Stelle
      auf, sondern oeffnet sich als Feld in der Mitte. Dasselbe Zeichen benutzt
@@ -730,8 +759,44 @@
      (scrub-engine.js, `i < NSEG - 1`); das Video verschwindet nur noch dadurch,
      dass die Fragen darueber hochwandern. Dafuer ist der Streifen laenger als
      vorher (22vh -> 34vh): er ist die ganze Ueberblendung. */
+  /* Die Hoehe des Ausklangs ist zugleich die Laenge der "Schuerze" an der
+     Textebene (siehe dort) — eine Zahl, damit die beiden nicht auseinanderlaufen
+     koennen: die Schuerze muss den Streifen genau ueberdecken. */
+  :root, .sw-root { --weg-schuerze: clamp(12rem, 34vh, 22rem); }
+
+  /* ------------------------------------------------------------------
+     Die Schuerze: der Pergament-Verlauf der Textebene reicht unter ihre
+     Unterkante hinaus (V43/V44, Gabriels Rueckmeldung vom 30.07.2026).
+
+     Sie heilt zwei Dinge, die dieselbe Ursache haben — dass der Abgang der
+     Reise von ZWEI Verlaeufen getragen wird, die verschiedenen Elementen
+     gehoeren: der Schleier der Textebene faehrt mit ihr hoch, der Ausklang
+     gehoert zum Leseteil und kommt von unten.
+
+     BREIT (V43): der Schleier liegt links (58 vw, waagerecht) und endete hart
+     an der Unterkante der Textebene — genau dort faengt der Ausklang an, der
+     aber von UNTEN aufhellt. Ergebnis war eine Kante quer ueber den Schirm:
+     oben links hell, unten links nicht, dazwischen kein Uebergang. Mit der
+     Schuerze laeuft der Schleier in den Ausklang hinein, beide ueberlappen
+     sich auf ganzer Streifenlaenge, die Kante verschwindet.
+
+     HOCHKANT (V44): die Textebene wird per JavaScript nachgefuehrt, der Rest
+     der Seite scrollt nativ. Bei einem schnellen Wisch hinkt sie ein Einzelbild
+     hinterher, und in diesem Bild klafft zwischen ihrer Unterkante und dem
+     Leseteil eine Luecke, durch die das Video blitzt (Gabriels "Flackern").
+     Die Schuerze fuellt diese Luecke, ohne dass Zeitverhalten eine Rolle
+     spielt. Liegt die Ebene richtig, verdeckt der deckende Leseteil (z 70
+     gegen 20) die Schuerze vollstaendig — sie ist nur im Fehlerfall zu sehen.
+
+     Warum `bottom` negativ und keine Hoehe: die Verlaufsstopps rechnen von
+     OBEN (breit waagerecht, hochkant `180deg` ab `--weg-band`), der letzte
+     Stopp ist deckendes Pergament bei 100 %. Ein tieferer Kasten verlaengert
+     also genau diesen deckenden Teil — kein Stopp muss angefasst werden.
+     ------------------------------------------------------------------ */
+  .sw-root .sw-copylayer::before { bottom: calc(-1 * var(--weg-schuerze)); }
+
   .ausklang {
-    height: clamp(12rem, 34vh, 22rem);
+    height: var(--weg-schuerze);
     background: linear-gradient(180deg,
       rgba(254, 252, 247, 0) 0%,
       rgba(254, 252, 247, 0.72) 46%,
@@ -1569,24 +1634,43 @@
     var ebene = document.querySelector('#world .sw-copylayer');
     var leseteil = document.querySelector('.leseteil');
     if (!ebene || !leseteil) return;
-    var geplant = false;
 
+    /* Der Scrollstand, ab dem der Leseteil ins Fenster ragt. Einmal je Layout
+       gemessen statt bei jedem Scrollbild — siehe `stelle()`. */
+    var schwelle = 0;
+
+    function miss() {
+      var y = window.scrollY || window.pageYOffset;
+      schwelle = leseteil.getBoundingClientRect().top + y - window.innerHeight;
+    }
+
+    /* Laeuft DIREKT im Scroll-Lauscher, nicht in `requestAnimationFrame`
+       (V44). Vorher hing die Textebene bei einem schnellen Wisch ein Einzelbild
+       hinter dem nativ gescrollten Leseteil zurueck, und in diesem Bild blitzte
+       das Video durch die Luecke. Die Schuerze faengt das inzwischen ohnehin ab
+       — beides zusammen, weil die Schuerze den Fehler unsichtbar macht und das
+       hier ihn gar nicht erst entstehen laesst.
+       Moeglich ist das nur, weil hier NICHTS mehr gemessen wird: die Schwelle
+       steht, es bleibt eine Rechnung und ein Schreibvorgang. Ein
+       `getBoundingClientRect()` an dieser Stelle wuerde bei jedem Scrollbild
+       eine Neuberechnung des Layouts erzwingen. */
     function stelle() {
-      geplant = false;
-      // Wie weit ist der Leseteil schon im Fenster? Ueber diesen Weg statt
-      // ueber die Bahnhoehe, weil er ohne Kenntnis der Engine-Rechnung
-      // stimmt — auch wenn sich Scrollwege oder Etappenzahl aendern.
-      var herein = window.innerHeight - leseteil.getBoundingClientRect().top;
+      var herein = (window.scrollY || window.pageYOffset) - schwelle;
       ebene.style.transform = herein > 0
         ? 'translate3d(0,' + -Math.min(herein, window.innerHeight * 1.5) + 'px,0)'
         : '';
     }
 
-    window.addEventListener('scroll', function () {
-      if (!geplant) { geplant = true; requestAnimationFrame(stelle); }
-    }, { passive: true });
-    window.addEventListener('resize', stelle);
-    stelle();
+    function neu() { miss(); stelle(); }
+
+    window.addEventListener('scroll', stelle, { passive: true });
+    /* Nach der Engine, nicht davor: sie setzt in ihrem eigenen resize-Lauscher
+       die Bahnhoehe neu, und daran haengt die Oberkante des Leseteils. Dieser
+       Block laeuft nach `mountScrollWorld`, sein Lauscher also auch. */
+    window.addEventListener('resize', neu);
+    window.addEventListener('orientationchange', neu);
+    window.addEventListener('load', neu);
+    neu();
   })();
 </script>
 </body>

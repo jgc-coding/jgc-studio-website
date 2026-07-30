@@ -98,6 +98,22 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
 DSGVO-Linie außerhalb der Reise.
 
+- [ ] **V47** (C) Die zwei Handlungsknöpfe der Schluss-Station bestimmen die Höhe des
+      **ganzen** Textstreifens — auf jeder Station der Reise
+      Beleg: „Erstgespräch anfragen" (190 px) und „Zur Stilprobe" (125 px) sind mit Lücke
+      324 px breit. Bei 320 px Schirmbreite stehen 284 zur Verfügung, bei 375 px sind es 338
+      gegen nötige 341 — sie passen auf **keinem** Telefon nebeneinander und stehen deshalb
+      übereinander: 87 statt 40 px. Damit ist die Schluss-Station mit 304 px die höchste und
+      legt `--weg-textzone` auf 355 fest (gemessen 30.07., `der-weg/index.html`).
+      Aufwand: S · Risiko: mittel (Gestaltung, nicht Technik)
+      Warum: Ohne diese eine Station wäre die höchste 291 px und der Streifen könnte auf rund
+      330 herunter — gut 25 px mehr Bild auf jeder der sieben Stationen. Nebeneinander passten
+      die Knöpfe erst mit schmalerer Polsterung, und da endet die Technik: 42 px sind die
+      Untergrenze für eine Fingerfläche, und „Erstgespräch anfragen" ist der wichtigste Knopf
+      der Seite — er soll nicht kleiner aussehen als der Nebenweg. **Gabriels Entscheidung.**
+      Alternativen: (a) so lassen, (b) Polsterung schmaler und nebeneinander, (c) „Zur
+      Stilprobe" auf der Schluss-Station als Textlink statt als Knopf.
+
 - [ ] **V34** (A) Pauschales „DSGVO-konform" steht weiter auf der Lesefassung V18
       Beleg: `inhalt/lumen-inhalt.md` Zeilen 10, 34, 139, 197, 366, 383 — Kurzbeschreibung,
       Hero-Zeile, Bausteine, Fußzeile tragen dieselbe unbedingte Zusage, die in der Reise am
@@ -197,6 +213,24 @@ DSGVO-Linie außerhalb der Reise.
 *(noch keine Einträge — Gabriel hat bisher keinen Punkt ausdrücklich abgelehnt)*
 
 ## Erledigt
+
+### Rückmeldung zur Runde davor — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
+
+- **V42** (C) „Mehr dazu" stand mal hinter dem Text, mal unter den Schlagworten — je nach
+  Station. Hängt jetzt überall hinten am letzten Satz des Fließtextes. **Lehre:** „spart
+  Platz" schlägt nicht „steht immer an derselben Stelle" — ein Bedienelement, dessen Ort von
+  den Daten abhängt, wirkt beliebig, auch wenn jede Platzierung für sich begründet ist.
+- **V43** (B) Am PC stand eine harte Kante quer über dem Übergang zu den Fragen: der Schleier
+  der Textebene (von links) endete genau dort, wo der Ausklang (von unten) anfängt. Der
+  Verlauf reicht jetzt um die Länge des Ausklangs unter die Textebene hinaus („Schürze").
+- **V44** (B) Am Telefon blitzte bei schnellem Wischen der Videohintergrund auf — die per
+  JavaScript nachgeführte Textebene hinkte ein Einzelbild hinter dem nativ gescrollten
+  Leseteil her. Dieselbe Schürze deckt das ab (geprüft bis 260 px Verzug), zusätzlich läuft
+  die Nachführung jetzt direkt im Scroll-Lauscher statt in `requestAnimationFrame`.
+- **V45** (C) Wegmarkierung im Reitermenü am PC zurück (ab 861 px), am Telefon unverändert
+  ohne. Weiß auf Tinte, 14,26:1 — nicht die alte Fläche in Szenenfarbe (V24).
+- **V46** (C) Textstreifen auf das Minimum: 355 px, niedrige Schirme 325. Weiter geht es
+  nicht, ohne unter 18 px Luft zu fallen — siehe V47 unter „Offen".
 
 ### Gabriels zweiter Telefon-Durchgang — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
 

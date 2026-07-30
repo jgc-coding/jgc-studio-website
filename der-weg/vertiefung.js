@@ -183,24 +183,29 @@ function mountVertiefung(optionen) {
 
   // ---- Knopf an jede Station haengen ----
   //
-  // Er reitet auf der LETZTEN Zeile der Station, nie auf einer eigenen (V40,
-  // Gabriels Telefon-Durchgang vom 30.07.2026).
+  // Er haengt IMMER hinten an den letzten Satz des Fliesstextes — bei jeder
+  // Station gleich (V42, Gabriels Rueckmeldung vom 30.07.2026, zweite Runde).
   //
-  // Die Vorgeschichte in zwei Stationen: bis zum 29.07. sass er in einer
-  // Kopfzeile rechts neben dem Kleintext — dort lag er am Geraet auf der
-  // Wegpunkt-Leiste am rechten Rand, zwei Bedienelemente an derselben Stelle.
-  // Danach stand er unter dem Text, frei, aber auf einer eigenen Zeile: rund
-  // 39 px, die ueber die Mindesthoehe des Textstreifens direkt vom Bild abgehen.
+  // Die Vorgeschichte in vier Stationen, weil an dieser Kleinigkeit viermal
+  // etwas hing:
   //
-  // Jetzt beides zugleich. Gemessen bei 393x852: der Knopf ist 107 px breit, die
-  // letzte Schlagwortzeile endet bei x=216, der Textrand liegt bei 374 — er
-  // passt also mit 51 px Rest daneben. Die Wegpunkt-Leiste (x 353-387) ist kein
-  // Thema mehr: sie liegt auf halber Schirmhoehe, die Schlagwortzeile im
-  // Textstreifen darunter.
+  //   1. Bis 29.07. in einer Kopfzeile rechts neben dem Stations-Kleintext.
+  //      Kostete nur rund 10 px, lag am Geraet aber genau auf der
+  //      Wegpunkt-Leiste: zwei Bedienelemente an derselben Stelle (V36).
+  //   2. Dann unter dem Text, frei und in Leserichtung — dafuer auf einer
+  //      eigenen Zeile, rund 39 px, die ueber die Mindesthoehe des
+  //      Textstreifens direkt vom Bild abgingen.
+  //   3. Am 30.07. auf die letzte Zeile gezogen, aber je nach Station an
+  //      verschiedene Orte: mit Schlagworten in deren Zeile, ohne sie an den
+  //      Text (V40). Am Geraet las sich das als Zufall — derselbe Knopf stand
+  //      mal hinter dem Text, mal unter den Schlagworten.
+  //   4. Jetzt einheitlich hinter dem Text. Die Schlagworte stehen darunter,
+  //      der Knopf immer an derselben Stelle relativ zum Satz, den er vertieft.
   //
-  // Zwei Stationen haben keine Schlagworte ("KI ist ein Werkzeug", "Lass uns
-  // 30 Minuten reden"). Dort haengt er hinten an den letzten Satz — dieselbe
-  // Regel, nur eine Zeile hoeher. Fehlt beides, bleibt es beim alten Weg.
+  // Er endet damit weiterhin vor den Handlungsknoepfen — Fliesstext steht ueber
+  // ihnen. Das ist Absicht: die Schluss-Station endet mit "Erstgespraech
+  // anfragen". Was jemand als Letztes liest, soll der Weg nach vorn sein und
+  // nicht das Angebot, noch mehr zu lesen.
   //
   // Das Zeichen ist ein PLUS, kein Pfeil nach unten. Ein Pfeil nach unten
   // verspricht Aufklappen an Ort und Stelle; hier oeffnet sich ein Feld in der
@@ -222,22 +227,8 @@ function mountVertiefung(optionen) {
     knopf.addEventListener('click', function () { oeffne(i, knopf); });
     // Bewusst KEIN pointer-events:auto: der Knopf erbt damit den Zustand seiner
     // Station und ist nur anklickbar, solange die auch sichtbar ist.
-    //
-    // Beide Wege enden VOR den Handlungsknoepfen — Schlagwortliste und
-    // Fliesstext stehen ohnehin darueber. Das ist Absicht: die Schluss-Station
-    // endet mit "Erstgespraech anfragen". Was jemand als Letztes liest, soll der
-    // Weg nach vorn sein und nicht das Angebot, noch mehr zu lesen.
-    var tags = kopie.querySelector('.sw-copy__tags');
     var text = kopie.querySelector('.sw-copy__body');
-    if (tags) {
-      // Eine <ul> darf als Kind nur <li> haben, deshalb die Zelle. Sie ist kein
-      // Schlagwort und traegt darum eine eigene Klasse, die die Chip-Optik
-      // (Flaeche, Rahmen, Polsterung) wieder abraeumt — siehe index.html.
-      var zelle = document.createElement('li');
-      zelle.className = 'weg-mehr-zelle';
-      zelle.appendChild(knopf);
-      tags.appendChild(zelle);
-    } else if (text) {
+    if (text) {
       // Ein gewoehnliches Leerzeichen, kein geschuetztes: der Knopf soll auf die
       // naechste Zeile rutschen duerfen, wenn der letzte Satz die Zeile fuellt.
       text.appendChild(document.createTextNode(' '));

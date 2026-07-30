@@ -143,7 +143,7 @@ Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-H
 sich daraus ab.
 
 ```
---weg-textzone: max(36svh, 360px);   /* niedrige Schirme (unter 780 px Hoehe): 335px */
+--weg-textzone: max(36svh, 355px);   /* niedrige Schirme (unter 780 px Hoehe): 325px */
 ```
 
 **Seit 29.07.2026 in `svh` statt `%`, und das ist keine Kosmetik.** Chrome auf Android misst feste
@@ -164,47 +164,45 @@ einen viel größeren Anteil als auf 850. Ein fester Prozentwert müsste sich am
 orientieren und hielte das Bild überall sonst unnötig klein. Eine Staffelung in Stufen hatte
 denselben Fehler in klein: Gabriels Gerät fiel in die unterste Stufe und sah keine Änderung.
 
-Gemessen am 30.07.2026, nachdem der „Mehr"-Knopf in die letzte Textzeile gezogen ist (V40) und
-keine eigene Zeile mehr braucht — darum 360 statt 380 px. Die Schirmhöhe ist hier die
-**sichtbare** Höhe (`svh`), also die mit ausgefahrener Adressleiste — das ist der Fall, den man
-auf dem Telefon zuerst sieht:
+**Die Zahl ist seit 30.07.2026 ausgereizt** (V46, 380 → 360 → 355 px). Maßgeblich ist die
+**Schluss-Station** („Lass uns 30 Minuten reden"), und zwar wegen ihrer zwei Handlungsknöpfe, nicht
+wegen des „Mehr"-Knopfs. Gemessen über alle sieben Stationen:
 
-| Schirm (sichtbar) | Streifen | Band | Szene sichtbar |
-|---|---|---|---|
-| 393 × 852 | 360 px | 59 % | 60 % der Breite |
-| 360 × 640 | 335 px (niedrige Stufe) | 49 % | 89 % der Breite |
-| 320 × 568 | 335 px (niedrige Stufe) | 42 % | 100 % (dafür 3 % oben/unten beschnitten) |
+| Schirm | höchste Station | Textkasten | Luft je Seite | Band |
+|---|---|---|---|---|
+| 360 × 800 | 304 px | 341 px | 19 px | 56 % |
+| 375 × 812 | 304 px | 341 px | 19 px | 56 % |
+| 393 × 852 | 266 px | 341 px | 37 px | 58 % |
+| 412 × 915 | 273 px | 341 px | 34 px | 61 % |
+| 360 × 640 | 274 px | 311 px | 19 px | 49 % |
+| 320 × 568 | 274 px | 311 px | 19 px | 43 % |
 
 Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — ein flacheres Band
 liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wird dabei nur
-kleiner dargestellt, nicht knapper. Der Schritt von 380 auf 360 px geht deshalb in beide
-Richtungen: das Band wächst von 55 auf 59 % des Schirms, die sichtbare Breite der Szene sinkt
-von 62 auf 60 % (rund 23 der 1112 Quellpixel). Bewusst so entschieden — die Szene gewinnt
-sichtbar an Fläche, und 2 Prozentpunkte Beschnitt an den Rändern der Papierwelt fallen nicht auf.
-Wer es umgekehrt will, dreht die eine Zahl zurück.
+kleiner dargestellt, nicht knapper. Jede Senkung der Zahl geht deshalb in beide Richtungen: das
+Band wächst am Schirm, die sichtbare Breite der Szene sinkt (393 × 852: von 62 % bei 380 px auf
+60 % bei 355 px, rund 23 der 1112 Quellpixel). Bewusst so entschieden.
 
-Maßgeblich für die Mindesthöhe ist die **Schluss-Station** („Lass uns 30 Minuten reden"): ihre
-Höhe hängt an den zwei gestapelten Handlungsknöpfen, nicht am „Mehr"-Knopf — sie hat durch V40
-also am wenigsten gewonnen und bestimmt seitdem die Zahl. Gemessen am 30.07.2026 über alle
-sieben Stationen:
+**Wer den Textstreifen wirklich kleiner haben will, muss an die zwei Handlungsknöpfe.** Sie sind
+zusammen 324 px breit und passen auf keinem Telefon nebeneinander (bei 320 px Breite stehen 284
+zur Verfügung), stehen also übereinander und kosten 87 statt 40 px. Ohne sie wäre die höchste
+Station 291 px und der Streifen könnte auf rund 330 herunter. Nebeneinander passten sie erst mit
+schmalerer Polsterung — 42 px sind aber schon die Untergrenze für eine Fingerfläche, und der
+Hauptknopf würde optisch kleiner. Das ist eine Gestaltungsfrage und steht als offener Punkt in
+`verbesserungen.md`, nicht hier.
 
-| Schirm | höchste Station | Textkasten | Luft je Seite |
-|---|---|---|---|
-| 360 × 800 | 306 px | 346 px | 20 px |
-| 375 × 812 | 306 px | 346 px | 20 px |
-| 393 × 852 | 262 px | 346 px | 42 px |
-| 412 × 915 | 270 px | 346 px | 38 px |
-| 360 × 640 | 277 px | 321 px | 22 px |
-| 320 × 568 | 277 px | 321 px | 22 px |
-
-350 px wären auch noch gegangen, lassen aber nur 15 px Luft — und über genau diese Reserve ist
-die Zahl am 29.07. schon einmal gestolpert. Dass die kleinere Schriftstufe unten kaum kürzer
-ausfällt, liegt an der Breite: 320 px lassen jede Zeile früher umbrechen.
+**Ein zweiter Teil des Leerraums steht überhaupt nicht in dieser Zahl.** Was am Gerät unter dem
+Text frei bleibt, ist zum guten Teil die Reserve, die `100svh` unten stehen lässt, sobald Chrome
+die Adressleiste einfährt (rund 60 px). Das ist der Preis für eine Aufteilung, die während der
+Fahrt nicht wandert — siehe unten. Ohne diese Reserve müsste der Text an der jeweils aktuellen
+Fensterhöhe hängen (`dvh`) und würde bei jedem Ein- und Ausfahren der Leiste um rund 30 px
+wandern. Umgekehrt ist es also kein Fehler, sondern eine Wahl: **ruhige Aufteilung gegen
+Leerraum.**
 
 Passt eine Station nicht in den Streifen, ragt sie oben und unten je zur Hälfte heraus; bis
 ~3 px verschwindet das im deckenden Teil des Verlaufs. Nach jeder Änderung an Zahl, Schriftgröße
 oder Stationstext also die längste Station nachmessen. Ein weiterer Hebel steht daneben: unter
-`max-height: 780px` ist die Schrift eine Stufe kleiner (dort reichen 335 px), unter 393 px Breite
+`max-height: 780px` ist die Schrift eine Stufe kleiner (dort reichen 325 px), unter 393 px Breite
 zusätzlich der Stations-Kleintext.
 
 ## Der Ausklang
@@ -247,6 +245,40 @@ oberen Rand schrumpft von 1142 auf 852 px, also von 1,34 auf genau einen Bildsch
 Breit bleibt der Streifen: dort füllt das Video den ganzen Schirm, der Verlauf der Textebene
 deckt nur die linken 58 % ab, und der Streifen ist der einzige Abgang, den die Szene hat.
 
+### Die Schürze (V43/V44)
+
+Der Abgang wird von **zwei** Verläufen getragen, die verschiedenen Elementen gehören: der
+Schleier der Textebene fährt mit ihr hoch, der Ausklang gehört zum Leseteil und kommt von unten.
+Genau an dieser Naht sind am 30.07.2026 zwei Befunde entstanden, die auf denselben Bau zeigen.
+Die Antwort auf beide ist eine **Schürze**: der Verlauf der Textebene reicht seitdem um die Länge
+des Ausklang-Streifens **unter** ihre Unterkante hinaus (`--weg-schuerze`, dieselbe Zahl wie
+dessen Höhe — sonst können die beiden auseinanderlaufen).
+
+- **Breit (V43): eine Kante quer über den Schirm.** Der Schleier liegt links (58 vw, waagerecht)
+  und endete hart an der Unterkante der Textebene — dort fängt der Ausklang an, der aber von
+  UNTEN aufhellt. Ergebnis: oben links hell, unten links nicht, dazwischen kein Übergang.
+  Gabriels Formulierung traf es genau: „einmal Farbverlauf von links, einmal von unten,
+  dazwischen kein Verlauf." Mit der Schürze überlappen sich beide auf der ganzen Streifenlänge.
+  Nachgemessen an drei Scrollständen: Unterkante des Schleiers und Unterkante des Ausklangs
+  liegen auf demselben Pixel.
+- **Hochkant (V44): ein Flackern bei schnellem Wischen.** Die Textebene wird per JavaScript
+  nachgeführt, der Rest der Seite scrollt nativ — bei einem schnellen Wisch hinkt sie ein
+  Einzelbild hinterher, und in diesem Bild klafft zwischen ihrer Unterkante und dem Leseteil
+  eine Lücke, durch die das Video blitzt. Die Schürze füllt diese Lücke, ohne dass Zeitverhalten
+  eine Rolle spielt. Nachgemessen mit künstlichem Rückstand: bis **260 px** Verzug bleibt die
+  Lücke gedeckt (die Schürze ist 290 px lang); ein Einzelbild sind selbst bei hastigem Wischen
+  weniger als 100.
+
+Dazu läuft die Nachführung seit V44 **direkt im Scroll-Lauscher** statt in
+`requestAnimationFrame` — der Fehler entsteht damit gar nicht erst. Möglich ist das nur, weil
+dort nichts mehr gemessen wird: die Schwelle, ab der der Leseteil ins Fenster ragt, steht einmal
+je Layout, es bleiben eine Rechnung und ein Schreibvorgang. Ein `getBoundingClientRect()` an
+dieser Stelle würde bei jedem Scrollbild eine Neuberechnung des Layouts erzwingen.
+
+**Merksatz:** Wenn zwei Verläufe denselben Übergang tragen und verschiedenen Elementen gehören,
+müssen sie sich überlappen — aneinanderstoßen reicht nie, weil ihre Elemente sich unabhängig
+voneinander bewegen.
+
 Alles davon steht in `der-weg/index.html`, nicht in der Engine — siehe nächster Abschnitt.
 Nachmessen im Browser statt nach Augenmaß: die Fallen dabei stehen in der Projekt-CLAUDE.md
 unter „Preview-Messungen".
@@ -258,26 +290,27 @@ zugehörigen Abschnitts der Hauptseite als Feld in der Bildschirmmitte öffnet. 
 Schluss-Station steht er **vor** den Handlungsknöpfen: was jemand als Letztes liest, soll
 „Erstgespräch anfragen" sein und nicht das Angebot, noch mehr zu lesen.
 
-**Wo er sitzt: auf der letzten Zeile des Stationstextes, nie auf einer eigenen** (seit
-30.07.2026, V40). Hat die Station Schlagworte, hängt er als letztes Element in deren Zeile — die
-Liste bricht ohnehin um, und rechts daneben war Platz. Hat sie keine („KI ist ein Werkzeug",
-„Lass uns 30 Minuten reden"), hängt er hinten an den letzten Satz des Fließtextes. Beides endet
-vor den Handlungsknöpfen, die Reihenfolge oben bleibt also gewahrt. Nachgemessen auf sechs
-Gerätemaßen von 320 bis 412 px Breite: bei allen sieben Stationen sitzt er auf der letzten Zeile,
-keine bricht um.
+**Wo er sitzt: immer hinten am letzten Satz des Fließtextes** (seit 30.07.2026, V42) — bei jeder
+Station gleich, unabhängig davon, ob sie Schlagworte hat. Die Schlagworte stehen darunter, die
+Handlungsknöpfe darunter. Nachgemessen auf sechs Gerätemaßen von 320 bis 412 px Breite: bei allen
+sieben Stationen sitzt er auf der letzten Textzeile, keine bricht um.
 
-**Die Vorgeschichte in drei Stationen**, weil an dieser Kleinigkeit dreimal etwas hing:
+**Die Vorgeschichte in vier Stationen**, weil an dieser Kleinigkeit viermal etwas hing:
 
 1. Bis 29.07. in einer Kopfzeile rechts neben dem Stations-Kleintext — kostete nur rund 10 px,
    lag am Gerät aber genau auf der Wegpunkt-Leiste am rechten Rand: zwei Bedienelemente an
-   derselben Stelle, eines davon halb verdeckt.
+   derselben Stelle, eines davon halb verdeckt (V36).
 2. Dann unter dem Text, frei und in Leserichtung — dafür auf einer eigenen Zeile, und weil die
    längste Station die Mindesthöhe des Textstreifens bestimmt, kostete das rund 39 px, die
    direkt vom Bild abgingen (380 statt 320 px Streifen).
-3. Seit 30.07. auf der letzten Textzeile: beides zugleich. Gemessen bei 393 × 852 ist der Knopf
-   107 px breit, die letzte Schlagwortzeile endet bei x = 216 und der Textrand liegt bei 374 — er
-   passt mit 51 px Rest daneben. Die Wegpunkt-Leiste (x 353–387) ist kein Thema mehr: sie liegt
-   auf halber Schirmhöhe, die Schlagwortzeile im Textstreifen darunter.
+3. Am 30.07. auf die letzte Zeile gezogen, aber je nach Station an einen anderen Ort: mit
+   Schlagworten in deren Zeile, ohne sie an den Text (V40). Am Gerät las sich das als Zufall —
+   derselbe Knopf stand mal hinter dem Satz, mal unter den Schlagworten. **Die Lehre daraus:
+   „spart Platz" schlägt nicht „steht immer an derselben Stelle".** Ein Bedienelement, dessen
+   Ort von den Daten der Station abhängt, wirkt beliebig, auch wenn jede einzelne Platzierung
+   für sich begründet ist.
+4. Seither einheitlich hinter dem Text (V42). Kostet gegenüber Stufe 3 fast nichts: die höchste
+   Station wuchs von 304 auf 304 px (375 × 812) — sie hat gar keine Schlagworte.
 
 Ein Pfeil nach unten wäre außerdem gelogen: der Inhalt klappt nicht an Ort und Stelle auf,
 sondern öffnet ein Feld in der Mitte. Das Plus ist dasselbe Zeichen, das die häufigen Fragen
@@ -421,24 +454,34 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
   5. Der Kontrast des aktiven Nav-Reiters: Weiß auf Szenenakzent misst 2,6–3,3:1 —
      diese Seite überschreibt ihn auf Tinte (V24); im Skill sollte der Default selbst
      dunkel genug sein. **Nachtrag 29.07.:** Diese Seite hat die Aktiv-Markierung des
-     Reiters ganz entfernt (V29), weil die Punktleiste dasselbe schon sagt. Für den Skill
-     ist das eine Geschmacksfrage, der Kontrast-Default bleibt trotzdem zu korrigieren.
-  6. **Die letzte Szene stehen lassen** (V37) — der Fehler trifft jede Scroll-Welt, die unter
+     Reiters ganz entfernt (V29), weil die Punktleiste dasselbe schon sagt.
+     **Nachtrag 30.07. (V45):** und am PC wieder eingeschaltet, ab 861 px — derselben
+     Schwelle, an der die Engine das Reitermenü überhaupt einblendet. Die Doppelung
+     störte auf dem TELEFON, wo Menü und Punktleiste um knappen Platz konkurrieren; am
+     PC ist das Menü ohnehin da und der Stand in Worten leichter zu lesen als in Punkten.
+     Weiß auf Tinte misst nachgemessen 14,26:1. Für den Skill bleibt beides gültig: der
+     Kontrast-Default ist zu korrigieren, und ob markiert wird, ist eine Größenfrage.
+  6. **Zwei Verläufe an einer Naht müssen sich überlappen** (V43) — der Skill lässt den
+     Schleier der Textebene an ihrer Unterkante enden und den Ausklang genau dort
+     anfangen. Solange die Textebene steht, fällt das nicht auf; sobald sie sich bewegt,
+     steht eine harte Kante quer über den Schirm. Abhilfe ist ein negatives `bottom` am
+     Verlauf in Länge des Ausklangs. Trifft jede Scroll-Welt mit einem Leseteil darunter.
+  7. **Die letzte Szene stehen lassen** (V37) — der Fehler trifft jede Scroll-Welt, die unter
      der Reise noch etwas anderes hat: die Schluss-Szene blendet aus, bevor der nachfolgende
      Inhalt da ist, und dazwischen steht eine leere Seite. Einzeiler in der Deckkraft-Schleife.
-  7. **Die Aufteilung hochkant an `svh` binden** (V35) — feste Elemente rechnen in Chrome auf
+  8. **Die Aufteilung hochkant an `svh` binden** (V35) — feste Elemente rechnen in Chrome auf
      Android am grossen Fenster; alles, was unten am Rand haengt, steht mit ausgefahrener
      Adressleiste unter dem sichtbaren Bereich. Betrifft jede Scroll-Welt mit einem
      Textstreifen am unteren Rand.
-  8. **`linger` gegen `copyTiming` absichern** (V38) — die Bremse in der Etappenmitte ist für
+  9. **`linger` gegen `copyTiming` absichern** (V38) — die Bremse in der Etappenmitte ist für
      `'middle'` gebaut, wirkt aber auch unter `'arrival'`, wo sie genau falsch sitzt. Der Skill
      sollte `linger` unter `'arrival'` entweder ans Etappenende verlegen oder beim Mounten
      warnen. Trifft jede Scroll-Welt der Architektur A, die eine Szene betonen will.
-  9. **Die Fortschrittsleiste am oberen Rand** (V41) — eine leere 3-px-Rinne über die volle
+  10. **Die Fortschrittsleiste am oberen Rand** (V41) — eine leere 3-px-Rinne über die volle
      Breite ist beim Öffnen von einem Ladebalken nicht zu unterscheiden und liest sich als
      „lädt nicht". Diese Seite blendet sie aus (die Punktleiste zeigt den Stand). Für den Skill
      wäre die Rinne wenigstens erst ab dem ersten Scrollen einzublenden.
-  10. **Ein echter Engine-Fehler bei jedem nicht-quadratischen Logo** (gefunden über V30):
+  11. **Ein echter Engine-Fehler bei jedem nicht-quadratischen Logo** (gefunden über V30):
      `.sw-brand__logo` bekommt `width:100%; height:100%` in einem Kasten, der ein Raster mit
      automatisch hoher Zeile ist. Gegen eine solche Zeile kann der Browser keine Prozenthöhe
      auflösen — er nimmt die natürliche Form des Bildes. Ein hochkantes Sigel (hier 504×747)

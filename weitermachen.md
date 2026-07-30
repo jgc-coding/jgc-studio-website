@@ -1,6 +1,21 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (30.07.2026 — zweiter Telefon-Durchgang, V38–V41, live)
+## Stand (30.07.2026, abends — Rückmeldung zur Runde davor, V42–V46, live)
+- Fünf Punkte von Gabriel, PC und Telefon, unmittelbar nach dem Deploy von V38–V41.
+- **V43/V44 zeigen auf denselben Bau:** der Abgang der Reise wird von ZWEI Verläufen getragen,
+  die verschiedenen Elementen gehören — der Schleier der Textebene fährt mit ihr hoch, der
+  Ausklang gehört zum Leseteil. Am PC gab das eine harte Kante quer über den Schirm, am
+  Telefon ein Aufblitzen des Videos beim schnellen Wischen. Beides geheilt durch die
+  **Schürze**: der Verlauf reicht jetzt um die Länge des Ausklangs unter die Textebene hinaus.
+  Geprüft bis 260 px künstlichem Verzug. Dazu läuft die Nachführung direkt im Scroll-Lauscher.
+- **V42** „Mehr dazu" hängt jetzt überall hinten am letzten Satz, nicht mehr mal so, mal so.
+- **V45** Wegmarkierung im Reitermenü am PC zurück (ab 861 px), am Telefon weiterhin ohne.
+- **V46** Textstreifen auf 355 px (niedrige Schirme 325) — das Minimum, mehr geht nicht.
+- **Live**, Deploy grün. Hauptseite V18 unberührt, Reise weiter auf `noindex`.
+- Messwerte: CHANGELOG-Eintrag vom 30.07. (V42–V46), `docs/der-weg.md` (Abschnitt
+  „Die Schürze", Streifen-Tabelle, „Mehr dazu"), Register: `verbesserungen.md`.
+
+## Vorheriger Stand (30.07.2026, mittags — zweiter Telefon-Durchgang, V38–V41, live)
 - Vier Befunde von Gabriels Gerät, **zwei davon Folgeschäden des Vortags** — beide entstanden
   dadurch, dass eine Änderung eine Annahme aufhob, auf der eine ältere Regel stand:
   - **V38** Die Fahrt wirkte zäh. `linger` bremst die Kamera in der *Etappenmitte*, der Text
@@ -42,10 +57,10 @@
   drehen: die Punktleiste führt (statt der Reiter), und der Chip heißt „Deine Daten
   DSGVO-konform". Liegt als Frage im Hub.
 - ~~Offene Abwägung aus V36 (Knopf kostet eine Zeile Bildhöhe)~~ — **erledigt am 30.07. mit
-  V40:** der Knopf sitzt auf der letzten Textzeile, der Streifen ist von 380 auf 360 px zurück,
-  das Band von 55 auf 59 % gewachsen. Neue kleine Abwägung an derselben Stelle: das höhere Band
-  beschneidet die 4:3-Quelle seitlich stärker (60 statt 62 % sichtbare Breite) — eine Zahl in
-  `der-weg/index.html`, falls Gabriel es umgekehrt will.
+  V40/V42/V46:** der Knopf steht im Fließtext, der Streifen ist von 380 auf **355 px** herunter
+  (niedrige Schirme 325). Zwei Abwägungen bleiben an derselben Stelle: das höhere Band
+  beschneidet die 4:3-Quelle seitlich etwas stärker (60 statt 62 % sichtbare Breite), und
+  weiter herunter geht es nur über die zwei Handlungsknöpfe der Schluss-Station — **V47**.
 - **V34 offen:** die neue DSGVO-Sprachregelung fehlt in der Lesefassung V18, auf `stilprobe/`
   und der Datenschutzseite. Hängt an der Hub-Frage, ob die Lesefassung überhaupt bleibt.
 - **Formular und Badge der Stilprobe laufen weiter auf Fallbacks** — `senden.php` und
@@ -91,10 +106,18 @@
 
 ## Stolperfallen (sofort wichtig)
 - **Der Bildanteil hängt an genau einer Zahl:** `--weg-textzone` in `der-weg/index.html`, seit
-  30.07. `max(36svh, 360px)` (Schirme unter 780 px Höhe: 335 px). Nach jeder Änderung an Schrift
-  oder Stationstext die längste Station nachmessen — das ist jetzt die Schluss-Station „Lass uns
-  30 Minuten reden" (306 px bei 360×800 und 375×812, 277 px auf der niedrigen Stufe), weil ihre
-  Höhe an den zwei gestapelten Handlungsknöpfen hängt. Tabellen in `docs/der-weg.md`.
+  30.07. `max(36svh, 355px)` (Schirme unter 780 px Höhe: 325 px) — **ausgereizt**, es bleiben
+  19 px Luft. Nach jeder Änderung an Schrift oder Stationstext die längste Station nachmessen —
+  das ist die Schluss-Station „Lass uns 30 Minuten reden" (304 px bei 360×800 und 375×812,
+  274 px auf der niedrigen Stufe), weil ihre Höhe an den zwei gestapelten Handlungsknöpfen
+  hängt (offener Punkt V47). Tabellen in `docs/der-weg.md`.
+- **Nicht jeder Leerraum unter dem Text ist ein Fehler.** Rund 60 px davon sind die Reserve,
+  die `100svh` frei lässt, sobald Chrome die Adressleiste einfährt — der Preis dafür, dass die
+  Aufteilung während der Fahrt nicht wandert. Mit `dvh` wäre der Leerraum weg und der Text
+  würde bei jedem Ein- und Ausfahren um rund 30 px wandern. Bewusste Wahl, keine Schlamperei.
+- **Zwei Verläufe an einer Naht müssen sich überlappen, nicht aneinanderstoßen.** Sie gehören
+  verschiedenen Elementen, die sich unabhängig bewegen — siehe „Die Schürze" in
+  `docs/der-weg.md` (V43/V44). An dieser Naht ist inzwischen dreimal etwas gerissen.
 - **`linger` nur mit `copyTiming: 'middle'`.** Die Bremse in der Etappenmitte war für die
   Textführung 'middle' gebaut; diese Seite läuft auf 'arrival' (Text kommt am Etappenende), dort
   bremst sie im leeren Teil und lässt die Naht rasen. Deshalb steht nirgends mehr ein `linger`
