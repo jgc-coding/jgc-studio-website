@@ -1,6 +1,25 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (29.07.2026 — Gabriels PC- und Telefon-Durchgang, acht Befunde, alles live)
+## Stand (30.07.2026 — zweiter Telefon-Durchgang, V38–V41, live)
+- Vier Befunde von Gabriels Gerät, **zwei davon Folgeschäden des Vortags** — beide entstanden
+  dadurch, dass eine Änderung eine Annahme aufhob, auf der eine ältere Regel stand:
+  - **V38** Die Fahrt wirkte zäh. `linger` bremst die Kamera in der *Etappenmitte*, der Text
+    kommt hier aber erst am *Ende* (`copyTiming: 'arrival'`). Bremse im leeren Teil, Rasen an
+    der Naht. `linger` überall raus.
+  - **V39** Vor den Fragen tauchte das Video noch einmal als Band auf: der Ausklang-Streifen aus
+    V37 *gab* das Bildband frei, seit die Textebene mit den Fragen hochfährt. Hochkant entfällt
+    er; Leerlauf 1142 → 852 px.
+  - **V40** „Mehr dazu" sitzt auf der letzten Textzeile statt auf einer eigenen. Zahlt V36
+    zurück: Streifen 380 → 360 px, Band 55 → 59 % des Schirms.
+  - **V41** Die Fortschrittsleiste oben ist weg — sie las sich als hängender Ladebalken.
+- **Live**, Deploy grün (`23e2e4c`). Hauptseite V18 unberührt, Reise weiter auf `noindex`.
+- Nachgemessen auf sechs Hochkant-Maßen (320–412 px) und 1280×720/800. **Nicht prüfbar im
+  versteckten Pane bleibt die Kamerafahrt selbst** — ob sich V38 richtig anfühlt, sieht nur
+  Gabriel am Gerät.
+- Messwerte: CHANGELOG-Eintrag vom 30.07., `docs/der-weg.md` (neuer Abschnitt „Das Tempo der
+  Fahrt", Ausklang, Knopf, Streifen-Tabellen), Register: `verbesserungen.md`.
+
+## Vorheriger Stand (29.07.2026 — Gabriels PC- und Telefon-Durchgang, acht Befunde, alles live)
 - **Vormittag, PC-Durchgang (V29–V33):** doppelte Weganzeige aufgelöst (die Punktleiste führt,
   die Reiter sind reines Sprungmenü — erledigt V24 mit), Sigel 18×26 statt 34×34, verdrehter
   Schulungs-Satz raus, TÜV-Prüfzeichen mit Certipedia-Link im „Mehr"-Feld.
@@ -22,10 +41,11 @@
 - **Zwei Geschmacksentscheidungen dieser Session sind ungeprüft**, beide je eine Zeile zu
   drehen: die Punktleiste führt (statt der Reiter), und der Chip heißt „Deine Daten
   DSGVO-konform". Liegt als Frage im Hub.
-- **Offene Abwägung aus V36:** Der „Mehr dazu"-Knopf steht unter dem Text und kostet rund 60 px
-  Bildhöhe (Band 55 % statt 62 % bei 393×852). Die Alternative — Knopf zurück in die Kopfzeile
-  und dafür die Punktleiste aus seinem Weg rücken — ist **nicht gebaut** und wartet auf sein
-  Urteil am Gerät.
+- ~~Offene Abwägung aus V36 (Knopf kostet eine Zeile Bildhöhe)~~ — **erledigt am 30.07. mit
+  V40:** der Knopf sitzt auf der letzten Textzeile, der Streifen ist von 380 auf 360 px zurück,
+  das Band von 55 auf 59 % gewachsen. Neue kleine Abwägung an derselben Stelle: das höhere Band
+  beschneidet die 4:3-Quelle seitlich stärker (60 statt 62 % sichtbare Breite) — eine Zahl in
+  `der-weg/index.html`, falls Gabriel es umgekehrt will.
 - **V34 offen:** die neue DSGVO-Sprachregelung fehlt in der Lesefassung V18, auf `stilprobe/`
   und der Datenschutzseite. Hängt an der Hub-Frage, ob die Lesefassung überhaupt bleibt.
 - **Formular und Badge der Stilprobe laufen weiter auf Fallbacks** — `senden.php` und
@@ -71,9 +91,14 @@
 
 ## Stolperfallen (sofort wichtig)
 - **Der Bildanteil hängt an genau einer Zahl:** `--weg-textzone` in `der-weg/index.html`, seit
-  29.07. `max(36svh, 380px)` (Schirme unter 780 px Höhe: 350 px). Nach jeder Änderung an Schrift
-  oder Stationstext die längste Station nachmessen — das ist jetzt „Auf Augenhöhe" (299 px bei
-  393×852, 307 px bei 360×640). Tabelle und Begründung in `docs/der-weg.md`.
+  30.07. `max(36svh, 360px)` (Schirme unter 780 px Höhe: 335 px). Nach jeder Änderung an Schrift
+  oder Stationstext die längste Station nachmessen — das ist jetzt die Schluss-Station „Lass uns
+  30 Minuten reden" (306 px bei 360×800 und 375×812, 277 px auf der niedrigen Stufe), weil ihre
+  Höhe an den zwei gestapelten Handlungsknöpfen hängt. Tabellen in `docs/der-weg.md`.
+- **`linger` nur mit `copyTiming: 'middle'`.** Die Bremse in der Etappenmitte war für die
+  Textführung 'middle' gebaut; diese Seite läuft auf 'arrival' (Text kommt am Etappenende), dort
+  bremst sie im leeren Teil und lässt die Naht rasen. Deshalb steht nirgends mehr ein `linger`
+  (V38). Wer eine Szene betonen will, verlängert `scroll` — nicht `linger`.
 - **Der Arbeitsordner einer Sitzung kann zwischen zwei Zügen ausgetauscht werden.** Am 29.07.
   verschwand `.claude/worktrees/website-about-me-image-30c238` mitten in der Sitzung; der Commit
   überlebte auf seinem Branch, aber der Pfad war weg. Bei „No such file or directory" auf einen
