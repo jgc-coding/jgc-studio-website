@@ -23,6 +23,11 @@
   Fahrt" und „Die Schürze", Streifen-Tabellen, „Mehr dazu"), Register: `verbesserungen.md`.
 
 ## Offen (unfertig / wartet auf Zulieferung)
+- **ZUERST UND UNGEFRAGT ANSPRECHEN: V48 — die Sprungmarken landen ohne Text.** Gabriel hat das
+  am 30.07. abends gemeldet, kurz vor Sessionende, und ausdrücklich um eine Erinnerung gebeten.
+  Reiter am PC und Punktleiste rechts springen in die **Mitte** einer Etappe, der Text kommt hier
+  aber erst am **Ende** — Deckkraft dort gemessen 0,024. Ursache, Beleg und Lösungsvorschlag
+  stehen in `verbesserungen.md` unter V48. **Nicht warten, bis er danach fragt.**
 - **Impressum ist weiter leer (V3)** — braucht Gabriels Daten, liegt im Hub. Größter Blocker.
 - **V47 wartet auf Gabriels Entscheidung:** die zwei Handlungsknöpfe der Schluss-Station passen
   auf keinem Telefon nebeneinander und legen damit die Höhe des Textstreifens für **alle** sieben
@@ -43,36 +48,43 @@
 - **`der-weg/scrub-engine.js` ist eine Sonderfassung** — sechs Zusätze (Liste in
   `docs/der-weg.md`). Ein Update aus dem Skill würde sie überschreiben.
 - Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** · **V34** ·
-  **V47**.
+  **V47** · **V48**.
 - Offene Ideen: **I2** (V18 → Astro, löst V10 und V18 mit) · **I3** (Kosten-FAQ) ·
   **I4** (Wortmarke aufs Vorschaubild).
 
 ## Nächste Schritte (Claude)
-1. **Gabriels Urteil zu Runde 2 einarbeiten** und **V47 umsetzen**, sobald er einen der drei Wege
+1. **V48 zuerst — Sprungmarken landen ohne Text.** Das ist der einzige Punkt, den Gabriel als
+   offenen Fehler hinterlassen hat. Sprungziel in `jumpTo()` (`der-weg/scrub-engine.js`) ans
+   Etappenende statt in die Mitte legen und aus `COPY_TIMING` ableiten; danach an mehreren
+   Stationen die Textdeckkraft am Sprungziel messen (Soll: 1,000). Details in
+   `verbesserungen.md`. Bei der Gelegenheit die Engine nach weiteren `0.5`-Annahmen absuchen —
+   es ist derselbe Denkfehler wie bei V38.
+2. **Gabriels Urteil zu Runde 2 einarbeiten** und **V47 umsetzen**, sobald er einen der drei Wege
    wählt. Sein Feedback kommt erfahrungsgemäß als Screenshot plus Fließtext — erst messen, dann
    Plan zeigen, das hat zweimal getragen.
-2. **Die Reise zur Hauptseite machen**, sobald Gabriel Texte und Umfang freigibt: `robots` auf
+3. **Die Reise zur Hauptseite machen**, sobald Gabriel Texte und Umfang freigibt: `robots` auf
    `index, follow`, `scripts/copy-homepage.mjs` bzw. Manifest umstellen, `canonical` prüfen, und
    entscheiden, was mit `/main/` und der Lesefassung passiert.
-3. **V34 umsetzen**, sobald über die Lesefassung entschieden ist — Wortlaut steht (V32), V18
+4. **V34 umsetzen**, sobald über die Lesefassung entschieden ist — Wortlaut steht (V32), V18
    braucht ein assertion-guardetes Transform-Skript, danach `inhalt/lumen-inhalt.md` neu erzeugen.
-4. **Nachgeliefertes leg 4 (und ggf. 6) einarbeiten:** `node scripts/der-weg/kodiere.mjs 4`,
+5. **Nachgeliefertes leg 4 (und ggf. 6) einarbeiten:** `node scripts/der-weg/kodiere.mjs 4`,
    danach zwingend `node scripts/der-weg/pruefe-naehte.mjs`. Bei einer neuen Etappe 3 zusätzlich
    das Feld `vorlauf` in `kodiere.mjs` auf 0 zurücksetzen.
-5. **In den `scroll-world`-Skill zurückgeben** — die Liste in `docs/der-weg.md`, Abschnitt
+6. **In den `scroll-world`-Skill zurückgeben** — die Liste in `docs/der-weg.md`, Abschnitt
    „Offen", ist auf **elf** Punkte gewachsen (neu aus dieser Session: `linger` gegen `copyTiming`
    absichern, die Fortschrittsleiste am oberen Rand, zwei Verläufe an einer Naht müssen sich
-   überlappen). In einem Rutsch, wenn die Seite steht.
-6. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker.
-7. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen → macht Formular und
+   überlappen). Nach V48 kommt vermutlich ein zwölfter dazu (Sprungziel aus `copyTiming`
+   ableiten). In einem Rutsch, wenn die Seite steht.
+7. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker.
+8. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen → macht Formular und
    Badge scharf. Vertrag: `docs/stilprobe/schnittstelle.md`.
-8. I3 (Kosten-FAQ): Wortlaut-Vorschlag schreiben und Gabriel vorlegen — Verkaufstext, nicht
+9. I3 (Kosten-FAQ): Wortlaut-Vorschlag schreiben und Gabriel vorlegen — Verkaufstext, nicht
    ohne sein Ok einsetzen.
-9. V20 auflösen, sobald Gabriel entscheidet: echte Ausschnitte einsetzen oder den
-   Echtheits-Satz umformulieren. (Im „Mehr"-Feld steht die Echtheitsbehauptung bewusst nicht.)
-10. I2 einplanen (V18 → Astro), am besten zusammen mit dem All-Inkl-Umzug.
-11. V19 und die Branch-/Worktree-Bereinigung ausführen, sobald Gabriel freigibt (unten).
-12. **Videos neu komprimieren** — 16,4 MB für sieben Handy-Clips sind mit modernerer
+10. V20 auflösen, sobald Gabriel entscheidet: echte Ausschnitte einsetzen oder den
+    Echtheits-Satz umformulieren. (Im „Mehr"-Feld steht die Echtheitsbehauptung bewusst nicht.)
+11. I2 einplanen (V18 → Astro), am besten zusammen mit dem All-Inkl-Umzug.
+12. V19 und die Branch-/Worktree-Bereinigung ausführen, sobald Gabriel freigibt (unten).
+13. **Videos neu komprimieren** — 16,4 MB für sieben Handy-Clips sind mit modernerer
     Kompression plausibel halbierbar. Bisher bewusst ausgeklammert.
 
 ## Stolperfallen (sofort wichtig)

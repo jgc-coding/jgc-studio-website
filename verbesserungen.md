@@ -98,6 +98,26 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
 DSGVO-Linie außerhalb der Reise.
 
+- [ ] **V48** (B) **Sprungmarken landen im Niemandsland — ohne Text.** Gemeldet von Gabriel am
+      30.07.2026 abends, am PC über die Reiter („Deine Woche") und über die Punktleiste rechts.
+      Beleg: `jumpTo()` in `der-weg/scrub-engine.js` springt auf
+      `seg.start + (seg.end - seg.start) * 0.5`, also in die **Mitte** der Etappe. Der
+      Stationstext blendet auf dieser Seite aber erst zum **Ende** ein
+      (`copyTiming: 'arrival'`, Architektur A). Bei 50 % Scrollanteil beträgt die
+      Textdeckkraft **0,024** — gemessen am 30.07. an „Was sich wirklich ändert" und aus der
+      Formel nachgerechnet (`smooth(1 - 0.5/0.55)`). Betroffen sind die Stationen 2 bis 6;
+      „Auftakt" (hält bis zur ersten Ankunft) und „Weitblick" (hält am Ende) haben eigene
+      Regeln und sind unauffällig.
+      Aufwand: S · Risiko: niedrig
+      Warum: Ein Sprungmenü, das auf eine leere Stelle führt, sieht aus wie ein kaputter Link —
+      und es trifft genau die Besucherin, die gezielt etwas sucht. Zusammenhang mit V38: das
+      ist derselbe Denkfehler wie beim `linger`, nur an einer zweiten Stelle — **eine
+      Einstellung geht von der Textführung 'middle' aus, die Seite läuft auf 'arrival'.**
+      Wer V48 anfasst, sollte die Engine einmal nach weiteren `0.5`-Annahmen absuchen.
+      Vorschlag: Sprungziel ans Etappenende legen (dort ist die Deckkraft 1,000 und die Szene
+      angekommen), Ziel aus `COPY_TIMING` ableiten statt fest zu verdrahten — dann trägt die
+      Korrektur auch in den `scroll-world`-Skill zurück.
+
 - [ ] **V47** (C) Die zwei Handlungsknöpfe der Schluss-Station bestimmen die Höhe des
       **ganzen** Textstreifens — auf jeder Station der Reise
       Beleg: „Erstgespräch anfragen" (190 px) und „Zur Stilprobe" (125 px) sind mit Lücke
