@@ -118,6 +118,48 @@ Ein Verweilen bei der Ankunft braucht es nicht extra: `'arrival'` hält den Text
 nächste Etappe hinein (`rampOut`), deren erste Bilder dieselbe Szene zeigen. **Merksatz:** `linger`
 und `copyTiming` gehören zusammen — wer das eine setzt, muss das andere prüfen.
 
+### Woher die `scroll`-Werte kommen (V49, 31.07.2026)
+
+Nach dem Ausbau von `linger` blieb ein zweiter Tempo-Fehler übrig, den Gabriel am 31.07. meldete:
+„das Scrollgefühl im kompletten 2. Teil fühlt sich zäher an als im 1." — und das stimmte messbar.
+
+Zäh wird eine Etappe nicht vom Scrollweg allein, sondern vom **Verhältnis aus Scrollweg und
+Bildbewegung**. Alle sieben Clips sind gleich lang (8,04 s, 193 Bilder), sie bewegen sich aber
+unterschiedlich stark: die Kamera kommt zum Ende der Reise zur Ruhe. Ausgerechnet dort hatten die
+Etappen den **längsten** Scrollweg bekommen — beide Effekte multiplizierten sich.
+
+```bash
+cd der-weg/assets && for f in anflug werkzeug schreibtisch stilprobe weg lichtung aussicht; do v=$(ffmpeg -v error -i "$f-m.mp4" -vf "scale=160:90,tblend=all_mode=difference,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-" -f null - 2>/dev/null | grep -o "YAVG=[0-9.]*" | cut -d= -f2 | awk '{s+=$1; n++} END {printf "%.3f", s/n}'); echo "$f $v"; done
+```
+
+Das misst die mittlere Helligkeitsänderung zwischen aufeinanderfolgenden Einzelbildern — ein
+Stellvertreter für Kamerabewegung, kein Maß für sie. Ergebnis und die daraus abgeleiteten Werte:
+
+| Station | Bildbewegung | `scroll` alt → neu | Scrollweg für gleiche Bewegung, alt → neu |
+|---|---|---|---|
+| Auftakt | 8,8 | 1,15 → 1,10 | 1,21× → 1,01× |
+| Haltung | 9,3 | 1,00 → 1,15 | 1,00× → 1,01× |
+| Deine Woche | 9,7 | 1,30 → 1,20 | 1,25× → 1,01× |
+| Die Stilprobe | 7,5 | 1,45 → 0,95 | **1,80×** → 1,03× |
+| Der Weg | 8,9 | 1,15 → 1,10 | 1,20× → 1,00× |
+| Auf Augenhöhe | 5,1 | 1,10 → 0,85 | 2,00× → 1,35× |
+| Weitblick | 4,1 | 1,30 → 0,85 | **2,94×** → 1,68× |
+
+**Die Regel:** `scroll = Bildbewegung / 8,06`, Boden **0,85**. Die 8,06 ist die Rate von Teil 1,
+die Gabriel als richtig bezeichnet hat. Den Boden brauchen die zwei ruhigen Schlussszenen —
+rechnerisch kämen sie auf 0,64 und 0,51, dann fliegt man an ihnen vorbei und der Stationstext hat
+zu wenig Weg zum Einblenden (`rampIn` ist 0,55 × Etappe). Sie bleiben damit bewusst etwas ruhiger
+als der Rest; ein Ausklang darf das, ein Mittelteil nicht.
+
+Teil 2 verlangte vorher **57 %** mehr Scrollweg für dieselbe Bildbewegung als Teil 1, jetzt 18 %.
+Summe 8,45 → **7,20** Bildschirmhöhen, Seitenhöhe bei 393 × 702 damit 9549 → 8496 px.
+
+**Wer einen Clip austauscht, misst neu und rechnet die Zahl nach** — sonst wandert genau dieser
+Fehler wieder ein. Die zweite Lehre daraus steht bei der Stilprobe: sie hatte den längsten
+Scrollweg, *weil* sie die stärkste Karte der Seite ist. Eine kriechende Kamera liest sich aber
+nicht als „wichtig", sondern als „hängt". Gewicht trägt eine Station über ihren Text und ihren
+Platz, nicht über die Bremse.
+
 ## Zwei Fassungen der Seite: breit und hochkant
 
 Ab 27.07.2026 sieht die Reise hochkant anders aus als auf einem breiten Schirm — nicht aus
@@ -143,7 +185,10 @@ Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-H
 sich daraus ab.
 
 ```
---weg-textzone: max(36svh, 355px);   /* niedrige Schirme (unter 780 px Hoehe): 325px */
+--weg-textzone: max(36svh, 355px);   /* hoch (>=780px) und schmal (<385px)   */
+--weg-textzone: max(36svh, 320px);   /* hoch und breit (>=385px)             */
+--weg-textzone: max(36svh, 325px);   /* niedrig (<780px) und schmal (<365px) */
+--weg-textzone: max(36svh, 300px);   /* niedrig und breit (>=365px)          */
 ```
 
 **Seit 29.07.2026 in `svh` statt `%`, und das ist keine Kosmetik.** Chrome auf Android misst feste
@@ -164,18 +209,34 @@ einen viel größeren Anteil als auf 850. Ein fester Prozentwert müsste sich am
 orientieren und hielte das Bild überall sonst unnötig klein. Eine Staffelung in Stufen hatte
 denselben Fehler in klein: Gabriels Gerät fiel in die unterste Stufe und sah keine Änderung.
 
-**Die Zahl ist seit 30.07.2026 ausgereizt** (V46, 380 → 360 → 355 px). Maßgeblich ist die
-**Schluss-Station** („Lass uns 30 Minuten reden"), und zwar wegen ihrer zwei Handlungsknöpfe, nicht
-wegen des „Mehr"-Knopfs. Gemessen über alle sieben Stationen:
+**Seit 31.07.2026 hängt die Zahl auch an der BREITE** (V50) — vorher nur an der Höhe, und das war
+der Fehler. Maßgeblich ist die **Schluss-Station** („Lass uns 30 Minuten reden") wegen ihrer zwei
+Handlungsknöpfe. Die stehen aber nicht überall übereinander: sie brauchen zusammen 325 px (kleiner
+Zweig) bzw. 342 px (großer Zweig — größere Polsterung und Schrift), und der Textkasten bekommt
+`100vw - 2 × clamp(18px, 5vw, 48px)`, ab 360 px Breite also 0,9 × Breite. Daraus fällt der Umbruch
+bei **362** bzw. **380 px**; die Grenzen im CSS liegen mit 365 und 385 px knapp darüber.
 
-| Schirm | höchste Station | Textkasten | Luft je Seite | Band |
-|---|---|---|---|---|
-| 360 × 800 | 304 px | 341 px | 19 px | 56 % |
-| 375 × 812 | 304 px | 341 px | 19 px | 56 % |
-| 393 × 852 | 266 px | 341 px | 37 px | 58 % |
-| 412 × 915 | 273 px | 341 px | 34 px | 61 % |
-| 360 × 640 | 274 px | 311 px | 19 px | 49 % |
-| 320 × 568 | 274 px | 311 px | 19 px | 43 % |
+Wo sie stapeln, ist die Zone ausgereizt (17–18 px Luft). Wo sie nebeneinander passen, lagen 30 bis
+39 px je Seite brach — genau der Streifen, den Gabriel am 31.07. gemeldet hat („immer noch eine
+dicke Zeile unten verschenkt, lieber etwas mehr Video zeigen"). Gemessen über alle sieben
+Stationen, Zone und Band vorher → nachher:
+
+| Schirm | Knöpfe | höchste Station | Zone | Luft je Seite | Band |
+|---|---|---|---|---|---|
+| 320 × 568 | gestapelt | 277 px | 325 (unverändert) | 17 px | 43 % |
+| 360 × 645 | gestapelt | 277 px | 325 (unverändert) | 17 px | 50 % |
+| 360 × 800 | gestapelt | 306 px | 355 (unverändert) | 18 px | 56 % |
+| 375 × 812 | gestapelt | 306 px | 355 (unverändert) | 18 px | 56 % |
+| 375 × 667 | nebeneinander | 240 px | 325 → **300** | 36 → 23 px | 51 → 55 % |
+| 393 × 702 | nebeneinander | 245 px | 325 → **300** | 33 → 21 px | 54 → 57 % |
+| 412 × 760 | nebeneinander | 251 px | 325 → **300** | 30 → 18 px | 57 → 61 % |
+| 393 × 852 | nebeneinander | 264 px | 355 → **320** | 39 → 21 px | 58 → 62 % |
+| 412 × 915 | nebeneinander | 271 px | 355 → **330** | 35 → 23 px | 61 → 64 % |
+
+Der 393 × 702 große Schirm ist Gabriels Gerät (aus der Knopfbreite auf seinem Screenshot
+zurückgerechnet und am Messstand reproduziert). Ein Hochkant-Fenster jenseits echter Telefone
+(520 × 760, höchste Station 264 px) behält nur 11 px Luft je Seite — es schneidet nichts ab, sitzt
+aber enger als auf jedem Gerät.
 
 Merkwürdig, aber richtig: **mehr Textanteil heißt mehr sichtbares Bild** — ein flacheres Band
 liegt näher am 4:3 der Quelle, es wird also weniger abgeschnitten. Die Szene wird dabei nur
@@ -183,13 +244,17 @@ kleiner dargestellt, nicht knapper. Jede Senkung der Zahl geht deshalb in beide 
 Band wächst am Schirm, die sichtbare Breite der Szene sinkt (393 × 852: von 62 % bei 380 px auf
 60 % bei 355 px, rund 23 der 1112 Quellpixel). Bewusst so entschieden.
 
-**Wer den Textstreifen wirklich kleiner haben will, muss an die zwei Handlungsknöpfe.** Sie sind
-zusammen 324 px breit und passen auf keinem Telefon nebeneinander (bei 320 px Breite stehen 284
-zur Verfügung), stehen also übereinander und kosten 87 statt 40 px. Ohne sie wäre die höchste
-Station 291 px und der Streifen könnte auf rund 330 herunter. Nebeneinander passten sie erst mit
+**Wer den Streifen auf den SCHMALEN Telefonen kleiner haben will, muss an die zwei
+Handlungsknöpfe.** Dort stapeln sie und kosten 87 statt 40 px. Nebeneinander passten sie erst mit
 schmalerer Polsterung — 42 px sind aber schon die Untergrenze für eine Fingerfläche, und der
 Hauptknopf würde optisch kleiner. Das ist eine Gestaltungsfrage und steht als offener Punkt in
-`verbesserungen.md`, nicht hier.
+`verbesserungen.md`, nicht hier. Zu holen ist dort allerdings weniger, als es aussieht: bei
+320 × 568 steht direkt hinter der Schluss-Station (277 px) schon „In deinem Tempo" mit 270 px. Ohne
+das Stapeln würde die Schluss-Station auf ~230 px fallen, die höchste wäre dann jene 270 — der
+Streifen käme also nur von 325 auf rund 320 px herunter — rund 5 px statt der erhofften 40.
+
+**Die zwei Knopfbeschriftungen verschieben die Umbruchgrenze.** Wer sie ändert, misst neu: die
+Grenzen 365/385 px im CSS hängen unmittelbar an der Breite dieser beiden Knöpfe.
 
 **Ein zweiter Teil des Leerraums steht überhaupt nicht in dieser Zahl.** Was am Gerät unter dem
 Text frei bleibt, ist zum guten Teil die Reserve, die `100svh` unten stehen lässt, sobald Chrome

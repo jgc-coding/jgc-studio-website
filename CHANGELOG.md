@@ -2,6 +2,49 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-07-31 — Der Weg: dritte Rückmeldung (V48–V50)
+
+Drei Punkte aus Gabriels Durchgang am Telefon. Alle drei waren **messbar**, und zwei davon standen
+vorher als Vermutung oder sogar als falsche Zahl in der Doku — deshalb hier zuerst die Messung,
+dann die Änderung.
+
+- **V48 — Der Weganzeiger sprang nicht auf die richtigen Stellen.** `jumpTo()` sprang fest in die
+  Etappenmitte, der Stationstext blüht auf dieser Seite aber erst zum Etappenende auf
+  (`copyTiming: 'arrival'`). Über alle sieben Stationen nachgemessen: bei den Stationen **2 bis 6**
+  landete jeder Sprung bei Textdeckkraft **0,023** — auf einem komplett textlosen Schirm. Das
+  Sprungziel leitet sich jetzt aus der Textführung ab (`copyPeak()`) und spiegelt damit die
+  Formeln in `read()` statt eine feste Annahme zu tragen: `'arrival'` → 0,98 der Etappe,
+  `'middle'` → 0,5, `'middle'`-Auftakt → 0,08, Schluss-Station immer 0,55. **Nachher:** Deckkraft
+  0,996–1,000 auf allen sieben, genau ein Text lesbar, Punkt- und Reitermarkierung auf der
+  richtigen Station — am Telefonmaß (393 × 702) und am PC (1280 × 800) geprüft.
+- **V49 — Der zweite Teil der Reise fühlte sich zäher an als der erste.** Gabriels Frage „kann das
+  sein?" ließ sich mit Ja beantworten. Alle sieben Clips sind gleich lang (8,04 s, 193 Bilder),
+  bewegen sich aber unterschiedlich stark — gemessen als mittlere Helligkeitsänderung zwischen
+  Einzelbildern (Auftakt 8,8 · Haltung 9,3 · Deine Woche 9,7 · Stilprobe 7,5 · Der Weg 8,9 · Auf
+  Augenhöhe 5,1 · Weitblick 4,1). Die Kamera kommt zum Ende der Reise zur Ruhe, und ausgerechnet
+  dort hatten die Etappen den **längsten** Scrollweg bekommen; beide Effekte multiplizierten sich.
+  Teil 2 verlangte **57 %** mehr Scrollweg für dieselbe Bildbewegung als Teil 1, am Weitblick war
+  es gegen die Haltung das **2,94-fache**. `scroll` leitet sich jetzt aus der Messung ab
+  (`Bildbewegung / 8,06`, Boden 0,85), Regel und Messkommando stehen in `docs/der-weg.md`.
+  **Nachher:** Etappen 1–5 liegen auf 1–3 % gleich, Teil 2 noch 18 % über Teil 1, Weitblick von
+  2,94× auf 1,68×. Summe 8,45 → **7,20** Bildschirmhöhen, Seitenhöhe 9549 → 8496 px.
+  Der Abgang der Reise (Schürze, V43/V44) hält die Verkürzung: über 1300 px Scrollweg nachgemessen
+  liegt die Oberkante des Leseteils bündig an der Bandunterkante, es öffnet sich kein Spalt.
+- **V50 — „Immer noch eine dicke Zeile unten verschenkt."** Die Höhe des Textstreifens hing nur an
+  der Schirm*höhe*. Maßgeblich ist aber, ob die zwei Handlungsknöpfe der Schluss-Station stapeln,
+  und das hängt an der **Breite**: sie brauchen 325 px (kleiner Zweig) bzw. 342 px (großer), der
+  Textkasten bekommt ab 360 px Breite 0,9 × Breite — Umbruch also bei 362 bzw. 380 px. Wo sie
+  stapeln, war die Zone ausgereizt (17–18 px Luft); wo sie nebeneinander passen, lagen **30 bis
+  39 px je Seite** brach. Die Zone hängt jetzt auch an der Breite: unverändert 325/355 wo
+  gestapelt wird, **300/320** wo nicht. **Nachher**, Bildband: 393 × 702 (Gabriels Gerät) 377 →
+  402 px (54 → 57 %) · 412 × 760 435 → 460 (57 → 61 %) · 393 × 852 497 → 532 (58 → 62 %) ·
+  412 × 915 560 → 586 (61 → 64 %). Über neun Schirmgrößen nachgemessen, nirgends ragt Text heraus;
+  es bleiben mindestens 17 px Luft je Seite plus 14 px Rand nach unten.
+- **Korrektur an der eigenen Doku.** V47 stand in `verbesserungen.md` mit der Aussage, die zwei
+  Knöpfe passten auf *keinem* Telefon nebeneinander. Das war falsch und hat vier Wochen lang den
+  Textstreifen auf **allen** Geräten hochgehalten. Der Punkt ist korrigiert und auf das reduziert,
+  was davon übrig bleibt: Schirme unter 362/380 px, dort mit rund 5 px Gewinn.
+
 ## 2026-07-30 — Der Weg: Rückmeldung zur Runde davor (V42–V46)
 
 Fünf Punkte aus Gabriels Durchgang am PC und am Telefon, unmittelbar nach dem Deploy von V38–V41.

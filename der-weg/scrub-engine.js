@@ -330,9 +330,28 @@ function mountScrollWorld(container, config) {
     read();
   }
 
+  // WO in einer Etappe der Stationstext seine volle Deckkraft hat. Spiegelt die
+  // Formeln in read() — wer dort etwas aendert, aendert es hier mit.
+  //   letzte Station : read() nimmt fuer sie IMMER smooth(pr/0.4), unabhaengig von
+  //                    der Textfuehrung — voll ab 40 %, haelt bis zum Ende.
+  //   'arrival'      : der Text blueht erst zum Etappenende auf (Architektur A).
+  //   'middle'       : er blueht in der Etappenmitte auf (Architektur B) …
+  //   'middle', i=0  : … ausser beim Auftakt, der beim Landen begruesst und
+  //                    danach ausblendet.
+  function copyPeak(i) {
+    if (i === N - 1) return 0.55;
+    if (COPY_TIMING === 'arrival') return 0.98;
+    return i === 0 ? 0.08 : 0.5;
+  }
+
+  // Ein Sprungmenue muss dort landen, wo der Text der Station STEHT — nicht in
+  // der Mitte der Etappe. Der feste 0.5-Sprung war eine 'middle'-Annahme in einer
+  // Engine, die auch 'arrival' kann: auf einer Architektur-A-Seite landete jeder
+  // Sprung bei Textdeckkraft 0.02, also auf einem leeren Schirm, und das Menue
+  // sah aus wie ein kaputter Link (gemessen 31.07.2026 an allen sieben Stationen).
   function jumpTo(i) {
     const seg = SECTIONS[i]._seg;
-    window.scrollTo({ top: seg.start + (seg.end - seg.start) * 0.5, behavior: reduce ? 'auto' : 'smooth' });
+    window.scrollTo({ top: seg.start + (seg.end - seg.start) * copyPeak(i), behavior: reduce ? 'auto' : 'smooth' });
   }
 
   function enterStillsMode() {

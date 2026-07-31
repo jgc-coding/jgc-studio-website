@@ -514,6 +514,55 @@
     .sw-root .weg-mehr { padding: 3px 10px 3px 12px; font-size: 0.75rem; }
   }
 
+  /* ==================================================================
+     BREITERE TELEFONE: der Textstreifen darf schmaler werden.
+
+     Hochgehalten wird er von EINER Station — "Lass uns 30 Minuten reden"
+     mit ihren zwei Handlungsknoepfen. Stehen die uebereinander, ist sie rund
+     40 px hoeher, und der Streifen muss diese Hoehe fuer ALLE Stationen
+     vorhalten. Passen sie nebeneinander, muss er das nicht.
+
+     Gemessen am 31.07.2026, hoechste Station je Schirm (Luft je Seite):
+
+       gestapelt:        320x568  277 (17)      360x800  306 (18)
+                         360x645  277 (17)      375x812  306 (18)
+       nebeneinander:    375x667  240 (36)      393x852  264 (39)
+                         393x702  245 (33)      412x915  271 (35)
+                         412x760  251 (30)
+
+     Bei gestapelten Knoepfen ist die Zone ausgereizt — dort bleibt alles, wie
+     es war. Nebeneinander lagen 30 bis 39 px je Seite brach, und genau die hat
+     Gabriel am 31.07. auf dem Geraet gesehen ("immer noch eine dicke Zeile
+     unten verschenkt, lieber etwas mehr Video zeigen"). Es bleiben 17 px je
+     Seite plus die 14 px Rand nach unten: Luft, aber keine Zeile mehr.
+
+     WO DIE GRENZE LIEGT: die Knoepfe brauchen zusammen 325 px (kleiner Zweig)
+     bzw. 342 px (grosser Zweig — groessere Polsterung und Schrift). Der
+     Textkasten bekommt `100vw - 2 x clamp(18px, 5vw, 48px)`, ab 360 px Breite
+     also 0,9 x Breite. Daraus faellt der Umbruch bei 362 bzw. 380 px; die
+     Grenzen hier liegen mit 365 und 385 px knapp darueber.
+
+     ACHTUNG: die zwei Knopfbeschriftungen verschieben genau diese Grenze. Wer
+     sie aendert, misst neu — Messkommando in docs/der-weg.md. Und ein
+     Hochkant-Fenster jenseits echter Telefone (gemessen 520x760: hoechste
+     Station 264 px) behaelt hier nur 11 px Luft je Seite. Es schneidet nichts
+     ab, sitzt aber enger als auf jedem Geraet.
+     ================================================================== */
+  @media (orientation: portrait) and (min-width: 385px) and (max-width: 1200px) {
+    :root, .sw-root { --weg-textzone: max(36%, 285px); }
+    @supports (height: 100svh) {
+      /* 271 hoechste Station + 2 x 17 Luft + 14 Rand = 319, aufgerundet. */
+      :root, .sw-root { --weg-textzone: max(36svh, 320px); }
+    }
+  }
+  @media (orientation: portrait) and (min-width: 365px) and (max-width: 1200px) and (max-height: 780px) {
+    :root, .sw-root { --weg-textzone: max(36%, 275px); }
+    @supports (height: 100svh) {
+      /* 251 hoechste Station + 2 x 17 Luft + 14 Rand = 299, aufgerundet. */
+      :root, .sw-root { --weg-textzone: max(36svh, 300px); }
+    }
+  }
+
   /* Handy quer. Hier greift die Hochkant-Fassung bewusst nicht: quer ist der
      Schirm breiter als 4:3, es wird also gar nichts abgeschnitten, und ein
      Bildband oben waere bei 393 px Hoehe ein Streifen. Die Engine schaltet
@@ -1300,9 +1349,38 @@
     nav: true,
     atmosphere: true,
 
-    /* Scrollweg je Etappe. Zusammen rund 8 Bildschirmhoehen statt vorher 12: die
-       Reise laeuft zuegiger, ohne dass eine Szene gehetzt wirkt. Die zwei
-       Schluesselszenen behalten mehr Weg als die Durchfahrten.
+    /* Scrollweg je Etappe. Zusammen 7,2 Bildschirmhoehen (vorher 8,45, davor 12).
+
+       WIE DIE ZAHLEN ZUSTANDE KOMMEN — das ist der Punkt, an dem vorher nach
+       Gefuehl verteilt wurde (V49, Gabriels Rueckmeldung vom 31.07.2026: "das
+       Scrollgefuehl im kompletten 2. Teil fuehlt sich zaeher an als im 1.").
+
+       Zaeh wird eine Etappe nicht vom Scrollweg allein, sondern vom Verhaeltnis
+       aus Scrollweg und BILDBEWEGUNG. Alle sieben Clips sind gleich lang (8,04 s,
+       193 Bilder), sie bewegen sich aber unterschiedlich stark. Gemessen als
+       mittlere Helligkeitsaenderung zwischen Einzelbildern (ffmpeg, tblend +
+       signalstats; ein Stellvertreter fuer Kamerabewegung, kein Mass fuer sie):
+
+         Auftakt 8,8 · Haltung 9,3 · Deine Woche 9,7 · Stilprobe 7,5
+         Der Weg 8,9 · Auf Augenhoehe 5,1 · Weitblick 4,1
+
+       Die Kamera kommt zum Ende der Reise zur Ruhe — und ausgerechnet dort hatten
+       die Etappen den LAENGSTEN Scrollweg bekommen. Beide Effekte multiplizierten
+       sich: Teil 2 verlangte 57 % mehr Scrollweg fuer dieselbe Bildbewegung als
+       Teil 1, am Weitblick war es gegen die Haltung fast das Dreifache.
+
+       Deshalb leitet sich `scroll` jetzt aus der Messung ab statt aus dem Gefuehl:
+
+         scroll = Bildbewegung / 8,06        (8,06 = die Rate von Teil 1, die steht)
+
+       mit einem Boden von 0,85. Den brauchen die zwei ruhigen Schlussszenen:
+       rechnerisch kaemen sie auf 0,64 und 0,51, dann fliegt man an ihnen vorbei,
+       und der Stationstext haette zu wenig Weg zum Einblenden (`rampIn` ist
+       0,55 × Etappe). Sie bleiben damit bewusst etwas ruhiger als der Rest —
+       ein Ausklang darf das, ein Mittelteil nicht.
+
+       Wer einen Clip austauscht, misst neu und rechnet die Zahl nach. Das
+       Messkommando steht in docs/der-weg.md.
 
        KEIN `linger` mehr — und das ist der Punkt, an dem man sich vertut (V38,
        Gabriels Telefon-Durchgang vom 30.07.2026: "zaeh, als muesste man mehr
@@ -1351,7 +1429,7 @@
         poster: 'assets/anflug-poster.jpg', posterMobile: 'assets/anflug-poster-m.jpg',
         still: 'assets/anflug-still.jpg',
         accent: '#C97B3F',
-        scroll: 1.15,
+        scroll: 1.10,               /* Bildbewegung 8,8 */
         eyebrow: 'Für Coaches, Trainer, Mentoren',
         title: 'Mehr Raum für das Wesentliche.',
         body: 'KI, die deine Handschrift trägt statt sie zu glätten.',
@@ -1368,6 +1446,7 @@
         /* Der Uebergang zum Schreibtisch springt (gemessen 0,30 gegen einen
            Eigenwert von 0,96). Breitere Ueberblendung faengt das ab. */
         crossfade: 0.38,
+        scroll: 1.15,               /* Bildbewegung 9,3 — die bewegteste Etappe */
         eyebrow: 'Eine Einordnung vorweg',
         title: 'KI ist ein Werkzeug.',
         body: 'Wie jedes Werkzeug taugt sie so viel wie die Hand, die es führt.',
@@ -1382,7 +1461,7 @@
         poster: 'assets/schreibtisch-poster.jpg', posterMobile: 'assets/schreibtisch-poster-m.jpg',
         still: 'assets/schreibtisch-still.jpg',
         accent: '#6FA3B5',
-        scroll: 1.3,
+        scroll: 1.20,               /* Bildbewegung 9,7 */
         /* Beide Naehte dieser Etappe springen — davor die Werkzeugwand,
            danach das Stilprobe-Pult. */
         crossfade: 0.38,
@@ -1393,13 +1472,19 @@
       },
       {
         /* Die stärkste Karte der Seite: der einzige Beweis, den jemand anfassen kann.
-           Bekommt den längsten Scrollweg der ganzen Reise. */
+           Sie hatte deshalb bis zum 31.07.2026 den längsten Scrollweg der Reise
+           (1,45). Das war der Denkfehler: ihr Clip ist der zweitruhigste im ersten
+           Teil (Bildbewegung 7,5), der lange Weg machte sie damit zur zähesten
+           Etappe der ganzen Seite — 1,80× so viel Scrollen wie die Haltung für
+           dieselbe Bildbewegung. Eine kriechende Kamera liest sich nicht als
+           "wichtig", sondern als "hängt". Ihr Gewicht trägt sie über den Text und
+           ihren Platz in der Reise, nicht über die Bremse. */
         id: 'stilprobe', label: 'Die Stilprobe',
         clip: 'assets/stilprobe.mp4', clipMobile: 'assets/stilprobe-m.mp4',
         poster: 'assets/stilprobe-poster.jpg', posterMobile: 'assets/stilprobe-poster-m.jpg',
         still: 'assets/stilprobe-still.jpg',
         accent: '#C97B3F',
-        scroll: 1.45,
+        scroll: 0.95,               /* Bildbewegung 7,5 */
         crossfade: 0.38,
         eyebrow: 'Die Stilprobe',
         title: 'Lies dich selbst.',
@@ -1412,7 +1497,7 @@
         poster: 'assets/weg-poster.jpg', posterMobile: 'assets/weg-poster-m.jpg',
         still: 'assets/weg-still.jpg',
         accent: '#6FA3B5',
-        scroll: 1.15,
+        scroll: 1.10,               /* Bildbewegung 8,9 */
         eyebrow: 'Schritt für Schritt',
         title: 'In deinem Tempo.',
         body: 'Erstgespräch, ehrliche Bestandsaufnahme, dann bauen wir. Jeder Schritt entscheidet über den nächsten.',
@@ -1424,7 +1509,11 @@
         poster: 'assets/lichtung-poster.jpg', posterMobile: 'assets/lichtung-poster-m.jpg',
         still: 'assets/lichtung-still.jpg',
         accent: '#8FA98A',
-        scroll: 1.1,
+        /* Boden 0,85 statt der gerechneten 0,64: hier kommt die Kamera zur Ruhe
+           (Bildbewegung 5,1), und ein Ausklang darf ruhiger laufen als der
+           Mittelteil. Unter 0,85 hat der Stationstext zu wenig Weg zum
+           Einblenden. */
+        scroll: 0.85,               /* Bildbewegung 5,1 — Boden greift */
         eyebrow: 'Wer mit dir arbeitet',
         title: 'Drei Welten, ein Blick.',
         body: 'Mentaltrainer, Wirtschaftsingenieur, TÜV-geprüft für angewandte KI. Ich kenne die innere Seite deiner Arbeit und die Technik dahinter.',
@@ -1436,7 +1525,11 @@
         poster: 'assets/aussicht-poster.jpg', posterMobile: 'assets/aussicht-poster-m.jpg',
         still: 'assets/aussicht-still.jpg',
         accent: '#C97B3F',
-        scroll: 1.3,
+        /* Die ruhigste Aufnahme der Reise (Bildbewegung 4,1) und vorher mit 1,3
+           der zweitlaengste Scrollweg — zusammen die zaeheste Stelle ueberhaupt
+           (2,94× gegen die Haltung). Boden 0,85 statt der gerechneten 0,51: die
+           Handlungsknoepfe sollen stehen, nicht vorbeiziehen. */
+        scroll: 0.85,               /* Bildbewegung 4,1 — Boden greift */
         eyebrow: 'Wenn es passt',
         title: 'Lass uns 30 Minuten reden.',
         body: 'Kostenfrei und ohne Verpflichtung. Wir klären auf Augenhöhe, ob das zueinander passt.',

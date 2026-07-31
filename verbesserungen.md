@@ -98,41 +98,27 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
 DSGVO-Linie außerhalb der Reise.
 
-- [ ] **V48** (B) **Sprungmarken landen im Niemandsland — ohne Text.** Gemeldet von Gabriel am
-      30.07.2026 abends, am PC über die Reiter („Deine Woche") und über die Punktleiste rechts.
-      Beleg: `jumpTo()` in `der-weg/scrub-engine.js` springt auf
-      `seg.start + (seg.end - seg.start) * 0.5`, also in die **Mitte** der Etappe. Der
-      Stationstext blendet auf dieser Seite aber erst zum **Ende** ein
-      (`copyTiming: 'arrival'`, Architektur A). Bei 50 % Scrollanteil beträgt die
-      Textdeckkraft **0,024** — gemessen am 30.07. an „Was sich wirklich ändert" und aus der
-      Formel nachgerechnet (`smooth(1 - 0.5/0.55)`). Betroffen sind die Stationen 2 bis 6;
-      „Auftakt" (hält bis zur ersten Ankunft) und „Weitblick" (hält am Ende) haben eigene
-      Regeln und sind unauffällig.
-      Aufwand: S · Risiko: niedrig
-      Warum: Ein Sprungmenü, das auf eine leere Stelle führt, sieht aus wie ein kaputter Link —
-      und es trifft genau die Besucherin, die gezielt etwas sucht. Zusammenhang mit V38: das
-      ist derselbe Denkfehler wie beim `linger`, nur an einer zweiten Stelle — **eine
-      Einstellung geht von der Textführung 'middle' aus, die Seite läuft auf 'arrival'.**
-      Wer V48 anfasst, sollte die Engine einmal nach weiteren `0.5`-Annahmen absuchen.
-      Vorschlag: Sprungziel ans Etappenende legen (dort ist die Deckkraft 1,000 und die Szene
-      angekommen), Ziel aus `COPY_TIMING` ableiten statt fest zu verdrahten — dann trägt die
-      Korrektur auch in den `scroll-world`-Skill zurück.
-
-- [ ] **V47** (C) Die zwei Handlungsknöpfe der Schluss-Station bestimmen die Höhe des
-      **ganzen** Textstreifens — auf jeder Station der Reise
-      Beleg: „Erstgespräch anfragen" (190 px) und „Zur Stilprobe" (125 px) sind mit Lücke
-      324 px breit. Bei 320 px Schirmbreite stehen 284 zur Verfügung, bei 375 px sind es 338
-      gegen nötige 341 — sie passen auf **keinem** Telefon nebeneinander und stehen deshalb
-      übereinander: 87 statt 40 px. Damit ist die Schluss-Station mit 304 px die höchste und
-      legt `--weg-textzone` auf 355 fest (gemessen 30.07., `der-weg/index.html`).
+- [ ] **V47** (C) Auf **schmalen** Telefonen stapeln die zwei Handlungsknöpfe der
+      Schluss-Station und heben damit den Textstreifen für jede Station an
+      Beleg: „Erstgespräch anfragen" und „Zur Stilprobe" brauchen zusammen 325 px (kleiner
+      Zweig) bzw. 342 px (großer Zweig). Der Textkasten bekommt ab 360 px Breite 0,9 × Breite,
+      der Umbruch fällt also bei 362 bzw. 380 px. Darunter kosten die Knöpfe 87 statt 40 px.
       Aufwand: S · Risiko: mittel (Gestaltung, nicht Technik)
-      Warum: Ohne diese eine Station wäre die höchste 291 px und der Streifen könnte auf rund
-      330 herunter — gut 25 px mehr Bild auf jeder der sieben Stationen. Nebeneinander passten
-      die Knöpfe erst mit schmalerer Polsterung, und da endet die Technik: 42 px sind die
-      Untergrenze für eine Fingerfläche, und „Erstgespräch anfragen" ist der wichtigste Knopf
-      der Seite — er soll nicht kleiner aussehen als der Nebenweg. **Gabriels Entscheidung.**
-      Alternativen: (a) so lassen, (b) Polsterung schmaler und nebeneinander, (c) „Zur
-      Stilprobe" auf der Schluss-Station als Textlink statt als Knopf.
+      **Korrektur vom 31.07.2026:** Dieser Punkt stand hier mit der Aussage, die Knöpfe passten
+      auf *keinem* Telefon nebeneinander und die Zone könnte ohne sie von 355 auf 330. Beides
+      war falsch. Am Messstand nachgeprüft: ab 393 px Breite stehen sie nebeneinander (so auch
+      auf Gabriels Gerät), und der frei gewordene Platz ist mit V50 bereits geholt. Es geht
+      hier also nur noch um Schirme **unter** 362/380 px — und dort ist der Gewinn klein: bei
+      320 × 568 ist „In deinem Tempo" mit 270 px die zweithöchste Station, der Streifen käme
+      also selbst ohne das Stapeln nur von 325 auf ~320 px.
+      Warum trotzdem offen: 42 px sind die Untergrenze für eine Fingerfläche, und „Erstgespräch
+      anfragen" ist der wichtigste Knopf der Seite — er soll nicht kleiner aussehen als der
+      Nebenweg. **Gabriels Entscheidung.** Alternativen: (a) so lassen — bei 5 px Gewinn die
+      naheliegende, (b) Polsterung schmaler und nebeneinander, (c) „Zur Stilprobe" auf der
+      Schluss-Station als Textlink statt als Knopf.
+      **Lehre für die Liste selbst:** ein Befund, der eine Zahl behauptet („passen auf keinem
+      Telefon"), gehört gemessen, bevor er als Begründung für andere Entscheidungen dient.
+      Diese eine hat vier Wochen lang den Textstreifen auf allen Geräten hochgehalten.
 
 - [ ] **V34** (A) Pauschales „DSGVO-konform" steht weiter auf der Lesefassung V18
       Beleg: `inhalt/lumen-inhalt.md` Zeilen 10, 34, 139, 197, 366, 383 — Kurzbeschreibung,
@@ -251,6 +237,37 @@ DSGVO-Linie außerhalb der Reise.
   ohne. Weiß auf Tinte, 14,26:1 — nicht die alte Fläche in Szenenfarbe (V24).
 - **V46** (C) Textstreifen auf das Minimum: 355 px, niedrige Schirme 325. Weiter geht es
   nicht, ohne unter 18 px Luft zu fallen — siehe V47 unter „Offen".
+  **Nachtrag 31.07.:** „das Minimum" stimmte nur für schmale Telefone. Siehe V50.
+
+### Gabriels dritte Rückmeldung — umgesetzt am 2026-07-31 (Messwerte im CHANGELOG)
+
+- **V48** (B) **Sprungmarken landeten im Niemandsland.** `jumpTo()` sprang fest in die
+  Etappenmitte (`0.5`), der Stationstext blüht auf dieser Seite aber erst zum Etappenende auf
+  (`copyTiming: 'arrival'`). Gemessen an allen sieben Stationen: die Stationen 2–6 landeten bei
+  Textdeckkraft **0,023** — auf einem komplett textlosen Schirm. Das Sprungziel leitet sich
+  jetzt aus der Textführung ab (`copyPeak()` in `scrub-engine.js`), spiegelt also die Formeln
+  in `read()`: `'arrival'` → 0,98 der Etappe · `'middle'` → 0,5 · `'middle'`-Auftakt → 0,08 ·
+  Schluss-Station immer 0,55. Nachher: Deckkraft 0,996–1,000, genau ein Text lesbar, Punkt-
+  und Reitermarkierung auf der richtigen Station. **Lehre:** dieselbe Wurzel wie V38 — eine
+  Einstellung ging von `'middle'` aus, die Seite läuft auf `'arrival'`. Der Fix gehört zurück
+  in den `scroll-world`-Skill.
+- **V49** (B) **Der zweite Teil der Reise fühlte sich zäher an als der erste** — und das war
+  messbar. Alle sieben Clips sind gleich lang (8,04 s), bewegen sich aber unterschiedlich
+  stark; die Kamera kommt zum Ende zur Ruhe. Ausgerechnet dort hatten die Etappen den
+  längsten Scrollweg. Teil 2 verlangte **57 %** mehr Scrollweg für dieselbe Bildbewegung als
+  Teil 1, am Weitblick fast das Dreifache der Haltung. `scroll` leitet sich jetzt aus der
+  gemessenen Bildbewegung ab (Regel und Messkommando in `docs/der-weg.md`), Boden 0,85 für die
+  zwei ruhigen Schlussszenen. Nachher: Etappen 1–5 auf 1–3 % gleich, Teil 2 noch 18 % über
+  Teil 1. Summe 8,45 → 7,20 Bildschirmhöhen. **Lehre:** eine kriechende Kamera liest sich
+  nicht als „wichtig", sondern als „hängt" — die Stilprobe hatte den längsten Weg *weil* sie
+  die stärkste Karte ist und war dadurch die zäheste Etappe der Seite.
+- **V50** (B) **Der Textstreifen war für einen Fall reserviert, der auf breiteren Telefonen
+  gar nicht eintritt.** Seine Höhe hing nur an der Schirm*höhe*; maßgeblich ist aber, ob die
+  zwei Handlungsknöpfe der Schluss-Station stapeln — und das tun sie nur unter 362 px (kleiner
+  Zweig) bzw. 380 px Breite. Darüber lagen 30–39 px je Seite brach. Die Zone hängt jetzt auch
+  an der Breite: unverändert 325/355 wo gestapelt wird, 300/320 wo nicht. Auf Gabriels Gerät
+  (393 × 702) wächst das Bildband von 377 auf 402 px (54 → 57 %), bei 393 × 852 von 497 auf
+  532 (58 → 62 %). Über neun Schirmgrößen nachgemessen, nirgends ragt Text heraus.
 
 ### Gabriels zweiter Telefon-Durchgang — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
 
