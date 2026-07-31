@@ -82,9 +82,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   `der-weg`, Port 4330, liefert die ganze Projektwurzel und schneidet das `/jgc-studio-website`-Präfix
   weg). Die Scroll-Reise braucht ihn zwingend: unter `file://` verbietet der Browser das Laden der
   Clips, die Seite bleibt leer.
-- **Preview-Messungen: der Pane gilt als versteckt.** Screenshots hängen auf den 1-MB-Seiten; prüfe
-  stattdessen per JavaScript (DOM-Geometrie, `getComputedStyle`). Drei Fallen, die alle schon
-  Fehlbefunde erzeugt haben:
+- **Preview-Messungen: der Pane gilt als versteckt.** Screenshots gehen deshalb **gar nicht** —
+  unabhängig von der Seitengröße, denn eine nicht angezeigte Seite rendert keine Bilder ("not
+  compositing frames", am 31.07. auch auf der 90-KB-Reise). Jeder Beweis läuft über JavaScript
+  (DOM-Geometrie, `getComputedStyle`). Drei Fallen, die alle schon Fehlbefunde erzeugt haben:
   (1) **Erst Viewport setzen, dann messen** — ein frisch geöffneter Tab meldet `0×0`, jede Geometrie
   ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch). `resize_window` mit expliziter
   Breite/Höhe, danach `innerWidth` gegenprüfen. **Danach `resize` selbst auslösen:** die Scroll-Engine
