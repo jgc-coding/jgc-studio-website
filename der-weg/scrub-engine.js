@@ -20,6 +20,9 @@
        copyTiming: 'auto',  // 'auto' | 'arrival' | 'middle' — WHEN each section's copy
                             // peaks. 'auto' reads it off the config: no connectors =
                             // architecture A = 'arrival'. See "COPY TIMING" below.
+       clipFps: 24,       // native fps of the encoded clips. Seeks then fire only on
+                          // real frame changes (fewer decodes, steadier scrubbing);
+                          // omit to keep the legacy threshold-based seeking.
        sections: [
          { id, label, still, poster, posterMobile, clip, clipMobile, accent,
            crossfade: 0.38,  // optional per-section dissolve width, overrides the global
@@ -175,6 +178,11 @@ function mountScrollWorld(container, config) {
   const DIVE_W = config.diveScroll || 1.3;
   const CONN_W = config.connScroll || 0.9;
   const CROSSFADE = (config.crossfade != null) ? config.crossfade : 0.12;  // seam dissolve width (vh)
+  // Native fps of the encoded clips (`clipFps` in the config). With it, seeks
+  // quantise to REAL frame changes — the eased tail otherwise orders several
+  // sub-frame seeks per settle that decode the same picture again. Unset (0)
+  // keeps the legacy threshold-based seeking.
+  const FPS = config.clipFps || 0;
   const N = SECTIONS.length;
   if (!N) return;
 
@@ -312,7 +320,7 @@ function mountScrollWorld(container, config) {
   // (where the copy peaks) and moves quicker near the seams. L=0 linear, L=1 full
   // mid-scene pause. f(0)=0, f(1)=1 always, so seam frames are untouched.
   const lingerEase = (x, L) => { L = clamp(L); const c = x - 0.5; return (1 - L) * x + L * (4 * c * c * c + 0.5); };
-  let vh = window.innerHeight, stageX = 0, totalW = 0, activeIndex = -1, ticking = false;
+  let vh = window.innerHeight, stageX = 0, totalW = 0, activeIndex = -1, ticking = false, lastRaf = 0;
   let laidOutW = window.innerWidth;   // width the current layout was computed at (see onResize)
 
   function layout() {
@@ -382,7 +390,10 @@ function mountScrollWorld(container, config) {
         v.muted = true; v.playsInline = true; v.preload = 'auto';
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
         v.src = URL.createObjectURL(blob);
-        v.addEventListener('loadedmetadata', () => { s.ready = true; read(); });
+        // Start the very first seek AT the current scroll position: easing up
+        // from 0 would visibly fast-forward the clip in the moment it replaces
+        // the poster.
+        v.addEventListener('loadedmetadata', () => { s.ready = true; s.cur = s.target; read(); });
         // Reveal the video (hide the still poster) only once a real frame has
         // painted — on iOS a seeked-but-never-played muted video stays blank, so
         // hiding the still on metadata alone would flash an empty scene.
@@ -485,20 +496,42 @@ function mountScrollWorld(container, config) {
     ticking = false;
   }
 
-  function raf() {
-    const eps = isMobile() ? 0.02 : 0.008;   // coarser seek step on phones = fewer decodes
+  function raf(now) {
+    // The easing step derives from REAL elapsed time, not from the tick count:
+    // a fixed 0.18/tick meant ~190 ms response at 60 Hz, but ~100 ms on a 120 Hz
+    // phone and ~390 ms once decode load pushed the browser to 30 — the same
+    // scroll felt direct or sluggish depending on device and moment. tau = 85 ms
+    // reproduces the tuned 60 Hz feel at every frame rate. (V51)
+    const dt = lastRaf ? Math.min(now - lastRaf, 250) : 16.7;
+    lastRaf = now;
+    const alpha = reduce ? 1 : 1 - Math.exp(-dt / 85);
+    const eps = isMobile() ? 0.02 : 0.008;   // legacy seek threshold (only without clipFps)
     for (let i = 0; i < NSEG; i++) {
       const s = SEGMENTS[i];
       if (!s.hasClip || !s.ready || !s.video) continue;
-      // Never queue a seek while the decoder is still resolving the last one.
-      // On phones a fast flick would otherwise pile up seeks and freeze the clip;
-      // cur keeps lerping, so we snap to the latest target the moment it's free.
+      // Off-screen scenes don't need the eased camera: pin them to the target in
+      // one hop, so a route jump doesn't keep every loaded decoder easing in
+      // parallel — and the scene already stands correct when it fades in. (V53)
+      if (!s.visible) s.cur = s.target;
+      else s.cur += (s.target - s.cur) * alpha;
+      // Never QUEUE a seek while the decoder still resolves the last one (fast
+      // flicks would pile up and freeze the clip) — but the easing above keeps
+      // running, so the next seek continues from wherever the camera got to in
+      // the meantime, not from where the decoder stalled. (V52)
       if (s.video.seeking) continue;
-      if (!s.visible && Math.abs(s.cur - s.target) < 0.002) continue;
-      s.cur += (s.target - s.cur) * (reduce ? 1 : 0.18);
       const dur = s.video.duration || 1;
       const t = clamp(s.cur, 0, 0.999) * dur;
-      if (Math.abs(s.video.currentTime - t) > eps) { try { s.video.currentTime = t; } catch (e) {} }
+      if (FPS) {
+        // Seek only when the target lands on a DIFFERENT frame, and aim at the
+        // frame centre — a currentTime exactly on a frame boundary rounds to
+        // either neighbour depending on the browser. (V53)
+        const frame = Math.floor(t * FPS);
+        if (frame !== Math.floor(s.video.currentTime * FPS)) {
+          try { s.video.currentTime = (frame + 0.5) / FPS; } catch (e) {}
+        }
+      } else if (Math.abs(s.video.currentTime - t) > eps) {
+        try { s.video.currentTime = t; } catch (e) {}
+      }
     }
     requestAnimationFrame(raf);
   }

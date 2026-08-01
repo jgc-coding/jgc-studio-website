@@ -1422,6 +1422,12 @@
        Messwerte: scripts/der-weg/pruefe-naehte.mjs */
     crossfade: 0.1,
 
+    /* Bildrate der kodierten Clips. Damit springt die Engine nur, wenn wirklich
+       ein anderes Bild zu zeigen ist — statt mehrfach je Bildwechsel zu
+       dekodieren. `kodiere.mjs` erzeugt 24 fps und warnt, wenn ein neues
+       Rohvideo davon abweicht; dann diese Zahl mitziehen. */
+    clipFps: 24,
+
     sections: [
       {
         id: 'anflug', label: 'Auftakt',

@@ -17,7 +17,7 @@ per ffprobe gemessen, Latenzen gerechnet; eine Laufzeitmessung gibt der versteck
 Preview-Pane nicht her (Kernfunktion 15). Das Videomaterial ist unschuldig: alle Clips
 24 fps, Ankerbilder exakt wie geplant alle 8 (PC) bzw. 4 Bilder (Telefon), und auch die
 V49-Scrollwege stehen korrekt im Code. Die Ursachen liegen in der Nachführ-Schleife der
-Engine → **V51–V53**, alle Aufwand S und zusammen behebbar.
+Engine → **V51–V53**, am selben Tag umgesetzt (siehe Erledigt; Rechenwerte im CHANGELOG).
 
 Runde 2 (Fokus: alles) ist live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
 Runde 3 hat nur `der-weg/` und seine Werkzeuge angesehen; V18/Hauptseite, `site/`, `stilprobe/`
@@ -105,49 +105,6 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 **V29–V33 kamen aus Gabriels PC-Durchgang am 27.07.2026 und sind am 29.07. umgesetzt** — sie
 stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
 DSGVO-Linie außerhalb der Reise.
-
-- [ ] **V51** (B) Die Glättung der Videozeit rechnet pro gezeichnetem Bild statt pro Zeit —
-      dasselbe Scrollen ist mal direkt, mal zäh, je nach Gerät und Momentlast
-      Beleg: `der-weg/scrub-engine.js:498` — `s.cur += (s.target - s.cur) * 0.18` je
-      rAF-Durchlauf, ohne Zeitbezug. 90 % des Rückstands sind nach ~11,6 Durchläufen
-      aufgeholt: 97 ms auf einem 120-Hz-Telefon, 193 ms bei 60 Hz, 387 ms, wenn die
-      Bildrate unter Decoderlast auf 30 fällt. Die Last des Scrubbens drückt selbst die
-      Bildrate — je mehr los ist, desto träger wird obendrein die Glättung. Am PC liegt
-      vor der Glättung zusätzlich Chromes eigene Radscroll-Animation (~100–150 ms).
-      Aufwand: S · Risiko: gering
-      Warum: Der Kern des „mal zäh": die Reaktionszeit der Kamera ist keine Eigenschaft
-      der Seite, sondern schwankt mit Gerät und Last um den Faktor 4. Fix: Schrittweite
-      aus der echten Bildzeit ableiten (`1 - exp(-dt/tau)`, tau ≈ 85 ms entspricht dem
-      heutigen Gefühl bei 60 Hz). Gilt genauso für die Skill-Fassung → Rückgabeliste in
-      `docs/der-weg.md`.
-
-- [ ] **V52** (B) Läuft gerade ein Videosprung, friert die Nachführung ein und holt danach
-      in größeren Sprüngen auf — der Code widerspricht seinem eigenen Kommentar
-      Beleg: `der-weg/scrub-engine.js:496` — `if (s.video.seeking) continue;` steht VOR der
-      Glättungszeile und überspringt sie mit; der Kommentar daneben behauptet das Gegenteil
-      („cur keeps lerping, so we snap to the latest target the moment it's free"). Auf
-      Telefonen dauert ein Sprung im Hardware-Decoder typisch 20–60 ms (2–4 Bildschirm-
-      Frames, Erfahrungswert, keine Messung); solange steht die interne Position, der
-      Rückstand wächst, der nächste Sprung fällt entsprechend größer und unregelmäßig aus.
-      Aufwand: S · Risiko: gering
-      Warum: Das ist das „fast sprunghaft" — vor allem am Telefon, wo schon normales
-      Scrollen (~1 Videobild je Bildschirm-Frame) den Decoder an der Kapazitätsgrenze
-      fährt; jede Störung (Clip-Nachladen, zweite Szene pendelt ein) kippt ihn in den
-      Friere-und-hole-auf-Modus. Fix: nur das Schreiben von `currentTime` auslassen,
-      die Glättung weiterrechnen — dann stimmt auch der Kommentar wieder.
-
-- [ ] **V53** (B) Sprungaufträge, die kein neues Bild zeigen können — und nach einem
-      Sprungmarken-Klick spulen alle geladenen Videos gleichzeitig
-      Beleg: (a) `der-weg/scrub-engine.js:489` — die Schwelle für „lohnt einen Sprung" ist
-      8 ms (PC) bzw. 20 ms (Telefon), ein Videobild dauert aber 41,7 ms (24 fps). Beim
-      Ausklingen der Glättung nach jedem Anhalten entstehen so am PC bis zu 9 Sprünge für
-      einen einzigen Bildwechsel — 8 davon dekodieren dasselbe Bild noch einmal. (b) Zeile
-      497: unsichtbare Szenen spulen weiter, bis sie eingependelt sind — nach einem Sprung
-      über mehrere Etappen laufen kurzzeitig alle geladenen Decoder parallel (bis zu 7).
-      Aufwand: S · Risiko: gering
-      Warum: Beides ist reine Lastverstärkung genau in den Momenten, in denen V51/V52
-      kippen. Fix: Zielzeit aufs 24-Bilder-Raster runden (Sprung nur bei echtem
-      Bildwechsel), unsichtbare Szenen hart setzen statt weich nachziehen.
 
 - [ ] **V47** (C) Auf **schmalen** Telefonen stapeln die zwei Handlungsknöpfe der
       Schluss-Station und heben damit den Textstreifen für jede Station an
@@ -319,6 +276,31 @@ DSGVO-Linie außerhalb der Reise.
   an der Breite: unverändert 325/355 wo gestapelt wird, 300/320 wo nicht. Auf Gabriels Gerät
   (393 × 702) wächst das Bildband von 377 auf 402 px (54 → 57 %), bei 393 × 852 von 497 auf
   532 (58 → 62 %). Über neun Schirmgrößen nachgemessen, nirgends ragt Text heraus.
+
+### Scrollgefühl der Kamerafahrt — umgesetzt am 2026-08-01 (Rechenwerte im CHANGELOG)
+
+- **V51** (B) **Die Glättung der Videozeit rechnete pro gezeichnetem Bild statt pro Zeit.**
+  0,18 je rAF-Durchlauf hieß: ~100 ms Reaktion auf einem 120-Hz-Telefon, ~190 ms bei 60 Hz,
+  ~390 ms, sobald Decoderlast die Bildrate auf 30 drückte — dasselbe Scrollen mal direkt,
+  mal zäh, und die Scrub-Last drückte die Bildrate selbst. Die Schrittweite leitet sich
+  jetzt aus der echten Bildzeit ab (`1 − exp(−dt/85 ms)`); 85 ms reproduziert das
+  abgestimmte 60-Hz-Gefühl auf jeder Bildrate. **Lehre:** eine Konstante „pro Frame" ist
+  auf dem Telefon keine Konstante.
+- **V52** (B) **Während eines Video-Seeks fror die Nachführung ein** und holte danach in
+  größeren, unregelmäßigen Sprüngen auf — das „fast sprunghaft", vor allem am Telefon, wo
+  normales Scrollen (~1 Videobild je Bildschirm-Frame) den Decoder ohnehin an der Grenze
+  fährt. Der Code widersprach seinem eigenen Kommentar („cur keeps lerping"). Jetzt rechnet
+  die Glättung durch; nur das Schreiben von `currentTime` pausiert, solange der Decoder
+  arbeitet.
+- **V53** (B) **Sprungaufträge, die kein neues Bild zeigen konnten.** Die Seek-Schwelle
+  (8/20 ms) lag unter der Bilddauer (41,7 ms bei 24 fps): beim Ausrollen nach dem Anhalten
+  7 Seeks für 2 echte Bildwechsel (PC, simuliert). Seeks feuern jetzt nur bei Bildwechsel
+  (`clipFps: 24`, Ziel Bildmitte). Dazu: unsichtbare Szenen werden hart auf ihr Ziel
+  gesetzt statt weich nachgezogen (nach einem Wegmarken-Sprung spulten vorher bis zu
+  7 Decoder parallel), und ein frisch geladener Clip startet an der aktuellen
+  Scrollposition statt sichtbar hochzuspulen. `kodiere.mjs` warnt ab jetzt, wenn eine
+  neue Etappe nicht 24 fps liefert — der anstehende Clip-Tausch (Etappe 6, Naht 3→4)
+  bleibt damit gefahrlos.
 
 ### Gabriels zweiter Telefon-Durchgang — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
 

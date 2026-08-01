@@ -2,6 +2,52 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-08-01 — Der Weg: Scrollgefühl der Kamerafahrt (V51–V53)
+
+Gabriels Rückmeldung: das Hintergrundvideo fühle sich beim Scrollen „manchmal zäh, manchmal
+fast sprunghaft" an. Die Analyse hat das Material entlastet (alle 14 Clips 24 fps, Ankerbilder
+wie geplant alle 8 bzw. 4 Bilder — per ffprobe gemessen) und drei Ursachen in der
+Nachführ-Schleife der Engine gefunden. Anders als bei V48–V50 sind die Belege **gerechnet**
+statt im Browser gemessen: die Kamerafahrt läuft im versteckten Preview-Pane nicht
+(Prüfliste, Kernfunktion 15) — der Gegenbeweis ist Gabriels nächster Telefontest.
+
+- **V51 — Die Glättung rechnete pro gezeichnetem Bild statt pro Zeit.** `0.18 je
+  rAF-Durchlauf` ergibt 90 % Aufholung nach ~11,6 Durchläufen — das sind ~100 ms auf einem
+  120-Hz-Telefon, ~190 ms bei 60 Hz und ~390 ms, sobald Decoderlast die Bildrate auf 30
+  drückt. Dieselbe Seite reagierte also mal direkt, mal zäh — und die Scrub-Last selbst
+  drückte die Bildrate (Rückkopplung). Jetzt: `1 − exp(−dt/85 ms)` mit der echten
+  Bildzeit `dt`; 85 ms reproduziert das mit V49 abgestimmte 60-Hz-Gefühl auf jeder Bildrate
+  (bei 16,7 ms ergibt die Formel exakt die alten 0,178/Schritt). `dt` ist auf 250 ms
+  gedeckelt, damit ein Tab-Wechsel keinen Riesenschritt nachholt.
+- **V52 — Während eines Seeks fror die Nachführung ein.** `if (seeking) continue` stand vor
+  der Glättungszeile und übersprang sie mit — der Kommentar daneben behauptete das
+  Gegenteil. Dauert ein Sprung am Telefon 20–60 ms (2–4 Bildschirm-Frames), wuchs solange
+  der Rückstand, und das Video holte in entsprechend größeren, unregelmäßigen Sprüngen auf.
+  Jetzt rechnet die Glättung immer weiter; pausiert wird nur das Schreiben von
+  `currentTime`.
+- **V53 — Seeks, die kein neues Bild zeigen konnten.** Die Schwelle (8 ms PC / 20 ms
+  Telefon) lag unter der Bilddauer (41,7 ms bei 24 fps): das Ausrollen der Glättung nach
+  dem Anhalten bestellte am PC 7 Seeks, wo 2 Bildwechsel zu zeigen waren (simuliert, s. u.;
+  am Telefon 3). Neu: `clipFps: 24` in der Konfiguration — geseekt wird nur, wenn das Ziel
+  auf einem anderen Bild des 24er-Rasters liegt, und dann auf die Bildmitte (eine Zielzeit
+  exakt auf der Bildgrenze rundet je nach Browser in beide Richtungen). Dazu: unsichtbare
+  Szenen werden hart auf ihr Ziel gesetzt statt weich nachgezogen (nach einem
+  Wegmarken-Sprung spulten vorher bis zu 7 Decoder parallel), und ein frisch geladener Clip
+  setzt seinen ersten Seek an die aktuelle Scrollposition statt sichtbar von Bild 0
+  hochzuspulen.
+- **Nachgerechnet** (Nachbau der alten und neuen Schleife in Node, ein sichtbares Video,
+  24 fps): Reaktionszeit alt 92 / 183 / 367 ms bei 120 / 60 / 30 Hz → neu 167–192 ms
+  überall. Langsames Scrollen (16 s je Etappe, 60 Hz): 955 → 192 Seeks bei 193 Bildern.
+  Ausrollen nach dem Anhalten: 7 → 2 Seeks (PC). Träger Decoder (50 ms je Seek): mittlerer
+  Rückstand des gezeigten Bildes hinter dem Scroll-Ziel 7,6 → 3,6 Bilder, Spitze
+  10,1 → 5,2.
+- **Absicherung für den anstehenden Clip-Tausch** (Etappe 6 mit Gabriels Porträt, Neubau
+  der Naht 3→4): `kodiere.mjs` misst nach dem Kodieren die Bildrate der erzeugten Datei und
+  warnt laut, wenn sie von den 24 fps abweicht, auf denen `clipFps` steht. Engine-Änderung
+  und Clip-Tausch sind damit entkoppelt — die Fixes gelten unverändert für neue Videos.
+- Alle drei Änderungen stehen in `der-weg/scrub-engine.js` (Sonderfassung) und auf der
+  Rückgabeliste für den `scroll-world`-Skill in `docs/der-weg.md`.
+
 ## 2026-07-31 — Der Weg: dritte Rückmeldung (V48–V50)
 
 Drei Punkte aus Gabriels Durchgang am Telefon. Alle drei waren **messbar**, und zwei davon standen

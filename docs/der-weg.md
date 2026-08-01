@@ -43,6 +43,11 @@ node scripts/der-weg/pruefe-naehte.mjs
 Etappe berührt immer zwei Übergänge, den davor und den danach. Ein neues Video, das
 woanders anfängt oder aufhört als das alte, zerreißt die Fahrt an dieser Stelle.
 
+Die Engine kennt außerdem die Bildrate der Clips (`clipFps: 24` in `der-weg/index.html`)
+und springt nur bei echtem Bildwechsel. `kodiere.mjs` warnt, wenn eine neu kodierte
+Etappe von 24 fps abweicht — dann die Zahl dort mitziehen. Und wer einen Clip tauscht,
+misst seine Bildbewegung neu und rechnet den `scroll`-Wert nach (Regel unten, V49).
+
 Die Nummern: 1 anflug · 2 werkzeug · 3 schreibtisch · 4 stilprobe · 5 weg · 6 lichtung ·
 7 aussicht.
 
@@ -449,6 +454,9 @@ Zusätze, alle rückwärtskompatibel — eine Konfiguration ohne sie verhält si
 | `visibility` an Stationen | ausgeblendete Stationstexte waren nur durchsichtig, aber weiter klickbar (die CTA-Knöpfe der Schluss-Station fingen auf Schirm 1 unsichtbar Klicks — mailto!) und tastatur-fokussierbar; jetzt schaltet `read()` zusätzlich `visibility` (V21, Runde 3) |
 | Nachlade-Deckel | ein dauerhaft fehlender Clip (404) löste bei jedem Scroll-Bild einen neuen Abruf aus; jetzt höchstens drei Versuche je Etappe (V28, Runde 3) |
 | Letzte Szene bleibt stehen | jede Szene blendete nach ihrem Ende aus — auch die letzte, obwohl danach nichts mehr kommt außer dem Leseteil. Die Reise endete darum in einer leeren Fläche. Jetzt gilt die Ausblendung nur für `i < NSEG - 1` (V37, 29.07.) |
+| Zeitbasierte Glättung | die Nachführung der Videozeit rechnet ihre Schrittweite aus der echten Bildzeit (`1 − exp(−dt/85 ms)`) statt fest 0,18 je gezeichnetem Bild — gleiche Reaktionszeit bei 30, 60 und 120 Hz (V51, 01.08.) |
+| Kein Einfrieren im Sprung | läuft gerade ein Video-Seek, wird nur das Schreiben von `currentTime` ausgelassen; die Glättung rechnet weiter, statt danach in größeren Sprüngen aufzuholen (V52, 01.08.) |
+| `clipFps: 24` | Seeks nur bei echtem Bildwechsel (Ziel: Bildmitte des 24er-Rasters) statt mehrerer Sub-Frame-Seeks je Ausrollen (simuliert: 7 statt 2 am PC); unsichtbare Szenen werden hart gesetzt statt weich nachgezogen, und ein frisch geladener Clip startet an der aktuellen Scrollposition statt sichtbar von 0 hochzuspulen (V53, 01.08.) |
 
 Die Trennung ist Absicht: die **Engine** bringt die Mechanik, die **Seite** die Politik
 (Schwelle, Messzeitpunkte, gemerkte Wahl, Schalter). Damit ist der Zusatz für jedes
@@ -506,10 +514,12 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
 - Die zwei springenden Übergänge (siehe oben).
 - **In den Skill zurückgeben**, sobald sie sich bewährt haben:
   1. `clipStart: 'gated'` + `prefetch` + Rückgabewert, die `visibility`-Kopplung der
-     Stationstexte (V21) und der Nachlade-Deckel (V28) — stehen bereits **in** der Engine,
-     müssen also nur noch in die Skill-Fassung übernommen werden. Bis dahin ist
-     `der-weg/scrub-engine.js` eine Sonderfassung, und ein Update aus dem Skill würde sie
-     überschreiben.
+     Stationstexte (V21), der Nachlade-Deckel (V28) und die überarbeitete Scrub-Nachführung
+     (V51–V53: zeitbasierte Glättung, kein Einfrieren während eines Seeks, `clipFps`-
+     Bildraster, unsichtbare Szenen hart setzen, Erst-Seek an der Scrollposition) — stehen
+     bereits **in** der Engine, müssen also nur noch in die Skill-Fassung übernommen werden.
+     Bis dahin ist `der-weg/scrub-engine.js` eine Sonderfassung, und ein Update aus dem
+     Skill würde sie überschreiben.
   2. Die verlorene Zentrierung der breiten Fassung — ein echter Fehler der Engine, kein
      Geschmack, und er trifft jedes Projekt, das den Skill benutzt (`top: 50%` plus
      `transform: translateY(-50%)`, während die Engine `transform` beim Scrollen überschreibt;

@@ -42,6 +42,11 @@ const ZIEL = resolve('der-weg/assets');
  * Drei Bilder von 193 sind 1,6 % der Etappe, inhaltlich also nichts.
  * Zum Nachmessen: scripts/der-weg/pruefe-naehte.mjs
  */
+/* Die Engine springt nur bei echtem Bildwechsel (`clipFps: 24` in
+ * der-weg/index.html). Liefert ein neues Rohvideo eine andere Bildrate,
+ * muss die Zahl dort mitgezogen werden — darum die Warnung unten. */
+const ERWARTETE_FPS = 24;
+
 const ETAPPEN = [
   { nr: 1, name: 'anflug' },
   { nr: 2, name: 'werkzeug' },
@@ -71,6 +76,15 @@ function mass(datei) {
 
 function mb(datei) {
   return (statSync(datei).size / 1048576).toFixed(1);
+}
+
+function fps(datei) {
+  const out = ff('ffprobe', [
+    '-v', 'error', '-select_streams', 'v:0',
+    '-show_entries', 'stream=r_frame_rate', '-of', 'csv=p=0', datei,
+  ]).trim();
+  const [z, n] = out.split('/').map(Number);
+  return n ? z / n : z;
 }
 
 /* Schneidet die ersten `vorlauf` Bilder weg. `setpts` setzt die Zeitachse danach
@@ -156,6 +170,10 @@ function main() {
       + (vorlauf ? `, ${vorlauf} Bilder Vorlauf ab` : '') + ') ');
     kodiereDesktop(quelle, desk, vorlauf);
     process.stdout.write('Desktop ');
+    const istFps = fps(desk);
+    if (Math.abs(istFps - ERWARTETE_FPS) > 0.01) {
+      console.warn(`\n::warnung:: ${name}: ${istFps} fps statt ${ERWARTETE_FPS} — clipFps in der-weg/index.html mitziehen!`);
+    }
     kodiereMobil(quelle, mobil, vorlauf);
     process.stdout.write('Handy ');
 
