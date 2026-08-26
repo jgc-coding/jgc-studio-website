@@ -1,66 +1,77 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (01.08.2026 — Scrollgefühl der Kamerafahrt, V51–V53, live)
-Gabriels Rückmeldung „das Hintergrundvideo fühlt sich mal zäh, mal fast sprunghaft an" ist
-analysiert und behoben. Das Material war unschuldig (ffprobe: alle 14 Clips 24 fps, Anker
-alle 8/4 Bilder); drei Ursachen saßen in der raf-Schleife der Engine:
-- **V51 — Glättung zeitbasiert** (`1 − exp(−dt/85 ms)` statt fest 0,18 je Frame): Reaktion
-  konstant ~180 ms auf jeder Bildrate statt 92–367 ms je nach Gerät und Last.
-- **V52 — kein Einfrieren während eines Seeks:** nur das Schreiben von `currentTime`
-  pausiert noch; Rückstand am trägen Decoder halbiert (simuliert 7,6 → 3,6 Bilder).
-- **V53 — Seeks nur bei echtem Bildwechsel** (`clipFps: 24`, Ziel Bildmitte; langsames
-  Scrollen 955 → 192 Seeks je Etappe), unsichtbare Szenen hart gesetzt statt nachgezogen,
-  Erst-Seek eines frisch geladenen Clips an der Scrollposition statt Hochspulen von 0.
-- Absicherung für den Clip-Tausch: `kodiere.mjs` warnt, wenn eine Etappe nicht 24 fps liefert.
-- Beweise: Node-Simulation Alt/Neu (Zahlen im CHANGELOG) + Testmount im Browser (Seek exakt
-  aufs 19,5/24-Raster, Seek-Koaleszenz greift, keine Exception). Live: Deploy `2a045e6` grün,
-  Live-Bytes gegengeprüft, Hauptseite V18 unberührt (1.225.044 Zeichen).
-- **Das Gefühl selbst kann nur Gabriels Telefon beurteilen** — liegt als neuer Punkt im Hub.
+## Stand (26.08.2026 — Texte v2, Formulare in der Reise, V54–V58, live)
+Gabriels Änderungsrunde vom 26.08. ist komplett umgesetzt, gemessen und deployt (Lauf auf
+`5e513fc` grün, Live-Bytes gegengeprüft, Hauptseite V18 byteidentisch unberührt).
+- **V54 — Texte v2 wortgetreu** an allen drei Orten je Station plus FAQ 01/02/05; Chips
+  („innerhalb 48 h", ohne „15 im Monat", „TÜV-zertifiziert"), Label „Über mich", überall
+  „Klientinnen und Klienten". Neun Grammatik-/Typografie-Fixes und zwei Konsistenz-Chips
+  („ab 1.000 €", „Social Media") an Gabriel gemeldet.
+- **V54-Messung — Hochkant-Zonen angehoben** auf 365/350/345/325 (vorher 355/320/325/300):
+  höchste Station ist jetzt „Über mich" (313 px) bzw. bei 320 px Breite „Der Weg" (297 px),
+  nicht mehr die Schluss-Station. Kostet 20–30 px Bildhöhe auf breiten Telefonen.
+- **V55 — „Mehr dazu" am PC größer** (ab 900 px: 52rem breit, min(88dvh,62rem), Lesebreite
+  38rem im Feld). Hero passt bei 1920×1080 ohne Scrollen, bei 1366×768 bleiben 65 px Rest.
+- **V56/V57 — zwei Formular-Overlays in der Reise** (`der-weg/formulare.js`, neu): Stilprobe
+  einreichen und Erstgespräch anfragen. Artikel ohne `data-station` in `#vertiefungen`, per JS
+  ins Overlay **verschoben statt geklont** (Eingaben überleben das Schließen), Reise hält an,
+  aber Weiterscrollen schließt NICHT. `mountVertiefung` gibt dafür neu ein Handle zurück.
+- **V58 — Gendern raus**, auch auf `stilprobe/index.html`. V18 bewusst unangetastet.
+- Neu im Repo: `docs/erstgespraech/` (Konzept + Vertrag), Gates erweitert (Deploy-Verify prüft
+  `formulare.js`, `pruefen.txt` prüft jetzt auch die drei Reise-Skripte).
 
 ## Offen (unfertig / wartet auf Zulieferung)
 - **Impressum ist weiter leer (V3)** — braucht Gabriels Daten, liegt im Hub. Größter Blocker.
-- **Gabriels Gerätetest steht aus** für Runde 3 (V48–V50) UND den Scrub-Umbau (V51–V53) —
-  seine „zäh/sprunghaft"-Meldung bezog sich auf den Stand davor.
-- **Zwei Clips kommen von Gabriel** (am 01.08. angekündigt): neue Etappe 4 gegen den
-  Rückwärts-Sprung der Naht 3→4 (Startbild liegt in `Scroll World\legs\anschlussbilder\`)
-  und leg 6 mit seinem eigenen Porträt statt des generierten Gesichts.
-- **V47 ist stark geschrumpft, nicht erledigt.** Auf Schirmen unter 362/380 px stapeln die
-  Knöpfe weiter; Gewinn dort rund 5 px. Korrigierte Fassung in `verbesserungen.md`.
-- **Eine Geschmacksentscheidung ist weiter unbestätigt:** der Chip auf der ersten Szene heißt
-  „Deine Daten DSGVO-konform". Liegt als Frage im Hub.
+  Daran hängt auch der **Datenschutz-Absatz zu den zwei neuen Formularen**.
+- **Gabriels Gerätetest steht aus** — inzwischen für drei Runden: V48–V50, der Scrub-Umbau
+  V51–V53 und jetzt V54–V58 (neue Texte, Formulare, höherer Textstreifen). Drei Punkte im Hub,
+  in einem Durchgang erledigbar.
+- **Zwei Clips kommen von Gabriel:** neue Etappe 4 gegen den Rückwärts-Sprung der Naht 3→4
+  (Startbild in `Scroll World\legs\anschlussbilder\`) und leg 6 mit seinem eigenen Porträt.
+- **V47 ist stark geschrumpft, nicht erledigt.** Unter 362/380 px stapeln die Knöpfe weiter;
+  Gewinn dort rund 5 px. Korrigierte Fassung in `verbesserungen.md`.
+- **Zwei Wortlaut-Fragen im Hub:** der Chip „Deine Daten DSGVO-konform" auf der ersten Szene —
+  und neu, ob der v2-Auftaktsatz wieder pauschal „DSGVO-konform" sagen soll.
 - **Im Hub: soll die weiche Ausblendung des Videos ins Pergament kürzer werden?** 14svh
   (~98 px am Telefon); kürzer = ~28 px mehr klares Bild, ändert die Naht. Bewusst unangetastet.
-- **V34 offen:** die DSGVO-Sprachregelung fehlt in Lesefassung V18, `stilprobe/` und
-  Datenschutzseite. Hängt an der Hub-Frage, ob die Lesefassung bleibt.
-- **Formular und Badge der Stilprobe laufen weiter auf Fallbacks** — `senden.php` und
-  `kontingent.php` existieren noch nicht. Kein Bug; der Fehlerpfad ist sichtbar.
-- **`der-weg/scrub-engine.js` ist eine Sonderfassung** — seit 01.08. auch mit V51–V53.
-  Zusatzliste in `docs/der-weg.md`; ein Update aus dem Skill würde sie überschreiben.
+- **V34 offen:** die DSGVO-Sprachregelung fehlt in Lesefassung V18 und auf der Datenschutzseite.
+  Hängt an der Hub-Frage, ob die Lesefassung bleibt.
+- **Alle drei Formularstrecken laufen auf Fallbacks** — `stilprobe/senden.php`,
+  `kontingent.php` und neu `erstgespraech/senden.php` existieren noch nicht. Kein Bug, der
+  Fehlerpfad mit Mailweg ist der gebaute Normalfall. Ob `stilprobe@jgc-lumen.de` überhaupt
+  empfängt, ist ungeprüft (jetzt im Hub).
+- **`der-weg/scrub-engine.js` ist eine Sonderfassung** (V51–V53 inklusive). Zusatzliste in
+  `docs/der-weg.md`; ein Update aus dem Skill würde sie überschreiben.
 - Offene Befunde: **V3** · **V10** · **V13** · **V14** · **V18** · **V19** · **V20** ·
   **V34** · **V47**.
 - Offene Ideen: **I2** (V18 → Astro, löst V10 und V18 mit) · **I3** (Kosten-FAQ) ·
   **I4** (Wortmarke aufs Vorschaubild).
 
 ## Nächste Schritte (Claude)
-1. **Gabriels Urteil einarbeiten** — zu Runde 3 UND zum Scrollgefühl nach V51–V53. Erst
-   messen, dann Plan zeigen (hat viermal getragen). Stellschrauben: Boden 0,85 (Schluss-
-   szenen), Stilprobe-`scroll`, Ausblendung kürzen; beim Scrubbing die Zeitkonstante 85 ms.
+1. **Gabriels Urteil einarbeiten** — jetzt zu drei Runden gleichzeitig (V48–V50, V51–V53,
+   V54–V58). Erst messen, dann Plan zeigen (hat fünfmal getragen). Stellschrauben: Boden 0,85
+   (Schlussszenen), Stilprobe-`scroll`, Ausblendung kürzen, Zeitkonstante 85 ms beim Scrubbing,
+   und falls der Textstreifen zu hoch wirkt: die Texte von „Über mich"/„Der Weg" kürzen, nicht
+   die Zonen-Zahlen.
 2. **Nachgelieferte Clips einarbeiten** (Etappe 4 und 6): `node scripts/der-weg/kodiere.mjs <N>`
    → zwingend `pruefe-naehte.mjs` → Bildbewegung messen und `scroll` nachrechnen (V49-Regel,
-   Kommando in `docs/der-weg.md`); `kodiere.mjs` warnt selbst bei fps ≠ 24 (`clipFps`). Bei
-   neuem leg 3 zusätzlich `vorlauf` auf 0. Trägt die Naht 3→4 danach: `crossfade: 0.38` auf
-   den Etappen 3/4 zurücknehmen (global gilt 0.1) und Nähte neu messen.
-3. **Die Reise zur Hauptseite machen**, sobald Gabriel Texte und Umfang freigibt: `robots`
-   auf `index, follow`, `scripts/copy-homepage.mjs` bzw. Manifest, `canonical`, und
-   entscheiden, was mit `/main/` und der Lesefassung passiert.
+   Kommando in `docs/der-weg.md`); `kodiere.mjs` warnt selbst bei fps ≠ 24. Bei neuem leg 3
+   zusätzlich `vorlauf` auf 0. Trägt die Naht 3→4 danach: `crossfade: 0.38` auf den Etappen 3/4
+   zurücknehmen (global gilt 0.1) und Nähte neu messen.
+3. **Die Reise zur Hauptseite machen**, sobald Gabriel freigibt: `robots` auf `index, follow`,
+   `scripts/copy-homepage.mjs` bzw. Manifest, `canonical`, und entscheiden, was mit `/main/`
+   und der Lesefassung passiert. Seit dieser Session ist die Reise dafür bereit — sie kann
+   Stilprobe und Erstgespräch selbst entgegennehmen.
 4. **V34 umsetzen**, sobald über die Lesefassung entschieden ist — Wortlaut steht (V32),
    V18 braucht ein Transform-Skript, danach `inhalt/lumen-inhalt.md` neu erzeugen.
-5. **In den `scroll-world`-Skill zurückgeben** — Liste in `docs/der-weg.md`, Abschnitt
-   „Offen"; seit dieser Session gehören auch V51–V53 dazu (stehen fertig in der Engine).
-   In einem Rutsch, wenn die Seite steht.
-6. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker.
-7. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen → macht Formular und
-   Badge scharf. Vertrag: `docs/stilprobe/schnittstelle.md`.
+5. **In den `scroll-world`-Skill zurückgeben** — Liste in `docs/der-weg.md`, Abschnitt „Offen";
+   dazugekommen ist das Muster „Formular-Overlay: verschieben statt klonen, kein
+   Scroll-Schließen". In einem Rutsch, wenn die Seite steht.
+6. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker; im
+   selben Zug den Datenschutz-Absatz zu den zwei Formularen schreiben.
+7. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen, **plus neu ein zweites
+   `senden.php` für `/erstgespraech/`** — macht alle drei Strecken scharf. Verträge:
+   `docs/stilprobe/schnittstelle.md` und `docs/erstgespraech/schnittstelle.md`.
 8. I3 (Kosten-FAQ): Wortlaut-Vorschlag schreiben und vorlegen — nicht ohne Ok einsetzen.
 9. V20 auflösen, sobald Gabriel entscheidet: echte Ausschnitte oder Satz umformulieren.
 10. V47 nur anfassen, wenn Gabriel es ausdrücklich will — 5 px auf schmalen Telefonen.
@@ -70,57 +81,66 @@ alle 8/4 Bilder); drei Ursachen saßen in der raf-Schleife der Engine:
     Kompression plausibel halbierbar. Bisher bewusst ausgeklammert.
 
 ## Stolperfallen (sofort wichtig)
+- **Texte der Reise stehen an DREI Orten** in `der-weg/index.html` (Konfiguration `sections`,
+  SEO-Spiegel `data-sw-seo`, Vertiefungs-Artikel) — alle drei zusammen ändern, sonst erzählen
+  Browser und Suchmaschine Verschiedenes. Danach die Stationshöhen hochkant nachmessen.
+- **Die zwei Formular-Overlays folgen anderen Regeln als die Lesefelder:** Original-Knoten
+  verschieben (nicht klonen), kein Schließen durch Scrollen. Wer `vertiefung.js` anfasst, darf
+  das nicht „vereinheitlichen" — Begründung in `der-weg/formulare.js`, Kopfkommentar.
+- **`--weg-textzone` steht jetzt auf 365/350/345/325** (vier Stellen, Breite × Höhe). Die
+  Grenzen 365/385 px hängen an der Breite der zwei Schluss-Knöpfe — **wer deren Beschriftung
+  ändert, misst neu.** Messwerte in `docs/der-weg.md` und im CSS-Kommentar.
 - **`clipFps: 24` ist an die Kodierung gekoppelt** — die Engine seekt aufs 24er-Bildraster.
-  `kodiere.mjs` warnt bei Abweichung; wer an Rasterung oder Glättung dreht: `docs/der-weg.md`.
-- **Der Bildanteil hängt an `--weg-textzone`** in `der-weg/index.html` — vier Stellen (Breite
-  × Höhe). Die Grenzen 365/385 px hängen an der Breite der zwei Schluss-Knöpfe — **wer deren
-  Beschriftung ändert, misst neu.** Tabellen in `docs/der-weg.md`.
+  `kodiere.mjs` warnt bei Abweichung.
 - **`scroll` je Etappe ist keine Geschmacksfrage**: `Bildbewegung / 8,06`, Boden 0,85 (V49).
-  Wer einen Clip austauscht, misst neu — sonst wandert der Zäh-Fehler wieder ein.
-- **`linger` und Sprungziel nur mit `copyTiming` zusammen denken** — die Verwechslung
-  ('middle' angenommen, 'arrival' gelaufen) hat zweimal zugeschlagen (V38, V48).
+- **`linger` und Sprungziel nur mit `copyTiming` zusammen denken** — die Verwechslung hat
+  zweimal zugeschlagen (V38, V48).
 - **Nicht jeder Leerraum unter dem Text ist ein Fehler** — ~60 px sind die `svh`-Reserve für
-  die einfahrende Adressleiste. Bewusste Wahl, keine Schlamperei.
-- **Zwei Verläufe an einer Naht müssen sich überlappen** — an der Abgangs-Naht ist dreimal
-  etwas gerissen (V37, V39, V43/V44). Siehe „Die Schürze" in `docs/der-weg.md`.
-- **Behauptete Zahlen vor dem Dokumentieren messen** — V47 hielt vier Wochen den Streifen
-  hoch; diese Session war „bis zu 9 Seeks" geschätzt, simuliert waren es 7.
+  die einfahrende Adressleiste. Bewusste Wahl.
+- **Zwei Verläufe an einer Naht müssen sich überlappen** (V37, V39, V43/V44) — „Die Schürze".
+- **Behauptete Zahlen vor dem Dokumentieren messen.** Diese Session gut gelaufen: die alten
+  Zonen-Werte wurden erst reproduziert (Schluss-Station 306/277 px wie dokumentiert), bevor die
+  neuen galten — das trennt „Text ist gewachsen" von „Messaufbau ist kaputt".
 - **Preview-Pane: Screenshots gehen gar nicht**, Beweise über DOM-Geometrie; erst Viewport
-  setzen, dann `resize` selbst auslösen. rAF/Scroll laufen nicht von allein — der Testmount-
-  Trick (rAF-Callbacks sammeln, je Charge EINMAL per `splice` feuern, nie bis zur Leere —
-  die Engine bestellt sich endlos nach) hat sich am 01.08. bewährt. Details in CLAUDE.md.
-- **Der Arbeitsordner einer Sitzung kann zwischen zwei Zügen ausgetauscht werden** (29.07.).
+  setzen, dann `resize` selbst auslösen. Formular-Flüsse mit ersetztem `window.fetch` prüfen
+  (Erfolg/Fehler/Timeout/Warteliste) — hat diese Session sauber getragen.
+- **Commit-Messages IMMER als Datei + `git commit -F`** — heute wieder zugeschlagen: ein
+  Here-String nach `;` in einer Befehlskette wird nicht als Here-String geparst, git bekam
+  Wortsalat als Pathspecs und staged gar nichts.
+- **Der Arbeitsordner einer Sitzung kann zwischen zwei Zügen ausgetauscht werden.**
   Bei „No such file or directory" auf einen eben benutzten Pfad: `git worktree list`.
-- V18 = minifiziertes Single-File-HTML: nie direkt editieren; Transform-Skript mit Assertions
-  (Vorbilder in `scripts/v18/`). Interne Links absolut (`/jgc-studio-website/…`).
+- V18 = minifiziertes Single-File-HTML: nie direkt editieren; Transform-Skript mit Assertions.
+  Interne Links absolut (`/jgc-studio-website/…`).
 - **Vor jedem Zugende `node scripts/pruefe-seiten.mjs`** (steckt in `pruefen.txt`).
-- **Scroll-Reise lokal ansehen:** `node scripts/der-weg/server.mjs` aus dem Arbeits-Worktree
+- **Scroll-Reise lokal ansehen:** `node scripts/der-weg/server.mjs` aus einem Arbeits-Worktree
   (der Hauptordner steht auf `variant/09` und hat kein `der-weg/`), Port 4330.
 - Deploy = Push auf `main` (`main` in keinem Worktree → `git branch -f main HEAD`).
-- **Commit-Messages IMMER als Datei + `git commit -F`** — am 01.08. zerbrach sogar eine reine
-  ASCII-Message: ein Here-String nach `;` in einer Befehlskette wurde nicht als Here-String
-  geparst, git bekam Wortsalat als Pathspecs.
 - Gabriels eigene Aufgaben liegen im **Hub, Karte „Website"** — nicht in einer Datei im Repo.
 
 ## Aufräumen — wartet auf Gabriels Freigabe
-Kassensturz 01.08.: 6 Worktrees (Hauptbaum + 4 unter „JGC Studio" + 1 unter „Scroll World").
+Kassensturz 26.08.: 6 Worktrees (Hauptbaum + 4 unter „JGC Studio" + 1 unter „Scroll World").
 Ungemergt gegen `main`: die neun `variant/*`-Branches (**müssen bleiben** — der Deploy baut
-sie) und dieselben drei `claude/*` wie am 31.07. (damals geprüft: keine verlorene Arbeit,
-seither unverändert). Die Arbeit dieser Session liegt vollständig in `main`; ihr Branch
-`claude/background-video-scroll-behavior-6e6a61` (lokal + origin) ist gemergt und kann weg.
-Entbehrliche Worktrees (alle auf gemergten Ständen): `bold-hopper-71b067`, `variante-18`,
-`website-improvements-review-e4c50f`, `Scroll World/…/extract-video-last-frame-ac0958`.
-**`leg6-staffelei-bild-1ac3ec` ist der aktive Ordner dieser Session** — erst nach deren
-Ende entfernen.
+sie) und dieselben drei `claude/*` wie am 31.07./01.08. (damals geprüft: keine verlorene
+Arbeit, seither unverändert). Die Arbeit dieser Session liegt vollständig in `main`.
+
+**Korrektur zum letzten Stand:** die Liste vom 01.08. führte `website-improvements-review-e4c50f`
+als entbehrlich — genau dieser Worktree war der Arbeitsordner dieser Session und darf erst
+nach ihrem Ende weg. Umgekehrt ist `leg6-staffelei-bild-1ac3ec` (damals aktiv) jetzt frei.
 
 ```
 git worktree remove ".claude/worktrees/bold-hopper-71b067"
 git worktree remove ".claude/worktrees/variante-18"
-git worktree remove ".claude/worktrees/website-improvements-review-e4c50f"
+git worktree remove ".claude/worktrees/leg6-staffelei-bild-1ac3ec"
 git worktree remove "C:/Projekte/JGC Studio/Scroll World/.claude/worktrees/extract-video-last-frame-ac0958"
 git branch -d claude/bold-hopper-71b067 claude/variante-18 claude/telegram-last-message-screenshot-8178b6
 git branch -d claude/sharp-herschel-f7c5e1 claude/website-variant-18-homepage-c16a97
+git branch -d claude/jgc-lumen-text-alternatives-d8ba75 claude/website-booking-options-ac112a
 git branch -D claude/world-scroll-mobile-expand-9b5250
-git branch -d claude/background-video-scroll-behavior-6e6a61
-git push origin --delete claude/background-video-scroll-behavior-6e6a61
+```
+
+Nach dem Ende DIESER Sitzung zusätzlich (Worktree + Branch lokal und auf origin):
+```
+git worktree remove ".claude/worktrees/website-improvements-review-e4c50f"
+git branch -d claude/jgc-lumen-website-updates-0552a3
+git push origin --delete claude/jgc-lumen-website-updates-0552a3
 ```

@@ -19,7 +19,8 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   Korrekturlesen oder Textarbeit nicht zugänglich ist.
 - `der-weg/` — **zweite Fassung der Seite als Scroll-Reise** (Kamerafahrt durch eine
   Papierwelt, 7 Videoetappen, ~52 MB). Eigenständige Unterseite wie `stilprobe/`, keine
-  Standalone-Variante — steht deshalb nicht im Manifest. Werkzeuge in `scripts/der-weg/`,
+  Standalone-Variante — steht deshalb nicht im Manifest. Nimmt Stilprobe- und
+  Erstgespräch-Anfragen selbst entgegen (`formulare.js`). Werkzeuge in `scripts/der-weg/`,
   Rohvideos außerhalb des Repos. **Details und Austauschweg: `docs/der-weg.md`.**
 - `scripts/generate-gallery.mjs` — baut die Galerie-Startseite.
 - `stilprobe/index.html` — eigenständige Unterseite „Die Stilprobe" (lesbares Single-File-HTML im V18-Design,
@@ -29,10 +30,12 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
 - `docs/stilprobe/` — Stilprobe-Konzept v1.1, Knoten-Graph, `schnittstelle.md` (Formular-/Badge-Vertrag für die
   spätere PHP-Empfangsschicht aus dem separaten Repo `stilprobe-automatik`).
 
-## Stilprobe (Besonderheiten)
-- Formular (`senden.php`) und Kontingent-Badge (`kontingent.php`) zeigen auf Endpoints, die erst mit dem
-  All-Inkl-Umzug existieren — bis dahin greifen by design die Fallbacks (statischer Kontingent-Satz,
-  Fehlermeldung mit Mail-Ausweichweg). Feldnamen/JSON-Vertrag nicht ändern ohne `docs/stilprobe/schnittstelle.md`.
+## Formulare (Besonderheiten)
+- Drei Strecken zeigen auf Endpoints, die erst mit dem All-Inkl-Umzug existieren: Stilprobe-Formular
+  (`senden.php`), Kontingent-Badge (`kontingent.php`) und Erstgespräch (`/erstgespraech/senden.php`).
+  Bis dahin greifen by design die Fallbacks (statischer Kontingent-Satz, Fehlermeldung mit
+  Mail-Ausweichweg). Feldnamen/JSON-Verträge nicht ändern ohne `docs/stilprobe/schnittstelle.md`
+  bzw. `docs/erstgespraech/schnittstelle.md`.
 - Mailadressen: `kontakt@jgc-lumen.de` (Impressum, Erstgespräch-CTA) empfängt bestätigt. Ob das Postfach
   `stilprobe@jgc-lumen.de` existiert, ist ungeprüft — es steht als const in den Inline-Scripts. Die Domain
   selbst ist registriert und zeigt auf All-Inkl, liefert über HTTP aber nur eine Parkseite ohne HTTPS.
@@ -127,7 +130,14 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   Unterseite erbt das CSS aus V18, ein Fehler dort taucht also zweimal auf.
 - **Sektions-Aussehen nie über die Position steuern** (`:nth-child(N of .bg-pergament)`): eine
   eingeschobene Sektion verschiebt still alle Farbflächen. Immer IDs. `pruefe-seiten.mjs` bewacht das.
+- **Texte der Scroll-Reise stehen an DREI Orten** in `der-weg/index.html` (Konfiguration `sections`,
+  SEO-Spiegel `data-sw-seo`, Vertiefungs-Artikel) — immer alle drei zusammen ändern, sonst erzählen
+  Browser und Suchmaschine Verschiedenes. Danach die Stationshöhen hochkant nachmessen: `--weg-textzone`
+  hängt an der höchsten Station (`docs/der-weg.md`).
 - Windows: keine PS-Bulk-Replaces auf den HTML-Dateien (verstümmelt UTF-8). Edits via Tool oder Node.
+- **Commit-Messages immer als Datei + `git commit -F`.** Ein PowerShell-Here-String (`@'…'@`) nach
+  einem `;` in einer Befehlskette wird nicht als Here-String geparst; git bekommt Wortsalat als
+  Pathspecs und staged dann gar nichts. Zweimal passiert (01.08., 26.08.).
 - **`.gitattributes` / EOL:** Der Git-Index der minifizierten Varianten-HTMLs ist LF; `.gitattributes` hält
   sie als `text eol=lf`. NICHT auf `-text`/`binary` stellen — das würde die CRLF-Arbeitskopien wörtlich
   einchecken und die deployten Live-Bytes ändern. Vor EOL-/Attribut-Änderungen immer erst
