@@ -709,6 +709,26 @@
     color: color-mix(in srgb, var(--sw-ink-soft) 78%, transparent);
   }
 
+  /* Am PC darf das Feld deutlich groesser sein (Gabriels Rueckmeldung vom
+     26.08.2026: das Hero-Feld musste scrollen, obwohl drumherum Platz war).
+     Ab 900 px — bewusst NICHT die 861-px-Schwelle der Engine-Navigation,
+     sondern eine glatte Grenze knapp darueber, die Telefone quer aussen vor
+     laesst. Die Lesebreite waechst nur HIER (38rem = rund 87 Zeichen, ueber
+     dem 75er-Ideal): bewusster Tausch, weniger Scrollen schlaegt die ideale
+     Zeilenlaenge. Der No-JS-Lesefluss (.vertiefungen) behaelt seine 32rem.
+     Kalibriert per Messung: das Hero-Feld passt bei 1920x1080 ohne internes
+     Scrollen, bei 1366x768 bleibt nur ein kleiner Rest (Werte im CHANGELOG,
+     26.08.2026). */
+  @media (min-width: 900px) {
+    .weg-tief__feld {
+      width: min(100%, 52rem);
+      max-height: min(88vh, 62rem);
+      max-height: min(88dvh, 62rem);
+    }
+    .weg-tief__rolle { padding: 40px 56px 28px; }
+    .weg-tief .vertiefung p, .weg-tief .vertiefung li { max-width: 38rem; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .weg-tief__grund, .weg-tief__feld { transition: opacity 0.12s linear; }
     .weg-tief__feld { transform: none; }
