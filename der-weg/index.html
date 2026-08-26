@@ -793,6 +793,115 @@
   .vertiefung > :last-child { margin-bottom: 0; }
 
   /* ------------------------------------------------------------------
+     Schaltflaechen in den Vertiefungen ("Zur Stilprobe", "Erstgespraech
+     anfragen"): Optik des Primaer-Knopfs der Engine (.sw-btn--primary),
+     aber als eigene Klasse — die Engine-Klassen gehoeren der Engine.
+     ------------------------------------------------------------------ */
+  .vertiefung-knopf, .vertiefung a.vertiefung-knopf {
+    display: inline-block; text-decoration: none; cursor: pointer;
+    color: #fff; background: var(--sw-ink);
+    font-weight: 600; font-size: 0.92rem;
+    padding: 12px 22px; border-radius: 999px;
+    transition: transform 0.2s;
+  }
+  .vertiefung a.vertiefung-knopf:hover { color: #fff; transform: translateY(-2px); }
+  .vertiefung-knopf:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 3px; }
+
+  /* ------------------------------------------------------------------
+     Die Formulare der Reise (Artikel .weg-formular in #vertiefungen).
+
+     Eigene Feld-Optik im --sw-Namensraum: die V18-Formularklassen der
+     Stilprobe-Unterseite (.formfeld-*, .card, .btn-primary) existieren
+     hier bewusst nicht. Eingabefelder laufen ueber die volle Feldbreite
+     (max-width: none gegen die 32-rem-Leseregel oben — Eingabefelder
+     sind keine Lesezeilen); Hilfe- und Zaehlerzeilen ebenso, damit sie
+     buendig unter ihren Feldern stehen.
+     ------------------------------------------------------------------ */
+  .weg-formular form { margin: 0.4rem 0 0; }
+  .weg-formular__gruppe { margin: 0 0 1.15rem; }
+  .weg-formular__label {
+    display: block; margin: 0 0 0.35rem;
+    font-family: var(--sw-font-display); font-weight: 600;
+    font-size: 0.95rem; color: var(--sw-ink);
+  }
+  .weg-formular input[type="text"],
+  .weg-formular input[type="email"],
+  .weg-formular input[type="tel"],
+  .weg-formular textarea,
+  .weg-formular select {
+    width: 100%; max-width: none; box-sizing: border-box;
+    font: inherit; font-size: 0.98rem; line-height: 1.5;
+    color: var(--sw-ink);
+    background: color-mix(in srgb, #fff 45%, var(--sw-bg));
+    border: 1px solid color-mix(in srgb, var(--sw-ink) 22%, transparent);
+    border-radius: 9px; padding: 10px 12px;
+  }
+  .weg-formular textarea { resize: vertical; }
+  .weg-formular input:focus-visible,
+  .weg-formular textarea:focus-visible,
+  .weg-formular select:focus-visible {
+    outline: 2px solid var(--sw-accent); outline-offset: 2px;
+  }
+  .weg-formular__hilfe, .weg-formular__zaehler {
+    margin: 0.3rem 0 0; font-size: 0.8rem; line-height: 1.5;
+    color: var(--sw-ink-soft); max-width: none;
+  }
+  .weg-formular__zusage {
+    margin: 0.45rem 0 0; font-size: 0.85rem; font-weight: 600;
+    color: var(--sw-ink); max-width: none;
+  }
+  .weg-formular__kontingent {
+    margin: -0.3rem 0 1.2rem; font-size: 0.85rem;
+    color: var(--sw-accent); font-weight: 600; max-width: none;
+  }
+  .weg-formular__zeile {
+    display: grid; grid-template-columns: auto 1fr; gap: 0.6rem;
+    align-items: start;
+  }
+  .weg-formular__zeile input[type="checkbox"] {
+    width: 1.05rem; height: 1.05rem; margin-top: 0.2rem;
+    accent-color: var(--sw-accent);
+  }
+  .weg-formular__zeile label { font-size: 0.9rem; line-height: 1.55; color: var(--sw-ink-soft); }
+  /* Honigtopf (Honeypot): fuer Menschen unsichtbar, fuer Formular-Bots ein
+     ganz normales Feld. NICHT display:none — manche Bots lassen solche
+     Felder dann aus. */
+  .weg-formular__honigtopf { position: absolute; left: -9999px; }
+  .weg-formular__fehler {
+    margin: 0 0 1rem; padding: 0.9rem 1.1rem;
+    border: 1.5px solid var(--sw-accent); border-radius: 10px;
+    background: color-mix(in srgb, var(--sw-accent) 7%, var(--sw-bg));
+    font-size: 0.92rem; line-height: 1.6; color: var(--sw-ink); max-width: none;
+  }
+  .weg-formular__fehler:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 2px; }
+  .weg-formular__senden {
+    display: inline-block; border: 0; cursor: pointer;
+    color: #fff; background: var(--sw-ink);
+    font: inherit; font-weight: 600; font-size: 0.95rem;
+    padding: 13px 24px; border-radius: 999px;
+    transition: transform 0.2s;
+  }
+  .weg-formular__senden:hover:not(:disabled) { transform: translateY(-2px); }
+  .weg-formular__senden:disabled { opacity: 0.6; cursor: default; }
+  .weg-formular__senden:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 3px; }
+  .weg-formular__leise {
+    display: inline; border: 0; padding: 0; background: none; cursor: pointer;
+    font: inherit; color: var(--sw-accent);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .weg-formular__erfolg {
+    padding: 1.1rem 1.2rem; border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--sw-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--sw-accent) 6%, var(--sw-bg));
+    font-size: 0.98rem; line-height: 1.65; color: var(--sw-ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vertiefung-knopf, .weg-formular__senden { transition: none; }
+    .vertiefung a.vertiefung-knopf:hover,
+    .weg-formular__senden:hover:not(:disabled) { transform: none; }
+  }
+
+  /* ------------------------------------------------------------------
      Der Leseteil unterhalb der Reise.
 
      Wichtig ist die Stapelhoehe: die Buehne der Engine liegt fest im Fenster
@@ -1073,7 +1182,10 @@
          Du darfst anhalten.“</p>
       <p>Das Merkmal in diesem Beispiel: die kurzen Schlusssätze. Genau solche Eigenheiten suche
          ich in deinen Texten — und schreibe sie nicht glatt.</p>
-      <p><a href="/jgc-studio-website/stilprobe/">→ Zur Stilprobe</a></p>
+      <!-- Mit JavaScript oeffnet die Schaltflaeche das Einreich-Formular direkt in
+           der Reise (formulare.js); das href bleibt als Weg ohne JavaScript. -->
+      <p><a class="vertiefung-knopf" href="/jgc-studio-website/stilprobe/"
+            data-formular-oeffner="stilprobe">→ Zur Stilprobe</a></p>
     </article>
 
     <article class="vertiefung" data-station="weg">
@@ -1185,6 +1297,270 @@
          kostenfrei, ohne Haken. Ich freu mich auf dich!</p>
       <p>Melde dich direkt hier an oder schreib mir an
          <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
+      <!-- Mit JavaScript oeffnet die Schaltflaeche das Anfrageformular
+           (formulare.js); ohne JavaScript faellt sie auf den Mailweg zurueck. -->
+      <p><a class="vertiefung-knopf" href="mailto:kontakt@jgc-lumen.de"
+            data-formular-oeffner="erstgespraech">Erstgespräch anfragen</a></p>
+    </article>
+
+    <!-- ==============================================================
+         Die zwei Formulare der Reise: Stilprobe einreichen und
+         Erstgespraech anfragen.
+
+         BEWUSST OHNE data-station: vertiefung.js ignoriert sie damit
+         (kein "Mehr dazu"-Knopf, kein Klonen). formulare.js verschiebt
+         die Artikel beim Start in eigene Overlays — verschieben statt
+         klonen, damit Eingaben das Schliessen ueberleben. Ohne
+         JavaScript stehen sie hier als Lesetext, und die Formulare
+         posten nativ an ihre action-URLs.
+
+         Feldnamen sind Vertrag: docs/stilprobe/schnittstelle.md bzw.
+         docs/erstgespraech/schnittstelle.md — nicht umbenennen. Die
+         action-/Badge-Pfade stehen ABSOLUT im HTML (formulare.js bleibt
+         pfadfrei); beim All-Inkl-Umzug wandert der Praefix
+         /jgc-studio-website/ per Suchen-Ersetzen auf /.
+         Bis zum Umzug antworten die Endpoints nicht (404) — dann greift
+         by design der Fehlerpfad mit dem Mail-Ausweichweg.
+         ============================================================== -->
+
+    <article class="vertiefung weg-formular" id="formular-stilprobe"
+             data-formular="stilprobe" data-mail="stilprobe@jgc-lumen.de"
+             data-kontingent="/jgc-studio-website/stilprobe/kontingent.php">
+      <p class="vertiefung-auge">Die Stilprobe</p>
+      <h2>Schick mir deine Stilprobe.</h2>
+      <p>Wähle möglichst drei Texte aus einem Ton, geschrieben für dieselbe Zielgruppe — zum
+         Beispiel drei LinkedIn-Beiträge oder drei Newsletter-Ausgaben. Du bekommst binnen
+         48 Stunden einen neuen Entwurf in zwei Fassungen zurück, dazu drei Beobachtungen zu
+         deiner Sprache.</p>
+      <p class="weg-formular__kontingent" data-rolle="kontingent">15 Proben im Monat – mehr gibt
+         die Handarbeit nicht her.</p>
+
+      <div data-rolle="normal">
+        <form method="post" action="/jgc-studio-website/stilprobe/senden.php"
+              accept-charset="UTF-8">
+          <div class="weg-formular__gruppe" data-rolle="entwurf-hinweis" hidden role="status">
+            <p class="weg-formular__hilfe">Dein angefangener Entwurf ist wieder da – gespeichert
+               am <span data-rolle="entwurf-zeit">zuletzt</span>.
+               <button type="button" class="weg-formular__leise" data-rolle="entwurf-verwerfen">
+                 Entwurf verwerfen und neu anfangen</button></p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-name">Wie heißt du?</label>
+            <input type="text" id="sp-name" name="name" required autocomplete="name">
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-email">Deine E-Mail-Adresse</label>
+            <input type="email" id="sp-email" name="email" required autocomplete="email"
+                   aria-describedby="sp-email-hilfe">
+            <p class="weg-formular__hilfe" id="sp-email-hilfe">Dorthin schicke ich dir die
+               Fassungen.</p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-text_1">Dein Text 1</label>
+            <textarea id="sp-text_1" name="text_1" required minlength="200" maxlength="6000"
+                      rows="6" aria-describedby="sp-text_1-hilfe sp-text_1-zaehler"></textarea>
+            <p class="weg-formular__hilfe" id="sp-text_1-hilfe">Bitte einfügen statt verlinken.</p>
+            <p class="weg-formular__zaehler" id="sp-text_1-zaehler">0 / 6.000 Zeichen
+               (mindestens 200)</p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-text_2">Dein Text 2</label>
+            <textarea id="sp-text_2" name="text_2" required minlength="200" maxlength="6000"
+                      rows="6" aria-describedby="sp-text_2-zaehler"></textarea>
+            <p class="weg-formular__zaehler" id="sp-text_2-zaehler">0 / 6.000 Zeichen
+               (mindestens 200)</p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-text_3">Dein Text 3</label>
+            <textarea id="sp-text_3" name="text_3" required minlength="200" maxlength="6000"
+                      rows="6" aria-describedby="sp-text_3-zaehler"></textarea>
+            <p class="weg-formular__zaehler" id="sp-text_3-zaehler">0 / 6.000 Zeichen
+               (mindestens 200)</p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-wunschthema">Dein Wunschthema</label>
+            <input type="text" id="sp-wunschthema" name="wunschthema" required maxlength="160"
+                   aria-describedby="sp-wunschthema-hilfe">
+            <p class="weg-formular__hilfe" id="sp-wunschthema-hilfe">Wozu soll der neue Entwurf
+               entstehen? Ein Satz reicht – z. B. „Warum Pausen kein Rückschritt sind“.</p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-quelle">Wie bist du auf die Stilprobe
+               gestoßen?</label>
+            <select id="sp-quelle" name="quelle">
+              <option value="">–</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="empfehlung">Empfehlung</option>
+              <option value="newsletter">Newsletter</option>
+              <option value="video">Video</option>
+              <option value="anders">anders</option>
+            </select>
+          </div>
+
+          <div class="weg-formular__gruppe weg-formular__zeile">
+            <input type="checkbox" id="sp-eigene_texte" name="eigene_texte" value="ja" required>
+            <label for="sp-eigene_texte">Das sind meine eigenen Texte. Keine Sitzungsnotizen,
+               nichts von oder über Klientinnen und Klienten.</label>
+          </div>
+
+          <div class="weg-formular__gruppe weg-formular__zeile">
+            <input type="checkbox" id="sp-einwilligung" name="einwilligung" value="ja" required>
+            <label for="sp-einwilligung">Ich habe den
+               <a href="/jgc-studio-website/stilprobe/#klartext">Klartext zu meinen Texten</a>
+               gelesen und bin einverstanden, dass meine Angaben zur Erstellung der Stilprobe
+               verarbeitet werden.
+               (<a href="/jgc-studio-website/main/datenschutz/">Datenschutzerklärung</a>)</label>
+          </div>
+
+          <div class="weg-formular__honigtopf" aria-hidden="true">
+            <label>Firma <input type="text" name="firma" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <input type="hidden" name="geladen_ts" value="">
+
+          <div class="weg-formular__fehler" data-rolle="fehler" hidden role="alert"
+               tabindex="-1"></div>
+          <button type="submit" class="weg-formular__senden">Stilprobe anfordern</button>
+          <p class="weg-formular__hilfe">Während du schreibst, bleibt dein Entwurf in deinem
+             eigenen Browser gespeichert – ein versehentlicher Reload kostet dich nichts.
+             Übertragen wird er erst, wenn du oben klickst.</p>
+        </form>
+      </div>
+
+      <div data-rolle="warteliste" hidden>
+        <h3>Der <span data-rolle="wl-monat">Monat</span> ist voll.</h3>
+        <p>15 Proben sind vergeben – mehr gibt die Handarbeit nicht her. Trag dich ein, und du
+           bekommst den ersten freien Platz im <span data-rolle="wl-folgemonat">nächsten
+           Monat</span>, bevor er auf der Website erscheint.</p>
+        <form method="post" action="/jgc-studio-website/stilprobe/senden.php"
+              accept-charset="UTF-8">
+          <input type="hidden" name="warteliste" value="ja">
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-wl-name">Wie heißt du?</label>
+            <input type="text" id="sp-wl-name" name="name" required autocomplete="name">
+          </div>
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="sp-wl-email">Deine E-Mail-Adresse</label>
+            <input type="email" id="sp-wl-email" name="email" required autocomplete="email">
+          </div>
+          <div class="weg-formular__gruppe weg-formular__zeile">
+            <input type="checkbox" id="sp-wl-einwilligung" name="einwilligung" value="ja"
+                   required>
+            <label for="sp-wl-einwilligung">Ich habe den
+               <a href="/jgc-studio-website/stilprobe/#klartext">Klartext zu meinen Texten</a>
+               gelesen und bin einverstanden, dass meine Angaben zur Erstellung der Stilprobe
+               verarbeitet werden.
+               (<a href="/jgc-studio-website/main/datenschutz/">Datenschutzerklärung</a>)</label>
+          </div>
+          <div class="weg-formular__honigtopf" aria-hidden="true">
+            <label>Firma <input type="text" name="firma" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <input type="hidden" name="geladen_ts" value="">
+          <div class="weg-formular__fehler" data-rolle="fehler" hidden role="alert"
+               tabindex="-1"></div>
+          <button type="submit" class="weg-formular__senden">Auf die Liste setzen</button>
+        </form>
+      </div>
+
+      <div data-rolle="pause" hidden>
+        <p>Die Stilprobe macht gerade eine kurze Pause – zum Beispiel, weil ich unterwegs bin.
+           Schau in ein paar Tagen wieder vorbei, dann geht es hier weiter.</p>
+      </div>
+    </article>
+
+    <article class="vertiefung weg-formular" id="formular-erstgespraech"
+             data-formular="erstgespraech" data-mail="kontakt@jgc-lumen.de">
+      <p class="vertiefung-auge">Erstgespräch</p>
+      <h2>Lass uns 30 Minuten reden.</h2>
+      <p>Du nennst mir deine Zeitfenster, ich gleiche sie mit meiner Woche ab. Kostenfrei und
+         ohne Verpflichtung. Lieber direkt per Mail? Schreib mir an
+         <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
+
+      <div data-rolle="normal">
+        <form method="post" action="/jgc-studio-website/erstgespraech/senden.php"
+              accept-charset="UTF-8">
+          <div class="weg-formular__gruppe" data-rolle="entwurf-hinweis" hidden role="status">
+            <p class="weg-formular__hilfe">Dein angefangener Entwurf ist wieder da – gespeichert
+               am <span data-rolle="entwurf-zeit">zuletzt</span>.
+               <button type="button" class="weg-formular__leise" data-rolle="entwurf-verwerfen">
+                 Entwurf verwerfen und neu anfangen</button></p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="eg-name">Wie heißt du?</label>
+            <input type="text" id="eg-name" name="name" required autocomplete="name">
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="eg-email">Deine E-Mail-Adresse</label>
+            <input type="email" id="eg-email" name="email" required autocomplete="email"
+                   aria-describedby="eg-email-hilfe">
+            <p class="weg-formular__hilfe" id="eg-email-hilfe">Dorthin schicke ich dir die
+               Terminvorschläge.</p>
+          </div>
+
+          <div class="weg-formular__gruppe weg-formular__zeile">
+            <input type="checkbox" id="eg-rueckruf" name="rueckruf" value="ja">
+            <label for="eg-rueckruf"><strong>Lieber ein kurzer Rückruf?</strong> Dann melde ich
+               mich telefonisch statt per Mail.</label>
+          </div>
+
+          <!-- Ohne JavaScript bleibt das Telefonfeld sichtbar und optional —
+               die Kombination prueft dann der Server (schnittstelle.md). -->
+          <div class="weg-formular__gruppe" data-rolle="telefon-feld">
+            <label class="weg-formular__label" for="eg-telefon">Deine Telefonnummer</label>
+            <input type="tel" id="eg-telefon" name="telefon" maxlength="40" autocomplete="tel">
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="eg-anliegen">Worum geht es?</label>
+            <textarea id="eg-anliegen" name="anliegen" required minlength="100" maxlength="2000"
+                      rows="5" aria-describedby="eg-anliegen-hilfe eg-anliegen-zaehler"></textarea>
+            <p class="weg-formular__hilfe" id="eg-anliegen-hilfe">Erzähl kurz, wo du stehst und
+               was du dir von KI erhoffst.</p>
+            <p class="weg-formular__zaehler" id="eg-anliegen-zaehler">0 / 2.000 Zeichen
+               (mindestens 100)</p>
+          </div>
+
+          <div class="weg-formular__gruppe">
+            <label class="weg-formular__label" for="eg-zeitfenster"
+                   data-rolle="zeitfenster-label">Wann bist du in den nächsten zwei Wochen gut
+               erreichbar?</label>
+            <textarea id="eg-zeitfenster" name="zeitfenster" required maxlength="500" rows="3"
+                      aria-describedby="eg-zeitfenster-hilfe"></textarea>
+            <p class="weg-formular__hilfe" id="eg-zeitfenster-hilfe">Nenn mir zwei oder drei
+               Fenster, dann schlage ich dir passende Termine vor.
+               (z. B. „Di und Do vormittags, Mi ab 17 Uhr“)</p>
+            <p class="weg-formular__zusage">Du bekommst eine Antwort mit zwei
+               Terminvorschlägen.</p>
+          </div>
+
+          <div class="weg-formular__gruppe weg-formular__zeile">
+            <input type="checkbox" id="eg-einwilligung" name="einwilligung" value="ja" required>
+            <label for="eg-einwilligung">Ich bin einverstanden, dass meine Angaben zur
+               Beantwortung meiner Anfrage verarbeitet werden.
+               (<a href="/jgc-studio-website/main/datenschutz/">Datenschutzerklärung</a>)</label>
+          </div>
+
+          <div class="weg-formular__honigtopf" aria-hidden="true">
+            <label>Firma <input type="text" name="firma" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <input type="hidden" name="geladen_ts" value="">
+
+          <div class="weg-formular__fehler" data-rolle="fehler" hidden role="alert"
+               tabindex="-1"></div>
+          <button type="submit" class="weg-formular__senden">Anfrage senden</button>
+          <p class="weg-formular__hilfe">Während du schreibst, bleibt dein Entwurf in deinem
+             eigenen Browser gespeichert – ein versehentlicher Reload kostet dich nichts.
+             Übertragen wird er erst, wenn du oben klickst.</p>
+        </form>
+      </div>
     </article>
 
   </div>
@@ -1328,6 +1704,7 @@
 
 <script src="scrub-engine.js"></script>
 <script src="vertiefung.js"></script>
+<script src="formulare.js"></script>
 <script>
   /* Die Konfiguration bekommt einen Namen, damit die Stationsliste fuer
      "Mehr dazu" unten daraus abgeleitet werden kann statt ein zweites Mal
@@ -1546,10 +1923,19 @@
   var welt = mountScrollWorld(document.getElementById('world'), wegKonfig);
 
   /* Muss NACH mountScrollWorld laufen: es haengt seine Knoepfe an die
-     Stationstexte, die die Engine erst dabei aufbaut. */
-  mountVertiefung({
+     Stationstexte, die die Engine erst dabei aufbaut. Das Handle braucht
+     formulare.js, um ein offenes Vertiefungsfeld zu schliessen, bevor ein
+     Formular aufgeht. */
+  var vertiefungHandle = mountVertiefung({
     stationen: wegKonfig.sections.map(function (s) { return s.id; }),
   });
+
+  /* Die zwei Formulare der Reise (Stilprobe einreichen, Erstgespraech
+     anfragen) — ebenfalls nach mountScrollWorld, weil es die zwei
+     Engine-Knoepfe der Schluss-Station als Ausloeser markiert. */
+  if (window.mountFormulare) {
+    mountFormulare({ vertiefung: vertiefungHandle });
+  }
 
   /* ==================================================================
      DATENMODUS: erst leicht, dann aufruesten.

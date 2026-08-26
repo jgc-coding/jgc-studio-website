@@ -238,6 +238,12 @@ function mountVertiefung(optionen) {
       if (handlung) kopie.insertBefore(knopf, handlung); else kopie.appendChild(knopf);
     }
   });
+
+  // Handle fuer andere Module (formulare.js): die Formular-Overlays muessen
+  // ein offenes Vertiefungsfeld sauber schliessen koennen, bevor sie selbst
+  // aufgehen — zwei Felder uebereinander waeren Bedien-Salat. Vorher gab die
+  // Funktion nichts zurueck; bestehende Aufrufer bleiben unberuehrt.
+  return { schliesse: schliesse, istOffen: function () { return offen; } };
 }
 
 if (typeof window !== 'undefined') window.mountVertiefung = mountVertiefung;
