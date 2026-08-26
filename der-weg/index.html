@@ -229,17 +229,17 @@
 
        `max()` loest das ohne Stufen: der Streifen bekommt 36 % der Hoehe,
        mindestens aber so viele Pixel, wie die laengste Station braucht.
-       Massgeblich ist die Schluss-Station mit ihren zwei gestapelten Knoepfen:
-       rund 314 px Inhalt, gemessen bei 375×812 — vorher ragte sie dort und
-       auf den 390er-iPhones 14 px oben ins Bild. Mit 320 px Zone bleiben je
-       3 px Rest oben (im noch deckenden Teil des Verlaufs, unsichtbar) und
-       unten (in der 14-px-Marge) — bewusst so gelassen, denn jede weitere
-       Zonen-Erhoehung kostet ALLE Telefone Bildhoehe, und die Knoepfe selbst
-       schrumpfen kommt nicht in Frage: 42 px sind schon die Untergrenze fuer
-       eine Fingerflaeche. Ab 889 px Schirmhoehe uebernimmt der Anteil,
-       darunter die Mindesthoehe. Niedrige Schirme (unter 780 px) setzen die
-       Schrift eine Stufe kleiner und duerfen auf 300 px herunter. */
-    :root, .sw-root { --weg-textzone: max(36%, 320px); }
+       Massgeblich ist seit den v2-Texten (26.08.2026) nicht mehr allein die
+       Schluss-Station mit ihren zwei gestapelten Knoepfen, sondern je nach
+       Breite auch "Ueber mich" (laengerer Kleintext) und "Der Weg"
+       (laengerer Titel; bei 320 px brechen zusaetzlich die drei Chips um).
+       Jede Zonen-Erhoehung kostet ALLE Telefone Bildhoehe, und die Knoepfe
+       selbst schrumpfen kommt nicht in Frage: 42 px sind schon die
+       Untergrenze fuer eine Fingerflaeche. Niedrige Schirme (unter 780 px)
+       setzen die Schrift eine Stufe kleiner. Die Prozent-Zweige hier gelten
+       nur fuer Browser ohne `svh` und wurden am 26.08.2026 um dieselben
+       Deltas angehoben wie die svh-Minima darunter. */
+    :root, .sw-root { --weg-textzone: max(36%, 330px); }
 
     /* Das Bild endet an der Oberkante des Textbereichs. Prozente beziehen
        sich auf die Buehne, und die liegt fest im Fenster — anders als vh
@@ -419,24 +419,22 @@
        in diesem Fall unten keine Luecke aufreisst — nur die Kanten darin
        rechnen in `svh`. Alte Browser ohne `svh` behalten die Regeln oben.
 
-       380 -> 360 -> 355 px am 30.07.2026, nachdem der "Mehr dazu"-Knopf in den
-       Fliesstext gezogen ist (V40/V46) und keine eigene Zeile mehr braucht.
-       Gemessen wird die HOECHSTE Station, denn nur sie bestimmt die Zahl:
+       380 -> 360 -> 355 px am 30.07.2026 (V40/V46), 355 -> 365 am 26.08.2026:
+       die v2-Texte machen "Ueber mich" zur hoechsten Station dieser Klasse.
+       Gemessen wird die HOECHSTE Station, denn nur sie bestimmt die Zahl
+       (26.08.2026, v2-Texte; Klasse hoch, schmal):
 
-         360x800   304 px      375x812   304 px
-         393x852   266 px      412x915   270 px
+         360x800   313 px (Ueber mich)      375x812   306 px (Schluss-Station)
 
-       355 ist damit ausgereizt: der Textkasten ist 341 px hoch, im
-       schlechtesten Fall bleiben 18 px Luft je Seite.
+       Formel wie immer: hoechste Station + 2 x 17 px Luft + 14 px Rand,
+       aufgerundet — 313 + 48 = 361 -> 365. Der Textkasten ist damit 351 px
+       hoch, im schlechtesten Fall bleiben 19 px Luft je Seite.
 
-       DASS HIER NICHT MEHR DRIN IST, LIEGT AN DER SCHLUSS-STATION. "Lass uns
-       30 Minuten reden" traegt zwei Handlungsknoepfe, die zusammen 324 px
-       breit waeren — auf jedem Telefon zu breit, also stehen sie
-       uebereinander und kosten 87 statt 40 px. Ohne sie waere die hoechste
-       Station 291 px und der Streifen koennte auf rund 330 herunter. Neben-
-       einander passten sie erst mit schmalerer Polsterung, und das ist eine
-       Gestaltungsfrage (der Hauptknopf wuerde kleiner) — sie steht als offener
-       Punkt in `verbesserungen.md`, nicht hier.
+       Die Schluss-Station ("Lass uns 30 Minuten reden") traegt weiter ihre
+       zwei gestapelten Handlungsknoepfe (87 statt 40 px, Umbruchgrenzen
+       siehe unten) — sie ist hier aber nicht mehr der Treiber. Ob die
+       Knoepfe nebeneinander duerfen, bleibt Gabriels offener Punkt V47 in
+       `verbesserungen.md`.
 
        Der zweite Teil des Leerraums, den man am Geraet sieht, steht ueberhaupt
        nicht in dieser Zahl: er ist die Reserve, die `100svh` unten frei laesst,
@@ -445,7 +443,7 @@
        svh-Block weiter unten. */
     @supports (height: 100svh) {
       :root, .sw-root {
-        --weg-textzone: max(36svh, 355px);
+        --weg-textzone: max(36svh, 365px);
         /* Das Bildband: alles, was der Text nicht braucht. */
         --weg-band: calc(100svh - var(--weg-textzone));
       }
@@ -490,20 +488,21 @@
      rund 260 px — und genau diese Zahl ist oben die Mindesthoehe des
      Streifens. Weniger Schrift heisst hier also unmittelbar mehr Bild. */
   @media (orientation: portrait) and (max-width: 1200px) and (max-height: 780px) {
-    /* Kleinere Schrift heisst kuerzere Stationen: hier reichen 300 px
-       Mindesthoehe (gemessen bei 320×640 und 360×640: laengste Station 286). */
-    :root, .sw-root { --weg-textzone: max(36%, 300px); }
+    /* Kleinere Schrift heisst kuerzere Stationen — Prozent-Zweig fuer Browser
+       ohne svh, am 26.08.2026 um dasselbe Delta angehoben wie unten. */
+    :root, .sw-root { --weg-textzone: max(36%, 320px); }
     /* Gleiche Umstellung wie oben, nur eine Stufe kleiner (siehe den langen
        Block zu 100svh).
 
-       350 -> 335 -> 325 px am 30.07.2026, gleiche Rechnung wie oben. Hoechste
-       Station hier 274 px (gemessen bei 320x568 UND 360x640, beide Male die
-       Schluss-Station) — der Kasten ist mit 325 noch 311 px hoch, es bleiben
-       18 px Luft je Seite. Dass die kleinere Schrift trotzdem nicht viel
-       kuerzer ausfaellt als oben, liegt an der Breite: 320 px lassen jede Zeile
-       frueher umbrechen. */
+       350 -> 335 -> 325 px am 30.07.2026, 325 -> 345 am 26.08.2026 mit den
+       v2-Texten. Hoechste Station jetzt "Der Weg" mit 297 px bei 320x568:
+       der laengere Titel ("So gehen wir gemeinsam vor.") und die drei Chips
+       brechen auf 320 px Breite frueher um (bei 360x645 ist dieselbe Station
+       nur 243 px, dort fuehrt die Schluss-Station mit 277). Rechnung:
+       297 + 2 x 17 Luft + 14 Rand = 345. Der Kasten ist damit 331 px hoch,
+       es bleiben 17 px Luft je Seite. */
     @supports (height: 100svh) {
-      :root, .sw-root { --weg-textzone: max(36svh, 325px); }
+      :root, .sw-root { --weg-textzone: max(36svh, 345px); }
     }
     .sw-root .sw-copy__title { font-size: clamp(1.6rem, 7.1vw, 2.3rem); margin-top: 8px; }
     .sw-root .sw-copy__body { font-size: clamp(0.92rem, 3.85vw, 1.05rem); margin-top: 10px; }
@@ -517,49 +516,56 @@
   /* ==================================================================
      BREITERE TELEFONE: der Textstreifen darf schmaler werden.
 
-     Hochgehalten wird er von EINER Station — "Lass uns 30 Minuten reden"
-     mit ihren zwei Handlungsknoepfen. Stehen die uebereinander, ist sie rund
-     40 px hoeher, und der Streifen muss diese Hoehe fuer ALLE Stationen
-     vorhalten. Passen sie nebeneinander, muss er das nicht.
+     Auf breiten Telefonen stehen die zwei Handlungsknoepfe der
+     Schluss-Station nebeneinander (Grenzen siehe unten) — vorher machte
+     allein das den Streifen schmaler. Seit den v2-Texten (26.08.2026) haelt
+     hier aber eine andere Station dagegen: "Ueber mich" traegt jetzt den
+     laengsten Kleintext plus drei Chips und ist auf JEDEM breiten Schirm
+     die hoechste. Der Gewinn der nebeneinanderliegenden Knoepfe schrumpft
+     dadurch von rund 40 auf 15-20 px.
 
-     Gemessen am 31.07.2026, hoechste Station je Schirm (Luft je Seite):
+     Gemessen am 26.08.2026 (v2-Texte), hoechste Station je Schirm und die
+     Luft je Seite mit den NEUEN Minima:
 
-       gestapelt:        320x568  277 (17)      360x800  306 (18)
-                         360x645  277 (17)      375x812  306 (18)
-       nebeneinander:    375x667  240 (36)      393x852  264 (39)
-                         393x702  245 (33)      412x915  271 (35)
-                         412x760  251 (30)
+       Knoepfe gestapelt:      320x568  297 "Der Weg"    (17)
+                               360x645  277 Schluss      (27)
+                               360x800  313 "Ueber mich" (19)
+                               375x812  306 Schluss      (22)
+       Knoepfe nebeneinander:  375x667  263 "Ueber mich" (24)
+                               393x702  269 "Ueber mich" (21)
+                               412x760  276 "Ueber mich" (17)
+                               393x852  290 "Ueber mich" (23)
+                               412x915  298 "Ueber mich" (19)
 
-     Bei gestapelten Knoepfen ist die Zone ausgereizt — dort bleibt alles, wie
-     es war. Nebeneinander lagen 30 bis 39 px je Seite brach, und genau die hat
-     Gabriel am 31.07. auf dem Geraet gesehen ("immer noch eine dicke Zeile
-     unten verschenkt, lieber etwas mehr Video zeigen"). Es bleiben 17 px je
-     Seite plus die 14 px Rand nach unten: Luft, aber keine Zeile mehr.
+     Formel je Klasse: hoechste Station der Klasse + 2 x 17 Luft + 14 Rand,
+     aufgerundet. Das kostet gegenueber dem 31.07. auf den breiten Telefonen
+     20-30 px Bildhoehe — der Preis der laengeren v2-Texte, nicht des CSS.
+     Wer das Band wieder wachsen lassen will, kuerzt die Texte der Stationen
+     "Ueber mich" und "Der Weg", nicht diese Zahlen.
 
-     WO DIE GRENZE LIEGT: die Knoepfe brauchen zusammen 325 px (kleiner Zweig)
-     bzw. 342 px (grosser Zweig — groessere Polsterung und Schrift). Der
-     Textkasten bekommt `100vw - 2 x clamp(18px, 5vw, 48px)`, ab 360 px Breite
-     also 0,9 x Breite. Daraus faellt der Umbruch bei 362 bzw. 380 px; die
-     Grenzen hier liegen mit 365 und 385 px knapp darueber.
+     WO DIE KNOPF-GRENZE LIEGT: die Knoepfe brauchen zusammen 325 px (kleiner
+     Zweig) bzw. 342 px (grosser Zweig — groessere Polsterung und Schrift).
+     Der Textkasten bekommt `100vw - 2 x clamp(18px, 5vw, 48px)`, ab 360 px
+     Breite also 0,9 x Breite. Daraus faellt der Umbruch bei 362 bzw. 380 px;
+     die Grenzen hier liegen mit 365 und 385 px knapp darueber.
 
-     ACHTUNG: die zwei Knopfbeschriftungen verschieben genau diese Grenze. Wer
-     sie aendert, misst neu — Messkommando in docs/der-weg.md. Und ein
-     Hochkant-Fenster jenseits echter Telefone (gemessen 520x760: hoechste
-     Station 264 px) behaelt hier nur 11 px Luft je Seite. Es schneidet nichts
-     ab, sitzt aber enger als auf jedem Geraet.
+     ACHTUNG: die zwei Knopfbeschriftungen verschieben genau diese Grenze.
+     Wer sie aendert, misst neu — Messkommando in docs/der-weg.md.
      ================================================================== */
   @media (orientation: portrait) and (min-width: 385px) and (max-width: 1200px) {
-    :root, .sw-root { --weg-textzone: max(36%, 285px); }
+    :root, .sw-root { --weg-textzone: max(36%, 315px); }
     @supports (height: 100svh) {
-      /* 271 hoechste Station + 2 x 17 Luft + 14 Rand = 319, aufgerundet. */
-      :root, .sw-root { --weg-textzone: max(36svh, 320px); }
+      /* 298 hoechste Station ("Ueber mich", 412x915) + 2 x 17 Luft
+         + 14 Rand = 346, aufgerundet. */
+      :root, .sw-root { --weg-textzone: max(36svh, 350px); }
     }
   }
   @media (orientation: portrait) and (min-width: 365px) and (max-width: 1200px) and (max-height: 780px) {
-    :root, .sw-root { --weg-textzone: max(36%, 275px); }
+    :root, .sw-root { --weg-textzone: max(36%, 300px); }
     @supports (height: 100svh) {
-      /* 251 hoechste Station + 2 x 17 Luft + 14 Rand = 299, aufgerundet. */
-      :root, .sw-root { --weg-textzone: max(36svh, 300px); }
+      /* 276 hoechste Station ("Ueber mich", 412x760) + 2 x 17 Luft
+         + 14 Rand = 324, aufgerundet. */
+      :root, .sw-root { --weg-textzone: max(36svh, 325px); }
     }
   }
 
