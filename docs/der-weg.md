@@ -11,9 +11,10 @@ keine Verbindungsclips). Grundlage: `scroll-world-briefing.md` von Gabriel, 2026
 
 | Ort | Inhalt |
 |---|---|
-| `der-weg/index.html` | Seite, Stationstexte, Langfassungen, Engine-Konfiguration |
+| `der-weg/index.html` | Seite, Stationstexte, Langfassungen, Formulare, Engine-Konfiguration |
 | `der-weg/scrub-engine.js` | Scroll-Engine aus dem Skill, **unverändert** (siehe unten) |
 | `der-weg/vertiefung.js` | „Mehr dazu": öffnet die Langfassung einer Station (siehe unten) |
+| `der-weg/formulare.js` | die zwei Formular-Overlays: Stilprobe einreichen, Erstgespräch anfragen (siehe unten) |
 | `der-weg/assets/` | 7 Etappen à 4 Dateien plus Schriften, zusammen rund 52 MB |
 | `scripts/der-weg/kodiere.mjs` | Rohvideos → auslieferbare Dateien |
 | `scripts/der-weg/pruefe-naehte.mjs` | prüft die Übergänge zwischen den Etappen |
@@ -190,11 +191,21 @@ Textstreifens, von unten gemessen. Bild, Verlauf, Naht und die Lage des Scroll-H
 sich daraus ab.
 
 ```
---weg-textzone: max(36svh, 355px);   /* hoch (>=780px) und schmal (<385px)   */
---weg-textzone: max(36svh, 320px);   /* hoch und breit (>=385px)             */
---weg-textzone: max(36svh, 325px);   /* niedrig (<780px) und schmal (<365px) */
---weg-textzone: max(36svh, 300px);   /* niedrig und breit (>=365px)          */
+--weg-textzone: max(36svh, 365px);   /* hoch (>=780px) und schmal (<385px)   */
+--weg-textzone: max(36svh, 350px);   /* hoch und breit (>=385px)             */
+--weg-textzone: max(36svh, 345px);   /* niedrig (<780px) und schmal (<365px) */
+--weg-textzone: max(36svh, 325px);   /* niedrig und breit (>=365px)          */
 ```
+
+**Stand 26.08.2026 — die v2-Texte haben die Minima angehoben** (vorher 355/320/325/300):
+höchste Station ist seitdem je nach Breite „Über mich" (längerer Kleintext, bis 313 px)
+oder „Der Weg" (297 px bei 320 px Breite, weil Titel und Chips früher umbrechen), nicht
+mehr allein die Schluss-Station mit ihren Knöpfen. Formel unverändert: höchste Station
++ 2 × 17 px Luft + 14 px Rand, aufgerundet. Das kostet auf den breiten Telefonen 20–30 px
+Bildhöhe gegenüber dem 31.07. — der Preis der längeren Texte, nicht des CSS; wer das Band
+zurück will, kürzt die Texte dieser zwei Stationen. Die Messtabellen unten in diesem
+Abschnitt dokumentieren den Stand vom 31.07.; die aktuellen Messwerte stehen als Kommentar
+im CSS von `der-weg/index.html` und im CHANGELOG (26.08.2026).
 
 **Seit 29.07.2026 in `svh` statt `%`, und das ist keine Kosmetik.** Chrome auf Android misst feste
 Elemente am *großen* Fenster — dem ohne Adressleiste. Steht die Leiste, ragt die Unterkante eines
@@ -386,10 +397,17 @@ Ein Pfeil nach unten wäre außerdem gelogen: der Inhalt klappt nicht an Ort und
 sondern öffnet ein Feld in der Mitte. Das Plus ist dasselbe Zeichen, das die häufigen Fragen
 weiter unten benutzen.
 
-**Texte ändern:** im Markup von `der-weg/index.html`, Block `<div id="vertiefungen">`, ein
+**Texte ändern — die Drei-Orte-Regel:** jede Station hat ihren Text an DREI Orten in
+`der-weg/index.html`, die zusammen gezogen werden müssen: (1) die Kurzfassung in
+`wegKonfig.sections` (eyebrow/title/body/tags), (2) ihr statischer Spiegel im Block
+`<section data-sw-seo>` (das ist der einzige Text für Suchmaschinen und Besucher ohne
+JavaScript), (3) die Langfassung im Block `<div id="vertiefungen">`, ein
 `<article data-station="…">` je Station. Kein Skript nötig, kein Build. Erlaubte Bausteine:
-`.vertiefung-auge` (Kleintext oben), `h2`, `h3`, `.vertiefung-preis`, `p`, `ul`/`li`, `strong`, `a`.
-Interne Links absolut halten (`/jgc-studio-website/…`).
+`.vertiefung-auge` (Kleintext oben), `h2`, `h3`, `.vertiefung-preis`, `p`, `ul`/`li`, `strong`,
+`a`, `.vertiefung-knopf` (Schaltflächen-Optik). Interne Links absolut halten
+(`/jgc-studio-website/…`). Nach jeder Textänderung die Stationshöhen hochkant nachmessen
+(siehe oben). Wortlaut-Quelle seit 26.08.2026: Gabriels Fassung v2
+(im Repo nachvollziehbar über den CHANGELOG-Eintrag).
 
 **Zuordnung:** über `data-station` auf den Wert von `id` in der Sektions-Konfiguration. Die
 Reihenfolge leitet `mountVertiefung` aus `wegKonfig.sections` ab, damit keine zweite Liste
@@ -403,6 +421,44 @@ Hintergrund. Würde die Kamera weiterlaufen, wäre eine lange Station gar nicht 
 
 **Ohne JavaScript** stehen die Langfassungen als gewöhnlicher Lesetext untereinander — die Regel
 `.js .vertiefungen { display: none }` blendet sie nur aus, wenn sie per Knopf erreichbar sind.
+
+**Seit 26.08.2026 gibt `mountVertiefung` ein Handle zurück** (`{ schliesse, istOffen }`) —
+`formulare.js` schließt darüber ein offenes Vertiefungsfeld, bevor ein Formular aufgeht.
+Der Rückgabewert ist neu, bestehende Aufrufer bleiben unberührt.
+
+## Formulare in der Reise (seit 26.08.2026)
+
+Zwei Formulare machen die Reise eigenständig: **Stilprobe einreichen** und **Erstgespräch
+anfragen** (Gabriels Entscheidung vom 26.08.2026 — die V18-Unterseite `/stilprobe/` bleibt
+nur als Footer-Link und als Weg ohne JavaScript).
+
+**Bau:** Das Markup steht als `<article class="vertiefung weg-formular">` im Block
+`#vertiefungen`, bewusst **ohne** `data-station` — `vertiefung.js` ignoriert die Artikel
+(kein „Mehr dazu"-Knopf, kein Klonen), ohne JavaScript stehen sie als Lesetext mit nativem
+POST. `formulare.js` **verschiebt** die Artikel beim Start in eigene Overlays
+(`.weg-tief--formular`, gleiche Optik wie das Lesefeld). Verschieben statt klonen ist der
+Kernunterschied zu `vertiefung.js`: Eingaben überleben jedes Schließen. Der zweite
+Unterschied: **Weiterscrollen schließt NICHT** — die Reise hält an (wheel/touchmove werden
+abgefangen), zu geht es nur über Schließknopf, Escape oder Hintergrund-Klick. Wer die Seite
+am Scrollbalken zieht, bewegt die Kulisse hinter dem offenen Feld; bewusst hingenommen,
+Datenerhalt schlägt Kulisse.
+
+**Auslöser** ist jedes Element mit `data-formular-oeffner="stilprobe|erstgespraech"`
+(delegierter Klick-Lauscher, funktioniert darum auch in den geklonten Vertiefungsfeldern):
+die zwei Engine-Knöpfe der Schluss-Station (ihre `href` bleiben als No-JS-Weg — mailto bzw.
+`/stilprobe/`), die Schaltfläche in der Stilprobe-Vertiefung und der Knopf in der
+Abschnitt-7-Vertiefung.
+
+**Verträge:** Feldnamen, Antworten, Spam-Schutz und Wortlaute stehen in
+`docs/stilprobe/schnittstelle.md` (Stilprobe, inkl. Kontingent-Badge mit Warteliste- und
+Pause-Zweig — der Badge wird erst beim ersten Öffnen abgerufen) und
+`docs/erstgespraech/schnittstelle.md` (Erstgespräch: umgedrehte Terminfrage,
+Rückruf-Häkchen, Antwortversprechen ohne Frist). Die Endpoints stehen **absolut** im HTML
+(`action`-/`data-`Attribute; `formulare.js` ist pfadfrei) und existieren erst nach dem
+All-Inkl-Umzug — bis dahin 404, der Fehlerpfad mit Mail-Ausweichweg ist der gebaute und
+getestete Normalfall. Entwurfsspeicher: die Stilprobe teilt den localStorage-Schlüssel
+`stilprobe-entwurf-v1` mit der Unterseite (gleiche Feldnamen, Entwurf wandert mit), das
+Erstgespräch nutzt `erstgespraech-entwurf-v1`.
 
 ## Datenmodus: erst leicht, dann aufrüsten
 

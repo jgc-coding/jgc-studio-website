@@ -19,6 +19,12 @@ Preview-Pane nicht her (Kernfunktion 15). Das Videomaterial ist unschuldig: alle
 V49-Scrollwege stehen korrekt im Code. Die Ursachen liegen in der Nachführ-Schleife der
 Engine → **V51–V53**, am selben Tag umgesetzt (siehe Erledigt; Rechenwerte im CHANGELOG).
 
+**Nachtrag 2026-08-26:** Gabriels Änderungsrunde für die Reise (Texte v2 wortgetreu,
+Formulare direkt in der Reise, größere „Mehr dazu"-Felder am PC, Gendern raus, Chips und
+Label) → **V54–V58**, am selben Tag umgesetzt und am Server nachgemessen (siehe Erledigt;
+Messwerte im CHANGELOG). Rückkehrpunkt vor der Umsetzung: Commit `caaaece`. Neu dabei:
+`der-weg/formulare.js` und der Vertrag `docs/erstgespraech/schnittstelle.md`.
+
 Runde 2 (Fokus: alles) ist live seit 2026-07-25, Commit `4f3cc16`. Rollback-Punkt davor: `8d33cd0`.
 Runde 3 hat nur `der-weg/` und seine Werkzeuge angesehen; V18/Hauptseite, `site/`, `stilprobe/`
 blieben unangetastet. Teil 3 (Ausbau-Ideen) lief in Runde 3 nicht — der Fokus war Code + Design.
@@ -301,6 +307,41 @@ DSGVO-Linie außerhalb der Reise.
   Scrollposition statt sichtbar hochzuspulen. `kodiere.mjs` warnt ab jetzt, wenn eine
   neue Etappe nicht 24 fps liefert — der anstehende Clip-Tausch (Etappe 6, Naht 3→4)
   bleibt damit gefahrlos.
+
+### Gabriels Änderungsrunde vom 26.08. — umgesetzt am 2026-08-26 (Messwerte im CHANGELOG)
+
+- **V54** (A) **Texte v2 wortgetreu übernommen.** Gabriels überarbeitete Fassung ersetzt die
+  Texte an allen drei Orten je Station (Engine-Konfiguration, SEO-Spiegel, Vertiefungs-Artikel)
+  plus FAQ 01/02/05; dazu die bestellten Chips („innerhalb 48 h" statt „48 Stunden", „15 im
+  Monat" entfernt, „TÜV-zertifiziert"), Label „Über mich" statt „Auf Augenhöhe" und durchgängig
+  „Klientinnen und Klienten". Zwei Konsistenz-Chips über den Wortlaut hinaus („Umsetzung ab
+  1.000 €", „Social Media") und neun Grammatik-/Typografie-Fixes — beides an Gabriel gemeldet.
+  Die längeren Texte verschieben die höchste Station: die vier Hochkant-Zonen-Minima nach
+  Bestandsformel angehoben (365/350/345/325), kostet auf breiten Telefonen 20–30 px Bildhöhe.
+  **Hinweis:** der Vorschau-Hero sagt wieder pauschal „DSGVO-konform" (Gabriels Wortlaut,
+  bewusst übernommen; Spannungsfeld zur datengebundenen Sprachregelung aus V32/V34).
+- **V55** (C) **„Mehr dazu"-Felder am PC größer.** Das Hero-Feld musste am PC scrollen, obwohl
+  Platz da war. Ab 900 px: Feld bis 52rem breit, min(88dvh, 62rem) hoch, Lesebreite im Feld
+  38rem (bewusst über dem 75-Zeichen-Ideal — weniger Scrollen schlägt die ideale Zeile; der
+  No-JS-Lesefluss behält 32rem). Gemessen: 1920×1080 Hero ohne Restscroll, 1366×768 noch 65 px,
+  Handy unverändert.
+- **V56** (B) **Stilprobe direkt in der Reise einreichbar.** Formular-Overlay statt Absprung
+  auf die V18-Unterseite (die bleibt Footer-Link und No-JS-Weg). Felder, Wortlaute, Badge mit
+  Warteliste-/Pause-Zweig exakt nach `docs/stilprobe/schnittstelle.md`; Entwurfsspeicher teilt
+  den Schlüssel mit der Unterseite. Neues Modul `der-weg/formulare.js`: verschiebt die Artikel
+  statt sie zu klonen (Eingaben überleben das Schließen), hält die Reise an, schließt aber
+  nicht durch Weiterscrollen — nur Knopf, Escape, Hintergrund.
+- **V57** (B) **Erstgespräch-Anfrageformular gebaut** (Konzept „umgedrehte Terminfrage":
+  Besucher nennt Zeitfenster, Gabriel antwortet mit zwei Vorschlägen; bewusst kein
+  Buchungswerkzeug). Öffnet über den Haupt-Knopf der Schluss-Station und die
+  Abschnitt-7-Vertiefung; mailto bleibt als No-JS- und Ausweichweg. Rückruf-Häkchen macht das
+  Telefonfeld sichtbar und zur Pflicht und wechselt die Zeitfenster-Frage; Antwortversprechen
+  ohne Frist (Gabriels Wahl). Vertrag: `docs/erstgespraech/schnittstelle.md`, eigener Endpoint
+  `/erstgespraech/senden.php` (bis All-Inkl 404 → Fehlerpfad mit Mailweg, so getestet).
+- **V58** (A) **Gendern entfernt** — elf Stellen in der Reise (über die v2-Texte), zwei auf der
+  Stilprobe-Unterseite („Klientinnen und Klienten", „Jeder Coach"). Kontroll-Grep über beide
+  Seiten und `formulare.js` leer. V18 bleibt nach Gabriels Entscheidung unangetastet — dort
+  stehen die Doppelpunkt-Formen weiter (Lesefassung wird perspektivisch abgelöst).
 
 ### Gabriels zweiter Telefon-Durchgang — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
 

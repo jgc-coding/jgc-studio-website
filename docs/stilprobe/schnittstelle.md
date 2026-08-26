@@ -24,7 +24,13 @@ Antwort-Vertrag (für den fetch-Pfad der Seite):
 - Alles andere (kein 2xx, kein JSON, Timeout 10 s) → Seite zeigt Fehlermeldung mit Mail-Ausweichweg
 - No-JS-Fallback: normales POST; senden.php muss dann eine HTML-Dankeseite liefern
 
-## GET kontingent.php (Badge, wird von Hauptseite UND Unterseite gerufen)
+## GET kontingent.php (Badge — gerufen von Hauptseite, Unterseite UND der Scroll-Reise)
+
+Seit 26.08.2026 ruft auch die Scroll-Reise (`der-weg/index.html` + `der-weg/formulare.js`)
+Badge und `senden.php` — absolut, mit demselben Feld- und Antwort-Vertrag, inklusive
+Warteliste- und Pause-Zweig. Der Badge wird dort erst beim ersten Öffnen des
+Formular-Overlays abgerufen. Der Entwurfsspeicher teilt den localStorage-Schlüssel
+`stilprobe-entwurf-v1` mit der Unterseite (gleiche Feldnamen, gleiche Origin).
 
 Antwort: `{"monat":"Juli","frei":9,"deckel":15,"status":"frei"}` mit `status` ∈ `frei` | `knapp` (≤3) | `voll` | `pause`. Cachebar bis 10 Minuten. Timeout clientseitig 2 s; jeder Fehler → statischer Satz bleibt stehen.
 
@@ -41,9 +47,9 @@ Anzeige-Wortlaute (in beiden Seiten identisch implementiert):
 ## Platzhalter (beim All-Inkl-Umzug scharf schalten)
 
 - `STILPROBE_MAIL` = aktuell `stilprobe@jgc-lumen.de` (Domain unbestätigt) — steht als const in den Inline-Scripts der Unterseite; Suchbegriff: `stilprobe@`.
-- Interne Links nutzen den GitHub-Pages-Präfix `/jgc-studio-website/…` — beim Umzug per Suchen-Ersetzen auf `/` umstellen (betrifft `variants/standalone/18-lumen/index.html` und `stilprobe/index.html`).
+- Interne Links nutzen den GitHub-Pages-Präfix `/jgc-studio-website/…` — beim Umzug per Suchen-Ersetzen auf `/` umstellen (betrifft `variants/standalone/18-lumen/index.html`, `stilprobe/index.html` und `der-weg/index.html` — dort auch die Formular-`action`s und der Badge-Pfad; zusätzlich `docs/erstgespraech/schnittstelle.md` beachten: eigener Ordner `/erstgespraech/` mit eigenem `senden.php`).
 - Die Rechtslinks zeigen auf `/jgc-studio-website/main/impressum/` bzw. `…/main/datenschutz/` — beim Umzug prüfen, wohin Impressum/Datenschutz dann ausgeliefert werden (das `/main/`-Segment ist eine GitHub-Pages-Eigenheit des Astro-Builds).
-- Formular-`action` und Badge-`fetch` der Unterseite sind RELATIV (`senden.php`, `kontingent.php`) und funktionieren nach dem Umzug unverändert; nur die Hauptseite ruft den Badge absolut (`/jgc-studio-website/stilprobe/kontingent.php`).
+- Formular-`action` und Badge-`fetch` der Unterseite sind RELATIV (`senden.php`, `kontingent.php`) und funktionieren nach dem Umzug unverändert; die Hauptseite UND die Scroll-Reise rufen absolut (`/jgc-studio-website/stilprobe/kontingent.php` bzw. `…/senden.php`) — diese Pfade wandern mit dem Präfix-Suchen-Ersetzen.
 
 ## Spam-Schutz (serverseitig zu prüfen)
 

@@ -2,6 +2,66 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-08-26 — Der Weg: Texte v2, Formulare in der Reise, größere Vertiefungen (V54–V58)
+
+Gabriels Änderungsrunde vom 26.08. (schriftlich, mit zwei mitgelieferten Konzept-Dateien),
+alle Punkte am selben Tag umgesetzt. Belege **gemessen** am lokalen Server (DOM-Geometrie
+und gemockte Server-Antworten; der versteckte Preview-Pane erlaubt keine Screenshots, siehe
+Prüfliste). Rückkehrpunkt vor der Umsetzung: Commit `caaaece`. Vier vorab abgefragte
+Entscheidungen Gabriels: Stilprobe als Overlay in der Reise (Unterseite nur noch Footer-Link
+und No-JS-Weg) · Erstgespräch-Formular am Haupt-Knopf UND in der Abschnitt-7-Vertiefung ·
+Antwortversprechen ohne Frist · nur Der Weg, V18 unangetastet.
+
+- **V54 — Texte v2 wortgetreu eingebaut.** Alle drei Orte je Station (Engine-Konfiguration,
+  SEO-Spiegel, Vertiefungs-Artikel) plus FAQ 01/02/05; Chips „Kostenlos / innerhalb 48 h"
+  (ohne „15 im Monat"), „TÜV-zertifiziert", Label „Über mich"; durchgängig „Klientinnen und
+  Klienten" (Kontroll-Grep leer). Konsistenz über den Wortlaut hinaus, gemeldet: Chip
+  „Umsetzung ab 1.000 €" (Text nennt ab 1.000) und Chip „Social Media" statt „Newsletter".
+  Neun Grammatik-/Typografie-Korrekturen an der Vorlage, ebenfalls gemeldet (u. a. „bleiben"
+  statt „bleibe", „das" statt „dass", „Website-Erstellung", „davon abhält, … zu kommen",
+  FAQ 01 „Wir schauen, wo du stehst").
+- **V54-Messung — Hochkant-Textzone angehoben.** Die längeren Texte verschieben die höchste
+  Station („Über mich" bis 313 px bei 360×800; „Der Weg" 297 px bei 320×568 — Titel und drei
+  Chips brechen dort früher um). Auf 6 von 9 Gerätemaßen lag die Luft unter dem 17-px-Ziel
+  (minimal 5 px bei 412×760). Die vier Klassen-Minima nach Bestandsformel (höchste Station
+  + 2×17 + 14, aufgerundet) von 355/320/325/300 auf **365/350/345/325**; %-Fallbacks für
+  Browser ohne svh um dieselben Deltas. Gegenprobe nach der Änderung: Kasten 331/351/311/336 px
+  bei 320×568 / 375×812 / 393×702 / 393×852 → Luft 17/22/21/23 px. Methoden-Beleg: die
+  unveränderte Schluss-Station reproduziert die dokumentierten Altwerte (306 bei 375×812,
+  277 bei 320×568). Kostet auf breiten Telefonen 20–30 px Bildhöhe — Preis der längeren
+  Texte; wer das Band zurück will, kürzt die Texte von „Über mich"/„Der Weg".
+- **V55 — „Mehr dazu"-Felder am PC größer.** Neue Media Query ab 900 px: Feld bis 52rem
+  breit, `min(88dvh, 62rem)` hoch, Lesebreite im Feld 38rem (No-JS-Fluss behält 32rem).
+  Gemessen: 1920×1080 Hero-Feld 821×731 px, Restscroll 0; 1366×768 Feld 821×667, Rest 65 px;
+  393×852 unverändert 358 px breit.
+- **V56 — Stilprobe direkt in der Reise.** Neues Modul `der-weg/formulare.js` + zwei
+  `<article class="weg-formular">` in `#vertiefungen` (ohne `data-station`; ohne JavaScript
+  Lesetext mit nativem POST). Verschieben statt klonen — Eingaben überleben das Schließen;
+  Reise hält an, Weiterscrollen schließt NICHT (nur Knopf/Escape/Hintergrund).
+  `mountVertiefung` gibt dafür neu ein Handle zurück. Stilprobe-Formular vertragsgetreu
+  inkl. Kontingent-Badge (Abruf beim ersten Öffnen, 2-s-Timeout), Warteliste- und
+  Pause-Zweig; Entwurfsspeicher teilt `stilprobe-entwurf-v1` mit der Unterseite.
+- **V57 — Erstgespräch-Anfrageformular** nach dem beschlossenen Konzept „umgedrehte
+  Terminfrage" (neu im Repo: `docs/erstgespraech/buchung-konzept.md` +
+  `schnittstelle.md`; eigener Endpoint `/erstgespraech/senden.php`). Rückruf-Häkchen macht
+  das Telefonfeld sichtbar und zur Pflicht und wechselt die Zeitfenster-Frage auf „Wann
+  erreiche ich dich am besten?"; Antwortversprechen ohne Frist. Haupt-Knopf und
+  Vertiefungs-Knopf öffnen das Overlay, `href` bleibt mailto als No-JS-Weg.
+- **V58 — Gendern raus**, auch auf der Stilprobe-Unterseite („Klientinnen und Klienten",
+  „Jeder Coach"); V18 bewusst unangetastet.
+- **Geprüft** (Server 4330, gemockter fetch): Öffnen über alle vier Auslöser ·
+  Rad-/Wisch-Sperre ohne Schließen · Escape/Hintergrund mit Eingabe-Erhalt ·
+  Erfolg/Fehler/Warteliste-Antworten · Badge frei/voll/pause/Netzfehler (statischer Satz
+  bleibt) · Rückruf-Umschalter hin und zurück · Zeichenzähler · Autosave nach 400 ms und
+  Löschung nach Erfolg · Vertiefungs-Regression (Rad > 60 schließt dort weiter, Klonen
+  unverändert) · einziger 404 = beabsichtigter `kontingent.php`-Abruf. `node --check` und
+  `pruefe-seiten.mjs` grün. Gates erweitert: Deploy-Verify prüft `formulare.js`,
+  `pruefen.txt` prüft jetzt auch die Syntax der drei Reise-Skripte.
+- Geänderte Dateien: `der-weg/index.html`, `der-weg/vertiefung.js` (nur Handle-Rückgabe),
+  `der-weg/formulare.js` (neu), `stilprobe/index.html` (nur Gendern),
+  `docs/erstgespraech/*` (neu), `docs/der-weg.md`, `docs/stilprobe/schnittstelle.md`,
+  `.github/workflows/deploy.yml`, `.claude/pruefen.txt`, `verbesserungen.md`.
+
 ## 2026-08-01 — Der Weg: Scrollgefühl der Kamerafahrt (V51–V53)
 
 Gabriels Rückmeldung: das Hintergrundvideo fühle sich beim Scrollen „manchmal zäh, manchmal
