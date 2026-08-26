@@ -27,3 +27,9 @@ node --check scripts/v18/baue-og-bild.mjs
 node --check scripts/stilprobe/transform-v18-stilprobe.mjs
 node --check scripts/stilprobe/fix-v18-logo-link.mjs
 node --check scripts/stilprobe/extract-v18-assets.mjs
+
+# Die drei ausgelieferten Skripte der Scroll-Reise (laufen im Browser,
+# node --check prueft nur die Syntax).
+node --check der-weg/scrub-engine.js
+node --check der-weg/vertiefung.js
+node --check der-weg/formulare.js
