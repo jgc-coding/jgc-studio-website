@@ -117,30 +117,33 @@ Gabriels Änderungsrunde vom 26.08. ist komplett umgesetzt, gemessen und deployt
 - Deploy = Push auf `main` (`main` in keinem Worktree → `git branch -f main HEAD`).
 - Gabriels eigene Aufgaben liegen im **Hub, Karte „Website"** — nicht in einer Datei im Repo.
 
-## Aufräumen — wartet auf Gabriels Freigabe
-Kassensturz 26.08.: 6 Worktrees (Hauptbaum + 4 unter „JGC Studio" + 1 unter „Scroll World").
-Ungemergt gegen `main`: die neun `variant/*`-Branches (**müssen bleiben** — der Deploy baut
-sie) und dieselben drei `claude/*` wie am 31.07./01.08. (damals geprüft: keine verlorene
-Arbeit, seither unverändert). Die Arbeit dieser Session liegt vollständig in `main`.
+## Aufräumen — am 26.08.2026 erledigt (Gabriels Freigabe)
+Der Branch-Zoo ist weg: **4 Worktrees entfernt** (`bold-hopper-71b067`, `variante-18`,
+`leg6-staffelei-bild-1ac3ec`, `Scroll World/…/extract-video-last-frame-ac0958` — alle vorher
+auf sauberem Stand geprüft) und **24 `claude/*`-Branches gelöscht**, davon 21 gemergte über
+`git branch -d` (die Schutzschiene hat die anderen korrekt verweigert). Auf `origin` sind die
+zwei gemergten Reste ebenfalls weg.
 
-**Korrektur zum letzten Stand:** die Liste vom 01.08. führte `website-improvements-review-e4c50f`
-als entbehrlich — genau dieser Worktree war der Arbeitsordner dieser Session und darf erst
-nach ihrem Ende weg. Umgekehrt ist `leg6-staffelei-bild-1ac3ec` (damals aktiv) jetzt frei.
+Drei Branches waren ungemergt: `website-variant-18-homepage-c16a97` und
+`world-scroll-mobile-expand-9b5250` trugen nur ältere Fassungen von `CLAUDE.md` und
+`weitermachen.md` (dritte Prüfung, wieder ohne Fund) → gelöscht. `sharp-herschel-f7c5e1`
+enthielt als Einziges echten einmaligen Inhalt, die 116-zeilige Runde-1-Analyse vom 07.07.;
+sie ist **vor dem Löschen als Tag gesichert** und liegt auch auf `origin`:
 
 ```
-git worktree remove ".claude/worktrees/bold-hopper-71b067"
-git worktree remove ".claude/worktrees/variante-18"
-git worktree remove ".claude/worktrees/leg6-staffelei-bild-1ac3ec"
-git worktree remove "C:/Projekte/JGC Studio/Scroll World/.claude/worktrees/extract-video-last-frame-ac0958"
-git branch -d claude/bold-hopper-71b067 claude/variante-18 claude/telegram-last-message-screenshot-8178b6
-git branch -d claude/sharp-herschel-f7c5e1 claude/website-variant-18-homepage-c16a97
-git branch -d claude/jgc-lumen-text-alternatives-d8ba75 claude/website-booking-options-ac112a
-git branch -D claude/world-scroll-mobile-expand-9b5250
+git show archiv/runde1-analyse-2026-07-07:WEBSITE-AENDERUNGEN.md
 ```
 
-Nach dem Ende DIESER Sitzung zusätzlich (Worktree + Branch lokal und auf origin):
+Es bleiben: der Hauptbaum (steht auf `variant/09`), der Worktree dieser Sitzung und die neun
+`variant/*`-Branches — **die müssen bleiben, der Deploy baut aus ihnen die Galerie-Varianten.**
+
+Nach dem Ende DIESER Sitzung noch offen (Worktree + Branch lokal und auf origin):
 ```
 git worktree remove ".claude/worktrees/website-improvements-review-e4c50f"
 git branch -d claude/jgc-lumen-website-updates-0552a3
 git push origin --delete claude/jgc-lumen-website-updates-0552a3
 ```
+
+**Lehre für den nächsten Kassensturz:** `git branch --no-merged` zeigt nur die ungemergten —
+die 21 gemergten Altbranches standen dort nie und sind vier Wochen lang unbemerkt liegen
+geblieben. Einmal `git branch --list "claude/*"` zählen, nicht nur die Ungemergten.
