@@ -86,40 +86,30 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   weg). Die Scroll-Reise braucht ihn zwingend: unter `file://` verbietet der Browser das Laden der
   Clips, die Seite bleibt leer.
 - **Preview-Messungen: der Pane gilt als versteckt.** Screenshots gehen deshalb **gar nicht** —
-  unabhängig von der Seitengröße, denn eine nicht angezeigte Seite rendert keine Bilder ("not
-  compositing frames", am 31.07. auch auf der 90-KB-Reise). Jeder Beweis läuft über JavaScript
-  (DOM-Geometrie, `getComputedStyle`). Drei Fallen, die alle schon Fehlbefunde erzeugt haben:
-  (1) **Erst Viewport setzen, dann messen** — ein frisch geöffneter Tab meldet `0×0`, jede Geometrie
-  ist dann Müll (eine Fehlerbox wirkte so 2 px breit und 900 px hoch). `resize_window` mit expliziter
-  Breite/Höhe, danach `innerWidth` gegenprüfen. **Danach `resize` selbst auslösen:** die Scroll-Engine
-  rechnet ihre Bahnhöhe nur in `layout()` und schreibt sie als festen Pixelwert — ohne das Ereignis
-  misst man die Bahn des ALTEN Fensters (30.07.: 8822 statt 11509 px Seitenhöhe, und damit jede
-  Scrollposition daneben).
-  (2) Bei `document.visibilityState === 'hidden'` laufen `requestAnimationFrame`, IntersectionObserver
-  und Animationen **gar nicht** → `is-visible` wird nie gesetzt, Reveal-Zustände sind dort grundsätzlich
-  nicht prüfbar, und ein `await` auf rAF hängt bis zum Timeout. Solche Aussagen dann statisch belegen.
-  Auch **Scroll-Ereignisse werden nicht zugestellt** (gemessen: null bei `window.scrollTo`) — Position
-  setzen und `dispatchEvent(new Event('scroll'))` bzw. `resize` selbst auslösen. Und: Code mit dem
-  üblichen rAF-Riegel (`if (!ticking) { ticking = true; requestAnimationFrame(…) }`) verklemmt sich
-  dort beim ERSTEN Ereignis dauerhaft. Zum Testen `window.requestAnimationFrame` vorher auf synchron
-  umbiegen, dann läuft der echte Code-Pfad statt einer Nachbildung. Der Ersatz muss dabei
-  **Wiedereintritt verweigern** (Merker setzen, verschachtelte Aufrufe verwerfen): die Engine hat
-  eine rAF-Endlosschleife, die sich selbst nachbestellt — synchron ausgeführt reißt sie sonst
-  sofort den Aufrufstapel ein.
-  (3) **CSS-Übergänge frieren im versteckten Pane am STARTWERT ein.** Eine Eigenschaft mit
-  `transition` misst sich als ihr Ausgangswert — eine Knopffläche als `rgba(0,0,0,0)` statt der
-  Zielfarbe — und selbst inline gesetzte Werte scheinen ignoriert (die eingefrorene Transition
-  überdeckt sie). Vor Farb-/Zustandsmessungen `element.style.transition='none'` setzen, danach
-  zurücksetzen. So entstand am 27.07. die Fehlmessung, die Aktiv-Fläche des Nav-Reiters sei
-  durchsichtig — sie war es nicht. **Am 30.07. dieselbe Falle noch einmal**, an derselben Fläche:
-  eine frisch gesetzte Tinte-Fläche maß sich als `rgba(0,0,0,0)`. Diese Falle schnappt zuverlässig
-  wieder zu — vor jeder Farbmessung `transition` abschalten, ohne Ausnahme.
-- **Headless Chrome misst hier falsch, wenn man nicht nachrechnet.** `--window-size` ist nicht der
-  CSS-Viewport: es gehen 26 px Breite und 156 px Höhe für das Fensterwerk ab, und unter **526 CSS-px
+  eine nicht angezeigte Seite rendert keine Bilder, unabhängig von ihrer Größe. Jeder Beweis läuft
+  über JavaScript (DOM-Geometrie, `getComputedStyle`). Drei Fallen, jede hat schon einen
+  Fehlbefund erzeugt:
+  (1) **Erst Viewport setzen, dann messen** — ein frischer Tab meldet `0×0`, jede Geometrie ist
+  dann Müll. `resize_window` mit expliziter Breite/Höhe, `innerWidth` gegenprüfen. **Danach
+  `resize` selbst auslösen:** die Engine rechnet ihre Bahnhöhe nur in `layout()` und schreibt sie
+  als festen Pixelwert — sonst misst man die Bahn des ALTEN Fensters.
+  (2) Bei `visibilityState === 'hidden'` laufen `requestAnimationFrame`, IntersectionObserver und
+  Animationen **gar nicht**, und Scroll-Ereignisse werden nicht zugestellt: Reveal-Zustände sind
+  dort grundsätzlich nicht prüfbar (statisch belegen), ein `await` auf rAF hängt bis zum Timeout,
+  Position setzen und `scroll`/`resize` selbst dispatchen. Der übliche rAF-Riegel
+  (`if (!ticking) { ticking = true; … }`) verklemmt sich beim ERSTEN Ereignis dauerhaft — zum
+  Testen `requestAnimationFrame` auf synchron umbiegen, damit der echte Code-Pfad läuft. Der
+  Ersatz muss **Wiedereintritt verweigern**, sonst reißt die selbst-nachbestellende rAF-Schleife
+  der Engine sofort den Aufrufstapel ein.
+  (3) **CSS-Übergänge frieren am STARTWERT ein** — eine Fläche mit `transition` misst sich als
+  ihr Ausgangswert (`rgba(0,0,0,0)` statt Zielfarbe), und selbst inline gesetzte Werte scheinen
+  ignoriert. Vor jeder Farb-/Zustandsmessung `element.style.transition='none'` setzen, danach
+  zurücksetzen — ohne Ausnahme: dieselbe Falle hat an derselben Fläche zweimal zugeschlagen.
+- **Headless Chrome misst falsch, wenn man nicht nachrechnet.** `--window-size` ist nicht der
+  CSS-Viewport (26 px Breite und 156 px Höhe gehen fürs Fensterwerk ab), und unter **526 CSS-px
   Breite klemmt Chrome auf ein Minimum** — ein angefordertes 393er Handyfenster rendert als 526 px
-  und schneidet Text ab, der real passt. Vor jedem Beweisbild einmal mit einer Mess-Seite
-  (`innerWidth` ins DOM schreiben, `--dump-dom`) gegenprüfen. Für echte Handybreiten taugt der Weg
-  nicht — dort nur DOM-Geometrie messen.
+  und schneidet Text ab, der real passt. Für echte Handybreiten taugt der Weg nicht; dort nur
+  DOM-Geometrie messen.
 - **Hochkant-Layouts in `svh` rechnen, nicht in `vh` oder `%`.** Chrome auf Android misst
   `position: fixed` am GROSSEN Fenster (ohne Adressleiste); steht die Leiste, liegen rund 110 px
   davon unter dem sichtbaren Rand, und alles, was dort unten verankert ist, wird abgeschnitten.
@@ -135,9 +125,6 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   Browser und Suchmaschine Verschiedenes. Danach die Stationshöhen hochkant nachmessen: `--weg-textzone`
   hängt an der höchsten Station (`docs/der-weg.md`).
 - Windows: keine PS-Bulk-Replaces auf den HTML-Dateien (verstümmelt UTF-8). Edits via Tool oder Node.
-- **Commit-Messages immer als Datei + `git commit -F`.** Ein PowerShell-Here-String (`@'…'@`) nach
-  einem `;` in einer Befehlskette wird nicht als Here-String geparst; git bekommt Wortsalat als
-  Pathspecs und staged dann gar nichts. Zweimal passiert (01.08., 26.08.).
 - **`.gitattributes` / EOL:** Der Git-Index der minifizierten Varianten-HTMLs ist LF; `.gitattributes` hält
   sie als `text eol=lf`. NICHT auf `-text`/`binary` stellen — das würde die CRLF-Arbeitskopien wörtlich
   einchecken und die deployten Live-Bytes ändern. Vor EOL-/Attribut-Änderungen immer erst
