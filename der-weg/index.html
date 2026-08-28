@@ -1735,15 +1735,20 @@
     nav: true,
     atmosphere: true,
 
-    /* Scrollweg je Etappe. Zusammen 7,2 Bildschirmhoehen (vorher 8,45, davor 12).
+    /* Scrollweg je Etappe. Zusammen 6,90 Bildschirmhoehen (vorher 7,20, davor
+       8,45 und 12). Der letzte Schritt kommt nicht von einer Umverteilung, sondern
+       vom kuerzeren Film: Etappe 3 und 4 zusammen sind seit dem 28.08.2026 287
+       statt 383 Bilder lang (Gabriels neu gerenderter Durchgangsclip). Weniger
+       Film braucht weniger Scrollweg, sonst kroeche die Stelle.
 
        WIE DIE ZAHLEN ZUSTANDE KOMMEN — das ist der Punkt, an dem vorher nach
        Gefuehl verteilt wurde (V49, Gabriels Rueckmeldung vom 31.07.2026: "das
        Scrollgefuehl im kompletten 2. Teil fuehlt sich zaeher an als im 1.").
 
        Zaeh wird eine Etappe nicht vom Scrollweg allein, sondern vom Verhaeltnis
-       aus Scrollweg und BILDBEWEGUNG. Alle sieben Clips sind gleich lang (8,04 s,
-       193 Bilder), sie bewegen sich aber unterschiedlich stark. Gemessen als
+       aus Scrollweg und BILDBEWEGUNG. Fuenf der sieben Clips sind gleich lang
+       (8,04 s, 193 Bilder), sie bewegen sich aber unterschiedlich stark; Etappe 3
+       und 4 sind seit dem 28.08.2026 kuerzer und ungleich lang. Gemessen als
        mittlere Helligkeitsaenderung zwischen Einzelbildern (ffmpeg, tblend +
        signalstats; ein Stellvertreter fuer Kamerabewegung, kein Mass fuer sie):
 
@@ -1757,13 +1762,24 @@
 
        Deshalb leitet sich `scroll` jetzt aus der Messung ab statt aus dem Gefuehl:
 
-         scroll = Bildbewegung / 8,06        (8,06 = die Rate von Teil 1, die steht)
+         scroll = Bilder × Bildbewegung / 1555,6     (1555,6 = 193 × 8,06)
 
        mit einem Boden von 0,85. Den brauchen die zwei ruhigen Schlussszenen:
        rechnerisch kaemen sie auf 0,64 und 0,51, dann fliegt man an ihnen vorbei,
        und der Stationstext haette zu wenig Weg zum Einblenden (`rampIn` ist
        0,55 × Etappe). Sie bleiben damit bewusst etwas ruhiger als der Rest —
        ein Ausklang darf das, ein Mittelteil nicht.
+
+       Der Zaehler ist die GESAMTE Bildbewegung einer Etappe, nicht ihr Tempo:
+       Bildbewegung ist ein Mittelwert je Bildpaar, mal der Anzahl Bilder ergibt
+       das die Strecke, die das Bild insgesamt zuruecklegt. Solange alle sieben
+       Clips gleich lang waren (193 Bilder, bis 27.08.2026), kuerzte sich die
+       Anzahl heraus, und die Regel hiess verkuerzt `Bildbewegung / 8,06`. Seit
+       Etappe 3 und 4 aus einem geteilten Clip stammen und 118 bzw. 169 Bilder
+       haben, muss die Anzahl mitgerechnet werden — sonst bekaeme die kuerzere
+       Etappe denselben Scrollweg wie eine anderthalb Mal so lange und kroeche.
+       Gegenprobe: die fuenf unveraenderten Etappen ergeben mit dieser Formel
+       exakt ihre bisherigen Werte (1,10 / 1,15 / 1,10 / Boden / Boden).
 
        Wer einen Clip austauscht, misst neu und rechnet die Zahl nach. Das
        Messkommando steht in docs/der-weg.md.
@@ -1837,8 +1853,10 @@
         poster: 'assets/werkzeug-poster.jpg', posterMobile: 'assets/werkzeug-poster-m.jpg',
         still: 'assets/werkzeug-still.jpg',
         accent: '#8FA98A',
-        /* Der Uebergang zum Schreibtisch springt (gemessen 0,30 gegen einen
-           Eigenwert von 0,96). Breitere Ueberblendung faengt das ab. */
+        /* Der Uebergang zum Schreibtisch springt (gemessen 0,43 gegen einen
+           Eigenwert von 0,96, Verhaeltnis 0,45). Breitere Ueberblendung faengt
+           das ab. Die einzige verbliebene schlechte Naht der Reise — Gabriels
+           Neurendering vom 26.08.2026 betraf nur die Naht danach. */
         crossfade: 0.38,
         scroll: 1.15,               /* Bildbewegung 9,3 — die bewegteste Etappe */
         eyebrow: 'Eine Einordnung vorweg',
@@ -1847,17 +1865,23 @@
         tags: [],
       },
       {
-        /* Schluesselszene: die Kamera faehrt am Tisch entlang von Heute nach Morgen.
-           Mehr Scrollweg, damit der Text mitkommt — aber KEIN `linger`, siehe die
-           Notiz ueber `diveScroll`. */
+        /* Schluesselszene: die Kamera faehrt am Tisch entlang von Heute nach Morgen
+           und kommt am Schreibtisch zur Ruhe — KEIN `linger`, siehe die Notiz ueber
+           `diveScroll`.
+           Seit dem 28.08.2026 die ERSTE HAELFTE von Gabriels Durchgangsclip: 118 statt
+           193 Bilder (Bild 0 bis 120 der geteilten Fassung, davon 3 Bilder Vorlauf).
+           Der Clip endet dort, wo die Kamera am ruhigsten steht — der Ankunftsmoment
+           fuer diesen Text. Herkunft und Teilungsbild: scripts/der-weg/teile-verbunden.mjs */
         id: 'schreibtisch', label: 'Deine Woche',
         clip: 'assets/schreibtisch.mp4', clipMobile: 'assets/schreibtisch-m.mp4',
         poster: 'assets/schreibtisch-poster.jpg', posterMobile: 'assets/schreibtisch-poster-m.jpg',
         still: 'assets/schreibtisch-still.jpg',
         accent: '#6FA3B5',
-        scroll: 1.20,               /* Bildbewegung 9,7 */
-        /* Beide Naehte dieser Etappe springen — davor die Werkzeugwand,
-           danach das Stilprobe-Pult. */
+        scroll: 0.96,               /* 118 Bilder x Bildbewegung 12,6 / 1555,6 */
+        /* Nur noch die Naht DAVOR springt (Werkzeugwand). Die danach ist seit dem
+           Neurendering sauber (0,905 bei Eigenwert 0,810) — dort traegt die breite
+           Ueberblendung nichts mehr bei, schadet aber auch nicht: die zwei Bilder an
+           der Naht sind aufeinanderfolgende Bilder derselben Fahrt. */
         crossfade: 0.38,
         eyebrow: 'Zwischen den Sitzungen',
         title: 'Was sich wirklich ändert.',
@@ -1872,14 +1896,18 @@
            Etappe der ganzen Seite — 1,80× so viel Scrollen wie die Haltung für
            dieselbe Bildbewegung. Eine kriechende Kamera liest sich nicht als
            "wichtig", sondern als "hängt". Ihr Gewicht trägt sie über den Text und
-           ihren Platz in der Reise, nicht über die Bremse. */
+           ihren Platz in der Reise, nicht über die Bremse.
+           Seit dem 28.08.2026 die ZWEITE HAELFTE von Gabriels Durchgangsclip: 169 statt
+           193 Bilder (Bild 121 bis 289 der geteilten Fassung). Sie beginnt genau dort,
+           wo der Stift zu schreiben anfaengt — der Bildinhalt dieser Station. Kein
+           `crossfade` mehr: die 0,38 hingen an der gebrochenen Naht davor, und die ist
+           seit dem Neurendering sauber. */
         id: 'stilprobe', label: 'Die Stilprobe',
         clip: 'assets/stilprobe.mp4', clipMobile: 'assets/stilprobe-m.mp4',
         poster: 'assets/stilprobe-poster.jpg', posterMobile: 'assets/stilprobe-poster-m.jpg',
         still: 'assets/stilprobe-still.jpg',
         accent: '#C97B3F',
-        scroll: 0.95,               /* Bildbewegung 7,5 */
-        crossfade: 0.38,
+        scroll: 0.89,               /* 169 Bilder x Bildbewegung 8,2 / 1555,6 */
         eyebrow: 'Die Stilprobe',
         title: 'Lies dich selbst.',
         body: 'Du schickst mir drei deiner Texte und bekommst binnen 48 Stunden zwei Fassungen zurück: eine generische und eine in deiner Handschrift.',

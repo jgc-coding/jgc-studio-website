@@ -15,8 +15,9 @@ keine Verbindungsclips). Grundlage: `scroll-world-briefing.md` von Gabriel, 2026
 | `der-weg/scrub-engine.js` | Scroll-Engine aus dem Skill, **unverändert** (siehe unten) |
 | `der-weg/vertiefung.js` | „Mehr dazu": öffnet die Langfassung einer Station (siehe unten) |
 | `der-weg/formulare.js` | die zwei Formular-Overlays: Stilprobe einreichen, Erstgespräch anfragen (siehe unten) |
-| `der-weg/assets/` | 7 Etappen à 4 Dateien plus Schriften, zusammen rund 52 MB |
+| `der-weg/assets/` | 7 Etappen à 4 Dateien plus Schriften, zusammen rund 46 MB |
 | `scripts/der-weg/kodiere.mjs` | Rohvideos → auslieferbare Dateien |
+| `scripts/der-weg/teile-verbunden.mjs` | teilt Gabriels Durchgangsclip in die Etappen 3 und 4 |
 | `scripts/der-weg/pruefe-naehte.mjs` | prüft die Übergänge zwischen den Etappen |
 | `scripts/der-weg/hole-schriften.mjs` | löst Fraunces und Inter aus V18 heraus |
 | `scripts/der-weg/server.mjs` | lokaler Server zum Ansehen (Port 4330) |
@@ -52,33 +53,82 @@ misst seine Bildbewegung neu und rechnet den `scroll`-Wert nach (Regel unten, V4
 Die Nummern: 1 anflug · 2 werkzeug · 3 schreibtisch · 4 stilprobe · 5 weg · 6 lichtung ·
 7 aussicht.
 
-## Stand der Übergänge (Messung 27.07.2026)
+**Etappe 3 und 4 sind ein Sonderfall.** Sie stammen seit dem 28.08.2026 aus EINER Rohdatei,
+die `teile-verbunden.mjs` in zwei zerlegt (Abschnitt unten). Wer eine der beiden ersetzt,
+muss beide zusammen denken — und die alten Einzeldateien liegen unter
+`Scroll World\legs\vor-schnitt-2026-08-28\`.
 
-Vier von sechs Übergängen tragen, zwei springen sichtbar — beide um Etappe 3 herum:
+## Stand der Übergänge (Messung 28.08.2026)
+
+Fünf von sechs Übergängen tragen, einer springt sichtbar:
 
 ```
-anflug -> werkzeug          0.742   trägt
-werkzeug -> schreibtisch    0.423   SPRUNG   (war 0.304, per Vorlauf-Schnitt verbessert)
-schreibtisch -> stilprobe   0.281   SPRUNG   (durch Schneiden NICHT zu retten)
-stilprobe -> weg            0.620   trägt
-weg -> lichtung             0.855   trägt
-lichtung -> aussicht        0.833   trägt
+anflug -> werkzeug          0.742 / Eigenwert 0.656 = 1.13   trägt
+werkzeug -> schreibtisch    0.432 / 0.962 = 0.45             SPRUNG
+schreibtisch -> stilprobe   0.905 / 0.810 = 1.12             trägt   (war 0.281 = SPRUNG)
+stilprobe -> weg            0.821 / 0.638 = 1.29             trägt   (war 0.620)
+weg -> lichtung             0.855 / 0.696 = 1.23             trägt
+lichtung -> aussicht        0.833 / 0.837 = 1.00             trägt
 ```
 
-Abgefangen wird das in der Seite durch eine breitere Überblendung (`crossfade: 0.38` auf
-den beiden Etappen an der Naht).
+Abgefangen wird der verbliebene Sprung durch eine breitere Überblendung (`crossfade: 0.38`
+auf `werkzeug` und `schreibtisch`). Auf `stilprobe` stand bis zum 28.08.2026 dieselbe 0,38 —
+sie hing an der Naht davor und ist mit ihr weggefallen.
 
 **Naht 2 → 3: gebessert.** Etappe 3 hatte einen Anlauf — die Kamera driftet in den ersten
 drei Bildern von der Anschlussstelle weg und kommt dann zurück. `kodiere.mjs` schneidet
 diese drei Bilder jetzt weg (Feld `vorlauf`, 1,6 % der Etappe).
 
-**Naht 3 → 4: nur durch Neuerzeugung.** Ein 12 × 12-Vergleich aller Bildpaare rund um die
-Naht liegt flach bei 0,10 bis 0,12 — es gibt kein besseres Schnittbild. Im Standbildvergleich
-sieht man warum: derselbe Schreibtisch, aber die Kamera springt **rückwärts und nach oben**.
-Eine Richtungsumkehr lässt sich nicht wegschneiden.
+**Naht 3 → 4: erledigt am 28.08.2026, durch Neurendering.** Vorgeschichte: Ein 12 × 12-Vergleich
+aller Bildpaare rund um die alte Naht lag flach bei 0,10 bis 0,12 — es gab kein besseres
+Schnittbild. Im Standbildvergleich sah man warum: derselbe Schreibtisch, aber die Kamera sprang
+**rückwärts und nach oben**. Eine Richtungsumkehr lässt sich nicht wegschneiden.
 
-**Für die Neuerzeugung** liegen die exakten Anschlussbilder bereit (aus dem Rohmaterial, volle
-Auflösung, außerhalb des Repos):
+Gabriel hat den ganzen Bogen deshalb neu gerendert, und zwar als **ein durchgehendes Video**
+(`Scroll World\legs\ueberarbeitet\Segmente-verbunden.mp4`). Was darin steckt, gemessen gegen das
+alte Rohmaterial:
+
+```
+neu 0 .. 122     altes leg 3, dessen Bild 0 .. 98    (Ähnlichkeit 0,995–0,997)
+neu 123 .. 142   NEU gerendert — die Brücke, die den Sprung ersetzt
+neu 143 .. 364   altes leg 4, dessen Bild 16 .. 192  (Ähnlichkeit 0,990–0,997)
+```
+
+Anfang und Ende sind also praktisch identisch mit dem alten Material — **die Nähte 2 → 3 und
+4 → 5 bleiben davon unberührt**, ersetzt ist nur die kaputte Stelle. Herausgeschnitten sind
+rund 3,9 s.
+
+### Der Durchgangsclip und seine Teilung
+
+`scripts/der-weg/teile-verbunden.mjs` macht daraus wieder zwei Etappen. Es bringt das Video
+auf 1112 × 834 und 24 Bilder/s (Gabriels Fassung ist 1440 × 1080 bei 30) und teilt bei **Bild 121**
+der umgerechneten Fassung:
+
+| | Bilder | Länge | Inhalt |
+|---|---|---|---|
+| Etappe 3 `schreibtisch` | 118 (nach 3 Bildern Vorlauf) | 4,92 s | Anflug an den Schreibtisch, Ankunft im Stillstand |
+| Etappe 4 `stilprobe` | 169 (2 Bilder Nachlauf ab) | 7,04 s | der Stift schreibt, Tauchgang zur Feder |
+
+**Warum bei 121.** Die Bild-zu-Bild-Bewegung fällt ab Bild 85 auf ein Zehntel des Anfangswerts,
+ist zwischen 117 und 125 am kleinsten und steigt ab 170 wieder. Die Kamera steht dort also still —
+der Ankunftsmoment für „Was sich wirklich ändert". Und ab Bild 134 beginnt der Stift zu schreiben,
+also der Bildinhalt von „Lies dich selbst". Die Station wechselt damit dort, wo auch das Bild die
+Geschichte wechselt.
+
+**Warum die Auflösung nach unten geht.** Nur zwei von sieben Etappen wären sonst schärfer als
+ihre Nachbarn, und das fällt an den Nähten auf. Die 24 Bilder/s sind zwingend: `clipFps` ist
+**eine** Zahl für alle Clips, und die Scroll-Engine bleibt unverändert.
+
+**Warum 2 Bilder am Ende wegfallen.** Das Video fährt zwei Bilder über den Punkt hinaus, an dem
+Etappe 5 ansetzt. Gegen deren erstes Bild misst sich Bild 289 mit 0,891, die Bilder 290 und 291
+nur noch mit 0,626 — das alte leg 4 endete genau auf diesem Überschuss, daher die alte Naht von
+0,620. Zwei Bilder weniger kosten 0,08 s und heben die Naht auf 0,821.
+
+Die alten Einzeldateien sind nicht gelöscht, sondern liegen unter
+`Scroll World\legs\vor-schnitt-2026-08-28\`.
+
+**Für eine spätere Neuerzeugung** liegen die exakten Anschlussbilder weiterhin bereit (aus dem
+Rohmaterial, volle Auflösung, außerhalb des Repos):
 
 ```
 C:\Projekte\JGC Studio\Scroll World\legs\anschlussbilder\
@@ -88,8 +138,10 @@ C:\Projekte\JGC Studio\Scroll World\legs\anschlussbilder\
 
 Neu erzeugen mit dem passenden Startbild, Rohdatei ersetzen, dann
 `node scripts/der-weg/kodiere.mjs 4` und `node scripts/der-weg/pruefe-naehte.mjs`.
-Bei einer neuen Etappe 3 zusätzlich das Feld `vorlauf` in `kodiere.mjs` auf 0 zurücksetzen —
-es korrigiert einen Fehler, den genau diese Rohdatei hat.
+Das Feld `vorlauf: 3` in `kodiere.mjs` gilt weiterhin und weiterhin nur für Etappe 3: auch der
+neue Clip beginnt mit demselben Anlauf (gemessen 28.08.2026 — Bild 2 und 3 sind die besten
+Anschlüsse an Etappe 2, Bild 0 und 1 liegen deutlich darunter). Bei einer wirklich neuen
+Etappe 3 auf 0 zurücksetzen.
 
 **Zum Messverfahren:** Der Skill verlangt einen festen Ähnlichkeitswert von 0,90 je Naht.
 Dieses Maß ist bei fein strukturiertem Papier zu streng — schon zwei benachbarte Bilder
@@ -159,6 +211,50 @@ als der Rest; ein Ausklang darf das, ein Mittelteil nicht.
 
 Teil 2 verlangte vorher **57 %** mehr Scrollweg für dieselbe Bildbewegung als Teil 1, jetzt 18 %.
 Summe 8,45 → **7,20** Bildschirmhöhen, Seitenhöhe bei 393 × 702 damit 9549 → 8496 px.
+
+### Nachtrag 28.08.2026: die Anzahl der Bilder gehört in die Formel
+
+Solange alle sieben Clips 193 Bilder hatten, kürzte sich die Anzahl heraus. Seit Etappe 3 und 4
+aus einem geteilten Clip stammen (118 und 169 Bilder), muss sie mitgerechnet werden:
+
+```
+scroll = Bilder × Bildbewegung / 1555,6        (1555,6 = 193 × 8,06)
+```
+
+Der Zähler ist damit die **gesamte** Bildbewegung einer Etappe statt ihres Tempos: Bildbewegung
+ist ein Mittelwert je Bildpaar, mal der Anzahl Bilder ergibt das die Strecke, die das Bild
+insgesamt zurücklegt. Ohne diesen Faktor bekäme die kürzere Etappe denselben Scrollweg wie eine
+anderthalb Mal so lange — und würde kriechen.
+
+Gegenprobe: die fünf unveränderten Etappen ergeben mit der erweiterten Formel exakt ihre
+bisherigen Werte (1,094 / 1,154 / 1,110 / 0,635 → Boden / 0,510 → Boden).
+
+| Station | Bilder | Bildbewegung | `scroll` alt → neu |
+|---|---|---|---|
+| Deine Woche | 190 → **118** | 9,7 → **12,6** | 1,20 → **0,96** |
+| Die Stilprobe | 193 → **169** | 7,5 → **8,2** | 0,95 → **0,89** |
+
+Summe 7,20 → **6,90** Bildschirmhöhen. Die Reise wird damit um 4 % kürzer — nicht durch
+Umverteilung, sondern weil der Film kürzer ist (287 statt 383 Bilder in diesen zwei Etappen).
+Weniger Film braucht weniger Scrollweg, sonst kriecht die Stelle. Hochkant zählt der
+Mobilfaktor 1,2 mit: 0,30 × 1,2 × 702 = **253 px** weniger Scrollweg bei 393 × 702.
+
+Gemessen am laufenden Server:
+
+| | 1440 × 900 | 393 × 702 |
+|---|---|---|
+| Bahnhöhe (`.sw-track`) | 7110 px = 6,90 + 1,00 Bildschirmhöhen | 6514,6 px = 8,28 + 1,00 |
+| Seitenhöhe gesamt | 8751 px | 8267 px |
+
+Die eine zusätzliche Bildschirmhöhe hängt die Engine an, damit die letzte Etappe ausläuft.
+Stationsgrenzen bei 1440 × 900: 0 / 990 / 2025 / 2889 / 3690 / 4680 / 5445 / 6210 px, im
+Browser durch die Ebene mit `z-index: 120` bestätigt. Alle sieben Clips laden vollständig
+(`readyState` 4) mit 193 / 193 / **118** / **169** / 193 / 193 / 193 Bildern.
+
+Der oben genannte Altwert von 8496 px stammt vom 31.07.2026 und ist mit den 8267 px nicht direkt
+vergleichbar: dazwischen liegen die längeren v2-Texte vom 26.08., die auch den Leseteil unter der
+Reise verändert haben. Vergleichbar ist nur der Scrollweg der Reise selbst, und der ist um die
+oben gerechneten 253 px kürzer.
 
 **Wer einen Clip austauscht, misst neu und rechnet die Zahl nach** — sonst wandert genau dieser
 Fehler wieder ein. Die zweite Lehre daraus steht bei der Stilprobe: sie hatte den längsten

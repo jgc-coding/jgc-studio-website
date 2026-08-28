@@ -18,6 +18,7 @@ node --check scripts/v18/extrahiere-inhalt.mjs
 node --check scripts/v18/transform-weg-umschalter.mjs
 node --check scripts/der-weg/kodiere.mjs
 node --check scripts/der-weg/pruefe-naehte.mjs
+node --check scripts/der-weg/teile-verbunden.mjs
 node --check scripts/der-weg/hole-schriften.mjs
 node --check scripts/der-weg/server.mjs
 node --check scripts/der-weg/hole-logo.mjs

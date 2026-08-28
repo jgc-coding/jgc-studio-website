@@ -2,6 +2,48 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-08-28 — Der Weg: die gebrochene Naht 3 → 4 ist repariert
+
+Gabriel hat den Bogen zwischen „Was sich wirklich ändert" und „Lies dich selbst" neu gerendert,
+als **ein** durchgehendes Video (`Scroll World\legs\ueberarbeitet\Segmente-verbunden.mp4`, 1440 ×
+1080 bei 30 Bildern/s, 12,17 s). Das war die einzige Naht der Reise, die sich nicht durch
+Schneiden retten ließ — die Kamera sprang dort rückwärts und nach oben (Befund 27.07.2026).
+
+- **Neues Werkzeug `scripts/der-weg/teile-verbunden.mjs`.** Bringt den Clip auf das Format der
+  übrigen fünf Etappen (1112 × 834, 24 Bilder/s) und teilt ihn bei Bild 121 in die Etappen 3 und
+  4. Jeder Schritt ist gegen Sollwerte abgesichert und bricht ab statt still etwas anderes zu
+  schneiden. Die alten Rohdateien werden nicht gelöscht, sondern nach
+  `Scroll World\legs\vor-schnitt-2026-08-28\` verschoben.
+- **Teilungsbild aus der Messung, nicht aus dem Gefühl.** Die Bild-zu-Bild-Bewegung fällt ab
+  Bild 85 auf ein Zehntel, ist zwischen 117 und 125 am kleinsten, steigt ab 170 wieder. Bei
+  Bild 121 steht die Kamera also still — der Ankunftsmoment für „Was sich wirklich ändert" —
+  und ab Bild 134 beginnt der Stift zu schreiben, der Bildinhalt von „Lies dich selbst".
+- **Zwei Nähte gemessen besser, eine unverändert.** `schreibtisch → stilprobe` von 0,281
+  (SPRUNG) auf **0,905 bei Eigenwert 0,810, Verhältnis 1,12 — trägt**. `stilprobe → weg` von
+  0,620 auf **0,821 / 1,29**, weil zwei Bilder Nachlauf abfallen, die über den Anschlusspunkt
+  hinausfahren. `werkzeug → schreibtisch` bleibt bei 0,45 ein Sprung: dieses Material hat
+  Gabriel nicht angefasst, die breite Überblendung fängt es weiter ab.
+- **`crossfade: 0.38` auf `stilprobe` entfernt.** Die Zahl hing an der gebrochenen Naht davor.
+  Sie regelte die sichtbare Blende beim Eintritt in diese Etappe; ohne Grund weichgezeichnet
+  wird jetzt nichts mehr. Auf `werkzeug` und `schreibtisch` bleibt sie stehen.
+- **Scrollweg-Formel um die Bildanzahl erweitert.** Bisher `scroll = Bildbewegung / 8,06` — das
+  galt nur, solange alle Clips 193 Bilder hatten. Jetzt `scroll = Bilder × Bildbewegung / 1555,6`
+  (1555,6 = 193 × 8,06). Gegenprobe: die fünf unveränderten Etappen ergeben damit exakt ihre
+  bisherigen Werte. Neu: **Deine Woche 1,20 → 0,96** (118 statt 190 Bilder, Bildbewegung 9,7 →
+  12,6), **Die Stilprobe 0,95 → 0,89** (169 statt 193 Bilder, 7,5 → 8,2).
+- **Die Reise wird 4 % kürzer**, 7,20 → 6,90 Bildschirmhöhen. Das ist die Folge des Schnitts,
+  nicht eine Umverteilung: 287 statt 383 Bilder in diesen zwei Etappen. Hochkant sind das
+  253 px weniger Scrollweg bei 393 × 702.
+- Assets 52 → 46 MB. Texte, Hochkant-Zonen (`--weg-textzone`), die übrigen fünf Etappen, V18
+  und die Hauptseite unangetastet.
+
+**Belege** (der Preview-Pane gilt als versteckt, Screenshots sind dort unmöglich — alles über
+DOM-Geometrie und Messläufe): `pruefe-naehte.mjs` über die ausgelieferten Dateien; am laufenden
+Server bei 1440 × 900 Bahnhöhe 7110 px = 6,90 + 1,00 Bildschirmhöhen, Stationsgrenzen
+0/990/2025/2889/3690/4680/5445/6210 px über `z-index: 120` bestätigt, alle sieben Clips
+`readyState` 4 mit 193/193/118/169/193/193/193 Bildern; bei 393 × 702 Bahn 6514,6 px,
+Seitenhöhe 8267 px. `scripts/pruefe-seiten.mjs` grün, alle `node --check` grün.
+
 ## 2026-08-26 — Der Weg: Texte v2, Formulare in der Reise, größere Vertiefungen (V54–V58)
 
 Gabriels Änderungsrunde vom 26.08. (schriftlich, mit zwei mitgelieferten Konzept-Dateien),
