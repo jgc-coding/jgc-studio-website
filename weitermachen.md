@@ -20,12 +20,15 @@ gegengeprüft).
 - `crossfade: 0.38` auf `stilprobe` entfernt (hing an der gebrochenen Naht). Assets 52 → 46 MB.
   Alte Rohdateien liegen unter `Scroll World\legs\vor-schnitt-2026-08-28\`.
 
+**Gabriels Gerätetest ist durch — „alles super" (28.08.2026).** Er deckt vier Runden auf einmal
+ab: V48–V50, den Scrub-Umbau V51–V53, V54–V58 und den neuen Übergang. Damit sind alle
+Tempo- und Layout-Stellschrauben der Reise **bestätigt**: Boden 0,85, Zeitkonstante 85 ms,
+`--weg-textzone` 365/350/345/325, die Ausblendung mit 14svh und das Teilungsbild 121. Wer
+daran dreht, dreht an etwas, das der Nutzer abgenommen hat — nur mit Anlass und Messung.
+
 ## Offen (unfertig / wartet auf Zulieferung)
 - **Impressum ist weiter leer (V3)** — braucht Gabriels Daten, liegt im Hub. Größter Blocker.
   Daran hängt auch der **Datenschutz-Absatz zu den zwei neuen Formularen**.
-- **Gabriels Gerätetest steht aus** — inzwischen für vier Runden: V48–V50, der Scrub-Umbau
-  V51–V53, V54–V58 und jetzt der neue Übergang. Vier Punkte im Hub, in einem Durchgang
-  erledigbar.
 - **Ein Clip kommt noch von Gabriel:** leg 6 mit seinem eigenen Porträt (auf der Staffelei
   steht ein generiertes Gesicht).
 - **V47 ist stark geschrumpft, nicht erledigt.** Unter 362/380 px stapeln die Knöpfe weiter;
@@ -48,36 +51,30 @@ gegengeprüft).
   **I4** (Wortmarke aufs Vorschaubild).
 
 ## Nächste Schritte (Claude)
-1. **Gabriels Urteil einarbeiten** — jetzt zu vier Runden gleichzeitig (V48–V50, V51–V53,
-   V54–V58, neuer Übergang). Erst messen, dann Plan zeigen (hat sechsmal getragen).
-   Stellschrauben: Boden 0,85 (Schlussszenen), Ausblendung kürzen, Zeitkonstante 85 ms beim
-   Scrubbing, und falls der Textstreifen zu hoch wirkt: die Texte von „Über mich"/„Der Weg"
-   kürzen, nicht die Zonen-Zahlen. Kommt „die Stelle ist jetzt zu kurz", ist die
-   Stellschraube das Teilungsbild in `teile-verbunden.mjs`, nicht der `scroll`-Wert.
-2. **Leg 6 einarbeiten**, sobald es da ist: `node scripts/der-weg/kodiere.mjs 6` → zwingend
+1. **Leg 6 einarbeiten**, sobald es da ist: `node scripts/der-weg/kodiere.mjs 6` → zwingend
    `pruefe-naehte.mjs` → Bildbewegung messen und `scroll` nachrechnen (Formel unten);
    `kodiere.mjs` warnt selbst bei fps ≠ 24.
-3. **Die Reise zur Hauptseite machen**, sobald Gabriel freigibt: `robots` auf `index, follow`,
+2. **Die Reise zur Hauptseite machen**, sobald Gabriel freigibt: `robots` auf `index, follow`,
    `scripts/copy-homepage.mjs` bzw. Manifest, `canonical`, und entscheiden, was mit `/main/`
    und der Lesefassung passiert. Die Reise ist dafür bereit — sie kann Stilprobe und
-   Erstgespräch selbst entgegennehmen.
-4. **V34 umsetzen**, sobald über die Lesefassung entschieden ist — Wortlaut steht (V32),
+   Erstgespräch selbst entgegennehmen, und ihr Tempo ist am Gerät abgenommen.
+3. **V34 umsetzen**, sobald über die Lesefassung entschieden ist — Wortlaut steht (V32),
    V18 braucht ein Transform-Skript, danach `inhalt/lumen-inhalt.md` neu erzeugen.
-5. **In den `scroll-world`-Skill zurückgeben** — Liste in `docs/der-weg.md`, Abschnitt „Offen";
+4. **In den `scroll-world`-Skill zurückgeben** — Liste in `docs/der-weg.md`, Abschnitt „Offen";
    dazugekommen sind „Formular-Overlay: verschieben statt klonen, kein Scroll-Schließen" und
    **„`scroll` braucht die Bildanzahl, sobald Clips unterschiedlich lang sind"**. In einem
    Rutsch, wenn die Seite steht.
-6. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker; im
+5. Impressum-Daten einsetzen, sobald Gabriel sie liefert (V3) — letzter Launch-Blocker; im
    selben Zug den Datenschutz-Absatz zu den zwei Formularen schreiben.
-7. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen, **plus ein zweites
+6. Repo `stilprobe-automatik`: `senden.php` und `kontingent.php` bauen, **plus ein zweites
    `senden.php` für `/erstgespraech/`** — macht alle drei Strecken scharf. Verträge:
    `docs/stilprobe/schnittstelle.md` und `docs/erstgespraech/schnittstelle.md`.
-8. I3 (Kosten-FAQ): Wortlaut-Vorschlag schreiben und vorlegen — nicht ohne Ok einsetzen.
-9. V20 auflösen, sobald Gabriel entscheidet: echte Ausschnitte oder Satz umformulieren.
-10. V47 nur anfassen, wenn Gabriel es ausdrücklich will — 5 px auf schmalen Telefonen.
-11. I2 einplanen (V18 → Astro), am besten zusammen mit dem All-Inkl-Umzug.
-12. V19 und die Worktree-Bereinigung ausführen, sobald Gabriel freigibt (unten).
-13. **Videos neu komprimieren** — jetzt 14,6 MB für sieben Handy-Clips, mit modernerer
+7. I3 (Kosten-FAQ): Wortlaut-Vorschlag schreiben und vorlegen — nicht ohne Ok einsetzen.
+8. V20 auflösen, sobald Gabriel entscheidet: echte Ausschnitte oder Satz umformulieren.
+9. V47 nur anfassen, wenn Gabriel es ausdrücklich will — 5 px auf schmalen Telefonen.
+10. I2 einplanen (V18 → Astro), am besten zusammen mit dem All-Inkl-Umzug.
+11. V19 ausführen, sobald Gabriel freigibt.
+12. **Videos neu komprimieren** — jetzt 14,6 MB für sieben Handy-Clips, mit modernerer
     Kompression plausibel halbierbar. Bisher bewusst ausgeklammert.
 
 ## Stolperfallen (sofort wichtig)
@@ -118,23 +115,28 @@ gegengeprüft).
 - Deploy = Push auf `main` (`main` in keinem Worktree → `git branch -f main HEAD`).
 - Gabriels eigene Aufgaben liegen im **Hub, Karte „Website"** — nicht in einer Datei im Repo.
 
-## Aufräumen — Kassensturz 28.08.2026
-Sauber. Ungemergt sind nur die neun `variant/*`-Branches, und **die müssen bleiben** — der
-Deploy baut aus ihnen die Galerie-Varianten. Von den `claude/*`-Branches trägt keiner mehr
-eigene Arbeit (beide gegen `main` geprüft, `git log main..<branch>` leer).
+## Aufräumen — am 28.08.2026 erledigt (Gabriels Freigabe)
+Der Rest aus der 26.08.-Runde ist weg: Worktree `website-improvements-review-e4c50f` entfernt,
+Branch `claude/jgc-lumen-website-updates-0552a3` lokal und auf `origin` gelöscht (vorher
+dreifach geprüft: keine ungesicherten Änderungen, nichts Unversioniertes, `git log main..`
+leer). Auf `origin` liegt danach **kein** `claude/*`-Branch mehr.
 
-Offen und wartet auf Gabriels Freigabe — ein Worktree aus einer früheren Sitzung:
-```
-git worktree remove ".claude/worktrees/website-improvements-review-e4c50f"
-git branch -d claude/jgc-lumen-website-updates-0552a3
-git push origin --delete claude/jgc-lumen-website-updates-0552a3
-```
+Ungemergt sind nur die neun `variant/*`-Branches, und **die müssen bleiben** — der Deploy baut
+aus ihnen die Galerie-Varianten.
 
-Nach dem Ende DIESER Sitzung zusätzlich:
+Nach dem Ende DIESER Sitzung noch offen:
 ```
 git worktree remove ".claude/worktrees/background-video-cut-revision-bec6e7"
 git branch -d claude/background-video-cut-revision-bec6e7
 ```
+
+**Windows-Fall aus dieser Runde:** `git worktree remove` löschte den Inhalt, scheiterte aber
+mit „Permission denied" am leeren Ordner selbst — ein anderer Prozess hatte ihn als
+Arbeitsverzeichnis (wahrscheinlich eine noch laufende Claude-Sitzung). Das Git-Register war
+danach trotzdem sauber, `git worktree prune` fand nichts zu tun, und Branch-Löschen ging
+normal. **Der leere Ordner `.claude/worktrees/website-improvements-review-e4c50f` liegt noch
+da** und verschwindet, sobald der haltende Prozess endet — beim nächsten Kassensturz einfach
+`Remove-Item` versuchen. Kein Grund, fremde Sitzungen abzuschießen.
 
 **Lehre vom letzten Kassensturz:** `git branch --no-merged` zeigt nur die ungemergten — die
 gemergten Altbranches stehen dort nie und bleiben unbemerkt liegen. Einmal
