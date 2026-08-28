@@ -251,6 +251,27 @@ Stationsgrenzen bei 1440 × 900: 0 / 990 / 2025 / 2889 / 3690 / 4680 / 5445 / 62
 Browser durch die Ebene mit `z-index: 120` bestätigt. Alle sieben Clips laden vollständig
 (`readyState` 4) mit 193 / 193 / **118** / **169** / 193 / 193 / 193 Bildern.
 
+Und die Engine spult die zwei ungleich langen Clips an den richtigen Stellen ab (gemessene
+`currentTime`, in Bilder umgerechnet):
+
+| Scrollposition | `schreibtisch` | `stilprobe` |
+|---|---|---|
+| 2887 px (Ende Etappe 3) | **117 / 118** | 0 / 169 |
+| 4200 px (hinter Etappe 4) | 117 / 118 | **168 / 169** |
+
+Die Naht liegt also exakt zwischen dem letzten Bild der einen und dem ersten der anderen Etappe —
+genau die zwei Bilder, die `pruefe-naehte.mjs` mit 0,905 misst.
+
+**Wie das im versteckten Preview-Pane messbar war** (die Falle steht in der Projekt-CLAUDE.md):
+Ohne sichtbares Fenster läuft `requestAnimationFrame` gar nicht, und die Bild-Schleife der Engine
+sitzt genau dort. `requestAnimationFrame` wurde deshalb durch einen synchronen Ersatz getauscht,
+der den Rückruf **merkt** und Wiedereintritt verweigert; danach eine zweite Instanz der Engine in
+einen Hilfsbehälter gehängt und deren Schleife von Hand getaktet. Zwischen den Takten muss man an
+die Ereignisschleife abgeben (`await`), sonst bleibt `video.seeking` dauerhaft true und die Engine
+überspringt jeden Sprung. Der Riegel `ticking` in der ersten Instanz klemmt außerdem schon beim
+ersten Scroll-Ereignis auf true — er löst sich nur über `layout()`, also über ein
+`orientationchange`-Ereignis.
+
 Der oben genannte Altwert von 8496 px stammt vom 31.07.2026 und ist mit den 8267 px nicht direkt
 vergleichbar: dazwischen liegen die längeren v2-Texte vom 26.08., die auch den Leseteil unter der
 Reise verändert haben. Vergleichbar ist nur der Scrollweg der Reise selbst, und der ist um die

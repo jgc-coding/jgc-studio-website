@@ -42,7 +42,11 @@ DOM-Geometrie und Messläufe): `pruefe-naehte.mjs` über die ausgelieferten Date
 Server bei 1440 × 900 Bahnhöhe 7110 px = 6,90 + 1,00 Bildschirmhöhen, Stationsgrenzen
 0/990/2025/2889/3690/4680/5445/6210 px über `z-index: 120` bestätigt, alle sieben Clips
 `readyState` 4 mit 193/193/118/169/193/193/193 Bildern; bei 393 × 702 Bahn 6514,6 px,
-Seitenhöhe 8267 px. `scripts/pruefe-seiten.mjs` grün, alle `node --check` grün.
+Seitenhöhe 8267 px. Die Engine spult die zwei ungleich langen Clips richtig ab: bei 2887 px
+steht `schreibtisch` auf Bild 117/118 und `stilprobe` auf 0/169, bei 4200 px `stilprobe` auf
+168/169 — die Naht liegt also exakt zwischen letztem und erstem Bild. Dafür musste
+`requestAnimationFrame` durch einen synchronen Ersatz getauscht werden, der den Rückruf merkt
+(Verfahren in `docs/der-weg.md`). `scripts/pruefe-seiten.mjs` grün, alle `node --check` grün.
 
 ## 2026-08-26 — Der Weg: Texte v2, Formulare in der Reise, größere Vertiefungen (V54–V58)
 
