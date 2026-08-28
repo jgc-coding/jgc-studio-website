@@ -18,7 +18,7 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   erzeugen. Existiert, weil der Inhalt sonst nur im 1,2-MB-Minifikat steht und für neue Varianten,
   Korrekturlesen oder Textarbeit nicht zugänglich ist.
 - `der-weg/` — **zweite Fassung der Seite als Scroll-Reise** (Kamerafahrt durch eine
-  Papierwelt, 7 Videoetappen, ~52 MB). Eigenständige Unterseite wie `stilprobe/`, keine
+  Papierwelt, 7 Videoetappen, ~46 MB). Eigenständige Unterseite wie `stilprobe/`, keine
   Standalone-Variante — steht deshalb nicht im Manifest. Nimmt Stilprobe- und
   Erstgespräch-Anfragen selbst entgegen (`formulare.js`). Werkzeuge in `scripts/der-weg/`,
   Rohvideos außerhalb des Repos. **Details und Austauschweg: `docs/der-weg.md`.**
@@ -124,6 +124,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   SEO-Spiegel `data-sw-seo`, Vertiefungs-Artikel) — immer alle drei zusammen ändern, sonst erzählen
   Browser und Suchmaschine Verschiedenes. Danach die Stationshöhen hochkant nachmessen: `--weg-textzone`
   hängt an der höchsten Station (`docs/der-weg.md`).
+- **Etappe 3 und 4 der Reise stammen aus EINER Rohdatei**, die `scripts/der-weg/teile-verbunden.mjs`
+  zerlegt — wer eine der beiden ersetzt, muss beide zusammen denken. Und `scroll` je Etappe ist eine
+  Rechnung, keine Geschmacksfrage: `Bilder × Bildbewegung / 1555,6`, Boden 0,85. Seit die Clips
+  unterschiedlich lang sind, gehört die Bildanzahl zwingend hinein (`docs/der-weg.md`).
 - Windows: keine PS-Bulk-Replaces auf den HTML-Dateien (verstümmelt UTF-8). Edits via Tool oder Node.
 - **`.gitattributes` / EOL:** Der Git-Index der minifizierten Varianten-HTMLs ist LF; `.gitattributes` hält
   sie als `text eol=lf`. NICHT auf `-text`/`binary` stellen — das würde die CRLF-Arbeitskopien wörtlich
