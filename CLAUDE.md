@@ -85,10 +85,10 @@ Marke seit Variante 13 **JGC Lumen** (vorher „JGC Studio"); Repo heißt weiter
   `der-weg`, Port 4330, liefert die ganze Projektwurzel und schneidet das `/jgc-studio-website`-Präfix
   weg). Die Scroll-Reise braucht ihn zwingend: unter `file://` verbietet der Browser das Laden der
   Clips, die Seite bleibt leer.
-- **Preview-Messungen: der Pane gilt als versteckt.** Screenshots gehen deshalb **gar nicht** —
-  eine nicht angezeigte Seite rendert keine Bilder, unabhängig von ihrer Größe. Jeder Beweis läuft
-  über JavaScript (DOM-Geometrie, `getComputedStyle`). Drei Fallen, jede hat schon einen
-  Fehlbefund erzeugt:
+- **Preview-Messungen: der Pane meldet sich als versteckt** (`visibilityState === 'hidden'`).
+  Screenshots gelingen trotzdem (nachgeprüft 29.08.2026), taugen aber nur für Standbilder; jeder
+  Beweis über Maße und Zustände läuft über JavaScript (DOM-Geometrie, `getComputedStyle`).
+  Drei Fallen, jede hat schon einen Fehlbefund erzeugt:
   (1) **Erst Viewport setzen, dann messen** — ein frischer Tab meldet `0×0`, jede Geometrie ist
   dann Müll. `resize_window` mit expliziter Breite/Höhe, `innerWidth` gegenprüfen. **Danach
   `resize` selbst auslösen:** die Engine rechnet ihre Bahnhöhe nur in `layout()` und schreibt sie

@@ -15,7 +15,8 @@ keine Verbindungsclips). Grundlage: `scroll-world-briefing.md` von Gabriel, 2026
 | `der-weg/scrub-engine.js` | Scroll-Engine aus dem Skill, **unverändert** (siehe unten) |
 | `der-weg/vertiefung.js` | „Mehr dazu": öffnet die Langfassung einer Station (siehe unten) |
 | `der-weg/formulare.js` | die zwei Formular-Overlays: Stilprobe einreichen, Erstgespräch anfragen (siehe unten) |
-| `der-weg/assets/` | 7 Etappen à 4 Dateien plus Schriften, zusammen rund 46 MB |
+| `der-weg/assets/` | 7 Etappen à 4 Dateien plus Schriften, Siegel und Portrait, zusammen rund 46 MB |
+| `der-weg/assets/portrait-gabriel.webp` | Gabriels Portrait in der Langfassung „Über mich" (720 × 960, 41 KB) — Kopie von `Bildmaterial/Profilbild/profil-halbfigur-web.webp`, dieselbe Datei liegt eingebettet in V18 |
 | `scripts/der-weg/kodiere.mjs` | Rohvideos → auslieferbare Dateien |
 | `scripts/der-weg/teile-verbunden.mjs` | teilt Gabriels Durchgangsclip in die Etappen 3 und 4 |
 | `scripts/der-weg/pruefe-naehte.mjs` | prüft die Übergänge zwischen den Etappen |
@@ -521,10 +522,34 @@ weiter unten benutzen.
 JavaScript), (3) die Langfassung im Block `<div id="vertiefungen">`, ein
 `<article data-station="…">` je Station. Kein Skript nötig, kein Build. Erlaubte Bausteine:
 `.vertiefung-auge` (Kleintext oben), `h2`, `h3`, `.vertiefung-preis`, `p`, `ul`/`li`, `strong`,
-`a`, `.vertiefung-knopf` (Schaltflächen-Optik). Interne Links absolut halten
+`a`, `.vertiefung-knopf` (Schaltflächen-Optik), `.vertiefung-kopf` (Portrait neben dem Einstieg,
+siehe unten). Interne Links absolut halten
 (`/jgc-studio-website/…`). Nach jeder Textänderung die Stationshöhen hochkant nachmessen
 (siehe oben). Wortlaut-Quelle seit 26.08.2026: Gabriels Fassung v2
 (im Repo nachvollziehbar über den CHANGELOG-Eintrag).
+
+**Das Portrait in „Über mich" (seit 29.08.2026).** Die Station `lichtung` beginnt mit einem
+Kopfblock: links Gabriels Foto, rechts Augenzeile, Überschrift und Vorstellung. Es steht ganz
+oben, weil man beim Öffnen von „Wer mit dir arbeitet" zuerst ein Gesicht sehen will und nicht
+drei Absätze Lebenslauf. Das Markup ist `div.vertiefung-kopf` mit
+`figure.vertiefung-portrait` und `div.vertiefung-kopf__text` — kein Skript beteiligt, der Block
+funktioniert im Feld wie im No-JS-Lesefluss.
+
+Drei Maße, jedes gemessen statt geschätzt:
+
+| Fensterbreite | Anordnung | Bild |
+|---|---|---|
+| bis 559 px | Bild über dem Text | `min(56%, 200px)` → 180 × 240 px auf 393 px |
+| ab 560 px | nebeneinander | 168 × 224 px |
+| ab 900 px | nebeneinander | 200 × 267 px |
+
+Warum erst ab 560 px nebeneinander: darunter bleiben neben dem Bild unter 200 px Textspalte,
+und davon zieht der Schließknopf oben rechts nochmals 2,4 rem ab — „Drei Welten, ein Blick."
+zerfällt dann in vier Zeilen. Warum kein `object-fit`-Zuschnitt: das Bild ist als Halbfigur
+für die Website aufbereitet und wird in V18 im selben Ausschnitt gezeigt. `aspect-ratio: 3/4`
+hält den Platz frei, bevor das Bild da ist, damit der Kopfblock beim Öffnen nicht springt;
+`loading="lazy"` holt es erst beim ersten Öffnen, denn mit JavaScript ist der ganze
+`#vertiefungen`-Block ausgeblendet.
 
 **Zuordnung:** über `data-station` auf den Wert von `id` in der Sektions-Konfiguration. Die
 Reihenfolge leitet `mountVertiefung` aus `wegKonfig.sections` ab, damit keine zweite Liste

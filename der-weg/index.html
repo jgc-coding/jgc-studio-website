@@ -788,6 +788,50 @@
     font-size: 0.83rem; font-weight: 600; letter-spacing: 0.02em;
     color: var(--sw-accent);
   }
+  /* Das Portrait in der Station "Wer mit dir arbeitet".
+
+     Das Bild fuehrt den Kopfblock an, ohne ihn zu beherrschen: seine Hoehe soll
+     ungefaehr der von Augenzeile + Ueberschrift + Vorstellung entsprechen, damit
+     rechts daneben kein leerer Streifen stehenbleibt. Darum die Breiten unten —
+     3:4 heisst, jede Breite bestimmt zugleich die Hoehe (190 px -> 253 px).
+
+     Bis 559 px steht das Bild UEBER dem Text: die Textspalte daneben faellt sonst
+     unter 150 px, und "Drei Welten, ein Blick." zerfaellt in vier Zeilen. Der
+     Anteil bindet es an die Feldbreite, statt es hochkant zu einer halben
+     Bildschirmhoehe aufzublasen; gemessen auf 393 x 852 sind das 180 x 240 px —
+     gross genug, dass man ein Gesicht erkennt, und rund ein Drittel der
+     Feldhoehe, die der Text danach zurueckbekommt.
+
+     Kein `object-fit`-Zuschnitt: das Bild ist als Halbfigur fuer die Website
+     aufbereitet und wird in V18 genauso gezeigt — beide Fassungen sollen
+     denselben Ausschnitt zeigen. `aspect-ratio` haelt den Platz frei, bevor das
+     Bild geladen ist, damit der Kopfblock beim Oeffnen nicht springt. */
+  .vertiefung-kopf { margin: 0 0 0.95rem; }
+  .vertiefung-kopf__text > :last-child { margin-bottom: 0; }
+  .vertiefung-portrait {
+    margin: 0 0 1.05rem;
+    width: min(56%, 200px);
+  }
+  .vertiefung-portrait img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    box-shadow: 0 10px 26px -14px rgba(31, 42, 68, 0.42), 0 1px 4px rgba(31, 42, 68, 0.06);
+  }
+
+  @media (min-width: 560px) {
+    .vertiefung-kopf {
+      display: flex; align-items: flex-start;
+      gap: clamp(1.1rem, 3vw, 1.6rem);
+    }
+    .vertiefung-portrait { flex: 0 0 auto; margin: 0.2rem 0 0; width: 168px; }
+    .vertiefung-kopf__text { flex: 1 1 auto; min-width: 0; }
+  }
+  /* Ab hier ist das Feld 52rem breit (Regel oben) — das Bild darf mitwachsen. */
+  @media (min-width: 900px) {
+    .vertiefung-portrait { width: 200px; }
+  }
+
   /* Das TUEV-Pruefzeichen in der Station "Wer mit dir arbeitet" (V33).
      Das Bild bringt seinen eigenen weissen Grund mit; ein feiner Rahmen setzt
      ihn gegen das Pergament ab, statt ihn als hellen Fleck stehen zu lassen. */
@@ -1273,11 +1317,33 @@
     </article>
 
     <article class="vertiefung" data-station="lichtung">
-      <p class="vertiefung-auge">Wer mit dir arbeitet</p>
-      <h2>Drei Welten, ein Blick.</h2>
-      <p><strong>Gabriel Chimento</strong>, Gründer von JGC Lumen. Ich verstehe die innere Welt
-         deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides
-         verbinden.</p>
+      <!-- Kopfblock dieser Station: das Portrait steht neben Augenzeile, Ueberschrift
+           und Vorstellung — die einzige Stelle der Reise, an der ein Mensch zu sehen
+           ist. Es steht bewusst GANZ oben: wer "Wer mit dir arbeitet" oeffnet, will als
+           Erstes ein Gesicht, nicht drei Absaetze Lebenslauf.
+
+           Nebeneinander erst ab 560 px Fensterbreite (Regel weiter unten): darunter ist
+           die Textspalte neben dem Bild so schmal, dass die Ueberschrift in vier Zeilen
+           zerfaellt — der Schliessknopf zieht ihr zusaetzlich 2,4rem rechts ab.
+
+           Dieselbe Datei liegt eingebettet in der Lesefassung V18 (720 x 960, Quelle
+           Bildmaterial/Profilbild/profil-halbfigur-web.webp), damit beide Fassungen
+           dasselbe Bild zeigen. `loading="lazy"` laedt es erst, wenn das Feld aufgeht —
+           der Block hier ist mit JavaScript ausgeblendet. -->
+      <div class="vertiefung-kopf">
+        <figure class="vertiefung-portrait">
+          <img src="assets/portrait-gabriel.webp" width="720" height="960"
+               loading="lazy" decoding="async"
+               alt="Gabriel Chimento, Gründer von JGC Lumen">
+        </figure>
+        <div class="vertiefung-kopf__text">
+          <p class="vertiefung-auge">Wer mit dir arbeitet</p>
+          <h2>Drei Welten, ein Blick.</h2>
+          <p><strong>Gabriel Chimento</strong>, Gründer von JGC Lumen. Ich verstehe die innere Welt
+             deiner Arbeit, das Denken in Abläufen dahinter und die KI-Werkzeuge, die beides
+             verbinden.</p>
+        </div>
+      </div>
       <h3>Coach-Hintergrund</h3>
       <p>Ausgebildeter Mentaltrainer und Meditationskursleiter, in Ausbildung als Fitnesstrainer.
          Ich kenne die innere Welt deiner Arbeit aus eigener Anschauung und Erfahrung.</p>

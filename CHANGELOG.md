@@ -2,6 +2,44 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-08-29 — Der Weg: Gabriels Portrait in der Langfassung „Über mich"
+
+Die Scroll-Reise zeigte bisher keinen Menschen. Gabriel wollte sein Foto ursprünglich in eine
+der Papierwelt-Etappen einmontieren; das ließ sich nicht sauber freistellen. Statt dessen steht
+es jetzt dort, wo jemand ohnehin nach der Person sucht: im „Mehr dazu"-Feld der Station
+**Über mich** (`lichtung`), als Erstes im Blick.
+
+- **Kopfblock statt Bild irgendwo im Text.** Links das Portrait, rechts Augenzeile, Überschrift
+  „Drei Welten, ein Blick." und die Vorstellung. Neues Markup `div.vertiefung-kopf` mit
+  `figure.vertiefung-portrait` und `div.vertiefung-kopf__text`, nur in dieser einen Station.
+  Kein JavaScript beteiligt; der Block trägt im Feld wie im No-JS-Lesefluss.
+- **Bilddatei `der-weg/assets/portrait-gabriel.webp`** — byte-identische Kopie von
+  `Bildmaterial/Profilbild/profil-halbfigur-web.webp` (720 × 960, 41 KB), dieselbe Aufnahme, die
+  V18 eingebettet zeigt. Beide Fassungen der Seite zeigen damit dasselbe Bild im selben
+  Ausschnitt. `*.webp binary` steht bereits in `.gitattributes`.
+- **Drei Maße, gemessen statt geschätzt.** Bis 559 px Fensterbreite steht das Bild über dem Text
+  (`min(56%, 200px)`, auf 393 × 852 sind das 180 × 240 px), ab 560 px daneben mit 168 × 224 px,
+  ab 900 px mit 200 × 267 px. Der Umbruch liegt bei 560, weil darunter neben dem Bild unter
+  200 px Textspalte bleiben — abzüglich der 2,4 rem, die der Schließknopf der Überschrift
+  wegnimmt, zerfällt „Drei Welten, ein Blick." dann in vier Zeilen.
+- **Der Kopfblock kostet nur 89 px.** Bei 1440 × 900 wächst das Feld von 1004 auf 1108 px
+  Inhaltshöhe: das Bild ist 267 px hoch, der Text daneben 166 px, gezahlt wird nur die Differenz.
+  Ein Bild über der vollen Breite hätte rund 280 px gekostet. Das Feld musste bei dieser Station
+  schon vorher scrollen (Höhe 792 px), das ändert sich nicht.
+- `aspect-ratio: 3/4` hält den Platz frei, bevor das Bild geladen ist — der Kopfblock springt
+  beim Öffnen nicht. `loading="lazy"` holt es erst beim ersten Öffnen des Feldes.
+
+**Belege:** gemessen auf 320, 393, 559, 560, 768, 1024 und 1440 px Breite — Anordnung, Bildmaß,
+Zeilenzahl der Überschrift und Abstand zum Schließknopf (keine Überlappung in keiner Breite);
+`GET /der-weg/assets/portrait-gabriel.webp → 200`, keine Konsolenfehler; No-JS-Lesefluss mit
+entfernter `js`-Klasse gegengeprüft (Kopfblock `flex`, Bild 200 × 267). `node
+scripts/pruefe-seiten.mjs` grün.
+
+**Nebenbefund zur Preview:** Screenshots im Browser-Pane funktionieren wieder, obwohl
+`document.visibilityState` weiterhin `hidden` meldet. Die übrigen Fallen (kein
+`requestAnimationFrame`, eingefrorene CSS-Übergänge, Viewport erst setzen) gelten unverändert —
+die Notiz in `CLAUDE.md` ist entsprechend enger gefasst.
+
 ## 2026-08-28 — Der Weg: die gebrochene Naht 3 → 4 ist repariert
 
 Gabriel hat den Bogen zwischen „Was sich wirklich ändert" und „Lies dich selbst" neu gerendert,
