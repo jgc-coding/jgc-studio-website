@@ -193,13 +193,8 @@ DSGVO-Linie außerhalb der Reise.
       volle Megabyte. Sinnvoll erst beim All-Inkl-Umzug und gebündelt mit I2 (externe Dateien
       mit Caching, Font-Subsets auf latin/latin-ext ≈ 60–80 KB). Stand seit 27.06. offen.
 
-- [ ] **V19** (D) Alter Analyse-Branch `claude/sharp-herschel-f7c5e1` kann weg
-      Beleg: `git log main..claude/sharp-herschel-f7c5e1` — 1 Commit vom 07.07., einziger
-      Eigenwert war `WEBSITE-AENDERUNGEN.md`; dessen Inhalt steht jetzt hier · Aufwand: S
-      Warum: Reines Aufräumen — aber erst löschen, wenn Gabriel bestätigt, dass die Übernahme
-      vollständig ist. Branches werden nie ungefragt gelöscht.
-      **Nicht anfassen:** die neun `variant/*`-Branches. Der Deploy-Workflow baut sie bei jedem
-      Lauf; ein Löschen würde die Galerie beschädigen.
+**Nicht anfassen:** die neun `variant/*`-Branches. Der Deploy-Workflow baut sie bei jedem
+Lauf; ein Löschen würde die Galerie beschädigen.
 
 ## Ideen
 
@@ -233,6 +228,13 @@ DSGVO-Linie außerhalb der Reise.
 *(noch keine Einträge — Gabriel hat bisher keinen Punkt ausdrücklich abgelehnt)*
 
 ## Erledigt
+
+### Beim Kassensturz am 2026-08-29 festgestellt
+
+- **V19** (D) Der alte Analyse-Branch `claude/sharp-herschel-f7c5e1` ist weg — er fiel in der
+  Aufräumrunde vom 26./28.08. mit. Beleg: weder `git branch --list "claude/*"` noch
+  `git ls-remote --heads origin "refs/heads/claude/*"` kennen ihn noch. Sein einziger
+  Eigenwert (`WEBSITE-AENDERUNGEN.md`) war vorher hierher übernommen worden.
 
 ### Rückmeldung zur Runde davor — umgesetzt am 2026-07-30 (Messwerte im CHANGELOG)
 
