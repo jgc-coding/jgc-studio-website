@@ -2,13 +2,21 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
-## 2026-09-02 — Die Reise wird die einzige Seite, Ziel jgc-lumen.de (vorbereitet, noch nicht live)
+## 2026-09-02 — Die Reise ist die einzige Seite und lebt unter https://jgc-lumen.de
 
 Gabriels Entscheidungen: Rechtsseiten neu im Design der Reise, Galerie und Varianten raus aus dem
 Deploy (bleiben im Repo), `www` ja, Seitentitel „JGC Lumen – KI für Coaches, Trainer und Mentoren".
-Der Stand liegt auf dem Branch und geht erst auf `main`, wenn die DNS-Einträge bei All-Inkl stehen
-und die Domain in den Pages-Einstellungen eingetragen ist — mit dem neuen Präfix `/` funktioniert
-die Seite nur noch an der Wurzel einer Domain, nicht mehr unter `jgc-coding.github.io/jgc-studio-website/`.
+Mit dem neuen Präfix `/` funktioniert die Seite nur noch an der Wurzel einer Domain, deshalb ging der
+Stand erst auf `main`, als die DNS-Einträge standen.
+
+**Umgeschaltet am selben Tag:** Gabriel hat im All-Inkl-KAS vier A- und vier AAAA-Einträge auf
+GitHub Pages gesetzt (MX, SPF, DKIM, DMARC unverändert); die Auflösung stand auf drei Auskunftsdiensten.
+Danach Domain per `gh api -X PUT …/pages -f cname=jgc-lumen.de` eingetragen, `main` auf `9ca03be`
+gepusht, Deploy grün, Zertifikat von GitHub sofort „approved", `https_enforced` eingeschaltet.
+Live geprüft: alle sieben Pfade über HTTPS 200 mit gültigem Zertifikat, Titel und `canonical` der
+Startseite, die alte Adresse `jgc-coding.github.io/jgc-studio-website/` leitet mit 301 auf die Domain
+um, der verschickte Reise-Link `…/der-weg/` landet über 301 und Meta-Refresh auf der Startseite.
+Offen: `www` zeigt noch auf die All-Inkl-Parkseite, weil der CNAME-Eintrag fehlt (Hub).
 
 - **Reise als Startseite:** Kopf neu — Titel, Beschreibung mit echten Umlauten (vorher „traegt",
   „Fuer"), `robots` auf `index, follow`, `canonical` und Teilen-Angaben auf `https://jgc-lumen.de/`,
