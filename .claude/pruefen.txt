@@ -29,6 +29,7 @@ node --check scripts/deploy/baue-site.mjs
 node --check scripts/v18/transform-improve-runde2.mjs
 node --check scripts/v18/transform-tuvlink-schritt2.mjs
 node --check scripts/v18/baue-og-bild.mjs
+node --check scripts/google-profil/baue-profilbild.mjs
 node --check scripts/stilprobe/transform-v18-stilprobe.mjs
 node --check scripts/stilprobe/fix-v18-logo-link.mjs
 node --check scripts/stilprobe/extract-v18-assets.mjs
