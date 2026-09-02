@@ -1,17 +1,25 @@
 #!/usr/bin/env node
 /**
- * server.mjs — winziger Dateiserver zum Ansehen der Scroll-Welt.
+ * server.mjs — winziger Dateiserver zum Ansehen der Seite.
  *
  * Warum ueberhaupt einer: Die Scroll-Engine laedt jeden Clip als Blob per fetch.
  * Unter file:// verbietet der Browser das, die Seite bliebe leer. Ein `serve` oder
- * Python steht in dieser Umgebung nicht bereit, also diese knapp 40 Zeilen.
+ * Python steht in dieser Umgebung nicht bereit, also diese knapp 60 Zeilen.
  *
  * Liefert Byte-Bereiche aus (Range-Requests). Fuer die Engine ist das nicht noetig,
  * weil sie ohnehin Blobs benutzt, aber ohne sie verhaelt sich das direkte Abspielen
  * eines Videos im Browser anders als spaeter auf dem echten Server.
  *
  * Aufruf:  node scripts/der-weg/server.mjs [PORT] [WURZEL]
- * Default: Port 4330, Wurzel = Projektwurzel (damit /jgc-studio-website/... passt)
+ *
+ * Ohne WURZEL liefert er die Projektwurzel und spiegelt dabei die Anordnung des
+ * Deploys: eine Anfrage wird zuerst in der Projektwurzel gesucht, dann in der-weg/.
+ * So liegt die Reise wie live unter /, ihre Assets unter /assets/, die Rechtsseiten
+ * unter /impressum/ und /datenschutz/ — und die Archiv-Varianten bleiben unter
+ * /variants/standalone/<slug>/ erreichbar.
+ *
+ * Mit WURZEL (zum Beispiel `_site` nach `node scripts/deploy/baue-site.mjs _site`)
+ * liefert er genau diesen Ordner ohne Fallback — das ist das Deploy-Ergebnis.
  */
 
 import { createServer } from 'node:http';
@@ -20,12 +28,15 @@ import { join, extname, normalize } from 'node:path';
 
 const PORT = Number(process.argv[2]) || 4330;
 const WURZEL = process.argv[3] || process.cwd();
+const FALLBACK = process.argv[3] ? null : join(process.cwd(), 'der-weg');
 
 const TYPEN = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
   '.mp4': 'video/mp4',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -35,16 +46,22 @@ const TYPEN = {
   '.woff2': 'font/woff2',
 };
 
+/** Sucht die Datei zu einem Pfad: erst in der Wurzel, dann im Fallback-Ordner. */
+function findeDatei(pfad) {
+  for (const basis of [WURZEL, FALLBACK].filter(Boolean)) {
+    const datei = normalize(join(basis, pfad));
+    if (!datei.startsWith(normalize(basis))) continue;
+    if (existsSync(datei) && !statSync(datei).isDirectory()) return datei;
+  }
+  return null;
+}
+
 createServer((anfrage, antwort) => {
   let pfad = decodeURIComponent(new URL(anfrage.url, 'http://x').pathname);
-
-  // Die Seite benutzt absolute Pfade mit dem GitHub-Pages-Praefix. Lokal liegt die
-  // Projektwurzel direkt unter /, also wird das Praefix hier weggeschnitten.
-  pfad = pfad.replace(/^\/jgc-studio-website/, '') || '/';
   if (pfad.endsWith('/')) pfad += 'index.html';
 
-  const datei = normalize(join(WURZEL, pfad));
-  if (!datei.startsWith(normalize(WURZEL)) || !existsSync(datei) || statSync(datei).isDirectory()) {
+  const datei = findeDatei(pfad);
+  if (!datei) {
     antwort.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     antwort.end(`Nicht gefunden: ${pfad}`);
     return;
@@ -71,6 +88,6 @@ createServer((anfrage, antwort) => {
   antwort.writeHead(200, { 'Content-Type': typ, 'Content-Length': groesse, 'Accept-Ranges': 'bytes' });
   createReadStream(datei).pipe(antwort);
 }).listen(PORT, () => {
-  console.log(`Der Weg laeuft auf http://localhost:${PORT}/der-weg/`);
-  console.log(`Wurzel: ${WURZEL}`);
+  console.log(`Die Seite laeuft auf http://localhost:${PORT}/`);
+  console.log(`Wurzel: ${WURZEL}${FALLBACK ? `  (Fallback: ${FALLBACK})` : ''}`);
 });

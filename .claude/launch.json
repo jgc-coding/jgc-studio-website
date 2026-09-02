@@ -13,6 +13,13 @@
       "runtimeArgs": ["scripts/der-weg/server.mjs", "4330"],
       "port": 4330,
       "url": "http://localhost:4330"
+    },
+    {
+      "name": "site-vorschau",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/der-weg/server.mjs", "4331", "_site"],
+      "port": 4331,
+      "url": "http://localhost:4331"
     }
   ]
 }

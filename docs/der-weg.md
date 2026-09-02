@@ -523,8 +523,8 @@ JavaScript), (3) die Langfassung im Block `<div id="vertiefungen">`, ein
 `<article data-station="…">` je Station. Kein Skript nötig, kein Build. Erlaubte Bausteine:
 `.vertiefung-auge` (Kleintext oben), `h2`, `h3`, `.vertiefung-preis`, `p`, `ul`/`li`, `strong`,
 `a`, `.vertiefung-knopf` (Schaltflächen-Optik), `.vertiefung-kopf` (Portrait neben dem Einstieg,
-siehe unten). Interne Links absolut halten
-(`/jgc-studio-website/…`). Nach jeder Textänderung die Stationshöhen hochkant nachmessen
+siehe unten). Interne Links wurzel-relativ halten
+(`/stilprobe/`, `/impressum/`). Nach jeder Textänderung die Stationshöhen hochkant nachmessen
 (siehe oben). Wortlaut-Quelle seit 26.08.2026: Gabriels Fassung v2
 (im Repo nachvollziehbar über den CHANGELOG-Eintrag).
 

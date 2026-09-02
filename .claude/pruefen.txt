@@ -24,6 +24,8 @@ node --check scripts/der-weg/server.mjs
 node --check scripts/der-weg/hole-logo.mjs
 node --check scripts/der-weg/baue-favicon.mjs
 node --check scripts/stilprobe/setze-favicon.mjs
+node --check scripts/stilprobe/transform-domain.mjs
+node --check scripts/deploy/baue-site.mjs
 node --check scripts/v18/transform-improve-runde2.mjs
 node --check scripts/v18/transform-tuvlink-schritt2.mjs
 node --check scripts/v18/baue-og-bild.mjs

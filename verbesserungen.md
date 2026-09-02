@@ -112,11 +112,10 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
 DSGVO-Linie außerhalb der Reise.
 
-**Entscheidungen vom 02.09.2026 (Gabriel):** Die Scroll-Reise wird die einzige öffentliche
+**Entscheidungen vom 02.09.2026 (Gabriel):** Die Scroll-Reise ist die einzige öffentliche
 Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielort ist GitHub
-Pages mit der eigenen Domain jgc-lumen.de. Damit erledigen sich **V13**, **V20** und **V34** mit
-dem Umbau, weil sie nur V18 betreffen — sie bleiben hier stehen, bis der Umbau live ist.
-**I2** (V18 zurück nach Astro) ist gegenstandslos.
+Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
+**V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
 
 - [ ] **V47** (C) Auf **schmalen** Telefonen stapeln die zwei Handlungsknöpfe der
       Schluss-Station und heben damit den Textstreifen für jede Station an
@@ -140,72 +139,22 @@ dem Umbau, weil sie nur V18 betreffen — sie bleiben hier stehen, bis der Umbau
       Telefon"), gehört gemessen, bevor er als Begründung für andere Entscheidungen dient.
       Diese eine hat vier Wochen lang den Textstreifen auf allen Geräten hochgehalten.
 
-- [ ] **V34** (A) Pauschales „DSGVO-konform" steht weiter auf der Lesefassung V18
-      Beleg: `inhalt/lumen-inhalt.md` Zeilen 10, 34, 139, 197, 366, 383 — Kurzbeschreibung,
-      Hero-Zeile, Bausteine, Fußzeile tragen dieselbe unbedingte Zusage, die in der Reise am
-      29.07. durch die datenbezogene Fassung ersetzt wurde (V32). `stilprobe/index.html` und
-      die Datenschutzseite sind ebenfalls nicht abgeglichen.
-      Aufwand: M · Risiko: mittel
-      Warum: Solange beide Fassungen live sind, sagt dieselbe Marke an zwei Orten zwei
-      verschiedene Dinge — und die ältere sagt das, was nicht trägt. Der Wortlaut steht fest
-      (V32, in der Reise gebaut), hier ist es Übertragungsarbeit. Klein ist sie trotzdem nicht:
-      V18 ist minifiziert, braucht also ein assertion-guardetes Transform-Skript, und danach
-      muss `inhalt/lumen-inhalt.md` neu erzeugt werden.
-      → Sinnvoll gebündelt mit der Entscheidung, ob die Lesefassung überhaupt bestehen bleibt.
-
-- [ ] **V20** (A) Stilprobe-Beispiel nennt sich „echt", ist im Quelltext aber als Platzhalter markiert
-      Beleg: `variants/standalone/18-lumen/index.html`, Sektion `#stilprobe` — zwei Kommentare
-      `PLATZHALTER Phase 6: durch Ausschnitt aus Gabriels eigener Stilprobe ersetzen` stehen über
-      Fassung A und B; unmittelbar darunter liest die Besucherin „Ausschnitt aus einer echten
-      Stilprobe – an meinen eigenen Texten erprobt, bevor ich sie anbiete."
-      Aufwand: S · Risiko: mittel
-      Warum: Die Aussage ist eine Werbeaussage über Echtheit, und nach der eigenen Projekt-Doku
-      trifft sie nicht zu. Entweder die beiden Texte durch echte Ausschnitte aus Gabriels Probe
-      ersetzen (dann stimmt der Satz) oder den Satz umformulieren („So kann das aussehen").
-      Beides ist klein — nur beides zusammen stehen zu lassen geht nicht.
-      → braucht Gabriels Entscheidung bzw. seine eigene Stilprobe.
-
-- [ ] **V10** (A) Vier verbleibende Schwachstellen in den Build-Abhängigkeiten
-      Beleg: `npm audit` in `site/` — nach `npm audit fix` von 8 auf 4 (von 6 auf 2 hoch);
-      betroffen bleiben astro, sharp, esbuild, @astrojs/tailwind · Aufwand: M · **Risiko: gering**
-      Warum: Keines dieser Pakete läuft im Browser der Besucherin — die Seite ist statisches
-      HTML. Die Behebung verlangt Astro 7 (Breaking Change) und gehört zu I2.
-
-- [ ] **V13** (C) Drei erfundene Kundenstimmen mit Platzhalter-Label — **Gabriels Entscheidung**
-      Beleg: Sektion „Was Kunden über die Arbeit sagen." in V18 · Aufwand: S · Risiko: gering
-      Warum: Die Kennzeichnung ist ehrlich, sagt der Zielgruppe aber dreimal hintereinander
-      „ich habe noch keine Kunden". Der ehrliche Einleitungssatz allein trägt vermutlich mehr
-      Vertrauen als drei gelabelte Attrappen. Ob die Karten bleiben, ist eine Marketing-
-      Entscheidung, keine technische. → steht in `meine-todos.md`.
-
 - [ ] **V14** (C) LinkedIn-Fußzeilenlink — **braucht Gabriels Profil-URL**
       Beleg: entfernt in `site/src/components/Footer.astro`, V18 und `stilprobe/index.html`
       Aufwand: S · Risiko: gering
       Warum: Der Link zeigte auf die LinkedIn-Startseite. Bis die echte Profiladresse vorliegt,
       ist kein Link besser als ein toter. → steht in `meine-todos.md`.
 
-- [ ] **V18** (C) Seitengewicht 1,20 MB als Single-File
-      Beleg: Live-Abruf der Startseite, 1.196 KB; Fonts ~525 KB in 14 Subsets (inkl. Kyrillisch,
-      Griechisch, Vietnamesisch), Bilder dekodiert ~384 KB · Aufwand: M · Risiko: gering
-      Warum: Alles ist inline, nichts wird zwischengespeichert — jeder Aufruf lädt erneut das
-      volle Megabyte. Sinnvoll erst beim All-Inkl-Umzug und gebündelt mit I2 (externe Dateien
-      mit Caching, Font-Subsets auf latin/latin-ext ≈ 60–80 KB). Stand seit 27.06. offen.
-
-**Nicht anfassen:** die neun `variant/*`-Branches. Der Deploy-Workflow baut sie bei jedem
-Lauf; ein Löschen würde die Galerie beschädigen.
+**Nicht löschen:** die neun `variant/*`-Branches und `variants/standalone/`. Seit 02.09.2026
+baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Repo.
 
 ## Ideen
 
 - **I1** (Abrundung) Link- und Meta-Prüfung im Deploy — **umgesetzt am 2026-07-25**
       Als `scripts/pruefe-seiten.mjs` gebaut und im Workflow verankert; Details unter Erledigt.
 
-- **I2** (Erweiterung) Variante 18 in die Astro-Quelle zurückführen — Aufwand: L
-      Bedarf: `site/src/` ist zwei Generationen hinter der Live-Seite (`/main/` zeigt noch
-      „Audit anfragen" und den alten Aufbau). Jede Änderung an V18 verlangt ein eigenes
-      assertion-guardetes Node-Skript auf einer 1,2-MB-Zeile — inzwischen sind es fünf.
-      V10 (Astro 7) und V18 (Seitengewicht) lösen sich dabei mit auf.
-      Abgrenzung: reine Überführung des beschlossenen Standes, kein Redesign, keine neuen
-      Sektionen. Entspricht N1 aus Runde 1.
+- **I2** (Erweiterung) Variante 18 in die Astro-Quelle zurückführen — **gegenstandslos seit
+      02.09.2026**: V18 ist Archiv, die Reise die einzige Fassung, der Astro-Build läuft nicht mehr.
 
 - **I3** (Abrundung) FAQ „Was kostet das insgesamt?" — Aufwand: S
       Bedarf: Die Preise stehen verstreut (Praxis-Check 600 €, Bausteine ab 2.500 / 3.000 /
@@ -235,6 +184,12 @@ Lauf; ein Löschen würde die Galerie beschädigen.
   EU-Streitbeilegungsplattform, die ist seit Juli 2025 abgeschaltet. Offen bleibt nur, ob
   eine USt-IdNr. existiert (Gabriel klärt). Im selben Zug die Datenschutzerklärung komplett
   neu geschrieben, inklusive Erstgespräch-Formular — Entwurf für die juristische Prüfung.
+- **V13**, **V20**, **V34** (Platzhalter-Kundenstimmen, „echtes" Stilprobe-Beispiel, pauschales
+  „DSGVO-konform" in der Lesefassung) — gegenstandslos: V18 wird seit dem Umbau vom 02.09.2026
+  nicht mehr ausgeliefert, die Reise trägt keine dieser Aussagen. Die Datei bleibt als Archiv.
+- **V10** (npm-audit-Befunde der Astro-Abhängigkeiten) und **V18** (1,2 MB Seitengewicht der
+  Single-File-Lesefassung) — gegenstandslos: der Astro-Build läuft nicht mehr, V18 ist Archiv.
+  `site/node_modules` braucht es nur noch lokal für `sharp` (Vorschaubild, Favicon).
 
 ### Beim Kassensturz am 2026-08-29 festgestellt
 

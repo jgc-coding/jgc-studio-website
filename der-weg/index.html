@@ -3,25 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Der Weg — JGC Lumen</title>
-<meta name="description" content="Eine Reise durch die Arbeit von JGC Lumen: KI, die deine Handschrift traegt. Fuer Coaches, Trainer und Mentoren im DACH-Raum.">
-<!-- Testphase: die Seite ist online erreichbar, aber nicht fuer Suchmaschinen freigegeben.
-     Die Stationstexte sind noch nicht abgenommen, und solange eine zweite Fassung derselben
-     Leistung im Index steht, macht sie der Hauptseite Konkurrenz. Beim Scharfschalten hier
-     auf "index, follow" stellen und pruefen, ob ein canonical noetig wird. -->
-<meta name="robots" content="noindex, nofollow">
-<link rel="canonical" href="https://jgc-coding.github.io/jgc-studio-website/der-weg/">
+<!-- Seit 02.09.2026 die Startseite von jgc-lumen.de. Der canonical ist die EINZIGE Quelle
+     der Domain im Repo: baue-site.mjs (robots.txt, Sitemap) und pruefe-seiten.mjs
+     (Soll-canonicals aller Seiten) lesen sie hier ab. Bei einem Domainwechsel diesen
+     Kopf, die Koepfe von Stilprobe, Impressum und Datenschutz sowie das JSON-LD unten
+     aendern — sonst nichts. -->
+<title>JGC Lumen – KI für Coaches, Trainer und Mentoren</title>
+<meta name="description" content="KI, die deine Handschrift trägt – für Coaches, Trainer und Mentoren im DACH-Raum. Sitzungsnotizen, Nachfassen und Texte in deinem Ton, EU-gehostet und TÜV-geprüft.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://jgc-lumen.de/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="de_DE">
-<meta property="og:url" content="https://jgc-coding.github.io/jgc-studio-website/der-weg/">
-<meta property="og:title" content="Der Weg — JGC Lumen">
-<meta property="og:description" content="Eine Reise durch die Arbeit von JGC Lumen: KI, die deine Handschrift traegt.">
-<meta property="og:image" content="https://jgc-coding.github.io/jgc-studio-website/og-bild.jpg">
-<meta property="og:image:alt" content="JGC Lumen — Mehr Raum fuer das Wesentliche">
+<meta property="og:url" content="https://jgc-lumen.de/">
+<meta property="og:title" content="JGC Lumen – KI für Coaches, Trainer und Mentoren">
+<meta property="og:description" content="KI, die deine Handschrift trägt. Mehr Raum für das Wesentliche – für Coaches, Trainer und Mentoren im DACH-Raum.">
+<meta property="og:image" content="https://jgc-lumen.de/og-bild.jpg">
+<meta property="og:image:alt" content="JGC Lumen – Mehr Raum für das Wesentliche">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Der Weg — JGC Lumen">
-<meta name="twitter:description" content="Eine Reise durch die Arbeit von JGC Lumen: KI, die deine Handschrift traegt.">
-<meta name="twitter:image" content="https://jgc-coding.github.io/jgc-studio-website/og-bild.jpg">
+<meta name="twitter:title" content="JGC Lumen – KI für Coaches, Trainer und Mentoren">
+<meta name="twitter:description" content="KI, die deine Handschrift trägt – für Coaches, Trainer und Mentoren im DACH-Raum.">
+<meta name="twitter:image" content="https://jgc-lumen.de/og-bild.jpg">
+<!-- Strukturierte Firmendaten fuer Suchmaschinen. Bewusst ohne Anschrift: die c/o-Adresse
+     des Impressumsservices liegt in Hoyerswerda, die Arbeit in Freiburg und im DACH-Raum —
+     ein Ort im Datensatz wuerde Google auf die falsche Faehrte setzen. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "JGC Lumen",
+  "url": "https://jgc-lumen.de/",
+  "logo": "https://jgc-lumen.de/assets/sigel.png",
+  "image": "https://jgc-lumen.de/og-bild.jpg",
+  "email": "kontakt@jgc-lumen.de",
+  "description": "KI-Implementierung für Coaches, Trainer und Mentoren: Sitzungsnotizen, Nachfassen und Texte in der eigenen Handschrift – EU-gehostet und TÜV-geprüft.",
+  "founder": { "@type": "Person", "name": "Johann Gabriel Chimento" },
+  "areaServed": ["DE", "AT", "CH"],
+  "knowsLanguage": "de"
+}
+</script>
 
 <link rel="stylesheet" href="assets/schriften.css">
 
@@ -1147,8 +1166,7 @@
     <p>Kostenfrei und ohne Verpflichtung. Wir klären auf Augenhöhe, ob das zueinander passt.</p>
 
     <p><a href="mailto:kontakt@jgc-lumen.de">Erstgespräch anfragen</a> ·
-       <a href="/jgc-studio-website/stilprobe/">Zur Stilprobe</a> ·
-       <a href="/jgc-studio-website/">Zur Lesefassung</a></p>
+       <a href="/stilprobe/">Zur Stilprobe</a></p>
   </section>
 </div>
 
@@ -1257,7 +1275,7 @@
          ich in deinen Texten — und schreibe sie nicht glatt.</p>
       <!-- Mit JavaScript oeffnet die Schaltflaeche das Einreich-Formular direkt in
            der Reise (formulare.js); das href bleibt als Weg ohne JavaScript. -->
-      <p><a class="vertiefung-knopf" href="/jgc-studio-website/stilprobe/"
+      <p><a class="vertiefung-knopf" href="/stilprobe/"
             data-formular-oeffner="stilprobe">→ Zur Stilprobe</a></p>
     </article>
 
@@ -1411,16 +1429,15 @@
 
          Feldnamen sind Vertrag: docs/stilprobe/schnittstelle.md bzw.
          docs/erstgespraech/schnittstelle.md — nicht umbenennen. Die
-         action-/Badge-Pfade stehen ABSOLUT im HTML (formulare.js bleibt
-         pfadfrei); beim All-Inkl-Umzug wandert der Praefix
-         /jgc-studio-website/ per Suchen-Ersetzen auf /.
-         Bis zum Umzug antworten die Endpoints nicht (404) — dann greift
-         by design der Fehlerpfad mit dem Mail-Ausweichweg.
+         action-/Badge-Pfade stehen ABSOLUT und wurzel-relativ im HTML
+         (formulare.js bleibt pfadfrei). GitHub Pages fuehrt kein PHP aus:
+         bis zum Umzug auf einen PHP-Host antworten die Endpoints nicht
+         (404) — dann greift by design der Fehlerpfad mit dem Mail-Ausweichweg.
          ============================================================== -->
 
     <article class="vertiefung weg-formular" id="formular-stilprobe"
              data-formular="stilprobe" data-mail="stilprobe@jgc-lumen.de"
-             data-kontingent="/jgc-studio-website/stilprobe/kontingent.php">
+             data-kontingent="/stilprobe/kontingent.php">
       <p class="vertiefung-auge">Die Stilprobe</p>
       <h2>Schick mir deine Stilprobe.</h2>
       <p>Wähle möglichst drei Texte aus einem Ton, geschrieben für dieselbe Zielgruppe — zum
@@ -1431,7 +1448,7 @@
          die Handarbeit nicht her.</p>
 
       <div data-rolle="normal">
-        <form method="post" action="/jgc-studio-website/stilprobe/senden.php"
+        <form method="post" action="/stilprobe/senden.php"
               accept-charset="UTF-8">
           <div class="weg-formular__gruppe" data-rolle="entwurf-hinweis" hidden role="status">
             <p class="weg-formular__hilfe">Dein angefangener Entwurf ist wieder da – gespeichert
@@ -1508,10 +1525,10 @@
           <div class="weg-formular__gruppe weg-formular__zeile">
             <input type="checkbox" id="sp-einwilligung" name="einwilligung" value="ja" required>
             <label for="sp-einwilligung">Ich habe den
-               <a href="/jgc-studio-website/stilprobe/#klartext">Klartext zu meinen Texten</a>
+               <a href="/stilprobe/#klartext">Klartext zu meinen Texten</a>
                gelesen und bin einverstanden, dass meine Angaben zur Erstellung der Stilprobe
                verarbeitet werden.
-               (<a href="/jgc-studio-website/main/datenschutz/">Datenschutzerklärung</a>)</label>
+               (<a href="/datenschutz/">Datenschutzerklärung</a>)</label>
           </div>
 
           <div class="weg-formular__honigtopf" aria-hidden="true">
@@ -1533,7 +1550,7 @@
         <p>15 Proben sind vergeben – mehr gibt die Handarbeit nicht her. Trag dich ein, und du
            bekommst den ersten freien Platz im <span data-rolle="wl-folgemonat">nächsten
            Monat</span>, bevor er auf der Website erscheint.</p>
-        <form method="post" action="/jgc-studio-website/stilprobe/senden.php"
+        <form method="post" action="/stilprobe/senden.php"
               accept-charset="UTF-8">
           <input type="hidden" name="warteliste" value="ja">
           <div class="weg-formular__gruppe">
@@ -1548,10 +1565,10 @@
             <input type="checkbox" id="sp-wl-einwilligung" name="einwilligung" value="ja"
                    required>
             <label for="sp-wl-einwilligung">Ich habe den
-               <a href="/jgc-studio-website/stilprobe/#klartext">Klartext zu meinen Texten</a>
+               <a href="/stilprobe/#klartext">Klartext zu meinen Texten</a>
                gelesen und bin einverstanden, dass meine Angaben zur Erstellung der Stilprobe
                verarbeitet werden.
-               (<a href="/jgc-studio-website/main/datenschutz/">Datenschutzerklärung</a>)</label>
+               (<a href="/datenschutz/">Datenschutzerklärung</a>)</label>
           </div>
           <div class="weg-formular__honigtopf" aria-hidden="true">
             <label>Firma <input type="text" name="firma" tabindex="-1" autocomplete="off"></label>
@@ -1578,7 +1595,7 @@
          <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
 
       <div data-rolle="normal">
-        <form method="post" action="/jgc-studio-website/erstgespraech/senden.php"
+        <form method="post" action="/erstgespraech/senden.php"
               accept-charset="UTF-8">
           <div class="weg-formular__gruppe" data-rolle="entwurf-hinweis" hidden role="status">
             <p class="weg-formular__hilfe">Dein angefangener Entwurf ist wieder da – gespeichert
@@ -1640,7 +1657,7 @@
             <input type="checkbox" id="eg-einwilligung" name="einwilligung" value="ja" required>
             <label for="eg-einwilligung">Ich bin einverstanden, dass meine Angaben zur
                Beantwortung meiner Anfrage verarbeitet werden.
-               (<a href="/jgc-studio-website/main/datenschutz/">Datenschutzerklärung</a>)</label>
+               (<a href="/datenschutz/">Datenschutzerklärung</a>)</label>
           </div>
 
           <div class="weg-formular__honigtopf" aria-hidden="true">
@@ -1775,10 +1792,9 @@
            <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
       </div>
       <div class="abspann-reihen">
-        <a href="/jgc-studio-website/">Lesefassung der Seite</a>
-        <a href="/jgc-studio-website/stilprobe/">Die Stilprobe</a>
-        <a href="/jgc-studio-website/main/impressum/">Impressum</a>
-        <a href="/jgc-studio-website/main/datenschutz/">Datenschutz</a>
+        <a href="/stilprobe/">Die Stilprobe</a>
+        <a href="/impressum/">Impressum</a>
+        <a href="/datenschutz/">Datenschutz</a>
       </div>
       <!-- Datenmodus. Steht bewusst hier unten und nicht in der Reise: wer ihn
            sucht, sucht ihn gezielt, und die Reise selbst bleibt frei von
@@ -1805,7 +1821,7 @@
      "Mehr dazu" unten daraus abgeleitet werden kann statt ein zweites Mal
      dazustehen — sonst laufen die beiden Reihenfolgen irgendwann auseinander. */
   var wegKonfig = {
-    brand: { name: 'JGC Lumen', href: '/jgc-studio-website/', logo: 'assets/sigel.png' },
+    brand: { name: 'JGC Lumen', href: '/', logo: 'assets/sigel.png' },
     hint: 'scrollen und mitfliegen',
     nav: true,
     atmosphere: true,
@@ -2033,7 +2049,7 @@
         tags: [],
         cta: {
           primary: { label: 'Erstgespräch anfragen', href: 'mailto:kontakt@jgc-lumen.de' },
-          secondary: { label: 'Zur Stilprobe', href: '/jgc-studio-website/stilprobe/' },
+          secondary: { label: 'Zur Stilprobe', href: '/stilprobe/' },
         },
       },
     ],
@@ -2044,6 +2060,26 @@
   };
 
   var welt = mountScrollWorld(document.getElementById('world'), wegKonfig);
+
+  /* Sprungmarken auf Stationen: /#weg, /#lichtung, /#aussicht … (seit 02.09.2026).
+     Die Stilprobe-Unterseite verlinkt so in die Reise (ihr Menue stammt aus der
+     Lesefassung und kennt "Angebote", "Grundwerte", "Wer mit dir arbeitet"), und
+     ein geteilter Link kann direkt an einer Station beginnen. Die Engine kennt keine
+     Hash-Ziele; ihre Reiter im Kopf tun aber genau das (jumpTo), also wird der
+     passende Reiter geklickt — er existiert auch dort, wo das Menue ausgeblendet
+     ist (Telefon). #fragen und #abspann sind normale Sprungmarken, die bleiben
+     dem Browser ueberlassen. */
+  function springeZurStation() {
+    var ziel = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (!ziel) return;
+    var index = -1;
+    wegKonfig.sections.forEach(function (s, i) { if (s.id === ziel) index = i; });
+    if (index < 0) return;
+    var reiter = document.querySelectorAll('.sw-nav__item')[index];
+    if (reiter) reiter.click();
+  }
+  window.addEventListener('hashchange', springeZurStation);
+  window.addEventListener('load', springeZurStation);
 
   /* Muss NACH mountScrollWorld laufen: es haengt seine Knoepfe an die
      Stationstexte, die die Engine erst dabei aufbaut. Das Handle braucht

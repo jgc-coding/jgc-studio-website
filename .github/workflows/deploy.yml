@@ -1,10 +1,16 @@
-name: Deploy alle Varianten zu GitHub Pages
+name: Deploy jgc-lumen.de zu GitHub Pages
+
+# Seit 02.09.2026 ist die Scroll-Reise die einzige Fassung der Seite. Der Workflow
+# setzt nur noch zusammen, was scripts/deploy/baue-site.mjs beschreibt (Reise an
+# der Wurzel, Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung, robots.txt,
+# Sitemap) und prueft das Ergebnis. Kein npm, kein Astro, keine Varianten mehr —
+# die bleiben im Repo als Archiv. Dasselbe Skript laeuft lokal, das Ergebnis
+# laesst sich also vor dem Push ansehen (launch.json "site-vorschau").
 
 on:
   push:
     branches:
       - main
-      - 'variant/**'
   workflow_dispatch:
 
 permissions:
@@ -14,202 +20,34 @@ permissions:
 
 concurrency:
   group: 'pages'
-  # Cancel ueberlappende Runs, damit der neuere Push immer gewinnt
-  # (verhindert spurious-failure-Mails bei mehreren Branch-Pushes in Folge)
+  # Ueberlappende Laeufe abbrechen, damit der neuere Push immer gewinnt.
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main (für Action-Definition + Galerie-Generator)
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
-      - name: Discover variant branches
-        id: discover
-        run: |
-          git fetch --all --prune
-          BRANCHES=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin/variant/ \
-            | sed 's|^origin/||' \
-            | sort -u)
-          echo "Found variant branches:"
-          echo "$BRANCHES"
-          echo "branches<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$BRANCHES" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare output structure
-        run: |
-          mkdir -p _site/variants/screenshots
-
-      - name: Copy screenshots from main (if present)
-        run: |
-          if [ -d variants/screenshots ]; then
-            cp -r variants/screenshots/* _site/variants/screenshots/ 2>/dev/null || true
-            echo "Copied screenshots:"
-            ls -la _site/variants/screenshots/ || true
-          else
-            echo "No screenshots dir found on main"
-          fi
-
-      - name: Build main branch → /main/
-        run: |
-          git checkout main -- site/
-          cd site
-          npm ci --no-audit --no-fund
-          BASE_PATH="/jgc-studio-website/main/" \
-          SITE_URL="https://jgc-coding.github.io/jgc-studio-website/main/" \
-            npm run build
-          mkdir -p ../_site/main
-          cp -r dist/* ../_site/main/
-          cd ..
-
-      - name: Build each variant branch → /variants/<slug>/
-        run: |
-          BRANCHES="${{ steps.discover.outputs.branches }}"
-          if [ -z "$BRANCHES" ]; then
-            echo "No variant branches to build."
-            exit 0
-          fi
-          echo "$BRANCHES" | while read -r branch; do
-            if [ -z "$branch" ]; then continue; fi
-            slug="${branch#variant/}"
-            echo ""
-            echo "===== Building $branch → /variants/$slug/ ====="
-            # Wipe site/ and re-checkout from this branch
-            rm -rf site
-            git checkout "origin/$branch" -- site/
-            cd site
-            npm ci --no-audit --no-fund
-            BASE_PATH="/jgc-studio-website/variants/$slug/" \
-            SITE_URL="https://jgc-coding.github.io/jgc-studio-website/variants/$slug/" \
-              npm run build
-            mkdir -p "../_site/variants/$slug"
-            cp -r dist/* "../_site/variants/$slug/"
-            cd ..
-          done
-
-      - name: Copy standalone HTML variants → /variants/<slug>/
-        run: |
-          # Self-contained single-file variants live on main under
-          # variants/standalone/<slug>/index.html (no Astro build needed).
-          # main is still checked out here, so the dir is present.
-          if [ -d variants/standalone ]; then
-            for d in variants/standalone/*/; do
-              [ -d "$d" ] || continue
-              slug="$(basename "$d")"
-              if [ -f "${d}index.html" ]; then
-                mkdir -p "_site/variants/$slug"
-                cp "${d}index.html" "_site/variants/$slug/index.html"
-                echo "  + standalone: $slug"
-              fi
-            done
-          else
-            echo "No variants/standalone dir on main"
-          fi
-
-      - name: Copy Stilprobe-Unterseite → /stilprobe/
-        run: |
-          # Eigenständige Single-File-HTML unter stilprobe/index.html (kein
-          # Astro-Build noetig). main ist hier bereits ausgecheckt.
-          if [ -f stilprobe/index.html ]; then
-            mkdir -p _site/stilprobe
-            cp stilprobe/index.html _site/stilprobe/index.html
-            echo "  + stilprobe: index.html"
-          else
-            echo "No stilprobe/index.html on main"
-          fi
-
-      - name: Copy Scroll-Reise → /der-weg/
-        run: |
-          # Eigenstaendige Unterseite mit eigenem Asset-Ordner (Clips, Poster,
-          # Standbilder, Schriften) — anders als die Varianten also ein rekursiver
-          # Kopierschritt, nicht eine einzelne index.html. main ist hier ausgecheckt.
-          if [ -d der-weg ]; then
-            mkdir -p _site/der-weg
-            cp -r der-weg/. _site/der-weg/
-            echo "  + der-weg: $(find _site/der-weg -type f | wc -l) Dateien, $(du -sh _site/der-weg | cut -f1)"
-          else
-            echo "::error::der-weg/ fehlt auf main — die zweite Fassung waere nicht erreichbar."
-            exit 1
-          fi
-
-      - name: Copy Vorschaubild (og:image) → /og-bild.jpg
-        run: |
-          # og:image muss als echte Datei unter einer HTTP-Adresse liegen:
-          # LinkedIn, X und WhatsApp holen das Bild mit einer eigenen Anfrage,
-          # ein data:-URI im Meta-Tag hilft ihnen nicht. Gebaut wird es mit
-          # scripts/v18/baue-og-bild.mjs aus den Assets von Variante 18.
-          if [ -f assets/og-bild.jpg ]; then
-            cp assets/og-bild.jpg _site/og-bild.jpg
-            echo "  + og-bild.jpg"
-          else
-            echo "::error::assets/og-bild.jpg fehlt — die Seite verweist im Meta-Tag darauf."
-            exit 1
-          fi
-
-      - name: Generate gallery landing page
-        run: |
-          # Use main's gallery generator
-          git checkout main -- scripts/generate-gallery.mjs
-          node scripts/generate-gallery.mjs _site /jgc-studio-website/
-
-      - name: Copy homepage variant → root index
-        run: |
-          git checkout main -- scripts/copy-homepage.mjs
-          node scripts/copy-homepage.mjs _site
-
-      - name: Verify build artefacts
-        run: |
-          # Kernartefakte muessen existieren, sonst laut scheitern
-          # (kein stiller Teil-Deploy).
-          fail=0
-          for f in \
-            _site/index.html \
-            _site/galerie/index.html \
-            _site/main/index.html \
-            _site/stilprobe/index.html \
-            _site/der-weg/index.html \
-            _site/der-weg/scrub-engine.js \
-            _site/der-weg/vertiefung.js \
-            _site/der-weg/formulare.js \
-            _site/der-weg/assets/anflug.mp4 \
-            _site/og-bild.jpg \
-          ; do
-            if [ ! -f "$f" ]; then
-              echo "::error::Deploy-Artefakt fehlt: $f"
-              fail=1
-            fi
-          done
-          if [ "$fail" -ne 0 ]; then exit 1; fi
-          echo "Alle Kernartefakte vorhanden."
-
-      - name: noindex auf alles ausser der Startseite
-        run: |
-          # Die Varianten 01-09 werden aus den variant/*-Branches gebaut und
-          # existieren als Datei nirgends im Repo — ein Stempel auf _site ist
-          # die einzige Stelle, an der man sie zuverlaessig erwischt.
-          node scripts/site-noindex.mjs _site
+      - name: Seite zusammensetzen
+        run: node scripts/deploy/baue-site.mjs _site
 
       - name: Qualitaetspruefung der ausgelieferten Seiten
-        run: |
-          # Faengt genau die Fehlerklassen, die in Runde 2 live gefunden wurden:
-          # Anker ohne Ziel, canonical auf localhost, indexierbare Alt-Varianten,
-          # fehlende Pflicht-Metas, ortsabhaengige relative Links.
-          node scripts/pruefe-seiten.mjs _site
+        # Bricht ab bei: Sprungmarke ohne Ziel, fehlendem Kontaktweg, canonical
+        # abweichend von der Soll-Adresse, noindex auf einer echten Seite, altem
+        # GitHub-Praefix, internem Link ohne Ziel-Datei, Sitemap/robots.txt kaputt.
+        run: node scripts/pruefe-seiten.mjs _site
 
-      - name: List final output
+      - name: Ergebnis auflisten
         run: |
-          echo "Final _site structure (depth 3):"
-          find _site -maxdepth 3 -type d | sort
+          find _site -maxdepth 2 -type d | sort
+          du -sh _site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

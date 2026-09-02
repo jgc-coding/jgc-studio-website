@@ -2,6 +2,51 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-02 — Die Reise wird die einzige Seite, Ziel jgc-lumen.de (vorbereitet, noch nicht live)
+
+Gabriels Entscheidungen: Rechtsseiten neu im Design der Reise, Galerie und Varianten raus aus dem
+Deploy (bleiben im Repo), `www` ja, Seitentitel „JGC Lumen – KI für Coaches, Trainer und Mentoren".
+Der Stand liegt auf dem Branch und geht erst auf `main`, wenn die DNS-Einträge bei All-Inkl stehen
+und die Domain in den Pages-Einstellungen eingetragen ist — mit dem neuen Präfix `/` funktioniert
+die Seite nur noch an der Wurzel einer Domain, nicht mehr unter `jgc-coding.github.io/jgc-studio-website/`.
+
+- **Reise als Startseite:** Kopf neu — Titel, Beschreibung mit echten Umlauten (vorher „traegt",
+  „Fuer"), `robots` auf `index, follow`, `canonical` und Teilen-Angaben auf `https://jgc-lumen.de/`,
+  dazu strukturierte Firmendaten (JSON-LD `ProfessionalService`, bewusst ohne die c/o-Anschrift).
+  Alle Links vom GitHub-Präfix auf die Wurzel (`/stilprobe/`, `/impressum/`, `/datenschutz/`,
+  Formular-Endpunkte), per Node mit Trefferzählung (4 + 1 + 11). Die zwei Links „Zur Lesefassung"
+  sind weg. **Neu: Sprungmarken auf Stationen** (`/#weg`, `/#lichtung`, `/#aussicht` …) — die Seite
+  klickt bei passendem Hash den Reiter der Engine, ohne die Engine zu ändern.
+- **Rechtsseiten** `impressum/index.html` und `datenschutz/index.html` als eigenständige HTML-Seiten
+  im Design der Reise (gemeinsames `der-weg/assets/rechtliches.css`, Maße der FAQ, Abspann in Tinte),
+  Texte eins zu eins aus den Astro-Seiten. Der Astro-Build ist damit aus dem Deploy; `site/` bleibt
+  als Archiv.
+- **Stilprobe** per `scripts/stilprobe/transform-domain.mjs` (assertion-guarded, 25 Ersetzungen in
+  neun Mustern) auf die Domain umgestellt; ihr Menü aus der Lesefassung zeigt jetzt auf die
+  passenden Stationen der Reise: Angebote → `/#weg`, Grundwerte → `/#werkzeug`, Wer mit dir
+  arbeitet → `/#lichtung`, Erstgespräch → `/#aussicht`.
+- **Deploy neu:** `scripts/deploy/baue-site.mjs` setzt `_site/` zusammen (Reise an die Wurzel,
+  Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung `/der-weg/` → `/`, `robots.txt` und
+  `sitemap.xml` aus den indexierbaren Seiten) und scheitert laut bei fehlender Quelle oder fehlendem
+  Artefakt. Der Workflow ruft nur noch dieses Skript und die Prüfung: kein npm, kein Astro, keine
+  neun Varianten-Builds. Die Domain steht im Repo nur in den Köpfen der vier Seiten; die Skripte
+  lesen sie aus dem `canonical` der Reise.
+- **`pruefe-seiten.mjs` neu geschrieben** für fünf feste Seiten: Soll-`canonical` je Seite, Weiterleitung
+  muss `noindex` und Meta-Refresh tragen, alter Präfix und alte Adresse verboten (auch in den drei
+  Skripten der Reise), **jeder interne Link muss auf eine existierende Datei zeigen** (im Repo wie der
+  Vorschau-Server aufgelöst: erst Wurzel, dann `der-weg/`), im `_site` zusätzlich Sitemap und
+  robots.txt gegen die Seitenliste. Die Varianten werden nicht mehr geprüft.
+- **Vorschau-Server** spiegelt die Deploy-Anordnung (Wurzel zuerst, dann `der-weg/`), der Präfix-
+  Schnitt ist weg; mit Ordner-Argument liefert er genau `_site` (launch.json `site-vorschau`,
+  Port 4331). `_site/` ist in `.gitignore`.
+- Doku nachgezogen: CLAUDE.md (Aufbau, Formulare, Deploy, Preview, Archiv-Regel), README, VARIANTS.md
+  (Archiv-Hinweis), beide `schnittstelle.md`, `docs/der-weg.md`; in `verbesserungen.md` sind V13, V20,
+  V34, V10, V18 und I2 gegenstandslos.
+
+**Belege:** Done-Gate komplett grün; `pruefe-seiten.mjs` grün auf den Quellen und auf `_site`
+(61 Dateien, 46,3 MB, Sitemap mit vier Adressen); beide Transform-Skripte zweimal gelaufen
+(Ersetzung, dann „nichts zu tun"); Deploy-Ergebnis im Vorschau-Server auf Port 4331 angesehen.
+
 ## 2026-09-02 — Impressum steht, Datenschutzerklärung komplett, Favicon aus dem Sigel
 
 Vorbereitung auf die Veröffentlichung unter jgc-lumen.de. Gabriel hat die Impressumsdaten

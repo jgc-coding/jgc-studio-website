@@ -27,3 +27,6 @@ Thumbs.db
 # dadurch 224 statt 16 Befunde). .claude/launch.json und .claude/pruefen.txt
 # bleiben versioniert.
 .claude/worktrees/
+
+# Deploy-Ergebnis von scripts/deploy/baue-site.mjs (lokal zum Ansehen, nie committen)
+_site/

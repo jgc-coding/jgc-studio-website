@@ -47,15 +47,15 @@ Empfänger der Anfrage-Mail: `kontakt@jgc-lumen.de` (bestätigt empfangsfähig).
 - Antwortversprechen OHNE Frist (bewusst, Punkt 2 des Konzepts): „Du bekommst eine Antwort
   mit zwei Terminvorschlägen."
 
-## Platzhalter (beim All-Inkl-Umzug scharf schalten)
+## Platzhalter (beim Umzug auf den PHP-Host scharf schalten)
 
-- Formular-`action` steht ABSOLUT im HTML: `/jgc-studio-website/erstgespraech/senden.php`
-  (`der-weg/index.html`; `der-weg/formulare.js` ist pfadfrei). Beim Umzug per Suchen-Ersetzen
-  den Präfix `/jgc-studio-website/` auf `/` umstellen — Suchbegriff `erstgespraech/senden.php`.
+- Formular-`action` steht ABSOLUT und wurzel-relativ im HTML: `/erstgespraech/senden.php`
+  (`der-weg/index.html`; `der-weg/formulare.js` ist pfadfrei). Der frühere GitHub-Präfix ist
+  seit 02.09.2026 weg.
 - Die Mail-Ausweichadresse steht als `data-mail`-Attribut am Formular-Artikel in
   `der-weg/index.html`.
-- `/erstgespraech/`-Ordner auf All-Inkl anlegen und `senden.php` dorthin legen (FTP-Schritt
-  im Umzug, zusätzlich zur Stilprobe).
+- `/erstgespraech/`-Ordner auf dem PHP-Host anlegen und `senden.php` dorthin legen (FTP-Schritt,
+  zusätzlich zur Stilprobe). GitHub Pages selbst führt kein PHP aus.
 
 ## Spam-Schutz (serverseitig zu prüfen)
 

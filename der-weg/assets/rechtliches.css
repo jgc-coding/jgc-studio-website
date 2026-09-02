@@ -1,0 +1,87 @@
+/* Gemeinsames Stylesheet der Rechtsseiten (impressum/, datenschutz/).
+   Lehnt sich an den Leseteil der Reise an (Fragen und Abspann in der-weg/index.html):
+   dieselben Schriften, Farben und Zeilenmasse, damit alles wie ein Stueck wirkt.
+   Liegt in der-weg/assets/, weil dieser Ordner im Deploy an die Wurzel wandert und
+   die Rechtsseiten ihn unter /assets/ erreichen. Schriften: assets/schriften.css. */
+
+:root {
+  --sw-bg: #FEFCF7;
+  --sw-ink: #1F2A44;
+  --sw-ink-soft: #4A5568;
+  --sw-accent: #C97B3F;
+  --sw-font-display: "Fraunces Variable", Georgia, serif;
+  --sw-font-body: "Inter Variable", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--sw-bg); color: var(--sw-ink);
+  font-family: var(--sw-font-body); -webkit-font-smoothing: antialiased;
+}
+
+/* Sprungmarke fuer Tastaturbedienung: unsichtbar, bis sie den Fokus bekommt. */
+.sprung {
+  position: fixed; top: 0; left: 0; z-index: 100;
+  transform: translateY(-120%);
+  background: var(--sw-ink); color: #FEFCF7;
+  padding: 0.75rem 1.25rem; font-size: 0.9rem; text-decoration: none;
+  border-radius: 0 0 6px 0;
+}
+.sprung:focus { transform: translateY(0); }
+
+/* Kopf: Sigel und Wortmarke links, Rueckweg rechts. */
+.kopf { padding: 1.4rem 1.5rem 0.6rem; }
+.kopf-innen {
+  max-width: 46rem; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.marke {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  color: var(--sw-ink); text-decoration: none;
+  font-family: var(--sw-font-display); font-weight: 600; font-size: 1.15rem;
+}
+.marke img { display: block; height: 2.1rem; width: auto; }
+.marke:hover { color: var(--sw-accent); }
+.kopf-zurueck { font-size: 0.9rem; color: var(--sw-ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+.kopf-zurueck:hover { color: var(--sw-accent); }
+
+/* Inhalt: Augenzeile, Titel, Abschnitte — die Masse der FAQ der Reise. */
+.recht { padding: 2rem 1.5rem 5rem; }
+.recht-innen { max-width: 46rem; margin: 0 auto; }
+.recht-auge {
+  font-family: var(--sw-font-display); font-weight: 700;
+  font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sw-accent); margin: 0 0 0.6rem;
+}
+.recht h1 {
+  font-family: var(--sw-font-display); font-weight: 700;
+  font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.05;
+  margin: 0 0 2.2rem; letter-spacing: -0.01em;
+}
+.recht h2 {
+  font-family: var(--sw-font-display); font-weight: 600;
+  font-size: 1.35rem; line-height: 1.25; margin: 2.2rem 0 0.7rem;
+}
+.recht h1 + h2 { margin-top: 0; }
+/* 34rem ergeben rund 75 Zeichen je Zeile — die Grenze, bis zu der Fliesstext gut lesbar bleibt. */
+.recht p, .recht li { line-height: 1.68; color: var(--sw-ink-soft); max-width: 34rem; }
+.recht p { margin: 0 0 1rem; }
+.recht ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+.recht li { margin-bottom: 0.5rem; }
+.recht strong { color: var(--sw-ink); font-weight: 600; }
+.recht a { color: var(--sw-ink); text-decoration: underline; text-underline-offset: 3px; }
+.recht a:hover { color: var(--sw-accent); }
+.recht .adresse { color: var(--sw-ink); }
+.recht-stand { font-size: 0.86rem; margin-top: 2.5rem; }
+
+/* Abspann wie in der Reise: Tinte als Grund, Pergament als Schrift. */
+.abspann { background: var(--sw-ink); color: #FEFCF7; padding: 3rem 1.5rem 4rem; }
+.abspann-innen { max-width: 46rem; margin: 0 auto; display: grid; gap: 1.5rem; }
+.abspann p { margin: 0; color: rgba(254, 252, 247, 0.78); line-height: 1.65; max-width: 40rem; }
+.abspann a { color: #FEFCF7; text-decoration: underline; text-underline-offset: 3px; }
+.abspann a:hover { color: #E8A572; }
+.abspann-reihen { display: flex; flex-wrap: wrap; gap: 1rem 2rem; font-size: 0.9rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .marke, .kopf-zurueck, .recht a, .abspann a { transition: color 0.2s; }
+}

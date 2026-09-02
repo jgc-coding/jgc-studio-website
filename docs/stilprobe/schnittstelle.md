@@ -44,12 +44,11 @@ Anzeige-Wortlaute (in beiden Seiten identisch implementiert):
 - pause: „Die Stilprobe macht gerade eine kurze Pause – schau bald wieder vorbei." + Unterseite blendet Pause-Hinweis statt Formular ein
 - {folgemonat} wird clientseitig berechnet (deutscher Monatsname nach {monat}).
 
-## Platzhalter (beim All-Inkl-Umzug scharf schalten)
+## Platzhalter (beim Umzug auf den PHP-Host scharf schalten)
 
-- `STILPROBE_MAIL` = aktuell `stilprobe@jgc-lumen.de` (Domain unbestätigt) — steht als const in den Inline-Scripts der Unterseite; Suchbegriff: `stilprobe@`.
-- Interne Links nutzen den GitHub-Pages-Präfix `/jgc-studio-website/…` — beim Umzug per Suchen-Ersetzen auf `/` umstellen (betrifft `variants/standalone/18-lumen/index.html`, `stilprobe/index.html` und `der-weg/index.html` — dort auch die Formular-`action`s und der Badge-Pfad; zusätzlich `docs/erstgespraech/schnittstelle.md` beachten: eigener Ordner `/erstgespraech/` mit eigenem `senden.php`).
-- Die Rechtslinks zeigen auf `/jgc-studio-website/main/impressum/` bzw. `…/main/datenschutz/` — beim Umzug prüfen, wohin Impressum/Datenschutz dann ausgeliefert werden (das `/main/`-Segment ist eine GitHub-Pages-Eigenheit des Astro-Builds).
-- Formular-`action` und Badge-`fetch` der Unterseite sind RELATIV (`senden.php`, `kontingent.php`) und funktionieren nach dem Umzug unverändert; die Hauptseite UND die Scroll-Reise rufen absolut (`/jgc-studio-website/stilprobe/kontingent.php` bzw. `…/senden.php`) — diese Pfade wandern mit dem Präfix-Suchen-Ersetzen.
+- `STILPROBE_MAIL` = aktuell `stilprobe@jgc-lumen.de` (Postfach unbestätigt) — steht als const im Inline-Script der Unterseite und in `der-weg/formulare.js`; Suchbegriff: `stilprobe@`.
+- Interne Links sind seit 02.09.2026 wurzel-relativ (`/stilprobe/`, `/impressum/`, `/datenschutz/`); der frühere GitHub-Pages-Präfix ist weg, `scripts/pruefe-seiten.mjs` verbietet ihn. Impressum und Datenschutz sind eigene HTML-Seiten unter `/impressum/` und `/datenschutz/`, nicht mehr der Astro-Build.
+- Formular-`action` und Badge-`fetch` der Unterseite sind RELATIV (`senden.php`, `kontingent.php`); die Scroll-Reise ruft absolut (`/stilprobe/kontingent.php`, `/stilprobe/senden.php`, dazu `/erstgespraech/senden.php`, siehe `docs/erstgespraech/schnittstelle.md`). GitHub Pages führt kein PHP aus: die Endpunkte brauchen einen PHP-Host unter derselben Domain (All-Inkl) — oder einen eigenen API-Host, dann CORS und die Pfade bedenken.
 
 ## Spam-Schutz (serverseitig zu prüfen)
 

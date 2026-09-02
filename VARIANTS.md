@@ -3,6 +3,13 @@
 Dieses Dokument listet alle erkundeten Design-Richtungen für die Sales-Page.
 Jede Variante lebt auf einem eigenen Git-Branch — keine geht verloren.
 
+**Seit 02.09.2026 Archiv.** Die Scroll-Reise (`der-weg/`) ist die einzige ausgelieferte
+Fassung; keine Variante und keine Galerie wird mehr deployt. Alles hier bleibt im Repo als
+Vergleich und Fundus. Ansehen: `node scripts/der-weg/server.mjs`, dann
+`http://localhost:4330/variants/standalone/<slug>/` — V18, die frühere Lesefassung, unter
+`…/variants/standalone/18-lumen/`. Die Astro-Branches `variant/*` lassen sich weiter
+auschecken, werden aber nicht mehr gebaut.
+
 ## Wie damit arbeiten
 
 ```powershell

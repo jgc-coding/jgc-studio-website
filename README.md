@@ -1,63 +1,54 @@
 # JGC Lumen Website
 
-Sales-Page für JGC Lumen — KI-Implementierung für Coaches, Trainer und
-Mentoren (Freiburg/DACH). Marke seit Variante 13 „JGC Lumen"; das Repo
-heißt historisch weiter `jgc-studio-website`.
+Website von JGC Lumen — KI-Implementierung für Coaches, Trainer und Mentoren
+(Freiburg/DACH). Live unter https://jgc-lumen.de/ (GitHub Pages mit eigener
+Domain). Marke seit Variante 13 „JGC Lumen"; das Repo heißt historisch weiter
+`jgc-studio-website`.
 
 ## Struktur
 
 ```
 .
-├── site/                          # Astro-Quelle, deployt nach /main/
-│                                     (Startseite, Impressum, Datenschutz)
-├── variants/standalone/<slug>/    # Eingefrorene Single-File-Design-Varianten
-│   └── manifest.json              # Register; "homepage": true markiert die
-│                                     Live-Hauptseite (aktuell 18-lumen)
-├── stilprobe/                     # Eigenständige Unterseite "Die Stilprobe",
-│                                     deployt nach /stilprobe/
-├── docs/stilprobe/                # Konzept, Knoten-Graph, Schnittstellen-Vertrag
-├── scripts/                       # Galerie-Generator, Homepage-Kopie,
-│                                     Stilprobe-Transform/-Extract
-├── VARIANTS.md                    # Registry aller Design-Varianten
-├── CHANGELOG.md                   # Änderungshistorie (seit 2026-07-11)
-├── weitermachen.md                # Sessionstand für Multi-Session-Arbeit
-└── README.md                      # Diese Datei
+├── der-weg/                   # Die Seite: Scroll-Reise (index.html, drei Skripte,
+│                                 assets/) — liegt im Deploy an der Wurzel
+├── stilprobe/                 # Unterseite „Die Stilprobe" (Single-File-HTML) → /stilprobe/
+├── impressum/, datenschutz/   # Rechtsseiten im Design der Reise
+├── deploy/                    # Weiterleitung /der-weg/ → /
+├── scripts/deploy/            # baue-site.mjs: setzt _site/ zusammen (Workflow und lokal)
+├── scripts/pruefe-seiten.mjs  # Qualitätsprüfung (Repo-Quellen oder _site)
+├── scripts/der-weg/           # Werkzeuge der Reise (Kodieren, Nähte, Favicon, Vorschau-Server)
+├── docs/                      # der-weg.md, Stilprobe- und Erstgespräch-Verträge
+├── variants/, site/, inhalt/  # Archiv: alte Varianten (V18 = frühere Lesefassung), Astro-Quelle
+├── CHANGELOG.md               # Änderungshistorie (seit 2026-07-11)
+├── verbesserungen.md          # Offene und erledigte Befunde
+├── weitermachen.md            # Sessionstand für Multi-Session-Arbeit
+└── README.md                  # Diese Datei
 ```
 
-## Lokal entwickeln
+## Lokal ansehen
 
 ```powershell
-cd site
-npm install        # nur beim ersten Mal
-npm run dev        # → http://localhost:4321
+node scripts/der-weg/server.mjs             # http://localhost:4330/ — Repo-Stand, Reise an der Wurzel
+node scripts/deploy/baue-site.mjs _site     # Deploy-Ergebnis zusammensetzen
+node scripts/der-weg/server.mjs 4331 _site  # http://localhost:4331/ — genau das Deploy-Ergebnis
+node scripts/pruefe-seiten.mjs              # Prüfung der Quellen; mit `_site` das Ergebnis
 ```
 
-## Build (statisches Output)
-
-```powershell
-cd site
-npm run build      # erzeugt site/dist/
-npm run preview    # lokale Vorschau des Builds
-```
+Die Reise braucht zwingend einen Server: unter `file://` verbietet der Browser
+das Laden der Clips.
 
 ## Deploy
 
-Push auf `main` löst die GitHub Action `.github/workflows/deploy.yml` aus,
-die auf GitHub Pages deployt:
-
-- die Astro-`site/` nach `/main/`,
-- alle Standalone-Varianten aus `variants/standalone/` nach `/variants/<slug>/`,
-- eine generierte Galerie (`scripts/generate-gallery.mjs`) nach `/galerie/`,
-- die im Manifest als `"homepage": true` markierte Variante als Root-`index.html`
-  (`scripts/copy-homepage.mjs`),
-- `stilprobe/index.html` nach `/stilprobe/`.
-
-Live-URL: https://jgc-coding.github.io/jgc-studio-website/
+Push auf `main` löst `.github/workflows/deploy.yml` aus: `baue-site.mjs` setzt
+`_site/` zusammen (Reise an der Wurzel, Stilprobe, Rechtsseiten, Vorschaubild,
+Weiterleitung, robots.txt, Sitemap), `pruefe-seiten.mjs _site` prüft das
+Ergebnis, dann geht es auf GitHub Pages. Die Domain `jgc-lumen.de` ist in den
+Pages-Einstellungen des Repos eingetragen, DNS liegt bei All-Inkl.
 
 ## Arbeiten im Repo
 
-- [CLAUDE.md](./CLAUDE.md) — Konventionen und Stolperfallen, insbesondere:
-  minifizierte Single-File-HTML-Varianten nie direkt editieren/lesen.
-- [VARIANTS.md](./VARIANTS.md) — Register aller Standalone-Varianten.
+- [CLAUDE.md](./CLAUDE.md) — Konventionen und Stolperfallen.
+- [docs/der-weg.md](./docs/der-weg.md) — die Reise: Etappen, Maße, Austauschweg.
 - [CHANGELOG.md](./CHANGELOG.md) — Änderungshistorie seit 2026-07-11.
+- [verbesserungen.md](./verbesserungen.md) — offene und erledigte Befunde.
 - [weitermachen.md](./weitermachen.md) — aktueller Sessionstand.
