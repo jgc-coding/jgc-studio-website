@@ -55,7 +55,13 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 - **Domain:** `jgc-lumen.de` steht in den Pages-Einstellungen des Repos (`gh api repos/jgc-coding/jgc-studio-website/pages`),
   DNS liegt bei All-Inkl (A/AAAA auf GitHub Pages, `www` als CNAME auf `jgc-coding.github.io`). GitHub
   leitet `www` und die alte Adresse `jgc-coding.github.io/jgc-studio-website/` auf die Domain um.
-  Die Mail-Einträge der Domain (MX) bleiben bei All-Inkl — nie anfassen.
+  Die Mail-Einträge der Domain (MX, SPF, DKIM, DMARC) und der Wildcard-Eintrag `*` bleiben bei
+  All-Inkl — nie anfassen, sonst bricht das Postfach.
+- **Zertifikat deckt nur ab, was beim Ausstellen im DNS stand.** Kommt `www` später dazu, stellt GitHub
+  von sich aus KEIN neues aus, und die Domain aus- und wieder einzutragen genügt nicht. Was wirkt: kurz
+  `www.<domain>` als Custom Domain setzen, sofort zurück auf die Hauptadresse — der Antrag über beide
+  Namen bleibt bestehen. **Dabei fällt `https_enforced` auf false**; nach `state: approved` wieder mit
+  `gh api -X PUT …/pages -F https_enforced=true` setzen.
 - `pruefe-seiten.mjs` bricht ab bei: Sprungmarke ohne Ziel, fehlendem Kontaktweg, `canonical` auf localhost
   oder abweichend von der Soll-Adresse, `noindex` auf einer echten Seite (nur die Weiterleitung trägt es),
   fehlender Pflicht-Meta, Reveal-Regel ohne `.js`-Schutz, Positions-Selektor, altem GitHub-Präfix, internem
