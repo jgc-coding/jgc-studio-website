@@ -22,9 +22,18 @@ Pages-Einstellungen eingetragen, `main` auf `9ca03be`, Deploy grün, Zertifikat 
 - **Gabriel (Hub, Karte „Website"):** `www`-CNAME im KAS nachtragen, AVV mit All-Inkl im
   Members-Bereich (Stammdaten → Auftragsverarbeitung), USt-IdNr. ja/nein, optional Domain bei
   GitHub verifizieren, juristische Prüfung des Datenschutzes, Testmail an kontakt@, Postfach stilprobe@.
-- **Nachprüfen:** der Zwang von http auf https war unmittelbar nach dem Einschalten noch nicht
-  wirksam (`curl http://jgc-lumen.de/` gab 200 statt 301) — in der nächsten Sitzung erneut prüfen.
-  Search Console anmelden (Gabriels Google-Konto), Formular-Ausweichweg am Gerät testen.
+- **www und Zertifikat (Stand 02.09.2026 abends):** Gabriel hat den `www`-CNAME gesetzt, GitHubs
+  Health-Check sieht ihn als gültig. Das erste Zertifikat kannte nur die Hauptadresse, und ein
+  Aus-/Eintragen der Domain ließ GitHub das alte Zertifikat weiterverwenden. Abhilfe, die
+  gewirkt hat: kurz `www.jgc-lumen.de` als Custom Domain eintragen (GitHub beantragt dann ein
+  Zertifikat für beide Namen), sofort zurück auf `jgc-lumen.de` — der Antrag mit beiden Namen
+  bleibt bestehen (`https_certificate.domains` = beide, Zustand `new`). **Dabei fällt
+  `https_enforced` auf false.** Sobald `gh api repos/jgc-coding/jgc-studio-website/pages`
+  den Zustand `approved` zeigt: `gh api -X PUT … -F https_enforced=true`, dann prüfen:
+  `curl -sI http://jgc-lumen.de/` → 301 auf https, `https://www.jgc-lumen.de/` → 301 auf die
+  Hauptadresse mit gültigem Zertifikat. Bis dahin funktioniert https auf der Hauptadresse
+  weiter (altes Zertifikat), http leitet aber nicht um.
+- Search Console anmelden (Gabriels Google-Konto), Formular-Ausweichweg am Gerät testen.
 - **Stilprobe bekommt eine eigene Session** (Gabriels Wunsch): PHP-Empfang (Option B, Repo
   `stilprobe-automatik` existiert noch nicht), stilprobe@-Postfach, Anthropic-Bedingungen belegen.
 - Offene Befunde: **V47** (Knöpfe unter 362/380 px), **V14** (LinkedIn-URL). Ideen: **I3**
