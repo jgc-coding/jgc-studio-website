@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 const base = import.meta.env.BASE_URL;
+const mailKlasse = 'text-tinte font-medium border-b border-kupfer hover:text-kupfer transition-colors';
 ---
 
 <BaseLayout title="Datenschutz — JGC Lumen" description="Datenschutzerklärung von JGC Lumen, KI-Beratung für Coaches und Trainer.">
@@ -14,56 +15,157 @@ const base = import.meta.env.BASE_URL;
       <h1 class="font-serif text-section text-tinte mb-8">Datenschutz</h1>
 
       <div class="font-sans text-[1.0625rem] text-anthrazit leading-[1.7] space-y-6">
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Verantwortlicher</h2>
         <p>
-          Diese Seite ist in Vorbereitung. Die vollständige Datenschutzerklärung nach DSGVO wird hier kurzfristig ergänzt.
+          Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Website ist:<br />
+          Johann Gabriel Chimento, JGC Lumen<br />
+          c/o Autorenglück #75664<br />
+          Albert-Einstein-Straße 47<br />
+          02977 Hoyerswerda<br />
+          E-Mail:
+          <a href="mailto:kontakt@jgc-lumen.de" class={mailKlasse}>kontakt@jgc-lumen.de</a>
+        </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Das Wichtigste vorweg</h2>
+        <p>
+          Diese Website setzt keine Cookies, kein Tracking, keine Analyse-Werkzeuge und keine
+          Skripte von Drittanbietern ein. Schriften, Bilder und Videos liefert sie selbst aus;
+          beim Ansehen der Seite wird kein externer Dienst nachgeladen. Personenbezogene Daten
+          verarbeite ich nur, wenn du sie mir selbst gibst: per E-Mail, über die Anfrage zum
+          Erstgespräch oder über die Stilprobe.
         </p>
         <p>
-          Die Seiten dieser Website setzen weder Tracking noch Analytics noch Drittanbieter-Skripte ein; Schriftarten und Bilder werden vollständig von dieser Website selbst ausgeliefert, es werden also keine externen Dienste nachgeladen. Cookies setze ich nicht. Wenn du das Formular der Stilprobe ausfüllst, bleibt dein angefangener Entwurf ausschließlich in der lokalen Ablage deines eigenen Browsers, damit ein versehentliches Neuladen deine Eingaben nicht vernichtet; übertragen wird er erst, wenn du auf „Stilprobe anfordern" klickst, und er wird nach dem Absenden dort gelöscht.
+          Wenn du eines der Formulare ausfüllst, merkt sich dein Browser den angefangenen Entwurf
+          in seiner lokalen Ablage, damit ein versehentliches Neuladen deine Eingaben nicht
+          vernichtet. Diese Ablage bleibt auf deinem Gerät. Übertragen wird der Entwurf erst,
+          wenn du ihn absendest, und danach wird er dort gelöscht.
+        </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Hosting und Server-Logdateien</h2>
+        <p>
+          Die Website wird über GitHub Pages ausgeliefert, einen Dienst der GitHub, Inc.,
+          88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Bei jedem Aufruf verarbeitet
+          GitHub technisch notwendige Verbindungsdaten, insbesondere deine IP-Adresse, die
+          aufgerufene Adresse, Datum und Uhrzeit sowie Angaben zu deinem Browser, und speichert
+          sie in Server-Logdateien, um den Dienst sicher und stabil zu betreiben. Rechtsgrundlage
+          ist mein berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung der
+          Website (Art. 6 Abs. 1 lit. f DSGVO). GitHub ist unter dem EU-US Data Privacy Framework
+          zertifiziert; die Übermittlung in die USA stützt sich damit auf den
+          Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO). Näheres steht in der
+          <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" class={mailKlasse} rel="noopener">Datenschutzerklärung von GitHub</a>.
+          Auf diese Logdateien habe ich selbst keinen Zugriff und werte sie nicht aus.
+        </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Kontakt per E-Mail</h2>
+        <p>
+          Wenn du mir eine E-Mail schreibst, verarbeite ich deine Adresse und den Inhalt deiner
+          Nachricht, um deine Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b
+          DSGVO, wenn es um eine mögliche Zusammenarbeit geht, sonst mein berechtigtes Interesse
+          an der Beantwortung von Anfragen (Art. 6 Abs. 1 lit. f DSGVO).
         </p>
         <p>
-          Ausgeliefert wird die Website derzeit über GitHub Pages (GitHub, Inc., USA). Beim Abruf verarbeitet dieser Anbieter technisch notwendige Verbindungsdaten, insbesondere deine IP-Adresse, die angeforderte Adresse, Datum und Uhrzeit. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (Interesse an einer sicheren, funktionsfähigen Bereitstellung). Mit dem Umzug auf das eigene Hosting bei ALL-INKL.COM (Deutschland) entfällt dieser Punkt.
+          Mein Postfach betreibt ALL-INKL.COM – Neue Medien Münnich, Hauptstraße 68,
+          02742 Friedersdorf, Deutschland, auf Grundlage eines Vertrags zur Auftragsverarbeitung.
+          Ich lösche deine Nachricht, sobald dein Anliegen erledigt ist und keine gesetzlichen
+          Aufbewahrungspflichten entgegenstehen. Kommt eine Zusammenarbeit zustande, gelten die
+          handels- und steuerrechtlichen Aufbewahrungsfristen von bis zu zehn Jahren.
         </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Anfrage zum Erstgespräch</h2>
+        <p>
+          Über das Formular „Erstgespräch anfragen" verarbeite ich deinen Namen, deine
+          E-Mail-Adresse, dein Anliegen und die Zeitfenster, in denen du erreichbar bist. Wenn du
+          lieber zurückgerufen werden möchtest und das ankreuzt, zusätzlich deine Telefonnummer.
+          Zweck ist die Vereinbarung und Vorbereitung des kostenlosen Erstgesprächs.
+          Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Maßnahmen vor einem möglichen Vertrag)
+          sowie deine Einwilligung, die du im Formular erteilst (Art. 6 Abs. 1 lit. a DSGVO). Die
+          Einwilligung kannst du jederzeit formlos per E-Mail widerrufen, mit Wirkung für die
+          Zukunft.
+        </p>
+        <p>
+          Die Anfrage wird als E-Mail an mein Postfach bei ALL-INKL.COM übermittelt. Gegen
+          automatisierte Anfragen prüft das Formular ein für Menschen unsichtbares Feld und die
+          Zeit zwischen Aufruf und Absenden; deine IP-Adresse wird dabei nur kurzzeitig
+          gespeichert, um Massenanfragen abzuwehren. Für die Aufbewahrung gilt dasselbe wie bei
+          E-Mails.
+        </p>
+
         <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Die Stilprobe</h2>
         <p>
-          Wenn du die Stilprobe über das Formular auf dieser Website anfragst, verarbeite ich die dort angegebenen Daten – deinen Namen, deine E-Mail-Adresse, die drei von dir eingereichten Texte, dein Wunschthema und, sofern angegeben, wie du auf die Stilprobe aufmerksam geworden bist – ausschließlich zu dem Zweck, die Stilprobe zu erstellen und dich für die Rückgabe zu kontaktieren.
+          Über das Formular der Stilprobe verarbeite ich deinen Namen, deine E-Mail-Adresse, die
+          drei von dir eingereichten Texte, dein Wunschthema, deine Bestätigung, dass es deine
+          eigenen Texte sind, und, sofern angegeben, wie du auf die Stilprobe aufmerksam geworden
+          bist. Zweck ist allein, die Stilprobe zu erstellen und sie dir zurückzugeben. Ist das
+          monatliche Kontingent ausgeschöpft, kannst du dich mit Name und E-Mail-Adresse auf die
+          Warteliste setzen lassen; dann verarbeite ich nur diese beiden Angaben, um dich zu
+          benachrichtigen, sobald wieder ein Platz frei ist.
         </p>
         <p>
-          Rechtsgrundlage für diese Verarbeitung ist deine Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO, die du über die Checkbox im Formular erteilst. Du kannst diese Einwilligung jederzeit formlos per E-Mail widerrufen, mit Wirkung für die Zukunft.
+          Rechtsgrundlage ist deine Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO, die du über die
+          Checkbox im Formular erteilst. Du kannst sie jederzeit formlos per E-Mail widerrufen, mit
+          Wirkung für die Zukunft.
         </p>
         <p>
           An der Verarbeitung sind folgende Empfänger beziehungsweise Auftragsverarbeiter beteiligt:
         </p>
         <ul class="list-disc pl-6 space-y-2">
           <li>
-            ALL-INKL.COM – Neue Medien Münnich, für das Webhosting dieser Website und mein E-Mail-Postfach (Deutschland).
+            ALL-INKL.COM – Neue Medien Münnich (Deutschland), für das Entgegennehmen des Formulars
+            und mein E-Mail-Postfach.
           </li>
           <li>
-            Anthropic (Claude), zur Textverarbeitung für die Stilanalyse und die Erstellung der Textentwürfe (USA), abgesichert über eine Auftragsverarbeitung mit EU-Standardvertragsklauseln. Deine Texte werden nicht zum Training von KI-Modellen genutzt.
+            Anthropic (Claude), für die Stilanalyse und die Textentwürfe (USA), genutzt auf
+            Grundlage der kommerziellen Nutzungsbedingungen mit Vertrag zur Auftragsverarbeitung
+            und EU-Standardvertragsklauseln. Eine Nutzung deiner Texte zum Training von
+            KI-Modellen ist dort ausgeschlossen.
           </li>
           <li>
-            Telegram, ausschließlich für interne Benachrichtigungen an mich selbst, wenn eine neue Stilprobe zur Freigabe ansteht; dabei werden nur Kurzauszüge von höchstens rund 300 Zeichen übermittelt.
+            Telegram, ausschließlich für interne Benachrichtigungen an mich selbst, wenn eine neue
+            Stilprobe zur Freigabe ansteht; dabei werden nur Kurzauszüge von höchstens rund
+            300 Zeichen übermittelt.
           </li>
         </ul>
         <p>
-          Die inhaltliche Verarbeitung – also das Lesen, Prüfen und Ausformulieren deiner Stilprobe – findet lokal auf meinem eigenen Gerät in Deutschland statt.
+          Die inhaltliche Arbeit – das Lesen, Prüfen und Ausformulieren deiner Stilprobe – findet
+          auf meinem eigenen Gerät in Deutschland statt. Deine Texte und alle Zwischenergebnisse
+          lösche ich 30 Tage nach Versand der Rückgabe beziehungsweise nach einer Absage. Danach
+          bleiben nur Zahlen ohne Personenbezug für meine interne Statistik, zum Beispiel die
+          Anzahl der Stilproben pro Monat.
         </p>
         <p>
-          Deine Texte und alle Zwischenergebnisse werden 30 Tage nach Versand der Rückgabe beziehungsweise nach einer Absage gelöscht. Danach verbleiben nur Metadaten ohne Personenbezug für meine interne Statistik, zum Beispiel die Anzahl der Stilproben pro Monat.
+          Beim Aufruf der Seite fragt dein Browser bei meinem Server ab, wie viele Stilproben im
+          laufenden Monat noch frei sind. Dabei fallen nur die üblichen Verbindungsdaten an (siehe
+          Hosting); weitere Daten werden nicht übertragen. In E-Mails verfolge ich weder Öffnungen
+          noch Klicks.
+        </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Deine Rechte</h2>
+        <p>
+          Du hast das Recht auf Auskunft über die zu dir gespeicherten Daten (Art. 15 DSGVO), auf
+          Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18)
+          und Datenübertragbarkeit (Art. 20). Einer Verarbeitung, die auf mein berechtigtes
+          Interesse gestützt ist, kannst du widersprechen (Art. 21). Eine erteilte Einwilligung
+          kannst du jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3). Außerdem
+          steht dir das Recht zu, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren
+          (Art. 77). Für all das erreichst du mich unter
+          <a href="mailto:kontakt@jgc-lumen.de" class={mailKlasse}>kontakt@jgc-lumen.de</a>.
+        </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Keine automatisierten Entscheidungen</h2>
+        <p>
+          Ich treffe keine automatisierten Entscheidungen im Einzelfall und betreibe kein
+          Profiling. KI-Werkzeuge nutze ich bei der Stilprobe als Hilfsmittel; was du
+          zurückbekommst, prüfe und gebe ich selbst frei.
+        </p>
+
+        <h2 class="font-serif text-2xl text-tinte mt-2 mb-2">Freiwilligkeit und Änderungen</h2>
+        <p>
+          Du bist nicht verpflichtet, mir Daten zu geben. Ohne die Pflichtangaben eines Formulars
+          kann ich die jeweilige Anfrage allerdings nicht bearbeiten. Ich passe diese Erklärung
+          an, wenn sich die Website oder die Rechtslage ändert.
         </p>
         <p>
-          Dir stehen im Rahmen der Stilprobe die üblichen Betroffenenrechte zu: Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit, Widerruf deiner Einwilligung sowie das Recht auf Beschwerde bei einer Datenschutz-Aufsichtsbehörde. Für all das erreichst du mich unter
-          <a href="mailto:kontakt@jgc-lumen.de" class="text-tinte font-medium border-b border-kupfer hover:text-kupfer transition-colors">
-            kontakt@jgc-lumen.de
-          </a>.
-        </p>
-        <p>
-          Es gibt bei der Stilprobe kein Tracking: Ich verfolge weder Öffnungen noch Klicks in E-Mails, und im Formular kommen keine Analyse-Werkzeuge von Drittanbietern zum Einsatz.
-        </p>
-        <p>
-          Bei Fragen erreichst du mich unter
-          <a href="mailto:kontakt@jgc-lumen.de" class="text-tinte font-medium border-b border-kupfer hover:text-kupfer transition-colors">
-            kontakt@jgc-lumen.de
-          </a>.
+          Stand: 2. September 2026
         </p>
       </div>
 

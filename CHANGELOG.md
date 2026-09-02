@@ -2,6 +2,46 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-02 — Impressum steht, Datenschutzerklärung komplett, Favicon aus dem Sigel
+
+Vorbereitung auf die Veröffentlichung unter jgc-lumen.de. Gabriel hat die Impressumsdaten
+geliefert und drei Dinge entschieden: die Scroll-Reise wird die einzige öffentliche Fassung,
+die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus, Zielort ist GitHub Pages mit
+der eigenen Domain (Option A: DNS auf GitHub Pages, Formulare vorerst über den Mail-Ausweichweg).
+
+- **Impressum (V3) gefüllt** (`site/src/pages/impressum.astro`): Name, ladungsfähige Anschrift
+  über einen Impressumsservice (c/o-Adresse), E-Mail, Verantwortlicher nach § 18 Abs. 2 MStV,
+  Satz zur Verbraucherstreitbeilegung. Bewusst ohne Link zur EU-Streitbeilegungsplattform —
+  die ist seit Juli 2025 abgeschaltet, der Link steht nur noch in veralteten Vorlagen. Eine
+  USt-IdNr. fehlt, bis Gabriel klärt, ob eine besteht.
+- **Datenschutzerklärung neu geschrieben** (`site/src/pages/datenschutz.astro`, neun Abschnitte):
+  Verantwortlicher, Grundsatz „keine Cookies, kein Tracking, keine Drittanbieter-Skripte",
+  Formular-Entwürfe im lokalen Browserspeicher, Hosting GitHub Pages mit Server-Logs und
+  Data-Privacy-Framework, Kontakt per E-Mail, **Erstgespräch-Formular** (Name, E-Mail, Anliegen,
+  Zeitfenster, Telefon nur bei Rückrufwunsch, Spam-Abwehr), Stilprobe inklusive Warteliste und
+  Kontingent-Abfrage, Betroffenenrechte, keine automatisierten Entscheidungen, Stand. Der Satz
+  „in Vorbereitung" ist auf beiden Seiten weg. Es bleibt ein Entwurf für die juristische
+  Prüfung (Hub): die Aussagen zu Anthropic (kommerzielle Bedingungen, kein Training), zum
+  Vertrag zur Auftragsverarbeitung mit All-Inkl und zur kurzzeitigen IP-Speicherung beschreiben
+  den Sollzustand mit Serverteil und sind vor dem Launch zu belegen.
+- **Favicon aus dem Sigel** statt der erfundenen Spirale aus V18. `scripts/der-weg/baue-favicon.mjs`
+  löst die zwei Pfade aus `Logo/JGC Studio Logo final.svg`, misst den Begrenzungsrahmen über
+  einen Render (den Maßstab leitet es aus Renderbreite und viewBox ab — sharp 0.33 und 0.34
+  rechnen mm-Dokumente verschieden, die erste Fassung mit fester Annahme lag um den Faktor 3,5
+  daneben) und schreibt `der-weg/assets/favicon.svg` (quadratisch, 6 % Rand, 4,1 KB), PNGs in
+  48 und 192 px sowie ein Apple-Touch-Icon (180 px auf Pergament, weil iOS Transparenz schwarz
+  zeigt). Die Reise verlinkt die vier Dateien **relativ** (`assets/…`), damit die Links nach dem
+  Umzug an die Wurzel weiter stimmen. Die Stilprobe-Unterseite bekommt dasselbe SVG als
+  data-URI über `scripts/stilprobe/setze-favicon.mjs` (assertion-guarded, zweiter Lauf erkennt
+  den fertigen Stand). V18 bleibt unangetastet, sie geht in den Ruhestand.
+- Beide neuen Skripte stehen in `.claude/pruefen.txt`; in `verbesserungen.md` ist V3 erledigt und
+  die Entscheidung notiert, dass V13, V20 und V34 mit dem Umbau entfallen (sie betreffen nur V18).
+
+**Belege:** Astro-Build lokal wie im Deploy (`BASE_PATH`/`SITE_URL` gesetzt) grün, beide
+Rechtsseiten im `dist` mit neuem Inhalt und ohne „in Vorbereitung"; `node scripts/pruefe-seiten.mjs`
+grün; alle `node --check` der Prüfliste grün; Favicon-Render bei 32 und 256 px angesehen;
+Stilprobe-Transform zweimal gelaufen (Ersetzung, dann „nichts zu tun").
+
 ## 2026-08-29 — Der Weg: Gabriels Portrait in der Langfassung „Über mich"
 
 Die Scroll-Reise zeigte bisher keinen Menschen. Gabriel wollte sein Foto ursprünglich in eine

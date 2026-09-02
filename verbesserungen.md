@@ -112,6 +112,12 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 stehen unten unter „Erledigt", die Messwerte im CHANGELOG. Offen blieb daraus **V34**: dieselbe
 DSGVO-Linie außerhalb der Reise.
 
+**Entscheidungen vom 02.09.2026 (Gabriel):** Die Scroll-Reise wird die einzige öffentliche
+Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielort ist GitHub
+Pages mit der eigenen Domain jgc-lumen.de. Damit erledigen sich **V13**, **V20** und **V34** mit
+dem Umbau, weil sie nur V18 betreffen — sie bleiben hier stehen, bis der Umbau live ist.
+**I2** (V18 zurück nach Astro) ist gegenstandslos.
+
 - [ ] **V47** (C) Auf **schmalen** Telefonen stapeln die zwei Handlungsknöpfe der
       Schluss-Station und heben damit den Textstreifen für jede Station an
       Beleg: „Erstgespräch anfragen" und „Zur Stilprobe" brauchen zusammen 325 px (kleiner
@@ -158,14 +164,6 @@ DSGVO-Linie außerhalb der Reise.
       ersetzen (dann stimmt der Satz) oder den Satz umformulieren („So kann das aussehen").
       Beides ist klein — nur beides zusammen stehen zu lassen geht nicht.
       → braucht Gabriels Entscheidung bzw. seine eigene Stilprobe.
-
-- [ ] **V3** (A) Impressum ohne Inhalt — **braucht Gabriels Daten**
-      Beleg: `site/src/pages/impressum.astro:18`, live unter `/main/impressum/`
-      Aufwand: S · Risiko: mittel
-      Warum: Eine gewerbliche Seite mit Preisangaben braucht in Deutschland ein vollständiges
-      Impressum nach § 5 DDG. Der veraltete Gesetzesverweis ist korrigiert, der Inhalt fehlt.
-      Benötigt: vollständiger Name, ladungsfähige Anschrift, E-Mail, ggf. USt-IdNr. und
-      Berufsangaben. → steht in `meine-todos.md`.
 
 - [ ] **V10** (A) Vier verbleibende Schwachstellen in den Build-Abhängigkeiten
       Beleg: `npm audit` in `site/` — nach `npm audit fix` von 8 auf 4 (von 6 auf 2 hoch);
@@ -228,6 +226,15 @@ Lauf; ein Löschen würde die Galerie beschädigen.
 *(noch keine Einträge — Gabriel hat bisher keinen Punkt ausdrücklich abgelehnt)*
 
 ## Erledigt
+
+### Am 2026-09-02 umgesetzt (Launch-Vorbereitung)
+
+- **V3** (A) Impressum gefüllt — Gabriel hat die Daten geliefert: Name, ladungsfähige
+  Anschrift über einen Impressumsservice (c/o), E-Mail; dazu Verantwortlicher nach
+  § 18 Abs. 2 MStV und der Satz zur Verbraucherstreitbeilegung. Ohne Link zur
+  EU-Streitbeilegungsplattform, die ist seit Juli 2025 abgeschaltet. Offen bleibt nur, ob
+  eine USt-IdNr. existiert (Gabriel klärt). Im selben Zug die Datenschutzerklärung komplett
+  neu geschrieben, inklusive Erstgespräch-Formular — Entwurf für die juristische Prüfung.
 
 ### Beim Kassensturz am 2026-08-29 festgestellt
 
