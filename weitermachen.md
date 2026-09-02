@@ -18,6 +18,10 @@ Mail-Ausweichweg). Rechtsseiten neu im Design der Reise, Galerie raus, `www` ja,
 - **`/save-state` auf diesem Branch NICHT laufen lassen**, bevor umgeschaltet ist: Schritt 5b
   des Skills zieht `main` per Fast-Forward nach und würde damit deployen. Diese Datei ist
   deshalb von Hand geschrieben.
+- **Profilbild fürs Google-Unternehmensprofil gebaut** (02.09., nachmittags): vier Fassungen in
+  `Bildmaterial/Google-Unternehmensprofil/`, Skript `scripts/google-profil/baue-profilbild.mjs`
+  (Chrome headless + sharp, Kreisprüfung). Empfehlung: Tinte ohne Claim fürs runde Logo-Feld.
+  Welche Fassung Gabriel hochgeladen hat, ist offen; ein Titelbild (16:9) gibt es noch nicht.
 
 ## Offen (unfertig / wartet auf Zulieferung)
 - **Gabriel (Hub, Karte „Website"):** DNS bei All-Inkl (4 A, 4 AAAA, `www` CNAME, MX nicht

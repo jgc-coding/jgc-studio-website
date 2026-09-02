@@ -67,6 +67,10 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 - Favicon aus dem Sigel: `node scripts/der-weg/baue-favicon.mjs` (aus `Logo/JGC Studio Logo final.svg`),
   die Stilprobe bekommt es per `scripts/stilprobe/setze-favicon.mjs`. Beide Bild-Skripte brauchen `sharp`
   aus `site/node_modules` (`cd site && npm ci`).
+- Profilbild fürs Google-Unternehmensprofil (Logo-Feld, 1080 × 1080, vier Fassungen):
+  `node scripts/google-profil/baue-profilbild.mjs` → `Bildmaterial/Google-Unternehmensprofil/`. Setzt Sigel,
+  Fraunces und Farb-Tokens aus dem Repo per Chrome headless und prüft per Pixel, dass der Inhalt im runden
+  Google-Beschnitt bleibt. Braucht `sharp` und Chrome unter dem Standardpfad (sonst Umgebungsvariable `CHROME`).
 
 ## Stolperfallen (wichtig!)
 - **Minifizierte Single-File-HTML nicht direkt editieren/lesen** (Stilprobe, Archiv-Varianten). Die

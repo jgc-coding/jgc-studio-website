@@ -2,6 +2,20 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-02 — Profilbild fürs Google-Unternehmensprofil
+
+Gabriel legt das Google-Unternehmensprofil an und brauchte ein Logo-Bild in CI. Google zeigt es rund
+beschnitten und oft nur 40–80 px groß — deshalb quadratisch 1080 × 1080, alles Wichtige innerhalb
+von 82 % des Kreisradius, und je Grund eine Fassung ohne Claim für die kleinen Ansichten.
+
+- **Vier Fassungen** in `Bildmaterial/Google-Unternehmensprofil/`: Pergament und Tinte, jeweils mit und
+  ohne „Mehr Raum für das Wesentliche". Sigel (aus `der-weg/assets/favicon.svg`), Wortmarke in Fraunces
+  (die Schnitte der Reise) und die Marken-Tokens — nichts davon ist neu gezeichnet. Dazu `vorschau.jpg`
+  (quadratisch, rund, klein wie in Google-Listen). Empfehlung fürs runde Logo-Feld: Tinte ohne Claim.
+- **Neues Skript `scripts/google-profil/baue-profilbild.mjs`:** HTML/CSS → Chrome headless (2×) → sharp.
+  Prüft mit Trefferzahlen und Pixeln: exakt 1080 × 1080, kein Inhaltspixel außerhalb des
+  Sicherheitskreises (Render ohne Grund), unter 5 MB. Syntaxcheck steht in `pruefen.txt`.
+
 ## 2026-09-02 — Die Reise wird die einzige Seite, Ziel jgc-lumen.de (vorbereitet, noch nicht live)
 
 Gabriels Entscheidungen: Rechtsseiten neu im Design der Reise, Galerie und Varianten raus aus dem
