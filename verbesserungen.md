@@ -117,6 +117,25 @@ Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielor
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
 
+- [ ] **V59** (A) Googles Wissensbasis zur Marke füttern — Definitionssatz + `sameAs`.
+      **Gabriels Einstufung 03.09.2026: wichtig.**
+      Anlass: Die Google-Suche nach „JGC Lumen" zeigt eine KI-Übersicht, die den Namen
+      medizinisch deutet (JGC = Journal of Geriatric Cardiology, „Lumen" = Gefäß-Hohlraum);
+      Business-Profil und Website erscheinen erst darunter. Die Box lässt sich nicht abschalten —
+      der einzige Hebel ist, Googles Wissen über die Marke zu stärken, bis die Box kippt
+      (Zeithorizont Wochen bis Monate).
+      Umsetzung (Code, beides zusammen ein Paket):
+      (1) Ein sichtbarer, zitierfähiger Satz „JGC Lumen ist …" in der Reise — im Repo gibt es
+      bisher keinen (Grep 03.09.). Achtung Drei-Orte-Regel (`sections`, `data-sw-seo`,
+      Vertiefungs-Artikel) und danach Stationshöhen hochkant nachmessen.
+      (2) Im JSON-LD der Reise (`der-weg/index.html`, Kopfbereich) das Feld `sameAs` ergänzen:
+      Link zum Google-Unternehmensprofil und zur LinkedIn-Seite. Braucht Zulieferung: die
+      LinkedIn-URL (Hub-Punkt „LinkedIn-Profil-URL liefern") und den öffentlichen Profil-Link
+      (sobald das Profil verifiziert ist; notfalls über die Maps-Suche auffindbar).
+      Aufwand: S · Risiko: gering (Text + Kopf-Metadaten; `pruefe-seiten.mjs` läuft danach)
+      Flankierend, liegt bei Gabriel und steht schon im Hub: Search Console + Sitemap anmelden,
+      Profilbild hochladen, Profil vervollständigen und verifizieren.
+
 - [ ] **V47** (C) Auf **schmalen** Telefonen stapeln die zwei Handlungsknöpfe der
       Schluss-Station und heben damit den Textstreifen für jede Station an
       Beleg: „Erstgespräch anfragen" und „Zur Stilprobe" brauchen zusammen 325 px (kleiner
