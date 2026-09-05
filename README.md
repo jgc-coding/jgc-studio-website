@@ -11,9 +11,9 @@ Domain). Marke seit Variante 13 „JGC Lumen"; das Repo heißt historisch weiter
 .
 ├── der-weg/                   # Die Seite: Scroll-Reise (index.html, drei Skripte,
 │                                 assets/) — liegt im Deploy an der Wurzel
-├── stilprobe/                 # Unterseite „Die Stilprobe" (Single-File-HTML) → /stilprobe/
+├── stilprobe/                 # Unterseite „Die Stilprobe" im Design der Reise → /stilprobe/
 ├── impressum/, datenschutz/   # Rechtsseiten im Design der Reise
-├── deploy/                    # Weiterleitung /der-weg/ → /
+├── deploy/                    # Weiterleitung /der-weg/ → / und die 404-Seite
 ├── scripts/deploy/            # baue-site.mjs: setzt _site/ zusammen (Workflow und lokal)
 ├── scripts/pruefe-seiten.mjs  # Qualitätsprüfung (Repo-Quellen oder _site)
 ├── scripts/der-weg/           # Werkzeuge der Reise (Kodieren, Nähte, Favicon, Vorschau-Server)

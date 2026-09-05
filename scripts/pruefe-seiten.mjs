@@ -38,8 +38,9 @@ function lies(pfad) {
 }
 
 /**
- * Die fuenf Seiten. `rolle`: reise (Startseite mit Pflicht-Metas und Kontaktweg),
- * seite (indexierbare Unterseite), weiterleitung (noindex + Meta-Refresh).
+ * Die sechs Seiten. `rolle`: reise (Startseite mit Pflicht-Metas und Kontaktweg),
+ * seite (indexierbare Unterseite), weiterleitung (noindex + Meta-Refresh),
+ * fehlerseite (noindex, aber kein canonical — sie hat keine eigene Adresse).
  * `url` ist der Pfad unter der Domain — daraus folgt der Soll-canonical.
  */
 const PLAN = [
@@ -48,6 +49,7 @@ const PLAN = [
   { name: 'Impressum', repo: 'impressum/index.html', site: 'impressum/index.html', rolle: 'seite', url: '/impressum/' },
   { name: 'Datenschutz', repo: 'datenschutz/index.html', site: 'datenschutz/index.html', rolle: 'seite', url: '/datenschutz/' },
   { name: 'Weiterleitung /der-weg/', repo: 'deploy/der-weg-weiterleitung.html', site: 'der-weg/index.html', rolle: 'weiterleitung', url: '/der-weg/' },
+  { name: 'Fehlerseite 404', repo: 'deploy/404.html', site: '404.html', rolle: 'fehlerseite', url: '/404.html' },
 ];
 
 const seiten = [];
@@ -61,7 +63,8 @@ for (const p of PLAN) {
   seiten.push({ ...p, pfad, inhalt, kopf: inhalt.slice(0, 12000) });
 }
 const reise = seiten.find((s) => s.rolle === 'reise');
-const indexierbare = seiten.filter((s) => s.rolle !== 'weiterleitung');
+// Nur diese beiden Rollen sollen in den Suchindex und brauchen einen canonical.
+const indexierbare = seiten.filter((s) => s.rolle === 'reise' || s.rolle === 'seite');
 
 // Die Domain hat genau eine Quelle: den canonical der Reise. Soll-canonicals,
 // Sitemap und robots.txt werden daraus abgeleitet (auch in baue-site.mjs).
@@ -74,7 +77,7 @@ const robotsVon = (s) => (s.kopf.match(/<meta[^>]*name=["']robots["'][^>]*conten
 // Regel 1 — Jeder Sprungmarken-Link braucht ein Ziel. (Fehlerklasse V2)
 // ---------------------------------------------------------------------------
 geprueft.push('Sprungmarken haben ein Ziel');
-for (const s of indexierbare) {
+for (const s of seiten) {
   const ids = new Set([...s.inhalt.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
   const anker = new Set([...s.inhalt.matchAll(/href="#([^"]+)"/g)].map((m) => m[1]));
   for (const a of anker) {
@@ -115,6 +118,12 @@ for (const s of indexierbare) {
 for (const s of seiten.filter((x) => x.rolle === 'weiterleitung')) {
   if (!/noindex/.test(robotsVon(s) || '')) meldeFehler('robots', `${s.name}: die Weiterleitung braucht noindex.`);
   if (!/http-equiv="refresh"[^>]*url=\//.test(s.kopf)) meldeFehler('Weiterleitung', `${s.name}: kein Meta-Refresh auf /.`);
+}
+for (const s of seiten.filter((x) => x.rolle === 'fehlerseite')) {
+  // Eine Fehlerseite im Index waere doppelt falsch: sie beantwortet keine Suche
+  // und wuerde unter irgendeiner erfundenen Adresse gefuehrt.
+  if (!/noindex/.test(robotsVon(s) || '')) meldeFehler('robots', `${s.name}: die Fehlerseite braucht noindex.`);
+  if (/<link rel="canonical"/.test(s.kopf)) meldeFehler('Fehlerseite', `${s.name}: hat einen canonical — sie hat aber keine eigene Adresse.`);
 }
 
 // ---------------------------------------------------------------------------
@@ -193,8 +202,8 @@ for (const s of indexierbare) {
 geprueft.push('kein alter GitHub-Praefix, interne Links haben eine Ziel-Datei');
 {
   const skripte = SITE
-    ? ['scrub-engine.js', 'vertiefung.js', 'formulare.js'].map((n) => [`Skript ${n}`, SITE + n])
-    : ['scrub-engine.js', 'vertiefung.js', 'formulare.js'].map((n) => [`Skript ${n}`, WURZEL + 'der-weg/' + n]);
+    ? ['scrub-engine.js', 'vertiefung.js', 'formulare.js', 'formular-kern.js'].map((n) => [`Skript ${n}`, SITE + n])
+    : ['scrub-engine.js', 'vertiefung.js', 'formulare.js', 'formular-kern.js'].map((n) => [`Skript ${n}`, WURZEL + 'der-weg/' + n]);
   const texte = [...seiten.map((s) => [s.name, s.inhalt]), ...skripte.map(([n, p]) => [n, lies(p) || ''])];
   for (const [name, text] of texte) {
     if (text.includes('/jgc-studio-website')) meldeFehler('Alter Praefix', `${name}: enthaelt noch /jgc-studio-website.`);
@@ -263,6 +272,52 @@ for (const s of seiten) {
     if (ADRESSE && m[1].startsWith(ADRESSE + '/')) continue;
     if (/^https:\/\/(github\.com|www\.certipedia\.com)\//.test(m[1])) continue;
     meldeFehler('Externe Ressource', `${s.name}: laedt ${m[1].slice(0, 70)}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Regel 12 — Die Texte der Reise stehen an DREI Orten und muessen dort gleich
+// lauten: in der Engine-Konfiguration (`sections`), im SEO-Spiegel
+// (<section data-sw-seo>, den Suchmaschinen und Browser ohne JavaScript lesen)
+// und als Vertiefungs-Artikel (<article data-station="...">). Driftet einer,
+// erzaehlen Browser und Suchmaschine Verschiedenes — und niemand merkt es, weil
+// die Seite weiterhin laeuft. Bisher hielt diese Regel nur ein Merksatz in der
+// CLAUDE.md zusammen.
+// ---------------------------------------------------------------------------
+geprueft.push('Stationstexte stehen gleichlautend an allen drei Orten');
+if (reise) {
+  const spiegelRoh = (reise.inhalt.match(/<section data-sw-seo>[\s\S]*?<\/section>/) || [])[0];
+  const konf = (reise.inhalt.match(/sections:\s*\[[\s\S]*?\n {4}\],/) || [])[0];
+  if (!spiegelRoh) {
+    meldeFehler('Drei Orte', 'Der SEO-Spiegel <section data-sw-seo> fehlt — ohne ihn hat die Seite fuer Suchmaschinen keinen Text.');
+  } else if (!konf) {
+    meldeFehler('Drei Orte', 'Die Stationsliste (sections: [ ... ],) wurde nicht gefunden. Wurde die Konfiguration umformatiert? Dann diese Regel nachziehen.');
+  } else {
+    const spiegel = spiegelRoh.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    // Zeichenketten in einfachen Anfuehrungszeichen, escapte Zeichen mitgedacht.
+    const holeAlle = (feld) => [...konf.matchAll(new RegExp(`\\n\\s*${feld}: '((?:[^'\\\\]|\\\\.)*)',`, 'g'))]
+      .map((m) => m[1].replace(/\\(.)/g, '$1'));
+    const ids = [...konf.matchAll(/\bid: '([a-z-]+)', label:/g)].map((m) => m[1]);
+    const titel = holeAlle('title');
+    const koerper = holeAlle('body');
+
+    if (ids.length < 5) {
+      meldeFehler('Drei Orte', `Nur ${ids.length} Station(en) in der Konfiguration gefunden — das Muster passt nicht mehr.`);
+    } else if (titel.length !== ids.length || koerper.length !== ids.length) {
+      meldeFehler('Drei Orte', `${ids.length} Stationen, aber ${titel.length} title und ${koerper.length} body — die Regel kann so nicht vergleichen.`);
+    } else {
+      ids.forEach((id, i) => {
+        if (!spiegel.includes(titel[i])) {
+          meldeFehler('Drei Orte', `Station "${id}": die Ueberschrift "${titel[i]}" steht nicht im SEO-Spiegel.`);
+        }
+        if (!spiegel.includes(koerper[i])) {
+          meldeFehler('Drei Orte', `Station "${id}": der Fliesstext ("${koerper[i].slice(0, 40)}…") steht nicht wortgleich im SEO-Spiegel.`);
+        }
+        if (!reise.inhalt.includes(`data-station="${id}"`)) {
+          meldeFehler('Drei Orte', `Station "${id}": es gibt keinen Vertiefungs-Artikel <article data-station="${id}">.`);
+        }
+      });
+    }
   }
 }
 

@@ -7,7 +7,7 @@ im Design der Reise, Galerie und Varianten raus aus dem Deploy, `www` ja, Titel 
 Coaches, Trainer und Mentoren", Zielort GitHub Pages mit eigener Domain (Formulare vorerst über den
 Mail-Ausweichweg).
 - **Live:** Reise an der Wurzel (`index, follow`, `canonical` https://jgc-lumen.de/, JSON-LD),
-  `/stilprobe/`, `/impressum/` und `/datenschutz/` (eigene HTML-Seiten, `der-weg/assets/rechtliches.css`),
+  `/stilprobe/`, `/impressum/` und `/datenschutz/` (eigene HTML-Seiten, `der-weg/assets/seiten.css`),
   Favicon aus dem Sigel, `robots.txt`, `sitemap.xml`, Weiterleitung `/der-weg/` → `/`. Die alte
   GitHub-Adresse leitet per 301 um. Impressum mit Gabriels Daten (c/o-Anschrift), Datenschutz in neun
   Abschnitten inklusive Erstgespräch-Formular.

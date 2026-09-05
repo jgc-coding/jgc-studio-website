@@ -1,5 +1,12 @@
 # Verbesserungen
-Stand: 2026-09-05 (Runde 4, Fokus: alles — Teil 1 bis 3, kein Design-Teil)
+Stand: 2026-09-05 (Runde 4, Fokus: alles — Teil 1 bis 3, kein Design-Teil;
+**alle Befunde und alle vier Ideen am selben Tag umgesetzt**, Details im CHANGELOG)
+
+**Umsetzung am 05.09.2026 (Gabriels Freigabe „V60-65 und I5-8"):** V61–V65 und I5–I8 sind
+erledigt und stehen unten. **V60 bleibt offen** — der Zertifikatsantrag wurde neu angestoßen
+(Domain aus- und wieder eingetragen), stand am Abend des 05.09. aber weiter auf `new`; der
+letzte Schritt (`https_enforced` wieder einschalten) geht erst nach `approved`. Neu dazugekommen
+ist **V66** als Folge des Stilprobe-Neubaus. Rückkehrpunkt vor der Umsetzung: Commit `bc956bb`.
 
 **Runde 4 (2026-09-05, erste Analyse nach dem Launch unter jgc-lumen.de):** Live-Lauf über
 Reise, beide Formulare (Reise-Overlays und `/stilprobe/`), Rechtsseiten, Deploy-Nachbau im
@@ -93,8 +100,10 @@ darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind 
    Fehlerbox fokussiert, Knopf wieder frei, Eingaben und Entwurf bleiben; Umlaute sauber)
 4. **Stilprobe-Formular** — erwartet: in der Reise UND auf `/stilprobe/`; Validierung mit
    Mindestlänge, Entwurf überlebt Reload und wandert zwischen beiden Seiten, 404 → Fehlerbox
-   mit `stilprobe@` · zuletzt: läuft (2026-09-05, beides lokal; Mindestlänge per echter
-   Tastatureingabe geprüft; Postfach `stilprobe@` weiter unbestätigt → Hub)
+   mit `stilprobe@` · zuletzt: läuft (2026-09-05 **nach dem Neubau der Unterseite erneut geprüft**:
+   Warteliste- und Pause-Zweig über eine untergeschobene Antwort durchgespielt, Entwurf auf der
+   Unterseite angefangen und im Overlay der Reise wiedergefunden; Postfach `stilprobe@` weiter
+   unbestätigt → Hub)
 5. **Kontingent-Badge** — erwartet: statischer Satz, solange `kontingent.php` fehlt ·
    zuletzt: läuft (2026-09-05, Reise ruft erst beim Öffnen des Overlays, Unterseite beim
    Laden; 404 still, der Satz „15 Proben im Monat …" bleibt stehen)
@@ -134,8 +143,13 @@ darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind 
 18. **robots.txt und sitemap.xml** (neu) — erwartet: aus dem `canonical` erzeugt, vier
     Adressen · zuletzt: läuft (2026-09-05, live Byte für Byte wie der lokale Nachbau)
 19. **Vorschau-Server** (Werkzeug, `scripts/der-weg/server.mjs`) — erwartet: liefert
-    Repo-Stand und `_site` ohne Absturz · zuletzt: läuft, **stürzt aber bei einer kaputt
-    kodierten URL ab → V65**
+    Repo-Stand und `_site` ohne Absturz · zuletzt: läuft (2026-09-05; die kaputt kodierte
+    Adresse aus V65 beantwortet er jetzt mit HTTP 400 und läuft weiter)
+20. **Fehlerseite** (neu seit 05.09.) — erwartet: unbekannte Pfade landen auf einer eigenen
+    Seite mit Wegen zurück, `noindex`, nicht in der Sitemap · zuletzt: läuft (2026-09-05 im
+    Deploy-Nachbau: `/404.html` liefert 2.859 Bytes, Sitemap unverändert vier Adressen).
+    **Live erst nach dem nächsten Deploy prüfbar** — GitHub Pages liefert `/404.html`
+    automatisch aus, bis dahin steht dort noch GitHubs englische Standardseite.
 
 ## Offen
 
@@ -170,69 +184,26 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       -F https_enforced=true`, dann `curl -sI http://jgc-lumen.de/` → 301 auf https und
       `curl -sI https://www.jgc-lumen.de/` → 301 ohne Zertifikatsfehler. Das ist Schritt 1 aus
       `weitermachen.md`, seit drei Tagen offen.
+      **Stand 05.09.2026 (Schritt 2 ausgeführt):** Domain per API entfernt und sofort wieder eingetragen
+      (`cname: null` → `cname: jgc-lumen.de`); die Seite war durchgehend erreichbar (HTTP 200 vor und nach
+      dem Wechsel). Der Antrag steht seitdem wieder über beide Namen, blieb aber den ganzen Abend auf
+      `state: new`. Beobachtung nebenbei: **ohne Custom Domain steht `https_enforced` auf `true`** — der
+      Schalter fällt also mit dem Eintragen der Domain, nicht durch das `www`-Manöver. Nächster Schritt
+      unverändert (3); hilft auch das nicht binnen ein, zwei Tagen, bleibt nur der Blick in die
+      Pages-Einstellungen im Browser oder der GitHub-Support.
 
-- [ ] **V61** (A) `npm audit` im Archiv-Paket `site/`: 8 Schwachstellen (3 low, 5 high)
-      Gefahr: `sharp` verarbeitet Bilder; über eine präparierte Bilddatei könnte beim Verarbeiten
-      fremder Code laufen (vier libvips-CVEs, GHSA-f88m-g3jw-g9cj, `sharp` < 0.35.0). Dazu `nanoid`
-      < 3.3.18 (GHSA-2v37-7h3g-55p8) und `postcss-selector-parser` 6.1.0–6.1.2 (GHSA-w9m9-85wc-3x92).
-      Bezug: `sharp` läuft nur lokal in drei Bau-Skripten (`scripts/v18/baue-og-bild.mjs`,
-      `scripts/der-weg/baue-favicon.mjs`, `scripts/google-profil/baue-profilbild.mjs`) mit eigenen
-      Bildern — nie im Browser der Besucherin. V10 war „gegenstandslos", weil der Astro-Build weg ist;
-      `sharp` hängt aber weiter an diesem Paket (CLAUDE.md: `cd site && npm ci`), und `npm ci` installiert
-      genau den verwundbaren Stand samt Astro-Ballast.
+- [ ] **V66** (D) Vier Skripte in `scripts/stilprobe/` laufen seit dem Neubau ins Leere
+      Gefahr: Wer sie zur Hand nimmt, arbeitet an einer Datei, die es so nicht mehr gibt — die
+      Assertions schlagen fehl, und man sucht den Fehler an der falschen Stelle. Kein Risiko für
+      die Live-Seite, nur Ballast.
+      Beleg: `transform-v18-stilprobe.mjs`, `transform-domain.mjs`, `setze-favicon.mjs` und
+      `fix-v18-logo-link.mjs` erwarten die minifizierte V18-Einzeldatei; `stilprobe/index.html` ist
+      seit dem 05.09.2026 gewöhnliches HTML (I8). Sie stehen weiterhin in `.claude/pruefen.txt`, aber
+      nur als `node --check` (Syntax), laufen also nirgends.
       Aufwand: S · Risiko: gering
-      Empfehlung: `sharp` aus dem Archiv lösen — ein eigenes kleines Werkzeug-Paket (z. B. `scripts/package.json`
-      mit `sharp ^0.35`), CLAUDE.md-Zeile dazu anpassen; `site/` bleibt unangetastet als Archiv.
-      `npm audit fix --force` würde Astro auf 7.x heben — für ein Archiv sinnlos und riskant.
-      Zusatzbeleg: `npm audit` (2026-09-05, `site/`, ohne `node_modules` aus dem Lockfile):
-      „8 vulnerabilities (3 low, 5 high) … sharp <0.35.0 fix available via npm audit fix --force,
-      Will install astro@7.3.1, which is a breaking change".
-
-- [ ] **V62** (C) Fehlerbox der Formulare nennt keine technische Ursache (Regel „zweistufige Fehlermeldung")
-      Gefahr: Wenn der PHP-Empfang läuft und etwas scheitert, kann Gabriel aus dem Screenshot einer
-      Besucherin nicht erkennen, ob es ein Timeout, ein 500er oder kaputtes JSON war — die Ursache wird
-      verworfen, und der Fehler bleibt Ferndiagnose per Raten.
-      Beleg: `der-weg/formulare.js:263-281` wirft `'http-status'` bzw. `'status'`, der `catch` ignoriert
-      den Fehler; `zeigeFehler()` (Zeile 227) baut den Text ohne Status und Uhrzeit. Live nachgestellt:
-      POST → 404 → „Das hat gerade nicht geklappt …" ohne jeden Hinweis. Die Unterseite
-      `stilprobe/index.html` trägt dieselbe portierte Logik (minifiziert, nicht gelesen — Vermutung).
-      Aufwand: S · Risiko: gering
-      Empfehlung: eine kleine Zeile unter der Meldung („Technische Ursache: HTTP 404 · 13:45 Uhr") plus
-      `console.warn`; die menschliche Hauptmeldung bleibt wie sie ist.
-
-- [ ] **V63** (D) Launch vom 02.09.2026 ohne Git-Tag
-      Gefahr: Für einen Rollback der Live-Seite gibt es keinen benannten Punkt; die Regel „jedes Release
-      als Tag" ist seit dem Domain-Umzug verletzt.
-      Beleg: `git tag --sort=-creatordate` → nur `stilprobe-live-2026-07-12` und
-      `archiv/runde1-analyse-2026-07-07`; live ging `9ca03be`, `main` steht auf `17c85e4`.
-      Aufwand: S · Risiko: gering
-      Empfehlung: `git tag -a live-2026-09-02 17c85e4` (oder `9ca03be`, der erste Live-Stand) und pushen.
-
-- [ ] **V64** (D) Aufräumreste nach dem Launch — geprüft, keine verlorene Arbeit
-      Gefahr: Wer den Hauptordner `C:\Projekte\JGC Studio` öffnet, sieht den Stand von Variante 09
-      (168 Dateien, 24.091 Zeilen hinter `main`) und hält ihn womöglich für die Seite; alte Branches
-      lassen den Sessionstart-Hook jedes Mal „10 nicht gemergte Branches" melden.
-      Beleg (2026-09-05): `git worktree list` → Hauptbaum auf `variant/09-cinematic-bausteine`
-      (globale Regel: der Hauptbaum bleibt auf `main`). `claude/stilprobe-mail-setup-c938ed`:
-      0 Commits vor `main`, kein Worktree → nur löschen. `claude/jgc-lumen-launch-prep-252162`:
-      1 Commit (`bc956bb`, V59), in diesem Lauf per Fast-Forward in `claude/improve-760bc8`
-      übernommen; sein Worktree `.claude/worktrees/background-video-cut-revision-bec6e7` steht noch.
-      Zwei leere Worktree-Ordner (`google-business-profile-image-3d856e`,
-      `jgc-lumen-business-description-30f915`), bekanntes Windows-Muster. Die neun `variant/*`-Branches
-      sind Archiv auf Gabriels Wunsch — kein Befund.
-      Aufwand: S · Risiko: gering
-      Empfehlung: nach dem Merge dieser Runde `git branch -d` für die zwei `claude/*`-Branches,
-      `git worktree remove` für den alten Worktree, Hauptbaum per `git checkout main`.
-
-- [ ] **V65** (D) `scripts/der-weg/server.mjs` stürzt bei einer kaputt kodierten URL ab
-      Gefahr: Ein einziger Aufruf wie `/%` (Tippfehler, Bot, kaputter Link) beendet den Vorschau-Server;
-      der Vorschau-Pane zeigt danach nur noch „Verbindung abgelehnt", und man sucht den Fehler an der
-      falschen Stelle.
-      Beleg: reproduziert am 2026-09-05 mit `curl http://localhost:4331/%` → Prozess weg,
-      `URIError: URI malformed at decodeURIComponent (server.mjs:60:14)`; `robots.txt` danach
-      nicht mehr erreichbar. Nur lokales Werkzeug, nie ausgeliefert.
-      Aufwand: S · Risiko: gering
-      Empfehlung: `decodeURIComponent` in `try/catch`, bei Fehler HTTP 400 statt Absturz.
+      Empfehlung: zusammen mit den vier schon toten Skripten (`generate-gallery`, `copy-homepage`,
+      `site-noindex`, `varianten-noindex`) löschen — **nur mit Gabriels Ok**, wie bei allem Archiv.
+      `extract-v18-assets.mjs` gehört nicht dazu: es liest aus V18 und ist weiter brauchbar.
 
 - [ ] **V59** (A) Googles Wissensbasis zur Marke füttern — Definitionssatz + `sameAs`.
       **Gabriels Einstufung 03.09.2026: wichtig.**
@@ -306,7 +277,7 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
       ohne Weiteres setzen. Reicht so, wirkt aber ruhiger als nötig.
       Abgrenzung: nur das Teilen-Bild, keine Änderung an der Seite selbst.
 
-- **I5** (Abrundung) Eigene 404-Seite im Design der Reise — Aufwand: S
+- **I5** angenommen am 2026-09-05 → umgesetzt am selben Tag (siehe Erledigt). Ursprünglich: (Abrundung) Eigene 404-Seite im Design der Reise — Aufwand: S
       Nutzen: Wer einen alten oder vertippten Link öffnet, landet heute auf GitHubs englischer
       Standardseite („Page not found · GitHub Pages") ohne Weg zurück; eine eigene Seite holt ihn mit
       einem Satz und den vier Links zur Reise, Stilprobe und den Rechtsseiten ab.
@@ -316,7 +287,7 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
       `baue-site.mjs` müsste sie nur kopieren, `pruefe-seiten.mjs` sie als sechste Seite kennen.
       Abgrenzung: keine automatischen Weiterleitungen alter Pfade, keine Suche.
 
-- **I6** (Abrundung) Ausweichweg mit einem Klick: Mail vorbefüllen oder „Eingaben kopieren" — Aufwand: S
+- **I6** angenommen am 2026-09-05 → umgesetzt am selben Tag (siehe Erledigt). Ursprünglich: (Abrundung) Ausweichweg mit einem Klick: Mail vorbefüllen oder „Eingaben kopieren" — Aufwand: S
       Nutzen: Heute läuft JEDE Formulareinsendung in die Fehlerbox (Endpunkte 404, by design bis zum
       PHP-Host). Die Box sagt „du kannst sie von hier kopieren" — bei drei Texten à bis zu 6.000 Zeichen
       heißt das dreimal markieren, kopieren, einfügen. Ein Knopf, der alle Felder als fertigen Mailtext
@@ -327,7 +298,7 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
       auf dem eine Anfrage ankommt.
       Abgrenzung: kein Serverteil, kein Eingriff in die Feldverträge der `schnittstelle.md`.
 
-- **I7** (Abrundung) Drei-Orte-Regel maschinell bewachen — Aufwand: M
+- **I7** angenommen am 2026-09-05 → umgesetzt am selben Tag (siehe Erledigt). Ursprünglich: (Abrundung) Drei-Orte-Regel maschinell bewachen — Aufwand: M
       Nutzen: Jeder Stationstext steht dreimal in `der-weg/index.html` (Engine-Konfiguration
       `sections`, SEO-Spiegel `data-sw-seo`, Vertiefungs-Artikel). Driftet einer, erzählen Browser
       und Suchmaschine Verschiedenes — und niemand merkt es, weil die Seite trotzdem läuft. Eine
@@ -339,7 +310,7 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
       Abgrenzung: nur Prüfung, kein Generator, der einen Ort aus dem anderen erzeugt (das wäre ein
       Umbau der Reise).
 
-- **I8** (Später) Stilprobe-Unterseite ins Design der Reise — Aufwand: L
+- **I8** angenommen am 2026-09-05 → umgesetzt am selben Tag (siehe Erledigt). Ursprünglich: (Später) Stilprobe-Unterseite ins Design der Reise — Aufwand: L
       Nutzen: Wer aus der Papierwelt der Reise auf `/stilprobe/` wechselt, landet im Lesefassungs-Look
       von V18 (anderes Layout, eigene Schriften inline) — ein sichtbarer Bruch auf dem wichtigsten
       Nebenweg. Eine schlanke Seite nach dem Muster der Rechtsseiten (gemeinsame Schriften und
@@ -355,6 +326,45 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
 *(noch keine Einträge — Gabriel hat bisher keinen Punkt ausdrücklich abgelehnt)*
 
 ## Erledigt
+
+### Am 2026-09-05 umgesetzt (Runde 4 — Gabriels Freigabe für das ganze Paket)
+
+- **V61** (A) `sharp` hängt nicht mehr am Astro-Archiv: neues `scripts/package.json` mit nur dieser
+  einen Abhängigkeit (8 Pakete, `npm audit` sauber), die drei Bild-Skripte holen sie von dort.
+  Gegenprobe, dass der Versionssprung nichts verändert: `favicon.svg`, `favicon-192.png` und das
+  Apple-Icon byte-gleich, `favicon-48.png` nur im PNG-Container abweichend (0 von 9.216 Kanalwerten
+  unterschiedlich → auf den Live-Stand zurückgesetzt), `og-bild.jpg` unverändert. `site/` bleibt
+  unangetastet als Archiv.
+- **V62** (C) Fehlermeldungen der Formulare sind zweistufig. Unter dem menschlichen Satz steht
+  „Technische Ursache: HTTP 404 · 18:05 Uhr · ID nbv10", dieselbe Zeile geht als
+  `[JGC Lumen] [WARN] …` ins Browser-Log. Unterschieden werden HTTP-Status, unlesbare Antwort,
+  Antwort ohne `ok`, Zeitüberschreitung und Verbindungsfehler — vorher verwarf der `catch` die
+  Ursache vollständig. Gilt für beide Seiten, weil die Logik jetzt nur einmal existiert (I8).
+- **V63** (D) Der Launch trägt einen Tag: `live-2026-09-02` auf `17c85e4`, annotiert und gepusht.
+- **V64** (D) Aufgeräumt: `claude/stilprobe-mail-setup-c938ed` und
+  `claude/jgc-lumen-launch-prep-252162` gelöscht (beide in `main` enthalten), der Worktree
+  `background-video-cut-revision-bec6e7` entfernt, der Hauptbaum steht wieder auf `main`.
+- **V65** (D) `scripts/der-weg/server.mjs` antwortet auf eine kaputt kodierte Adresse mit HTTP 400,
+  statt abzustürzen. Vor dem Fix nachgestellt (`curl http://localhost:4331/%` → Prozess weg), nach
+  dem Fix erneut (400, Server lebt weiter).
+- **I8** (Erweiterung) Die Stilprobe-Unterseite ist neu gebaut — 20 KB gewöhnliches HTML im Design
+  der Reise statt 724 KB Einzeldatei, alle Wortlaute unverändert. Damit ist sie wieder direkt
+  editierbar, und die drei Unterseiten sehen aus wie ein Stück. Folge: **V66**.
+- **I5** (Abrundung) Eigene 404-Seite (`deploy/404.html` → `/404.html`), `noindex`, mit Wegen zurück.
+- **I6** (Abrundung) Knopf „Angaben kopieren" in der Fehlerbox legt alle Eingaben als fertigen
+  Mailtext in die Zwischenablage; die Mailadresse trägt einen Betreff, bei kurzen Anfragen auch
+  den Text. Mit echtem Mausklick geprüft (ohne Nutzergeste verweigert der Browser die
+  Zwischenablage — der Knopf sagt das dann, statt still zu scheitern).
+- **I7** (Abrundung) `pruefe-seiten.mjs` bewacht die Drei-Orte-Regel: Überschrift und Fließtext jeder
+  Station müssen zwischen Engine-Konfiguration und SEO-Spiegel übereinstimmen, und jede Station
+  braucht ihren Vertiefungs-Artikel. Gegenprobe: ein geändertes Wort im Spiegel bricht die Prüfung
+  mit Exit-Code 1 ab.
+- **Nebenbei zusammengeführt** (Grundlage für V62 und I6, kein eigener Befund): die Formular-Logik
+  stand zweimal im Repo und hing an dem Kommentar „Änderungen dort und hier gemeinsam ziehen".
+  Sie steht jetzt einmal in `der-weg/formular-kern.js`, die Feld-Optik einmal in
+  `assets/formular.css`; `rechtliches.css` heißt `seiten.css`, weil es das Grundgerüst aller drei
+  Unterseiten ist.
+
 
 ### Am 2026-09-02 umgesetzt (Launch-Vorbereitung)
 

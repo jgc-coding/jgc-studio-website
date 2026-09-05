@@ -1,0 +1,130 @@
+/* Stilprobe-Unterseite (/stilprobe/) — die Teile, die ueber das Grundgeruest
+   der Unterseiten (seiten.css) hinausgehen: Kopfmenue, Vorspann, Ablauf,
+   Karten, Formularrahmen und die Fragen.
+
+   Die Seite lag bis zum 05.09.2026 als 724-KB-Einzeldatei im Design der alten
+   Lesefassung V18 vor (Tailwind-Bau, Schriften als base64 eingebettet, eigene
+   Formularklassen). Wer aus der Reise hierher wechselte, landete sichtbar in
+   einer anderen Welt. Diese Fassung benutzt dieselben Schriften, Farben und
+   Masse wie die Reise und ihre Rechtsseiten; die Feld-Optik kommt aus
+   formular.css, die Logik aus formular-kern.js.
+
+   Reihenfolge der Stylesheets im Kopf der Seite:
+   schriften.css → seiten.css → formular.css → stilprobe.css */
+
+/* --- Kopf: die Unterseite traegt ein kleines Menue, die Rechtsseiten nicht. --- */
+.kopf--menue .kopf-innen { max-width: 62rem; flex-wrap: wrap; }
+.sp-menue {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.4rem;
+  font-size: 0.9rem;
+}
+.sp-menue a { color: var(--sw-ink-soft); text-decoration: none; }
+.sp-menue a:hover { color: var(--sw-accent); }
+.sp-menue a.sp-menue__ruf {
+  color: #fff; background: var(--sw-ink);
+  padding: 9px 17px; border-radius: 999px; font-weight: 600;
+}
+.sp-menue a.sp-menue__ruf:hover { color: #fff; background: color-mix(in srgb, var(--sw-ink) 88%, var(--sw-accent)); }
+.sp-menue a:focus-visible, .marke:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 3px; }
+
+/* --- Abschnitte --- */
+.sp { padding: 2.5rem 1.5rem 0; }
+.sp:last-of-type { padding-bottom: 4rem; }
+.sp-innen { max-width: 46rem; margin: 0 auto; }
+.sp-mitte { text-align: center; }
+.sp-auge {
+  font-family: var(--sw-font-display); font-weight: 700;
+  font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--sw-accent); margin: 0 0 0.6rem;
+}
+.sp h1 {
+  font-family: var(--sw-font-display); font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.05;
+  margin: 0 0 1.6rem; letter-spacing: -0.01em;
+}
+.sp h2 {
+  font-family: var(--sw-font-display); font-weight: 700;
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem); line-height: 1.1;
+  margin: 0 0 1.4rem; letter-spacing: -0.01em;
+}
+.sp h3 {
+  font-family: var(--sw-font-display); font-weight: 600;
+  font-size: 1.25rem; line-height: 1.25; margin: 0 0 0.8rem;
+}
+/* 34rem ergeben rund 75 Zeichen je Zeile — die Grenze guter Lesbarkeit. */
+.sp p { line-height: 1.68; color: var(--sw-ink-soft); max-width: 34rem; margin: 0 0 1rem; }
+.sp-mitte p { margin-left: auto; margin-right: auto; }
+.sp a { color: var(--sw-ink); text-decoration: underline; text-underline-offset: 3px; }
+.sp a:hover { color: var(--sw-accent); }
+.sp-vorspann { font-size: 1.08rem; }
+.sp-kontingent {
+  font-size: 0.88rem; font-weight: 600; color: var(--sw-accent);
+  margin-top: 1.6rem;
+}
+
+/* --- Der Ablauf: drei nummerierte Schritte --- */
+.sp-schritte { margin: 0 0 1.8rem; }
+.sp-schritt { display: grid; grid-template-columns: 2.2rem 1fr; margin: 0 0 1.3rem; }
+.sp-schritt__nr {
+  font-family: ui-monospace, Menlo, monospace; font-size: 0.78rem;
+  color: var(--sw-ink-soft); padding-top: 0.35rem;
+}
+.sp-schritt__was {
+  font-family: var(--sw-font-display); font-style: italic; font-weight: 600;
+  font-size: 1.1rem; color: var(--sw-ink); margin: 0 0 0.25rem; max-width: none;
+}
+.sp-schritt p { margin: 0; }
+.sp-nachsatz { font-size: 0.94rem; }
+
+/* --- Karten: Klartext-Absatz, Pause-Hinweis, Formularrahmen --- */
+.sp-karte {
+  border: 1px solid color-mix(in srgb, var(--sw-ink) 14%, transparent);
+  border-radius: 14px; padding: 1.5rem 1.6rem;
+  background: color-mix(in srgb, #fff 40%, var(--sw-bg));
+}
+.sp-karte > :last-child { margin-bottom: 0; }
+.sp-karte--formular { padding: 1.8rem 1.7rem 2rem; }
+@media (min-width: 700px) {
+  .sp-karte { padding: 1.9rem 2.1rem; }
+  .sp-karte--formular { padding: 2.2rem 2.3rem 2.4rem; }
+}
+
+/* Der Entwurfshinweis sitzt ueber dem ersten Feld. */
+.sp-entwurf { margin: 0 0 1.4rem; font-size: 0.92rem; color: var(--sw-ink-soft); max-width: none; }
+
+/* Hinweis unter dem Absendeknopf. */
+.sp-nach-knopf { font-size: 0.86rem; margin: 1.2rem 0 0; }
+
+/* --- Fragen: dieselbe Optik wie die Fragen der Reise --- */
+.sp-fragen { border-top: 1px solid rgba(31, 42, 68, 0.14); margin-top: 0.6rem; }
+.frage { border-bottom: 1px solid rgba(31, 42, 68, 0.14); }
+.frage > summary {
+  display: flex; align-items: baseline; gap: 0.9rem;
+  padding: 1.15rem 2rem 1.15rem 0; cursor: pointer; list-style: none;
+  font-size: 1.05rem; line-height: 1.4; font-weight: 500;
+  position: relative;
+}
+.frage > summary::-webkit-details-marker { display: none; }
+.frage > summary::after {
+  content: "+"; position: absolute; right: 0; top: 1rem;
+  font-size: 1.4rem; line-height: 1; color: var(--sw-accent);
+  transition: transform 0.25s;
+}
+.frage[open] > summary::after { transform: rotate(45deg); }
+.frage > summary:hover { color: var(--sw-accent); }
+.frage > summary:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 2px; }
+.frage-nr {
+  font-family: ui-monospace, Menlo, monospace; font-size: 0.78rem;
+  color: var(--sw-ink-soft); flex: none;
+}
+.frage p {
+  margin: 0 0 1.3rem; padding-right: 2rem;
+  line-height: 1.68; color: var(--sw-ink-soft); max-width: 32rem;
+}
+
+/* --- Leiser Abschluss --- */
+.sp-abschluss { font-size: 1.05rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .frage > summary::after { transition: none; }
+}

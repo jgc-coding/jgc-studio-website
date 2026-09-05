@@ -1,7 +1,6 @@
 # Erstgespräch — Schnittstelle Website ↔ PHP-Empfangsschicht
 
-Stand: 2026-08-26. Das Formular lebt in der Scroll-Variante (`der-weg/index.html`, deployt nach
-`/der-weg/`) als Overlay hinter dem Knopf „Erstgespräch anfragen" und dem Button in der
+Stand: 2026-08-26. Das Formular lebt in der Scroll-Reise (`der-weg/index.html`, deployt an die Wurzel `/`) als Overlay hinter dem Knopf „Erstgespräch anfragen" und dem Button in der
 Vertiefung „Wie geht es weiter?"; ohne JavaScript steht es als Lesetext mit nativem POST.
 Die PHP-Empfangsschicht (`senden.php`) entsteht später (gleicher Baukasten wie die Stilprobe,
 Repo `stilprobe-automatik`) und wird per FTP in einen eigenen Ordner `/erstgespraech/` auf

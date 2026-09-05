@@ -11,15 +11,18 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 
 ## Aufbau
 - `der-weg/` — **die Seite**: Scroll-Reise (Kamerafahrt durch eine Papierwelt, 7 Videoetappen,
-  ~46 MB). Wird im Deploy komplett an die Wurzel kopiert (`/`, `/assets/`, drei Skripte). Nimmt
+  ~46 MB). Wird im Deploy komplett an die Wurzel kopiert (`/`, `/assets/`, vier Skripte). Nimmt
   Stilprobe- und Erstgespräch-Anfragen selbst entgegen (`formulare.js`). Werkzeuge in
   `scripts/der-weg/`, Rohvideos außerhalb des Repos. **Details und Austauschweg: `docs/der-weg.md`.**
-- `stilprobe/index.html` — Unterseite „Die Stilprobe" (Single-File-HTML im V18-Design, Fonts/Logos
-  inline), deployt nach `/stilprobe/`. Änderungen nur per Transform-Skript in `scripts/stilprobe/`.
-- `impressum/`, `datenschutz/` — Rechtsseiten als schlichte HTML-Seiten im Design der Reise, gemeinsames
-  Stylesheet `der-weg/assets/rechtliches.css`, deployt nach `/impressum/` und `/datenschutz/`.
+- `stilprobe/index.html`, `impressum/`, `datenschutz/` — die drei Unterseiten im Design der Reise.
+  Die Stilprobe ist seit 05.09.2026 eine gewöhnliche, direkt editierbare HTML-Datei (~20 KB statt
+  724 KB aus dem V18-Bau).
+- **Gemeinsame Bausteine** (in `der-weg/`, weil der Ordner an die Wurzel zieht): `assets/seiten.css`
+  (Grundgerüst der Unterseiten, hieß bis 05.09.2026 `rechtliches.css`), `assets/formular.css`
+  (Feld-Optik) und `formular-kern.js` (Formular-Logik). Reise und Stilprobe benutzen sie gemeinsam.
 - `deploy/der-weg-weiterleitung.html` — landet als `/der-weg/index.html` und leitet auf `/` um; der
-  alte Link der Reise wurde verschickt.
+  alte Link der Reise wurde verschickt. `deploy/404.html` landet als `/404.html` und ist die
+  Fehlerseite für unbekannte Pfade (GitHub Pages liefert sie automatisch aus).
 - `scripts/deploy/baue-site.mjs` — setzt `_site/` zusammen (siehe Build / Deploy); `_site/` ist ignoriert.
 - `docs/stilprobe/`, `docs/erstgespraech/` — Konzepte und `schnittstelle.md` (Formular-/Badge-Verträge
   für die spätere PHP-Empfangsschicht aus dem separaten Repo `stilprobe-automatik`).
@@ -37,7 +40,10 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   Fallbacks (statischer Kontingent-Satz, Fehlermeldung mit Mail-Ausweichweg). Feldnamen/JSON-Verträge
   nicht ändern ohne die `schnittstelle.md`-Dateien.
 - Mailadressen: `kontakt@jgc-lumen.de` empfängt bestätigt. Ob das Postfach `stilprobe@jgc-lumen.de`
-  existiert, ist ungeprüft — es steht als const in `der-weg/formulare.js` und im Inline-Script der Stilprobe.
+  existiert, ist ungeprüft — es steht als `data-mail`-Attribut am Formular-Artikel beider Seiten.
+- **Die Formular-Logik steht einmal**, in `der-weg/formular-kern.js`; beide Seiten liefern nur Markup
+  (Rollen `data-rolle="fehler|normal|warteliste|pause|kontingent|…"`) und Wortlaute. Beim Fehlschlag:
+  menschlicher Satz, Knopf „Angaben kopieren", Diagnosezeile mit Fehler-ID (auch im Browser-Log).
 - **Interne Links sind wurzel-relativ** (`/stilprobe/`, `/impressum/`), die Assets der Reise relativ
   (`assets/…`), weil ihr Ordner mit an die Wurzel zieht. Der alte GitHub-Präfix `/jgc-studio-website/`
   darf nirgends mehr stehen — `pruefe-seiten.mjs` bricht sonst ab und prüft jeden internen Link auf
@@ -48,10 +54,11 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 
 ## Build / Deploy
 - Push auf `main` → GitHub Action (`.github/workflows/deploy.yml`): `node scripts/deploy/baue-site.mjs _site`
-  (Reise an die Wurzel, Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung, `robots.txt` + `sitemap.xml`
-  aus den indexierbaren Seiten), dann `node scripts/pruefe-seiten.mjs _site` → GitHub Pages. Kein npm,
-  kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`. `main` ist in keinem
-  Worktree ausgecheckt → `git branch -f main HEAD`.
+  (Reise an die Wurzel, Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung, 404-Seite, `robots.txt` +
+  `sitemap.xml` aus den indexierbaren Seiten), dann `node scripts/pruefe-seiten.mjs _site` → GitHub Pages. Kein npm,
+  kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`. Seit 05.09.2026 ist
+  `main` im Hauptbaum ausgecheckt (globale Regel) — aus einem Worktree deployt man deshalb mit
+  `git push origin HEAD:main`, nicht mehr über `git branch -f main HEAD`.
 - **Domain:** `jgc-lumen.de` steht in den Pages-Einstellungen des Repos (`gh api repos/jgc-coding/jgc-studio-website/pages`),
   DNS liegt bei All-Inkl (A/AAAA auf GitHub Pages, `www` als CNAME auf `jgc-coding.github.io`). GitHub
   leitet `www` und die alte Adresse `jgc-coding.github.io/jgc-studio-website/` auf die Domain um.
@@ -63,26 +70,30 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   Namen bleibt bestehen. **Dabei fällt `https_enforced` auf false**; nach `state: approved` wieder mit
   `gh api -X PUT …/pages -F https_enforced=true` setzen.
 - `pruefe-seiten.mjs` bricht ab bei: Sprungmarke ohne Ziel, fehlendem Kontaktweg, `canonical` auf localhost
-  oder abweichend von der Soll-Adresse, `noindex` auf einer echten Seite (nur die Weiterleitung trägt es),
-  fehlender Pflicht-Meta, Reveal-Regel ohne `.js`-Schutz, Positions-Selektor, altem GitHub-Präfix, internem
-  Link ohne Ziel-Datei, hartkodiertem Pfad; im `_site` zusätzlich Sitemap und robots.txt. Ohne Argument
-  prüft es die Repo-Quellen (so hängt es in `.claude/pruefen.txt`).
+  oder abweichend von der Soll-Adresse, `noindex` auf einer echten Seite (nur Weiterleitung und 404-Seite
+  tragen es), `canonical` auf der 404-Seite, fehlender Pflicht-Meta, Reveal-Regel ohne `.js`-Schutz,
+  Positions-Selektor, altem GitHub-Präfix, internem Link ohne Ziel-Datei, hartkodiertem Pfad,
+  **Stationstext, der zwischen Engine-Konfiguration und SEO-Spiegel abweicht**; im `_site` zusätzlich
+  Sitemap und robots.txt. Ohne Argument prüft es die Repo-Quellen (so hängt es in `.claude/pruefen.txt`).
 - Das Vorschaubild (`og:image`) ist eine echte Datei: `assets/og-bild.jpg` → `/og-bild.jpg`. Neu bauen mit
   `node scripts/v18/baue-og-bild.mjs` (nimmt Hero und Sigel aus V18). Ein `data:`-URI funktioniert hier
   NICHT — LinkedIn und Co. holen das Bild per HTTP.
-- Favicon aus dem Sigel: `node scripts/der-weg/baue-favicon.mjs` (aus `Logo/JGC Studio Logo final.svg`),
-  die Stilprobe bekommt es per `scripts/stilprobe/setze-favicon.mjs`. Beide Bild-Skripte brauchen `sharp`
-  aus `site/node_modules` (`cd site && npm ci`).
+- Favicon aus dem Sigel: `node scripts/der-weg/baue-favicon.mjs` (aus `Logo/JGC Studio Logo final.svg`);
+  die Stilprobe verlinkt es wie die Rechtsseiten unter `/assets/`.
+- **`sharp` liegt in `scripts/package.json`** (`cd scripts && npm install`), nicht mehr im Astro-Archiv
+  (V61). Die ausgelieferte Seite braucht weiterhin kein npm.
 - Profilbild fürs Google-Unternehmensprofil (Logo-Feld, 1080 × 1080, vier Fassungen):
   `node scripts/google-profil/baue-profilbild.mjs` → `Bildmaterial/Google-Unternehmensprofil/`. Setzt Sigel,
   Fraunces und Farb-Tokens aus dem Repo per Chrome headless und prüft per Pixel, dass der Inhalt im runden
   Google-Beschnitt bleibt. Braucht `sharp` und Chrome unter dem Standardpfad (sonst Umgebungsvariable `CHROME`).
 
 ## Stolperfallen (wichtig!)
-- **Minifizierte Single-File-HTML nicht direkt editieren/lesen** (Stilprobe, Archiv-Varianten). Die
+- **Minifizierte Single-File-HTML nicht direkt editieren/lesen** — das betrifft seit dem 05.09.2026 nur
+  noch die Archiv-Varianten unter `variants/standalone/`; die Stilprobe ist eine normale Datei. Die
   Inline-base64-Blobs sprengen Read/Edit. Vorgehen: base64 per Regex (`data:[…];base64,[A-Za-z0-9+/=]+`)
   zu Platzhaltern strippen → Lesekopie; Änderungen über ein **assertion-guardetes Node-Transform-Skript**
   (jede Ersetzung mit erwarteter Trefferzahl prüfen, sonst werfen). Datei-I/O explizit UTF-8.
+  Die Skripte in `scripts/stilprobe/` gehörten zur alten Einzeldatei und laufen ins Leere (siehe V66).
 - **Preview:** `node scripts/der-weg/server.mjs` (launch.json `der-weg`, Port 4330) liefert die
   Projektwurzel und löst Anfragen erst dort, dann in `der-weg/` auf — die Reise liegt damit wie live unter
   `/`, ihre Assets unter `/assets/`, die Rechtsseiten unter `/impressum/`, die Archiv-Varianten unter
@@ -134,7 +145,7 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   Rechnung, keine Geschmacksfrage: `Bilder × Bildbewegung / 1555,6`, Boden 0,85. Seit die Clips
   unterschiedlich lang sind, gehört die Bildanzahl zwingend hinein (`docs/der-weg.md`).
 - Windows: keine PS-Bulk-Replaces auf den HTML-Dateien (verstümmelt UTF-8). Edits via Tool oder Node.
-- **`.gitattributes` / EOL:** Der Git-Index der minifizierten HTMLs (Stilprobe, Varianten) ist LF;
+- **`.gitattributes` / EOL:** Der Git-Index der minifizierten Varianten-HTMLs ist LF;
   `.gitattributes` hält die Varianten als `text eol=lf`. NICHT auf `-text`/`binary` stellen — das würde
   CRLF-Arbeitskopien wörtlich einchecken und die Live-Bytes ändern. Vor EOL-/Attribut-Änderungen immer erst
   `git ls-files --eol` lesen; `git add --renormalize` nur mit Staging-Probelauf + Review, nie blind committen.

@@ -36,12 +36,21 @@
    genau EINMAL beim Mount (scrub-engine.js, buildDOM) — ein Resize erzeugt
    keine neuen, das Attribut haelt.
 
+   DIE FORMULAR-LOGIK SELBST steht seit dem 05.09.2026 in formular-kern.js
+   (Zaehler, Entwurfsspeicher, Absenden, Fehlerpfad, Kontingent-Badge) — dieselbe
+   Datei benutzt die Stilprobe-Unterseite. Hier bleibt nur, was die Reise
+   ausmacht: die Overlays und ihre Verdrahtung. Frueher stand dieselbe Logik
+   zweimal im Repo, zusammengehalten nur vom Merksatz "Aenderungen dort und hier
+   gemeinsam ziehen".
+
    VERTRAG DER FELDER UND ANTWORTEN: docs/stilprobe/schnittstelle.md und
    docs/erstgespraech/schnittstelle.md. Endpoints und Mailadressen stehen als
    action- bzw. data-Attribute im HTML, dieses Skript ist pfadfrei.
    ========================================================================== */
 
 function mountFormulare(optionen) {
+  var kern = window.formularKern;
+  if (!kern) return;                 // formular-kern.js muss vorher geladen sein
   var cfg = optionen || {};
   var vertiefung = cfg.vertiefung || null;
   var artikel = Array.prototype.slice.call(document.querySelectorAll('#vertiefungen .weg-formular'));
@@ -109,7 +118,7 @@ function mountFormulare(optionen) {
     if (ausloeser && ausloeser.setAttribute) ausloeser.setAttribute('aria-expanded', 'true');
     f.rolle.focus({ preventScroll: true });
     lauscher(true);
-    if (name === 'stilprobe') ladeKontingent(f.artikel);
+    if (name === 'stilprobe') kern.ladeKontingent(f.artikel);
   }
 
   function schliesse() {
@@ -215,259 +224,13 @@ function mountFormulare(optionen) {
   if (cta2) { cta2.setAttribute('data-formular-oeffner', 'stilprobe'); cta2.setAttribute('aria-haspopup', 'dialog'); }
 
   /* ==================================================================
-     Ab hier die Formular-Logik selbst — portiert aus der Stilprobe-
-     Unterseite (stilprobe/index.html), gleicher Vertrag, gleiche
-     Wortlaute. Aenderungen dort und hier gemeinsam ziehen.
+     Verdrahtung: welches Formular welche Wortlaute und Schluessel bekommt.
+     Die Mechanik dahinter steht in formular-kern.js.
      ================================================================== */
-
-  function formatDE(zahl) {
-    return zahl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
-  function zeigeFehler(form, mail, hinweis) {
-    var box = form.querySelector('[data-rolle="fehler"]');
-    if (!box) return;
-    box.innerHTML =
-      'Das hat gerade nicht geklappt. ' + hinweis + ' <a href="mailto:' + mail + '">' + mail +
-      '</a> – der Weg ist genauso gut. Deine Eingaben bleiben hier stehen, du kannst sie von hier kopieren.';
-    box.hidden = false;
-    if (box.scrollIntoView) box.scrollIntoView({ block: 'center', behavior: sanft ? 'smooth' : 'auto' });
-    if (box.focus) box.focus({ preventScroll: true });
-  }
-
-  function ersetzeDurchErfolg(block, text) {
-    block.innerHTML = '<div class="weg-formular__erfolg" role="status"><p>' + text + '</p></div>';
-  }
-
-  function setupFormular(form, opts) {
-    if (!form || !window.fetch) return;
-    var knopf = form.querySelector('button[type="submit"]');
-    var beschriftung = knopf ? knopf.textContent : '';
-
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      var box = form.querySelector('[data-rolle="fehler"]');
-      if (box) box.hidden = true;
-
-      var daten = new FormData(form);
-      var controller = 'AbortController' in window ? new AbortController() : null;
-      var timeoutId = controller ? setTimeout(function () { controller.abort(); }, 10000) : null;
-
-      if (knopf) { knopf.disabled = true; knopf.textContent = 'Wird gesendet …'; }
-
-      fetch(form.getAttribute('action'), {
-        method: 'POST',
-        body: daten,
-        signal: controller ? controller.signal : undefined
-      })
-        .then(function (antwort) {
-          if (timeoutId) clearTimeout(timeoutId);
-          if (!antwort.ok) throw new Error('http-status');
-          return antwort.json();
-        })
-        .then(function (json) {
-          if (!json || json.status !== 'ok') throw new Error('status');
-          if (opts.entwurfLoeschen) opts.entwurfLoeschen();
-          if (json.zustand === 'warteliste' && opts.erfolgWarteliste) {
-            ersetzeDurchErfolg(opts.block, opts.erfolgWarteliste);
-          } else {
-            ersetzeDurchErfolg(opts.block, opts.erfolg);
-          }
-        })
-        .catch(function () {
-          if (timeoutId) clearTimeout(timeoutId);
-          zeigeFehler(form, opts.mail, opts.fehlerHinweis);
-          if (knopf) { knopf.disabled = false; knopf.textContent = beschriftung; }
-        });
-    });
-  }
-
-  /* ---- Zeichenzaehler: jede Textarea mit zugehoeriger *-zaehler-Zeile ---- */
-  function setupZaehler(wurzel) {
-    Array.prototype.forEach.call(wurzel.querySelectorAll('textarea[id]'), function (feld) {
-      var zaehler = wurzel.querySelector('#' + feld.id + '-zaehler');
-      if (!zaehler) return;
-      var max = feld.maxLength > 0 ? feld.maxLength : 0;
-      var min = feld.minLength > 0 ? feld.minLength : 0;
-      function aktualisieren() {
-        var text = formatDE(feld.value.length) + ' / ' + formatDE(max) + ' Zeichen';
-        if (min && feld.value.length < min) text += ' (mindestens ' + min + ')';
-        zaehler.textContent = text;
-      }
-      aktualisieren();
-      feld.addEventListener('input', aktualisieren);
-    });
-  }
-
-  /* ---- Entwurfsspeicher, gleicher Bau wie auf der Unterseite (V5) ----
-     Die Stilprobe nutzt DENSELBEN Schluessel wie stilprobe/index.html:
-     beide Seiten liegen auf derselben Origin, ein angefangener Entwurf
-     wandert also zwischen Unterseite und Reise mit. */
-  function speicherVerfuegbar() {
-    try {
-      var probe = '__test__';
-      window.localStorage.setItem(probe, probe);
-      window.localStorage.removeItem(probe);
-      return true;
-    } catch (e) { return false; }
-  }
-
-  function setupEntwurf(art, form, schluessel, feldnamen) {
-    function loeschen() {
-      if (!speicherVerfuegbar()) return;
-      try { window.localStorage.removeItem(schluessel); } catch (e) {}
-    }
-    if (!form || !speicherVerfuegbar()) return { loeschen: loeschen };
-
-    var hinweis = art.querySelector('[data-rolle="entwurf-hinweis"]');
-    var zeitZeile = art.querySelector('[data-rolle="entwurf-zeit"]');
-
-    function felderListe() {
-      return feldnamen
-        .map(function (n) { return form.elements[n]; })
-        .filter(function (el) { return el && typeof el.value === 'string'; });
-    }
-
-    function sichern() {
-      var daten = { gespeichert: Date.now(), werte: {} };
-      var etwasDrin = false;
-      felderListe().forEach(function (el) {
-        daten.werte[el.name] = el.value;
-        if (el.value.trim() !== '') etwasDrin = true;
-      });
-      try {
-        if (etwasDrin) window.localStorage.setItem(schluessel, JSON.stringify(daten));
-        else window.localStorage.removeItem(schluessel);
-      } catch (e) { /* Quote voll: Formularinhalt bleibt, nur ohne Entwurf. */ }
-    }
-
-    function wiederherstellen() {
-      var roh = null;
-      try { roh = window.localStorage.getItem(schluessel); } catch (e) { return; }
-      if (!roh) return;
-      var daten;
-      try { daten = JSON.parse(roh); } catch (e) { loeschen(); return; }
-      if (!daten || !daten.werte) { loeschen(); return; }
-
-      var etwasGesetzt = false;
-      felderListe().forEach(function (el) {
-        var wert = daten.werte[el.name];
-        if (typeof wert === 'string' && wert !== '') {
-          el.value = wert;
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-          etwasGesetzt = true;
-        }
-      });
-      if (!etwasGesetzt) return;
-
-      if (hinweis) {
-        if (zeitZeile && daten.gespeichert) {
-          var d = new Date(daten.gespeichert);
-          zeitZeile.textContent = d.toLocaleDateString('de-DE') + ', ' +
-            d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
-        }
-        hinweis.hidden = false;
-      }
-    }
-
-    var timer = null;
-    form.addEventListener('input', function () {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(sichern, 400);
-    });
-
-    var verwerfen = art.querySelector('[data-rolle="entwurf-verwerfen"]');
-    if (verwerfen) {
-      verwerfen.addEventListener('click', function () {
-        loeschen();
-        felderListe().forEach(function (el) {
-          el.value = '';
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-        });
-        if (hinweis) hinweis.hidden = true;
-        var erstes = form.elements['name'];
-        if (erstes && erstes.focus) erstes.focus({ preventScroll: true });
-      });
-    }
-
-    wiederherstellen();
-    return { loeschen: loeschen };
-  }
-
-  /* ---- Kontingent-Badge (nur Stilprobe) ----
-     Erst beim ERSTEN Oeffnen abgefragt, nicht beim Seitenstart: die meisten
-     Besucher der Reise oeffnen das Formular nie, und der Vertrag erlaubt
-     10 Minuten Cache. Fehler bleiben still, der statische Satz steht schon
-     im HTML. Wortlaute identisch zur Unterseite (schnittstelle.md). */
-  var MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-    'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-  var kontingentGeladen = false;
-
-  function folgemonatVon(monat) {
-    var index = MONATE.indexOf(monat);
-    return index === -1 ? 'nächsten Monat' : MONATE[(index + 1) % 12];
-  }
-
-  function ladeKontingent(art) {
-    if (kontingentGeladen || !window.fetch) return;
-    var url = art.getAttribute('data-kontingent');
-    if (!url) return;
-    kontingentGeladen = true;
-
-    var controller = 'AbortController' in window ? new AbortController() : null;
-    var timeoutId = controller ? setTimeout(function () { controller.abort(); }, 2000) : null;
-
-    fetch(url, { signal: controller ? controller.signal : undefined })
-      .then(function (antwort) {
-        if (timeoutId) clearTimeout(timeoutId);
-        return antwort.ok ? antwort.json() : null;
-      })
-      .then(function (daten) {
-        if (!daten) return;
-        var folgemonat = folgemonatVon(daten.monat);
-        var zeile = art.querySelector('[data-rolle="kontingent"]');
-        var text = '';
-
-        if (daten.status === 'frei') {
-          text = 'Im ' + daten.monat + ' sind noch ' + daten.frei + ' von ' + daten.deckel +
-            ' Proben frei – mehr gibt die Handarbeit nicht her.';
-        } else if (daten.status === 'knapp') {
-          text = daten.frei === 1
-            ? 'Im ' + daten.monat + ' ist noch 1 Probe frei. Danach beginnt die Warteliste für den ' + folgemonat + '.'
-            : 'Im ' + daten.monat + ' sind noch ' + daten.frei + ' Proben frei. Danach beginnt die Warteliste für den ' + folgemonat + '.';
-        } else if (daten.status === 'voll') {
-          text = 'Der ' + daten.monat + ' ist voll – ' + daten.deckel + ' Proben, mehr gibt die Handarbeit nicht her.';
-        } else if (daten.status === 'pause') {
-          text = 'Die Stilprobe macht gerade eine kurze Pause – schau bald wieder vorbei.';
-        }
-        if (text && zeile) zeile.textContent = text;
-
-        var normal = art.querySelector('[data-rolle="normal"]');
-        if (daten.status === 'voll') {
-          var warteliste = art.querySelector('[data-rolle="warteliste"]');
-          if (normal) normal.hidden = true;
-          if (warteliste) warteliste.hidden = false;
-          var monatSpan = art.querySelector('[data-rolle="wl-monat"]');
-          var folgemonatSpan = art.querySelector('[data-rolle="wl-folgemonat"]');
-          if (monatSpan) monatSpan.textContent = daten.monat;
-          if (folgemonatSpan) folgemonatSpan.textContent = folgemonat;
-        } else if (daten.status === 'pause') {
-          var pause = art.querySelector('[data-rolle="pause"]');
-          if (normal) normal.hidden = true;
-          if (pause) pause.hidden = false;
-        }
-      })
-      .catch(function () {
-        if (timeoutId) clearTimeout(timeoutId);
-        /* still: der statische Satz im HTML bleibt stehen */
-      });
-  }
-
-  /* ---- Verdrahtung je Formular ---- */
 
   var spArt = felder.stilprobe && felder.stilprobe.artikel;
   if (spArt) {
-    setupZaehler(spArt);
+    kern.setupZaehler(spArt);
     var spMail = spArt.getAttribute('data-mail') || 'stilprobe@jgc-lumen.de';
     var spNormalBlock = spArt.querySelector('[data-rolle="normal"]');
     var spWlBlock = spArt.querySelector('[data-rolle="warteliste"]');
@@ -479,17 +242,19 @@ function mountFormulare(optionen) {
     var spErfolgWarteliste = 'Danke. Du stehst jetzt vorn auf der Liste: Sobald der nächste ' +
       'Monat beginnt, bekommst du deinen Platz angeboten, bevor er auf der Website erscheint.';
 
-    var spEntwurf = setupEntwurf(spArt, spNormalForm, 'stilprobe-entwurf-v1',
+    var spEntwurf = kern.setupEntwurf(spArt, spNormalForm, 'stilprobe-entwurf-v1',
       ['name', 'email', 'text_1', 'text_2', 'text_3', 'wunschthema', 'quelle']);
 
-    setupFormular(spNormalForm, {
-      block: spNormalBlock, mail: spMail,
+    kern.setupFormular(spNormalForm, {
+      name: 'stilprobe', block: spNormalBlock, mail: spMail,
+      betreff: 'Meine Stilprobe',
       fehlerHinweis: 'Schick mir deine drei Texte einfach direkt an',
       erfolg: spErfolg, erfolgWarteliste: spErfolgWarteliste,
       entwurfLoeschen: spEntwurf.loeschen
     });
-    setupFormular(spWlForm, {
-      block: spWlBlock, mail: spMail,
+    kern.setupFormular(spWlForm, {
+      name: 'stilprobe-warteliste', block: spWlBlock, mail: spMail,
+      betreff: 'Warteliste Stilprobe',
       fehlerHinweis: 'Schreib mir einfach direkt an',
       erfolg: spErfolgWarteliste
     });
@@ -497,16 +262,17 @@ function mountFormulare(optionen) {
 
   var egArt = felder.erstgespraech && felder.erstgespraech.artikel;
   if (egArt) {
-    setupZaehler(egArt);
+    kern.setupZaehler(egArt);
     var egMail = egArt.getAttribute('data-mail') || 'kontakt@jgc-lumen.de';
     var egBlock = egArt.querySelector('[data-rolle="normal"]');
     var egForm = egBlock && egBlock.querySelector('form');
 
-    var egEntwurf = setupEntwurf(egArt, egForm, 'erstgespraech-entwurf-v1',
+    var egEntwurf = kern.setupEntwurf(egArt, egForm, 'erstgespraech-entwurf-v1',
       ['name', 'email', 'telefon', 'anliegen', 'zeitfenster']);
 
-    setupFormular(egForm, {
-      block: egBlock, mail: egMail,
+    kern.setupFormular(egForm, {
+      name: 'erstgespraech', block: egBlock, mail: egMail,
+      betreff: 'Erstgespräch anfragen',
       fehlerHinweis: 'Schreib mir einfach direkt an',
       erfolg: 'Danke, deine Anfrage ist angekommen. Ich melde mich bei dir mit zwei Terminvorschlägen.',
       entwurfLoeschen: egEntwurf.loeschen
@@ -542,10 +308,7 @@ function mountFormulare(optionen) {
   }
 
   // Mindest-Ausfuellzeit: Startzeit fuer den Spam-Check des Servers.
-  Array.prototype.forEach.call(
-    document.querySelectorAll('.weg-formular input[name="geladen_ts"]'),
-    function (feld) { feld.value = String(Date.now()); }
-  );
+  kern.setzeGeladenZeit(document);
 }
 
 if (typeof window !== 'undefined') window.mountFormulare = mountFormulare;

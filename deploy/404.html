@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Landet im Deploy als /404.html. GitHub Pages liefert diese Datei bei jedem
+     Pfad aus, den es nicht kennt — vorher war das GitHubs englische Standardseite
+     ("Page not found · GitHub Pages") ohne einen einzigen Weg zurueck. Betroffen
+     sind vor allem Adressen, die es bis zum 02.09.2026 gab: /galerie/, /main/,
+     /variants/standalone/<slug>/.
+
+     noindex, weil eine Fehlerseite nicht in den Suchindex gehoert. Sie steht
+     deshalb auch nicht in der Sitemap: baue-site.mjs sammelt dafuer nur
+     index.html-Dateien ein. -->
+<title>Seite nicht gefunden — JGC Lumen</title>
+<meta name="description" content="Diese Adresse gibt es nicht (mehr) auf jgc-lumen.de.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#FEFCF7">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-48.png" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/schriften.css">
+<link rel="stylesheet" href="/assets/seiten.css">
+</head>
+<body>
+<a class="sprung" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="kopf">
+  <div class="kopf-innen">
+    <a class="marke" href="/"><img src="/assets/sigel.png" alt="" width="504" height="747">JGC Lumen</a>
+    <a class="kopf-zurueck" href="/">Zurück zur Reise</a>
+  </div>
+</header>
+
+<main class="recht" id="inhalt">
+  <div class="recht-innen">
+    <p class="recht-auge">404</p>
+    <h1>Diese Seite gibt es nicht.</h1>
+    <p>Vielleicht ist die Adresse vertippt, vielleicht stammt der Link aus einer
+       älteren Fassung dieser Website. Von hier aus kommst du überall hin:</p>
+    <ul>
+      <li><a href="/">Die Reise</a> – die Startseite, eine Fahrt durch das, was ich mache.</li>
+      <li><a href="/stilprobe/">Die Stilprobe</a> – drei eigene Texte rein, zwei Fassungen zurück.</li>
+      <li><a href="/impressum/">Impressum</a> und <a href="/datenschutz/">Datenschutz</a>.</li>
+    </ul>
+    <p>Wenn du hier gelandet bist, weil ein Link von mir ins Leere zeigt: schreib mir
+       kurz an <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>, dann
+       bringe ich das in Ordnung.</p>
+  </div>
+</main>
+
+<footer class="abspann">
+  <div class="abspann-innen">
+    <p>JGC Lumen – KI-Implementierung für Coaches, Trainer und Mentoren. Schreib mir an
+       <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
+    <div class="abspann-reihen">
+      <a href="/">Die Reise</a>
+      <a href="/stilprobe/">Die Stilprobe</a>
+      <a href="/impressum/">Impressum</a>
+      <a href="/datenschutz/">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

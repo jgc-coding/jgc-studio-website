@@ -15,6 +15,7 @@
  *   /datenschutz/     datenschutz/index.html
  *   /og-bild.jpg      assets/og-bild.jpg — das Vorschaubild muss per HTTP erreichbar sein
  *   /der-weg/         Weiterleitung auf /, weil der alte Link der Reise verschickt wurde
+ *   /404.html         eigene Fehlerseite (GitHub Pages liefert sie bei unbekannten Pfaden)
  *   /robots.txt       erzeugt
  *   /sitemap.xml      erzeugt aus den indexierbaren Seiten im Ergebnis
  *
@@ -50,6 +51,7 @@ const QUELLEN = [
   ['datenschutz/index.html', 'die Datenschutzerklaerung'],
   ['assets/og-bild.jpg', 'das Vorschaubild'],
   ['deploy/der-weg-weiterleitung.html', 'die Weiterleitung'],
+  ['deploy/404.html', 'die Fehlerseite'],
 ];
 for (const [pfad, was] of QUELLEN) {
   if (!existsSync(WURZEL + pfad)) abbruch(`Quelle fehlt: ${pfad} (${was}).`);
@@ -66,6 +68,7 @@ cpSync(WURZEL + 'impressum/index.html', ZIEL + 'impressum/index.html');
 cpSync(WURZEL + 'datenschutz/index.html', ZIEL + 'datenschutz/index.html');
 cpSync(WURZEL + 'assets/og-bild.jpg', ZIEL + 'og-bild.jpg');
 cpSync(WURZEL + 'deploy/der-weg-weiterleitung.html', ZIEL + 'der-weg/index.html');
+cpSync(WURZEL + 'deploy/404.html', ZIEL + '404.html');
 
 // --- Domain aus dem canonical der Reise.
 const reise = readFileSync(ZIEL + 'index.html', 'utf8').slice(0, 12000);
@@ -103,10 +106,11 @@ writeFileSync(ZIEL + 'robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${adress
 
 // --- Kernartefakte muessen da sein, sonst laut scheitern (kein stiller Teil-Deploy).
 const ARTEFAKTE = [
-  'index.html', 'scrub-engine.js', 'vertiefung.js', 'formulare.js',
-  'assets/anflug.mp4', 'assets/schriften.css', 'assets/rechtliches.css', 'assets/favicon.svg',
+  'index.html', 'scrub-engine.js', 'vertiefung.js', 'formulare.js', 'formular-kern.js',
+  'assets/anflug.mp4', 'assets/schriften.css', 'assets/seiten.css', 'assets/favicon.svg',
+  'assets/formular.css', 'assets/stilprobe.css',
   'stilprobe/index.html', 'impressum/index.html', 'datenschutz/index.html',
-  'der-weg/index.html', 'og-bild.jpg', 'robots.txt', 'sitemap.xml',
+  'der-weg/index.html', '404.html', 'og-bild.jpg', 'robots.txt', 'sitemap.xml',
 ];
 const fehlend = ARTEFAKTE.filter((a) => !existsSync(ZIEL + a));
 if (fehlend.length) abbruch(`Deploy-Artefakt(e) fehlen: ${fehlend.join(', ')}`);

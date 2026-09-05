@@ -1,0 +1,116 @@
+/* Gemeinsame Feld-Optik der Formulare (Stilprobe, Erstgespraech).
+
+   Bis zum 05.09.2026 stand dieser Block inline in der-weg/index.html, und die
+   Stilprobe-Unterseite hatte mit .formfeld-*, .card und .btn-primary eine
+   zweite, voellig andere Fassung derselben Sache. Beide Seiten laden jetzt
+   diese Datei: eine Aenderung an der Feld-Optik wirkt damit an beiden Orten,
+   statt dass zwei handgepflegte Kopien auseinanderlaufen.
+
+   Liegt in der-weg/assets/, weil dieser Ordner im Deploy an die Wurzel wandert
+   und beide Seiten ihn unter /assets/ erreichen. Die Tokens (--sw-*) setzen die
+   Seiten selbst; ohne sie greifen die Rueckfallwerte in var(). */
+
+/* Eingabefelder laufen ueber die volle Feldbreite (max-width: none gegen die
+   Leseregeln der Seiten — Eingabefelder sind keine Lesezeilen); Hilfe- und
+   Zaehlerzeilen ebenso, damit sie buendig unter ihren Feldern stehen. */
+.weg-formular form { margin: 0.4rem 0 0; }
+.weg-formular__gruppe { margin: 0 0 1.15rem; }
+.weg-formular__label {
+  display: block; margin: 0 0 0.35rem;
+  font-family: var(--sw-font-display, Georgia, serif); font-weight: 600;
+  font-size: 0.95rem; color: var(--sw-ink, #1F2A44);
+}
+.weg-formular input[type="text"],
+.weg-formular input[type="email"],
+.weg-formular input[type="tel"],
+.weg-formular textarea,
+.weg-formular select {
+  width: 100%; max-width: none; box-sizing: border-box;
+  font: inherit; font-size: 0.98rem; line-height: 1.5;
+  color: var(--sw-ink, #1F2A44);
+  background: color-mix(in srgb, #fff 45%, var(--sw-bg, #FEFCF7));
+  border: 1px solid color-mix(in srgb, var(--sw-ink, #1F2A44) 22%, transparent);
+  border-radius: 9px; padding: 10px 12px;
+}
+.weg-formular textarea { resize: vertical; }
+.weg-formular input:focus-visible,
+.weg-formular textarea:focus-visible,
+.weg-formular select:focus-visible {
+  outline: 2px solid var(--sw-accent, #C97B3F); outline-offset: 2px;
+}
+.weg-formular__hilfe, .weg-formular__zaehler {
+  margin: 0.3rem 0 0; font-size: 0.8rem; line-height: 1.5;
+  color: var(--sw-ink-soft, #4A5568); max-width: none;
+}
+.weg-formular__zusage {
+  margin: 0.45rem 0 0; font-size: 0.85rem; font-weight: 600;
+  color: var(--sw-ink, #1F2A44); max-width: none;
+}
+.weg-formular__kontingent {
+  margin: -0.3rem 0 1.2rem; font-size: 0.85rem;
+  color: var(--sw-accent, #C97B3F); font-weight: 600; max-width: none;
+}
+.weg-formular__zeile {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.6rem;
+  align-items: start;
+}
+.weg-formular__zeile input[type="checkbox"] {
+  width: 1.05rem; height: 1.05rem; margin-top: 0.2rem;
+  accent-color: var(--sw-accent, #C97B3F);
+}
+.weg-formular__zeile label { font-size: 0.9rem; line-height: 1.55; color: var(--sw-ink-soft, #4A5568); }
+/* Honigtopf (Honeypot): fuer Menschen unsichtbar, fuer Formular-Bots ein
+   ganz normales Feld. NICHT display:none — manche Bots lassen solche
+   Felder dann aus. */
+.weg-formular__honigtopf { position: absolute; left: -9999px; }
+.weg-formular__fehler {
+  margin: 0 0 1rem; padding: 0.9rem 1.1rem;
+  border: 1.5px solid var(--sw-accent, #C97B3F); border-radius: 10px;
+  background: color-mix(in srgb, var(--sw-accent, #C97B3F) 7%, var(--sw-bg, #FEFCF7));
+  font-size: 0.92rem; line-height: 1.6; color: var(--sw-ink, #1F2A44); max-width: none;
+}
+.weg-formular__fehler:focus-visible { outline: 2px solid var(--sw-accent, #C97B3F); outline-offset: 2px; }
+/* Zweite Stufe der Fehlermeldung: der menschliche Satz steht oben, hier die
+   knappe technische Zeile mit Fehler-ID. Ein Screenshot wird damit zur
+   Ferndiagnose, ohne dass die Hauptmeldung technisch klingt. */
+.weg-formular__diagnose {
+  margin: 0.6rem 0 0; font-size: 0.78rem; line-height: 1.5;
+  color: var(--sw-ink-soft, #4A5568); max-width: none;
+  font-family: ui-monospace, Menlo, monospace;
+}
+/* Ausweichweg mit einem Klick: legt alle Angaben als fertigen Mailtext in die
+   Zwischenablage. Sitzt in der Fehlerbox, direkt neben der Mailadresse. */
+.weg-formular__kopieren {
+  display: inline-block; margin: 0.7rem 0 0;
+  font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  color: var(--sw-ink, #1F2A44); background: transparent;
+  border: 1px solid color-mix(in srgb, var(--sw-ink, #1F2A44) 30%, transparent);
+  border-radius: 999px; padding: 8px 16px;
+}
+.weg-formular__kopieren:hover { border-color: var(--sw-accent, #C97B3F); color: var(--sw-accent, #C97B3F); }
+.weg-formular__kopieren:focus-visible { outline: 2px solid var(--sw-accent, #C97B3F); outline-offset: 3px; }
+.weg-formular__senden {
+  display: inline-block; border: 0; cursor: pointer;
+  color: #fff; background: var(--sw-ink, #1F2A44);
+  font: inherit; font-weight: 600; font-size: 0.95rem;
+  padding: 13px 24px; border-radius: 999px;
+  transition: transform 0.2s;
+}
+.weg-formular__senden:hover:not(:disabled) { transform: translateY(-2px); }
+.weg-formular__senden:disabled { opacity: 0.6; cursor: default; }
+.weg-formular__senden:focus-visible { outline: 2px solid var(--sw-accent, #C97B3F); outline-offset: 3px; }
+.weg-formular__leise {
+  display: inline; border: 0; padding: 0; background: none; cursor: pointer;
+  font: inherit; color: var(--sw-accent, #C97B3F);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.weg-formular__erfolg {
+  padding: 1.1rem 1.2rem; border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--sw-accent, #C97B3F) 30%, transparent);
+  background: color-mix(in srgb, var(--sw-accent, #C97B3F) 6%, var(--sw-bg, #FEFCF7));
+  font-size: 0.98rem; line-height: 1.65; color: var(--sw-ink, #1F2A44);
+}
+@media (prefers-reduced-motion: reduce) {
+  .weg-formular__senden { transition: none; }
+  .weg-formular__senden:hover:not(:disabled) { transform: none; }
+}

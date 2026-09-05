@@ -46,7 +46,7 @@ Anzeige-Wortlaute (in beiden Seiten identisch implementiert):
 
 ## Platzhalter (beim Umzug auf den PHP-Host scharf schalten)
 
-- `STILPROBE_MAIL` = aktuell `stilprobe@jgc-lumen.de` (Postfach unbestätigt) — steht als const im Inline-Script der Unterseite und in `der-weg/formulare.js`; Suchbegriff: `stilprobe@`.
+- `STILPROBE_MAIL` = aktuell `stilprobe@jgc-lumen.de` (Postfach unbestätigt) — steht seit dem 05.09.2026 auf beiden Seiten als `data-mail`-Attribut am Formular-Artikel, nicht mehr als Konstante im Skript; Suchbegriff: `stilprobe@`.
 - Interne Links sind seit 02.09.2026 wurzel-relativ (`/stilprobe/`, `/impressum/`, `/datenschutz/`); der frühere GitHub-Pages-Präfix ist weg, `scripts/pruefe-seiten.mjs` verbietet ihn. Impressum und Datenschutz sind eigene HTML-Seiten unter `/impressum/` und `/datenschutz/`, nicht mehr der Astro-Build.
 - Formular-`action` und Badge-`fetch` der Unterseite sind RELATIV (`senden.php`, `kontingent.php`); die Scroll-Reise ruft absolut (`/stilprobe/kontingent.php`, `/stilprobe/senden.php`, dazu `/erstgespraech/senden.php`, siehe `docs/erstgespraech/schnittstelle.md`). GitHub Pages führt kein PHP aus: die Endpunkte brauchen einen PHP-Host unter derselben Domain (All-Inkl) — oder einen eigenen API-Host, dann CORS und die Pfade bedenken.
 

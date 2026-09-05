@@ -25,7 +25,7 @@
  * Aufruf:   node scripts/google-profil/baue-profilbild.mjs
  * Ergebnis: Bildmaterial/Google-Unternehmensprofil/profilbild-<grund>-<claim>.png
  *           + vorschau.jpg (quadratisch, rund, klein - so wie Google es zeigt)
- * Braucht site/node_modules (sharp, `cd site && npm ci`) und Chrome unter dem
+ * Braucht sharp aus scripts/node_modules (`cd scripts && npm install`) und Chrome unter dem
  * Standardpfad (oder Umgebungsvariable CHROME).
  */
 
@@ -36,7 +36,7 @@ import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
-const require = createRequire(fileURLToPath(new URL('../../site/package.json', import.meta.url)));
+const require = createRequire(fileURLToPath(new URL('../package.json', import.meta.url)));
 const sharp = require('sharp');
 
 const WURZEL = fileURLToPath(new URL('../../', import.meta.url));

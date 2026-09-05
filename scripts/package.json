@@ -1,0 +1,9 @@
+{
+  "name": "jgc-lumen-werkzeuge",
+  "private": true,
+  "type": "module",
+  "description": "Nur die Abhaengigkeit der Bild-Werkzeuge (Favicon, Vorschaubild, Google-Profilbild). Bis zum 05.09.2026 holten sich die drei Skripte sharp aus site/node_modules, also aus dem Astro-Archiv: ein npm ci dort installierte den kompletten, nicht mehr gepflegten Build-Baum samt bekannter Luecken (V61). Die Seite selbst braucht kein npm.",
+  "dependencies": {
+    "sharp": "^0.35.0"
+  }
+}

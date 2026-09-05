@@ -2,6 +2,70 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-05 — Runde 4 umgesetzt: Stilprobe neu gebaut, Formular-Logik zusammengeführt (V60–V66, I5–I8)
+
+Gabriels Freigabe für das komplette Paket der `/improve`-Runde 4. Rückkehrpunkt davor: Commit `bc956bb`.
+Der Launch vom 02.09. trägt jetzt einen Tag: **`live-2026-09-02`** auf `17c85e4`, gepusht (V63).
+
+- **Die Stilprobe-Unterseite ist neu gebaut (I8).** Statt 724 KB Einzeldatei aus dem alten
+  Tailwind-Bau (Schriften als base64 eingebettet, nur über Transform-Skripte änderbar) jetzt
+  **20 KB gewöhnliches HTML** im Design der Reise. **Alle Wortlaute sind unverändert übernommen**
+  — Vorspann, Ablauf 01/02/03, Klartext-Absatz, sämtliche Feldbeschriftungen und Hilfetexte, die
+  vier Fragen, der Abschlusssatz. Feldnamen, Endpunkte (relativ: `senden.php`, `kontingent.php`)
+  und der Entwurfsschlüssel folgen weiter `docs/stilprobe/schnittstelle.md`.
+  *Bewusst anders als vorher:* kein Aufklappmenü mehr (das Kopfmenü umbricht auf schmalen Schirmen
+  in zwei Zeilen, ohne JavaScript), Abschnittsüberschriften linksbündig wie in der Reise statt
+  zentriert, und der Abspann ist derselbe wie auf den Rechtsseiten — die frühere Fußzeile mit
+  „Ruhig, präzise, DSGVO-konform", Standortzeile und „Haltung vor Technik →" ist damit weg.
+- **Formular-Logik steht nur noch einmal (Grundlage für V62 und I6).** Neu:
+  `der-weg/formular-kern.js` mit Zähler, Entwurfsspeicher, Absenden, Fehlerpfad und
+  Kontingent-Badge; `der-weg/formulare.js` schrumpft von 23,5 auf 14,2 KB und behält nur die
+  Overlays der Reise. Vorher stand dieselbe Logik zweimal im Repo, zusammengehalten von dem
+  Kommentar „Änderungen dort und hier gemeinsam ziehen". Ebenso die Optik: der Feld-CSS-Block
+  wanderte aus `der-weg/index.html` nach `assets/formular.css`, den beide Seiten laden.
+  `rechtliches.css` heißt jetzt `seiten.css` — es ist das Grundgerüst aller drei Unterseiten.
+- **V62 — Fehlermeldungen sind zweistufig.** Unter dem menschlichen Satz steht eine Diagnosezeile
+  („Technische Ursache: HTTP 404 · 18:05 Uhr · ID nbv10"), dieselbe Angabe geht als
+  `[JGC Lumen] [WARN] …` ins Browser-Log. Die Ursache wird nicht mehr im `catch` verworfen:
+  unterschieden werden HTTP-Status, unlesbare Antwort, Antwort ohne `ok`, Zeitüberschreitung
+  nach 10 s und Verbindungsfehler.
+- **I6 — Ausweichweg mit einem Klick.** Die Fehlerbox trägt einen Knopf „Angaben kopieren", der
+  alle ausgefüllten Felder als fertigen Mailtext in die Zwischenablage legt (Rückfallweg über ein
+  verstecktes Textfeld; scheitert beides, sagt der Knopf das). Die Mailadresse in der Box bekommt
+  einen Betreff, bei kurzen Anfragen auch den Text gleich mit — beim Erstgespräch also ein Klick
+  bis zur fertigen Mail. Der Satz „…, du kannst sie von hier kopieren" ist dadurch überflüssig
+  geworden und heißt jetzt „Deine Eingaben bleiben hier stehen."
+- **I5 — eigene 404-Seite.** `deploy/404.html` → `/404.html`, im Design der Unterseiten, mit
+  `noindex` und Wegen zurück. Vorher lieferte GitHub bei `/galerie/`, `/main/` oder
+  `/variants/…` seine englische Standardseite ohne einen einzigen Link.
+- **I7 — die Drei-Orte-Regel wird jetzt maschinell bewacht.** `pruefe-seiten.mjs` vergleicht für
+  jede Station Überschrift und Fließtext zwischen Engine-Konfiguration und SEO-Spiegel und
+  verlangt einen Vertiefungs-Artikel. Bisher hielt das nur ein Merksatz in der CLAUDE.md
+  zusammen. Gegenprobe: ein einziges geändertes Wort im Spiegel („selbst" → „selber") lässt die
+  Prüfung mit Exit-Code 1 abbrechen.
+- **V61 — `sharp` hängt nicht mehr am Astro-Archiv.** Neu `scripts/package.json` (nur `sharp`,
+  8 Pakete, `npm audit` sauber); die drei Bild-Skripte holen es von dort. Vorher zog
+  `cd site && npm ci` den kompletten alten Build-Baum herein: 8 Schwachstellen, davon 5 hoch.
+  Nachgeprüft: `favicon.svg`, `favicon-192.png` und das Apple-Icon kommen byte-gleich heraus,
+  `favicon-48.png` unterscheidet sich nur im PNG-Container (0 von 9.216 Kanalwerten abweichend)
+  und wurde deshalb auf den Live-Stand zurückgesetzt; `og-bild.jpg` unverändert.
+- **V65 — der Vorschau-Server stürzt nicht mehr ab.** Eine kaputt kodierte Adresse wie `/%` warf
+  in `decodeURIComponent` und beendete den Prozess; jetzt antwortet er mit 400. Nachgestellt vor
+  und nach dem Fix.
+- **V64 — aufgeräumt:** die zwei erledigten `claude/*`-Branches gelöscht, der alte Worktree
+  entfernt, der Hauptbaum steht wieder auf `main` statt auf `variant/09`.
+- Doku nachgezogen: CLAUDE.md (Aufbau, gemeinsame Bausteine, Prüfregeln, `sharp`, Stolperfalle
+  „minifiziert" gilt nur noch für die Archiv-Varianten), README, beide `schnittstelle.md`,
+  `.claude/pruefen.txt` (`formular-kern.js`).
+
+**Belege:** Done-Gate komplett grün (29 Zeilen); `pruefe-seiten.mjs` grün auf den Quellen (6 Seiten,
+11 Regeln) und auf `_site` (12 Regeln, 65 Dateien, 45,7 MB); Deploy-Ergebnis lokal auf Port 4331
+abgerufen (alle Pfade 200). Im Browser end-to-end: beide Formulare der Reise und das der Stilprobe
+abgeschickt (404 → Fehlerbox mit Diagnosezeile, Knopf wieder frei, Eingaben und Entwurf bleiben),
+Kopierknopf mit echtem Mausklick geprüft, Warteliste- und Pause-Zweig über eine untergeschobene
+Antwort durchgespielt, Entwurf auf der Unterseite angefangen und im Overlay der Reise
+wiedergefunden, 375 px ohne seitlichen Überlauf (Absendeknopf 44 px hoch).
+
 ## 2026-09-02 — Die Reise ist die einzige Seite und lebt unter https://jgc-lumen.de
 
 Gabriels Entscheidungen: Rechtsseiten neu im Design der Reise, Galerie und Varianten raus aus dem

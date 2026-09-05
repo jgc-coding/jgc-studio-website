@@ -57,7 +57,17 @@ function findeDatei(pfad) {
 }
 
 createServer((anfrage, antwort) => {
-  let pfad = decodeURIComponent(new URL(anfrage.url, 'http://x').pathname);
+  // Eine kaputt kodierte Adresse (etwa /% aus einem Tippfehler oder von einem Bot)
+  // liess decodeURIComponent frueher werfen — der Server war damit weg und der
+  // Vorschau-Pane meldete nur noch "Verbindung abgelehnt". Jetzt: 400 statt Absturz.
+  let pfad;
+  try {
+    pfad = decodeURIComponent(new URL(anfrage.url, 'http://x').pathname);
+  } catch (fehler) {
+    antwort.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    antwort.end(`Ungueltige Adresse: ${anfrage.url}`);
+    return;
+  }
   if (pfad.endsWith('/')) pfad += 'index.html';
 
   const datei = findeDatei(pfad);

@@ -17,14 +17,14 @@
  * (scripts/stilprobe/setze-favicon.mjs).
  *
  * Aufruf:  node scripts/der-weg/baue-favicon.mjs
- * Braucht site/node_modules (sharp liegt dort als Astro-Abhaengigkeit).
+ * Braucht sharp aus scripts/node_modules (`cd scripts && npm install`).
  */
 
 import { readFileSync, writeFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
-const require = createRequire(fileURLToPath(new URL('../../site/package.json', import.meta.url)));
+const require = createRequire(fileURLToPath(new URL('../package.json', import.meta.url)));
 const sharp = require('sharp');
 
 const QUELLE = fileURLToPath(new URL('../../Logo/JGC Studio Logo final.svg', import.meta.url));

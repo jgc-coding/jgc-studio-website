@@ -19,8 +19,8 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
-// sharp liegt als Astro-Abhaengigkeit in site/node_modules.
-const require = createRequire(fileURLToPath(new URL('../../site/package.json', import.meta.url)));
+// sharp kommt aus scripts/node_modules (scripts/package.json, `cd scripts && npm install`).
+const require = createRequire(fileURLToPath(new URL('../package.json', import.meta.url)));
 const sharp = require('sharp');
 
 const V18 = fileURLToPath(new URL('../../variants/standalone/18-lumen/index.html', import.meta.url));

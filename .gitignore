@@ -30,3 +30,7 @@ Thumbs.db
 
 # Deploy-Ergebnis von scripts/deploy/baue-site.mjs (lokal zum Ansehen, nie committen)
 _site/
+
+# Abhaengigkeit der Bild-Werkzeuge (scripts/package.json) — nur lokal, nie committen
+scripts/node_modules/
+scripts/package-lock.json

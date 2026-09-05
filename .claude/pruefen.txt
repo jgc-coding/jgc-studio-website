@@ -39,3 +39,4 @@ node --check scripts/stilprobe/extract-v18-assets.mjs
 node --check der-weg/scrub-engine.js
 node --check der-weg/vertiefung.js
 node --check der-weg/formulare.js
+node --check der-weg/formular-kern.js

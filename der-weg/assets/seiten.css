@@ -1,4 +1,6 @@
-/* Gemeinsames Stylesheet der Rechtsseiten (impressum/, datenschutz/).
+/* Gemeinsames Grundgeruest der Unterseiten (stilprobe/, impressum/, datenschutz/).
+   Hiess bis zum 05.09.2026 rechtliches.css; seit die Stilprobe dieselbe Grundlage
+   benutzt, waere der alte Name irrefuehrend.
    Lehnt sich an den Leseteil der Reise an (Fragen und Abspann in der-weg/index.html):
    dieselben Schriften, Farben und Zeilenmasse, damit alles wie ein Stueck wirkt.
    Liegt in der-weg/assets/, weil dieser Ordner im Deploy an die Wurzel wandert und
