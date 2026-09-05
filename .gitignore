@@ -28,6 +28,10 @@ Thumbs.db
 # bleiben versioniert.
 .claude/worktrees/
 
+# Lokale AI-Coding-Skills (Drittanbieter: emil-design-eng, taste, impeccable, …)
+# Installiert via `npx skills add` / `npx impeccable` — bleiben lokal, nicht committen.
+.claude/skills/
+
 # Deploy-Ergebnis von scripts/deploy/baue-site.mjs (lokal zum Ansehen, nie committen)
 _site/
 
