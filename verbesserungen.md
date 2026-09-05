@@ -1,5 +1,18 @@
 # Verbesserungen
-Stand: 2026-07-27 (Runde 3, Fokus: Scroll-Reise `der-weg/` — Code + Design,
+Stand: 2026-09-05 (Runde 4, Fokus: alles — Teil 1 bis 3, kein Design-Teil)
+
+**Runde 4 (2026-09-05, erste Analyse nach dem Launch unter jgc-lumen.de):** Live-Lauf über
+Reise, beide Formulare (Reise-Overlays und `/stilprobe/`), Rechtsseiten, Deploy-Nachbau im
+Scratchpad (61 Dateien, 46,3 MB, Prüfung grün), Done-Gate komplett grün, Live-Abfragen der
+Domain (HTTP, Zertifikate, DNS, GitHub-Pages-API). Ergebnis: die Seite läuft, **ein echter
+Live-Defekt** (V60: Zertifikat hängt, https-Zwang aus), dazu V61–V65 und die Ideen I5–I8.
+Nicht prüfbar im versteckten Vorschau-Pane: Kamerafahrt und Sprung per `/#station`
+(`scrollTo(smooth)` läuft dort nicht). Nicht erneut geprüft: Datenmodus (10) und Abgang zu den
+Fragen (16). Branch-Lage: `claude/stilprobe-mail-setup-c938ed` ist identisch mit `main`,
+`claude/jgc-lumen-launch-prep-252162` trägt nur V59 (in diesem Lauf per Fast-Forward
+übernommen) — keine verlorene Arbeit (V64). Rückkehrpunkt vor einer Umsetzung: Commit `bc956bb`.
+
+Runde 3 (2026-07-27, Fokus: Scroll-Reise `der-weg/` — Code + Design,
 Haltung: Nur messbare Fehler, Lupe: emil-design-eng — **alle acht Befunde am selben Tag
 umgesetzt und nachgemessen**, Details im CHANGELOG)
 
@@ -63,48 +76,66 @@ Die Zahlenangaben von damals sind teils überholt: 390 KB Fonts → tatsächlich
 
 ## Kernfunktionen (Prüfliste — jede Runde erneut abfahren)
 
-1. **Hauptseite erreichbar** — erwartet: V18 als Root-`index.html`, vollständig gerendert ·
-   zuletzt: läuft (2026-07-25, HTTP 200, genau ein `h1`, kein Overflow bei 375 px)
-2. **Navigation und Anker** — erwartet: Desktop- und Mobilmenü, jeder Anker hat ein Ziel ·
-   zuletzt: läuft (2026-07-25, `aria-expanded` korrekt; seither maschinell in `pruefe-seiten.mjs`)
-3. **Kontaktweg „Erstgespräch anfragen"** — erwartet: Besucher kann eine Anfrage auslösen ·
-   zuletzt: läuft (2026-07-25, mailto + sichtbare Adresse; maschinell bewacht)
-4. **Stilprobe-Formular** — erwartet: Validierung greift, Rückmeldung ist sichtbar, Eingaben
-   überleben einen Reload · zuletzt: läuft (2026-07-25, lokal end-to-end getestet)
+Seit 02.09.2026 ist die Reise die Startseite unter `https://jgc-lumen.de/`; die Liste ist
+darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind neu).
+
+1. **Startseite (Reise) erreichbar** — erwartet: `https://jgc-lumen.de/` liefert die Reise,
+   Titel und `canonical` stimmen · zuletzt: läuft (2026-09-05, live HTTP 200 mit 124.566 Bytes
+   wie im Repo; lokal 7 Szenen, 7 Stationen, 7 „Mehr dazu"-Knöpfe, genau ein `h1`)
+2. **Navigation und Anker** — erwartet: Reiter und Punktleiste, jeder Anker hat ein Ziel,
+   `/#station` springt zur Station · zuletzt: Reiter und Anker laufen (2026-09-05, 7 Reiter,
+   `pruefe-seiten.mjs` grün); der Sprung per Hash ist im versteckten Pane **nicht prüfbar**
+   (`jumpTo` scrollt mit `behavior: smooth`, das läuft dort nicht) — statisch belegt: der
+   Code klickt den passenden Reiter (`der-weg/index.html:2073-2081`), live am 02.09. bestätigt
+3. **Kontaktweg „Erstgespräch anfragen"** — erwartet: Overlay öffnet, Pflichtfelder greifen,
+   Absenden gegen den fehlenden Endpoint zeigt die Fehlerbox mit Mailweg, `mailto` bleibt der
+   Weg ohne JavaScript · zuletzt: läuft (2026-09-05, Ende-zu-Ende lokal: POST → 404 →
+   Fehlerbox fokussiert, Knopf wieder frei, Eingaben und Entwurf bleiben; Umlaute sauber)
+4. **Stilprobe-Formular** — erwartet: in der Reise UND auf `/stilprobe/`; Validierung mit
+   Mindestlänge, Entwurf überlebt Reload und wandert zwischen beiden Seiten, 404 → Fehlerbox
+   mit `stilprobe@` · zuletzt: läuft (2026-09-05, beides lokal; Mindestlänge per echter
+   Tastatureingabe geprüft; Postfach `stilprobe@` weiter unbestätigt → Hub)
 5. **Kontingent-Badge** — erwartet: statischer Satz, solange `kontingent.php` fehlt ·
-   zuletzt: läuft (2026-07-25, 404 wird still abgefangen — so gewollt)
-6. **Galerie und Einzelvarianten** — erwartet: `/galerie/` und `/variants/<slug>/` erreichbar ·
-   zuletzt: läuft (2026-07-25, alle geprüften Routen HTTP 200)
-7. **Rechtsseiten** — erwartet: Impressum und Datenschutz mit gültigem Inhalt ·
-   zuletzt: Datenschutz sachlich richtig, **Impressum weiter leer** (V3, braucht Gabriels Daten)
-8. **Deploy-Kette** — erwartet: Push auf `main` → Action grün, alle Kernartefakte vorhanden ·
-   zuletzt: läuft (letzte 5 Läufe grün, ~1 min 45 s)
-
-### Scroll-Reise `der-weg/` (seit Runde 3; im versteckten Preview-Pane sind nur
-### Aufbau, Zustände und Geometrie prüfbar — die Kamerafahrt selbst nicht)
-
-9. **Reise mountet** — erwartet: 7 Szenen, 7 Stationen, kein Konsolenfehler ·
-   zuletzt: läuft (2026-07-27, alle Requests 200)
+   zuletzt: läuft (2026-09-05, Reise ruft erst beim Öffnen des Overlays, Unterseite beim
+   Laden; 404 still, der Satz „15 Proben im Monat …" bleibt stehen)
+6. **Galerie und Einzelvarianten** — gegenstandslos seit 02.09.2026 (nicht mehr ausgeliefert;
+   live antworten `/galerie/` und `/variants/…` mit GitHubs 404-Seite, siehe I5)
+7. **Rechtsseiten** — erwartet: eigene HTML-Seiten im Design der Reise, alle Links treffen ·
+   zuletzt: läuft (2026-09-05, Impressum 4 Abschnitte, Datenschutz 9 Abschnitte mit Stand
+   02.09., Fraunces geladen, Sprungmarke „Zum Inhalt", interne Links alle 200)
+8. **Deploy-Kette** — erwartet: Push auf `main` → Action grün, Ergebnis lokal identisch
+   nachbaubar, Domain mit gültigem Zertifikat und https-Zwang · zuletzt: Build läuft (letzte
+   3 Läufe grün, ~30 s; lokal 61 Dateien, 46,3 MB, Prüfung grün) — **Zertifikat für `www` und
+   https-Zwang kaputt → V60**
+9. **Reise mountet** — erwartet: 7 Szenen, 7 Stationen, kein Konsolenfehler · zuletzt: läuft
+   (2026-09-05, alle Requests 200, Konsole leer bis auf die erwarteten 404 der PHP-Endpunkte)
 10. **Datenmodus entscheidet selbst** — erwartet: erst Standbilder, Freigabe nach Messung,
-    Lagezeile im Abspann stimmt · zuletzt: läuft (2026-07-27, alle drei Zustände geprüft;
-    feste Wahl „sparsam" lädt null Videos — V22/V23 behoben)
+    Lagezeile im Abspann stimmt · zuletzt: läuft (2026-07-27); in Runde 4 nicht erneut geprüft
 11. **Video-Nachladen** — erwartet: Clip als Blob geholt, Poster bis zum ersten Frame ·
-    zuletzt: läuft (anflug.mp4 geladen; `has-clip` braucht rAF → am Gerät prüfen)
-12. **„Mehr dazu"-Feld** — erwartet: öffnet, Fokus wandert hinein, Escape schließt,
-    Fokus kehrt zum Knopf zurück · zuletzt: läuft (2026-07-27, alles gemessen)
-13. **Hochkant-Fassung** — erwartet: Bildband oben, Text unten, kein seitlicher Überlauf,
-    jede Station passt in den Textstreifen · zuletzt: läuft (2026-07-30, gemessen bei
-    320×568/360×640/360×800/375×812/393×852/412×915 — 20 bis 42 px Luft je Seite;
-    320 bricht die Kopfzeile bewusst um, dokumentierte Grenze)
-16. **Abgang der Reise zu den Fragen** — erwartet: zwischen letztem Filmbild und den
-    häufigen Fragen keine Lücke und kein zweites Auftauchen des Videos; Unterkante
-    Textebene und Oberkante Leseteil auf 0 px · zuletzt: läuft (2026-07-30, neun
-    Messpunkte). **Hier ist schon zweimal etwas gerissen** (V37, V39) — nach jeder
-    Änderung an Ausklang, Textebene oder Leseteil erneut messen.
-14. **Ohne JavaScript** — erwartet: SEO-Block und Langfassungen als Lesetext ·
-    zuletzt: läuft (`.js`-Klasse ab-/angeschaltet und gemessen)
+    zuletzt: läuft (2026-09-05, `anflug.mp4` 200, Blob 206; `has-clip` braucht rAF → Gerät)
+12. **„Mehr dazu"-Feld** — erwartet: öffnet, Fokus wandert hinein, Escape schließt, Fokus
+    kehrt zum Knopf zurück · zuletzt: läuft (2026-09-05, alle vier Zustände gemessen)
+13. **Hochkant-Fassung** — erwartet: kein seitlicher Überlauf, jede Station passt in den
+    Textstreifen · zuletzt: läuft (2026-09-05 bei 375×812: Dokumentbreite 375, Textzone
+    `max(36svh, 365px)`; die Telefon-Erkennung greift in der Emulation nicht — nur am Gerät;
+    volle Messreihe zuletzt 2026-07-30)
+14. **Ohne JavaScript** — erwartet: SEO-Block und Langfassungen als Lesetext · zuletzt:
+    statisch belegt (2026-09-05: `.js .vertiefungen{display:none}` in Zeile 784, Reveal-Regeln
+    von `pruefe-seiten.mjs` bewacht; gemessen zuletzt 2026-07-27)
 15. **Kamerafahrt/Scrubbing** — nicht prüfbar im versteckten Pane (rAF läuft dort nicht);
     steht als Telefontest auf Gabriels Hub-Liste
+16. **Abgang der Reise zu den Fragen** — erwartet: keine Lücke, kein zweites Auftauchen des
+    Videos, Unterkante Textebene und Oberkante Leseteil auf 0 px · zuletzt: läuft (2026-07-30,
+    neun Messpunkte); in Runde 4 nicht erneut geprüft. **Hier ist schon zweimal etwas
+    gerissen** (V37, V39) — nach jeder Änderung an Ausklang, Textebene oder Leseteil messen.
+17. **Weiterleitung `/der-weg/` → `/`** (neu seit 02.09.) — erwartet: `noindex` + Meta-Refresh,
+    Browser landet auf der Startseite · zuletzt: läuft (2026-09-05, live 200 mit 878 Bytes;
+    im lokalen Deploy-Nachbau landet der Browser auf `/` mit Titel und `canonical` der Reise)
+18. **robots.txt und sitemap.xml** (neu) — erwartet: aus dem `canonical` erzeugt, vier
+    Adressen · zuletzt: läuft (2026-09-05, live Byte für Byte wie der lokale Nachbau)
+19. **Vorschau-Server** (Werkzeug, `scripts/der-weg/server.mjs`) — erwartet: liefert
+    Repo-Stand und `_site` ohne Absturz · zuletzt: läuft, **stürzt aber bei einer kaputt
+    kodierten URL ab → V65**
 
 ## Offen
 
@@ -116,6 +147,92 @@ DSGVO-Linie außerhalb der Reise.
 Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielort ist GitHub
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
+
+- [ ] **V60** (A) Zertifikat für `www` hängt seit dem 02.09. im Zustand `new`, der https-Zwang ist aus
+      Gefahr: `http://jgc-lumen.de/` wird unverschlüsselt ausgeliefert und leitet nicht auf https um —
+      in einem fremden WLAN könnte jemand die Seite unterwegs verändern (etwa die Mailadresse im
+      Formular). `https://www.jgc-lumen.de/` wirft eine Zertifikatswarnung, und das heutige Zertifikat
+      der Hauptadresse läuft am 01.12.2026 aus: hängt der Antrag bis dahin, fällt auch sie.
+      Beleg (2026-09-05): `gh api repos/jgc-coding/jgc-studio-website/pages` → `https_certificate.state`
+      = `"new"`, `domains` = [`jgc-lumen.de`, `www.jgc-lumen.de`], `https_enforced` = `false`,
+      `expires_at` 2026-12-01. `curl -sI http://jgc-lumen.de/` → 200 ohne `Location`. `openssl s_client`
+      auf `www` liefert `CN=*.github.io` (GitHubs Sammelzertifikat), auf der Hauptadresse ein Let's-Encrypt-
+      Zertifikat nur für `jgc-lumen.de` (02.09.–01.12.2026). DNS ist korrekt: A 185.199.108–111.153,
+      AAAA 2606:50c0:8000–8003::153, `www` CNAME `jgc-coding.github.io`; kein CAA-Eintrag, der Let's
+      Encrypt sperren würde (dns.google: NODATA). Die alte Adresse `jgc-coding.github.io/jgc-studio-website/`
+      leitet mit 301 auf **http**://jgc-lumen.de/ — Folge desselben Schalters.
+      Aufwand: S · Risiko: mittel
+      Vorgehen: (1) in den Pages-Einstellungen im Browser nachsehen, ob unter der Domain ein Fehlertext
+      steht — die API zeigt keinen Grund. (2) Steht dort nichts, den Antrag neu anstoßen: Domain kurz auf
+      `www.jgc-lumen.de` setzen und sofort zurück (hat am 02.09. den Antrag über beide Namen erzeugt) oder
+      Domain aus- und wieder eintragen; die Seite ist währenddessen kurz nur unter der github.io-Adresse
+      erreichbar, darum Gabriels Ok. (3) Sobald `approved`: `gh api -X PUT repos/jgc-coding/jgc-studio-website/pages
+      -F https_enforced=true`, dann `curl -sI http://jgc-lumen.de/` → 301 auf https und
+      `curl -sI https://www.jgc-lumen.de/` → 301 ohne Zertifikatsfehler. Das ist Schritt 1 aus
+      `weitermachen.md`, seit drei Tagen offen.
+
+- [ ] **V61** (A) `npm audit` im Archiv-Paket `site/`: 8 Schwachstellen (3 low, 5 high)
+      Gefahr: `sharp` verarbeitet Bilder; über eine präparierte Bilddatei könnte beim Verarbeiten
+      fremder Code laufen (vier libvips-CVEs, GHSA-f88m-g3jw-g9cj, `sharp` < 0.35.0). Dazu `nanoid`
+      < 3.3.18 (GHSA-2v37-7h3g-55p8) und `postcss-selector-parser` 6.1.0–6.1.2 (GHSA-w9m9-85wc-3x92).
+      Bezug: `sharp` läuft nur lokal in drei Bau-Skripten (`scripts/v18/baue-og-bild.mjs`,
+      `scripts/der-weg/baue-favicon.mjs`, `scripts/google-profil/baue-profilbild.mjs`) mit eigenen
+      Bildern — nie im Browser der Besucherin. V10 war „gegenstandslos", weil der Astro-Build weg ist;
+      `sharp` hängt aber weiter an diesem Paket (CLAUDE.md: `cd site && npm ci`), und `npm ci` installiert
+      genau den verwundbaren Stand samt Astro-Ballast.
+      Aufwand: S · Risiko: gering
+      Empfehlung: `sharp` aus dem Archiv lösen — ein eigenes kleines Werkzeug-Paket (z. B. `scripts/package.json`
+      mit `sharp ^0.35`), CLAUDE.md-Zeile dazu anpassen; `site/` bleibt unangetastet als Archiv.
+      `npm audit fix --force` würde Astro auf 7.x heben — für ein Archiv sinnlos und riskant.
+      Zusatzbeleg: `npm audit` (2026-09-05, `site/`, ohne `node_modules` aus dem Lockfile):
+      „8 vulnerabilities (3 low, 5 high) … sharp <0.35.0 fix available via npm audit fix --force,
+      Will install astro@7.3.1, which is a breaking change".
+
+- [ ] **V62** (C) Fehlerbox der Formulare nennt keine technische Ursache (Regel „zweistufige Fehlermeldung")
+      Gefahr: Wenn der PHP-Empfang läuft und etwas scheitert, kann Gabriel aus dem Screenshot einer
+      Besucherin nicht erkennen, ob es ein Timeout, ein 500er oder kaputtes JSON war — die Ursache wird
+      verworfen, und der Fehler bleibt Ferndiagnose per Raten.
+      Beleg: `der-weg/formulare.js:263-281` wirft `'http-status'` bzw. `'status'`, der `catch` ignoriert
+      den Fehler; `zeigeFehler()` (Zeile 227) baut den Text ohne Status und Uhrzeit. Live nachgestellt:
+      POST → 404 → „Das hat gerade nicht geklappt …" ohne jeden Hinweis. Die Unterseite
+      `stilprobe/index.html` trägt dieselbe portierte Logik (minifiziert, nicht gelesen — Vermutung).
+      Aufwand: S · Risiko: gering
+      Empfehlung: eine kleine Zeile unter der Meldung („Technische Ursache: HTTP 404 · 13:45 Uhr") plus
+      `console.warn`; die menschliche Hauptmeldung bleibt wie sie ist.
+
+- [ ] **V63** (D) Launch vom 02.09.2026 ohne Git-Tag
+      Gefahr: Für einen Rollback der Live-Seite gibt es keinen benannten Punkt; die Regel „jedes Release
+      als Tag" ist seit dem Domain-Umzug verletzt.
+      Beleg: `git tag --sort=-creatordate` → nur `stilprobe-live-2026-07-12` und
+      `archiv/runde1-analyse-2026-07-07`; live ging `9ca03be`, `main` steht auf `17c85e4`.
+      Aufwand: S · Risiko: gering
+      Empfehlung: `git tag -a live-2026-09-02 17c85e4` (oder `9ca03be`, der erste Live-Stand) und pushen.
+
+- [ ] **V64** (D) Aufräumreste nach dem Launch — geprüft, keine verlorene Arbeit
+      Gefahr: Wer den Hauptordner `C:\Projekte\JGC Studio` öffnet, sieht den Stand von Variante 09
+      (168 Dateien, 24.091 Zeilen hinter `main`) und hält ihn womöglich für die Seite; alte Branches
+      lassen den Sessionstart-Hook jedes Mal „10 nicht gemergte Branches" melden.
+      Beleg (2026-09-05): `git worktree list` → Hauptbaum auf `variant/09-cinematic-bausteine`
+      (globale Regel: der Hauptbaum bleibt auf `main`). `claude/stilprobe-mail-setup-c938ed`:
+      0 Commits vor `main`, kein Worktree → nur löschen. `claude/jgc-lumen-launch-prep-252162`:
+      1 Commit (`bc956bb`, V59), in diesem Lauf per Fast-Forward in `claude/improve-760bc8`
+      übernommen; sein Worktree `.claude/worktrees/background-video-cut-revision-bec6e7` steht noch.
+      Zwei leere Worktree-Ordner (`google-business-profile-image-3d856e`,
+      `jgc-lumen-business-description-30f915`), bekanntes Windows-Muster. Die neun `variant/*`-Branches
+      sind Archiv auf Gabriels Wunsch — kein Befund.
+      Aufwand: S · Risiko: gering
+      Empfehlung: nach dem Merge dieser Runde `git branch -d` für die zwei `claude/*`-Branches,
+      `git worktree remove` für den alten Worktree, Hauptbaum per `git checkout main`.
+
+- [ ] **V65** (D) `scripts/der-weg/server.mjs` stürzt bei einer kaputt kodierten URL ab
+      Gefahr: Ein einziger Aufruf wie `/%` (Tippfehler, Bot, kaputter Link) beendet den Vorschau-Server;
+      der Vorschau-Pane zeigt danach nur noch „Verbindung abgelehnt", und man sucht den Fehler an der
+      falschen Stelle.
+      Beleg: reproduziert am 2026-09-05 mit `curl http://localhost:4331/%` → Prozess weg,
+      `URIError: URI malformed at decodeURIComponent (server.mjs:60:14)`; `robots.txt` danach
+      nicht mehr erreichbar. Nur lokales Werkzeug, nie ausgeliefert.
+      Aufwand: S · Risiko: gering
+      Empfehlung: `decodeURIComponent` in `try/catch`, bei Fehler HTTP 400 statt Absturz.
 
 - [ ] **V59** (A) Googles Wissensbasis zur Marke füttern — Definitionssatz + `sameAs`.
       **Gabriels Einstufung 03.09.2026: wichtig.**
@@ -188,6 +305,50 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
       die Schrift Fraunces liegt nur als woff2 in der Seite und lässt sich mit `sharp` nicht
       ohne Weiteres setzen. Reicht so, wirkt aber ruhiger als nötig.
       Abgrenzung: nur das Teilen-Bild, keine Änderung an der Seite selbst.
+
+- **I5** (Abrundung) Eigene 404-Seite im Design der Reise — Aufwand: S
+      Nutzen: Wer einen alten oder vertippten Link öffnet, landet heute auf GitHubs englischer
+      Standardseite („Page not found · GitHub Pages") ohne Weg zurück; eine eigene Seite holt ihn mit
+      einem Satz und den vier Links zur Reise, Stilprobe und den Rechtsseiten ab.
+      Bedarf: live `/galerie/`, `/main/`, `/variants/standalone/18-lumen/` → 9.379 Bytes GitHub-404
+      (2026-09-05); `gh api …/pages` meldet `custom_404: false`. Die Galerie-Adressen waren bis
+      02.09. in Gebrauch. GitHub Pages nimmt eine `404.html` an der Wurzel automatisch;
+      `baue-site.mjs` müsste sie nur kopieren, `pruefe-seiten.mjs` sie als sechste Seite kennen.
+      Abgrenzung: keine automatischen Weiterleitungen alter Pfade, keine Suche.
+
+- **I6** (Abrundung) Ausweichweg mit einem Klick: Mail vorbefüllen oder „Eingaben kopieren" — Aufwand: S
+      Nutzen: Heute läuft JEDE Formulareinsendung in die Fehlerbox (Endpunkte 404, by design bis zum
+      PHP-Host). Die Box sagt „du kannst sie von hier kopieren" — bei drei Texten à bis zu 6.000 Zeichen
+      heißt das dreimal markieren, kopieren, einfügen. Ein Knopf, der alle Felder als fertigen Mailtext
+      in die Zwischenablage legt (beim Erstgespräch reicht ein `mailto:` mit Betreff und Body, dort
+      passen Anliegen und Zeitfenster hinein), macht aus dem Notweg einen Ein-Klick-Weg.
+      Bedarf: `der-weg/formulare.js:227-236` (Box ohne Vorbefüllung); die CTA-Links tragen ein nacktes
+      `mailto:` ohne Betreff (`index.html:2051`). Solange der Serverteil fehlt, ist das der einzige Weg,
+      auf dem eine Anfrage ankommt.
+      Abgrenzung: kein Serverteil, kein Eingriff in die Feldverträge der `schnittstelle.md`.
+
+- **I7** (Abrundung) Drei-Orte-Regel maschinell bewachen — Aufwand: M
+      Nutzen: Jeder Stationstext steht dreimal in `der-weg/index.html` (Engine-Konfiguration
+      `sections`, SEO-Spiegel `data-sw-seo`, Vertiefungs-Artikel). Driftet einer, erzählen Browser
+      und Suchmaschine Verschiedenes — und niemand merkt es, weil die Seite trotzdem läuft. Eine
+      Regel in `pruefe-seiten.mjs`, die Überschrift und Kerntext je Station zwischen `sections` und
+      dem SEO-Spiegel vergleicht (normalisiert, ohne Whitespace), macht den Fehler rot statt still.
+      Bedarf: die Regel steht als Merksatz in CLAUDE.md und `weitermachen.md`; V54 hat alle drei Orte
+      von Hand geändert. Der SEO-Spiegel ist eine einzelne `<section data-sw-seo>` mit `h2`/`p`
+      (Zeile 1141 ff.), die Konfiguration hat je Station `title`/Textfelder — beides ist greifbar.
+      Abgrenzung: nur Prüfung, kein Generator, der einen Ort aus dem anderen erzeugt (das wäre ein
+      Umbau der Reise).
+
+- **I8** (Später) Stilprobe-Unterseite ins Design der Reise — Aufwand: L
+      Nutzen: Wer aus der Papierwelt der Reise auf `/stilprobe/` wechselt, landet im Lesefassungs-Look
+      von V18 (anderes Layout, eigene Schriften inline) — ein sichtbarer Bruch auf dem wichtigsten
+      Nebenweg. Eine schlanke Seite nach dem Muster der Rechtsseiten (gemeinsame Schriften und
+      Stylesheet) würde den Bruch schließen und die Seite von 724 KB auf einen Bruchteil bringen.
+      Bedarf: `stilprobe/index.html` 723.923 Bytes als Single-File mit eingebetteten Schriften, nur
+      per Transform-Skript änderbar; die Reise mit Rechtsseiten liegt bei 125 KB plus geteilten
+      Assets. Gabriels Entscheidung vom 02.09. betraf die Lesefassung als Startseite, nicht die
+      Unterseite — darum „Später" und seine Entscheidung.
+      Abgrenzung: Formular-Vertrag, Feldnamen und Wortlaute bleiben exakt (`docs/stilprobe/schnittstelle.md`).
 
 ## Abgelehnt
 
