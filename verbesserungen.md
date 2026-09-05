@@ -342,8 +342,16 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
   Ursache vollständig. Gilt für beide Seiten, weil die Logik jetzt nur einmal existiert (I8).
 - **V63** (D) Der Launch trägt einen Tag: `live-2026-09-02` auf `17c85e4`, annotiert und gepusht.
 - **V64** (D) Aufgeräumt: `claude/stilprobe-mail-setup-c938ed` und
-  `claude/jgc-lumen-launch-prep-252162` gelöscht (beide in `main` enthalten), der Worktree
-  `background-video-cut-revision-bec6e7` entfernt, der Hauptbaum steht wieder auf `main`.
+  `claude/jgc-lumen-launch-prep-252162` gelöscht (beide nachweislich in `HEAD` enthalten), der
+  Worktree `background-video-cut-revision-bec6e7` entfernt. Übrig sind die neun `variant/*`-Branches
+  (Archiv, bleiben) und der Arbeitsbranch dieser Runde.
+  **Ein Teil ist bewusst NICHT ausgeführt: der Hauptbaum steht weiter auf `variant/09`.** Dort
+  liegt eine ungesicherte Änderung an `.gitignore` (die Zeile `.claude/skills/` mit Begründung,
+  von Gabriel, nie committet), und `.gitignore` unterscheidet sich zwischen `variant/09` und `main`
+  — ein Branchwechsel hätte diese Änderung angefasst. Dazu 17 unversionierte Dateien im Hauptbaum
+  (`Scroll World/`, Varianten-Exporte, `Website Texte 01.docx`, `ci-jgc-studio.md` …). Was damit
+  passiert, ist Gabriels Entscheidung; die `.gitignore`-Zeile gehört vermutlich committet und hängt
+  am Hub-Punkt „fremde Skills versionieren?". Danach: `git checkout main` im Hauptbaum.
 - **V65** (D) `scripts/der-weg/server.mjs` antwortet auf eine kaputt kodierte Adresse mit HTTP 400,
   statt abzustürzen. Vor dem Fix nachgestellt (`curl http://localhost:4331/%` → Prozess weg), nach
   dem Fix erneut (400, Server lebt weiter).
