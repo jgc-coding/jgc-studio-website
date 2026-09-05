@@ -8,6 +8,11 @@ erledigt und stehen unten. **V60 bleibt offen** — der Zertifikatsantrag wurde 
 letzte Schritt (`https_enforced` wieder einschalten) geht erst nach `approved`. Neu dazugekommen
 ist **V66** als Folge des Stilprobe-Neubaus. Rückkehrpunkt vor der Umsetzung: Commit `bc956bb`.
 
+**Deploy am 05.09.2026 (Gabriels Freigabe „mach das, was am besten ist"):** Runde 4 ist live —
+Push `042122a`, Action grün, Live-Nachprüfung grün (Reise und Stilprobe byte-gleich mit dem Repo,
+eigene 404-Seite greift, Sitemap vier Adressen). **V64 ist damit abgeschlossen** (Hauptbaum auf
+`main`, Details unter „Erledigt"); nur **V60** hängt weiter am Zertifikat.
+
 **Runde 4 (2026-09-05, erste Analyse nach dem Launch unter jgc-lumen.de):** Live-Lauf über
 Reise, beide Formulare (Reise-Overlays und `/stilprobe/`), Rechtsseiten, Deploy-Nachbau im
 Scratchpad (61 Dateien, 46,3 MB, Prüfung grün), Done-Gate komplett grün, Live-Abfragen der
@@ -87,8 +92,10 @@ Seit 02.09.2026 ist die Reise die Startseite unter `https://jgc-lumen.de/`; die 
 darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind neu).
 
 1. **Startseite (Reise) erreichbar** — erwartet: `https://jgc-lumen.de/` liefert die Reise,
-   Titel und `canonical` stimmen · zuletzt: läuft (2026-09-05, live HTTP 200 mit 124.566 Bytes
-   wie im Repo; lokal 7 Szenen, 7 Stationen, 7 „Mehr dazu"-Knöpfe, genau ein `h1`)
+   Titel und `canonical` stimmen · zuletzt: läuft (2026-09-05 nach dem Runde-4-Deploy: live
+   HTTP 200 mit 120.748 Bytes, byte-gleich mit dem Repo — kleiner als vorher, weil der
+   Feld-CSS-Block nach `formular.css` gewandert ist; lokal 7 Szenen, 7 Stationen,
+   7 „Mehr dazu"-Knöpfe, genau ein `h1`)
 2. **Navigation und Anker** — erwartet: Reiter und Punktleiste, jeder Anker hat ein Ziel,
    `/#station` springt zur Station · zuletzt: Reiter und Anker laufen (2026-09-05, 7 Reiter,
    `pruefe-seiten.mjs` grün); der Sprung per Hash ist im versteckten Pane **nicht prüfbar**
@@ -113,9 +120,10 @@ darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind 
    zuletzt: läuft (2026-09-05, Impressum 4 Abschnitte, Datenschutz 9 Abschnitte mit Stand
    02.09., Fraunces geladen, Sprungmarke „Zum Inhalt", interne Links alle 200)
 8. **Deploy-Kette** — erwartet: Push auf `main` → Action grün, Ergebnis lokal identisch
-   nachbaubar, Domain mit gültigem Zertifikat und https-Zwang · zuletzt: Build läuft (letzte
-   3 Läufe grün, ~30 s; lokal 61 Dateien, 46,3 MB, Prüfung grün) — **Zertifikat für `www` und
-   https-Zwang kaputt → V60**
+   nachbaubar, Domain mit gültigem Zertifikat und https-Zwang · zuletzt: läuft (2026-09-05
+   Runde-4-Deploy: Push `042122a` → Action grün, live byte-gleich mit dem Repo; lokal
+   65 Dateien, 45,7 MB, Prüfung grün) — **Zertifikat für `www` und https-Zwang weiter
+   kaputt → V60**
 9. **Reise mountet** — erwartet: 7 Szenen, 7 Stationen, kein Konsolenfehler · zuletzt: läuft
    (2026-09-05, alle Requests 200, Konsole leer bis auf die erwarteten 404 der PHP-Endpunkte)
 10. **Datenmodus entscheidet selbst** — erwartet: erst Standbilder, Freigabe nach Messung,
@@ -146,10 +154,9 @@ darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind 
     Repo-Stand und `_site` ohne Absturz · zuletzt: läuft (2026-09-05; die kaputt kodierte
     Adresse aus V65 beantwortet er jetzt mit HTTP 400 und läuft weiter)
 20. **Fehlerseite** (neu seit 05.09.) — erwartet: unbekannte Pfade landen auf einer eigenen
-    Seite mit Wegen zurück, `noindex`, nicht in der Sitemap · zuletzt: läuft (2026-09-05 im
-    Deploy-Nachbau: `/404.html` liefert 2.859 Bytes, Sitemap unverändert vier Adressen).
-    **Live erst nach dem nächsten Deploy prüfbar** — GitHub Pages liefert `/404.html`
-    automatisch aus, bis dahin steht dort noch GitHubs englische Standardseite.
+    Seite mit Wegen zurück, `noindex`, nicht in der Sitemap · zuletzt: läuft (2026-09-05
+    **live** nach dem Runde-4-Deploy: unbekannter Pfad antwortet HTTP 404 mit der eigenen
+    Seite „Seite nicht gefunden", Sitemap unverändert vier Adressen).
 
 ## Offen
 
@@ -191,6 +198,13 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Schalter fällt also mit dem Eintragen der Domain, nicht durch das `www`-Manöver. Nächster Schritt
       unverändert (3); hilft auch das nicht binnen ein, zwei Tagen, bleibt nur der Blick in die
       Pages-Einstellungen im Browser oder der GitHub-Support.
+      **Stand 05.09.2026 (nach dem Deploy von Runde 4):** Antrag steht weiter auf `new` („request
+      process will begin shortly"); der Server liefert unverändert das alte Apex-Zertifikat und für
+      `www` GitHubs Sammelzertifikat. Blick in die Pages-Einstellungen per Chrome versucht — dort ist
+      niemand bei GitHub angemeldet, die Seite zeigt dann nur „Page not found"; der Blick bleibt also
+      Gabriels Schritt (Hub). Wichtig: **nicht erneut anstoßen** — jeder Neuanstoß setzt den Antrag
+      wieder an den Anfang der Warteschlange. Erst nach ein, zwei weiteren Tagen `new` wird der
+      Browser-Blick bzw. der GitHub-Support zur einzigen Spur.
 
 - [ ] **V66** (D) Vier Skripte in `scripts/stilprobe/` laufen seit dem Neubau ins Leere
       Gefahr: Wer sie zur Hand nimmt, arbeitet an einer Datei, die es so nicht mehr gibt — die
@@ -352,6 +366,15 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
   (`Scroll World/`, Varianten-Exporte, `Website Texte 01.docx`, `ci-jgc-studio.md` …). Was damit
   passiert, ist Gabriels Entscheidung; die `.gitignore`-Zeile gehört vermutlich committet und hängt
   am Hub-Punkt „fremde Skills versionieren?". Danach: `git checkout main` im Hauptbaum.
+  **Abschluss am 05.09.2026 (Gabriels Freigabe „mach das, was am besten ist"):** die
+  `.gitignore`-Zeile ist wörtlich auf `main` committet (`042122a`), der Hauptbaum steht auf `main`
+  — verlustfrei: die einzige Änderung der Arbeitskopie war genau diese Zeile, und die vier
+  untracked Bilddateien, die dem Wechsel im Weg standen (Profilbild-Platzhalter, drei
+  TÜV-Dateien), waren byte-gleich mit dem `main`-Stand (zusätzlich im Session-Scratchpad
+  gesichert). Die übrigen unversionierten Dateien liegen unangetastet. Außerdem einen beim ersten
+  Aufräumen übersehenen dritten Worktree entfernt (`stilprobe-mail-setup-c938ed` mit Branch
+  `claude/improve-760bc8`, beide identisch mit `main`); übrig ist nur seine leere Ordnerhülle
+  unter `.claude/worktrees/` — ein anderer Prozess sperrt sie, nach einem Neustart löschbar.
 - **V65** (D) `scripts/der-weg/server.mjs` antwortet auf eine kaputt kodierte Adresse mit HTTP 400,
   statt abzustürzen. Vor dem Fix nachgestellt (`curl http://localhost:4331/%` → Prozess weg), nach
   dem Fix erneut (400, Server lebt weiter).

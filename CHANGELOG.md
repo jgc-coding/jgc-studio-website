@@ -2,6 +2,26 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-05 — Runde 4 ist live; Hauptbaum wieder auf `main` (V64 abgeschlossen)
+
+Gabriels Freigabe („mach das, was am besten ist"): Push `042122a` auf `main`, Action grün.
+Live nachgeprüft: Reise und Stilprobe byte-gleich mit dem Repo (120.748 / 20.351 Bytes), die
+eigene 404-Seite antwortet auf unbekannte Pfade mit HTTP 404 („Seite nicht gefunden",
+Kernfunktion 20 jetzt auch live), Sitemap unverändert vier Adressen, `formular-kern.js`,
+`seiten.css` und `formular.css` liefern 200, Weiterleitung `/der-weg/` und robots.txt stehen.
+Tag: **`live-2026-09-05`** (auf dem Stand dieses Eintrags, gepusht).
+
+- **V64 abgeschlossen:** Gabriels `.gitignore`-Zeile (`.claude/skills/` samt Begründung) wörtlich
+  auf `main` committet (`042122a`), der Hauptbaum von `variant/09` auf `main` gewechselt —
+  verlustfrei: die einzige Änderung der Arbeitskopie war genau diese Zeile, und die vier
+  untracked Bilddateien, die dem Wechsel im Weg standen (Profilbild-Platzhalter, TÜV-Zertifikat),
+  waren byte-gleich mit dem `main`-Stand. Dazu ein beim ersten Aufräumen übersehener dritter
+  Worktree entfernt (`stilprobe-mail-setup-c938ed`, Branch `claude/improve-760bc8`, identisch
+  mit `main`); übrig ist nur eine leere Ordnerhülle, die ein anderer Prozess sperrt.
+- **V60 unverändert offen:** der Zertifikatsantrag für beide Namen steht weiter auf `new`.
+  Browser-Diagnose war nicht möglich (Chrome auf GitHub nicht angemeldet); der letzte Schritt
+  (`https_enforced` wieder ein) folgt erst nach `approved`.
+
 ## 2026-09-05 — Runde 4 umgesetzt: Stilprobe neu gebaut, Formular-Logik zusammengeführt (V60–V66, I5–I8)
 
 Gabriels Freigabe für das komplette Paket der `/improve`-Runde 4. Rückkehrpunkt davor: Commit `bc956bb`.
