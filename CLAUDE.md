@@ -56,9 +56,9 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 - Push auf `main` → GitHub Action (`.github/workflows/deploy.yml`): `node scripts/deploy/baue-site.mjs _site`
   (Reise an die Wurzel, Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung, 404-Seite, `robots.txt` +
   `sitemap.xml` aus den indexierbaren Seiten), dann `node scripts/pruefe-seiten.mjs _site` → GitHub Pages. Kein npm,
-  kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`. Seit 05.09.2026 ist
-  `main` im Hauptbaum ausgecheckt (globale Regel) — aus einem Worktree deployt man deshalb mit
-  `git push origin HEAD:main`, nicht mehr über `git branch -f main HEAD`.
+  kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`. Aus einem Worktree
+  deployt man mit `git push origin HEAD:main` — das funktioniert unabhängig davon, wo `main`
+  ausgecheckt ist, und ersetzt das frühere `git branch -f main HEAD`.
 - **Domain:** `jgc-lumen.de` steht in den Pages-Einstellungen des Repos (`gh api repos/jgc-coding/jgc-studio-website/pages`),
   DNS liegt bei All-Inkl (A/AAAA auf GitHub Pages, `www` als CNAME auf `jgc-coding.github.io`). GitHub
   leitet `www` und die alte Adresse `jgc-coding.github.io/jgc-studio-website/` auf die Domain um.
@@ -117,7 +117,12 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   Testen `requestAnimationFrame` auf synchron umbiegen, damit der echte Code-Pfad läuft. Der
   Ersatz muss **Wiedereintritt verweigern**, sonst reißt die selbst-nachbestellende rAF-Schleife
   der Engine sofort den Aufrufstapel ein.
-  (3) **CSS-Übergänge frieren am STARTWERT ein** — eine Fläche mit `transition` misst sich als
+  (3) **Gescrollte Bereiche malt der Pane nicht neu** — ein Screenshot nach `scrollTo` zeigt leere
+  Fläche, obwohl `elementFromPoint` dort Inhalt findet. Für ein Bild weiter unten das Fenster hoch
+  setzen (`resize_window` 1100×2600) oder `documentElement.style.transform='translateY(-Npx)'`;
+  Beweise laufen ohnehin über DOM-Messung. Ebenso braucht `navigator.clipboard` eine echte
+  Mausgeste — ein `element.click()` aus JavaScript scheitert dort mit `NotAllowedError`.
+  (4) **CSS-Übergänge frieren am STARTWERT ein** — eine Fläche mit `transition` misst sich als
   ihr Ausgangswert (`rgba(0,0,0,0)` statt Zielfarbe), und selbst inline gesetzte Werte scheinen
   ignoriert. Vor jeder Farb-/Zustandsmessung `element.style.transition='none'` setzen, danach
   zurücksetzen — ohne Ausnahme: dieselbe Falle hat an derselben Fläche zweimal zugeschlagen.
