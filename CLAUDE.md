@@ -65,7 +65,7 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 ## Build / Deploy
 - Push auf `main` → GitHub Action (`.github/workflows/deploy.yml`): `node scripts/deploy/baue-site.mjs _site`
   (Reise an die Wurzel, Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung, 404-Seite, `robots.txt` +
-  `sitemap.xml` aus den indexierbaren Seiten), dann `node scripts/pruefe-seiten.mjs _site` → GitHub Pages. Kein npm,
+  `sitemap.xml` + `CNAME` aus den indexierbaren Seiten), dann `node scripts/pruefe-seiten.mjs _site` → GitHub Pages. Kein npm,
   kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`. Aus einem Worktree
   deployt man mit `git push origin HEAD:main` — das funktioniert unabhängig davon, wo `main`
   ausgecheckt ist, und ersetzt das frühere `git branch -f main HEAD`.
@@ -74,6 +74,10 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   leitet `www` und die alte Adresse `jgc-coding.github.io/jgc-studio-website/` auf die Domain um.
   Die Mail-Einträge der Domain (MX, SPF, DKIM, DMARC) und der Wildcard-Eintrag `*` bleiben bei
   All-Inkl — nie anfassen, sonst bricht das Postfach.
+- **Wer per Action deployt, muss die `CNAME`-Datei selbst ins Ergebnis legen** — GitHub erzeugt sie nur
+  beim Veröffentlichen aus einem Branch. Fehlt sie, widersprechen sich Pages-Einstellung und Ergebnis,
+  die Domainprüfung bleibt auf „DNS Check in Progress" hängen und es kommt kein Zertifikat. `baue-site.mjs`
+  schreibt sie aus dem `canonical`, `pruefe-seiten.mjs` prüft sie im `_site` (Ursache von V60, zehn Tage).
 - **Zertifikat deckt nur ab, was beim Ausstellen im DNS stand.** Kommt `www` später dazu, stellt GitHub
   von sich aus KEIN neues aus, und die Domain aus- und wieder einzutragen genügt nicht. Was wirkt: kurz
   `www.<domain>` als Custom Domain setzen, sofort zurück auf die Hauptadresse — der Antrag über beide
