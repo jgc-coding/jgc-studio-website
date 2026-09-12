@@ -24,7 +24,7 @@ der Notfallweg über ein Postfach, das es vorher nicht gab — beide waren bis h
   danach weiter auf `new`. **Nicht erneut anstoßen.** Nebenbefund: der Wildcard-Eintrag `*` fängt
   auch `_github-pages-challenge-…` ab und bricht damit die optionale Domain-Verifizierung.
 - **Mails sind nur zugesagt, nicht belegt.** `mail()` meldet die Annahme, nicht die Zustellung.
-  Gabriel prüft `stilprobe@` (vier Einreichungen der Prüfläufe) und `kontakt@` (Bestätigungen).
+  Gabriel prüft `stilprobe@` (drei Einreichungen der Prüfläufe) und `kontakt@` (Bestätigungen).
   Kommt nichts an, liegt es an der Zustellung, nicht am Formular.
 - **V68** (Anthropic-Vertrag) muss stehen, bevor der erste fremde Text durch Claude läuft.
 - Offene Befunde: **V59** (Googles Wissensbasis, wichtig), **V60**, **V66** (acht tote Skripte,
