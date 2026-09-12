@@ -1,6 +1,23 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (05.09.2026 — Runde 4 ist LIVE, Aufräumen abgeschlossen)
+## Stand (12.09.2026 — V67 gebaut, externes Feedback bewertet, V69/V70 umgesetzt; NICHT deployt)
+- **V67 (Formulare):** Empfangsschicht im privaten Repo `stilprobe-automatik` gebaut und mit
+  43 Fällen getestet; die Website zeigt im Repo auf `https://formular.jgc-lumen.de`. **Nicht
+  deployen**, bis Gabriel die drei All-Inkl-Schritte aus dem Hub erledigt hat (Postfach,
+  Unteradresse mit PHP und SSL, FTP-Zugang) — vorher bricht das Zertifikat der Unteradresse.
+  Danach: hochladen, `git push origin HEAD:main`, live nachprüfen.
+- **Externes Feedback vom 12.09.2026** (Datei bei Gabriel, `Feedback JGC Lumen.md`): bewertet,
+  Ergebnis in `verbesserungen.md` unter „Feedback-Runde". Gabriels Freigabe „F13, F3" →
+  **V69** (Auftakt-Titel ist ein `h1`) und **V70** (Knopf „Erstgespräch anfragen" in der
+  Kopfzeile, Gabriels Wahl statt Auftakt-Station) umgesetzt, nachgemessen, Done-Gate und
+  Deploy-Nachbau grün. Offen daraus: **V71–V75** (Menü der Stilprobe, TÜV-Chip, vier
+  Wortlaut-Zusagen, netto/brutto, zwei Datenschutz-Sätze) und **I9–I14** (Porträt in der Station,
+  Vorbereitungsliste, Quelle-Feld, Leseansicht, Arbeitsbeispiele, Schließ-Schwelle). Die
+  Wortlaut-Punkte hängen an Gabriels laufender Text-Überarbeitung, nichts davon ohne seine Wörter.
+- Der Branch trägt V67 UND V69/V70. Sollen V69/V70 vor V67 live, den Commit per Cherry-Pick auf
+  `main` setzen — er berührt andere Zeilen.
+
+## Davor (05.09.2026 — Runde 4 ist LIVE, Aufräumen abgeschlossen)
 Gabriels Freigabe („mach das, was am besten ist"): Runde 4 ist deployt — Push `042122a`,
 Action grün, live nachgeprüft. Reise (120.748 Bytes) und Stilprobe (20.351 Bytes) sind
 byte-gleich mit dem Repo, die eigene 404-Seite greift (Kernfunktion 20 jetzt auch live),
@@ -21,13 +38,14 @@ Tag `live-2026-09-05`, gepusht.
 - **V60** (Zertifikat für `www`, https-Zwang aus): Antrag steht nach dem Neuanstoß vom 05.09.
   weiter auf `new`. **Nicht erneut anstoßen** — das setzt die Warteschlange zurück. Chrome war
   auf GitHub nicht angemeldet, darum bleibt der Blick in Settings→Pages Gabriels Schritt (Hub).
-- **Stilprobe bekommt eine eigene Session** (Gabriels Wunsch): PHP-Empfang (Repo
-  `stilprobe-automatik` existiert noch nicht), `senden.php`, `kontingent.php`,
-  `/erstgespraech/senden.php`, Postfach stilprobe@, Anthropic-Bedingungen belegen.
-  Verträge: `docs/stilprobe/schnittstelle.md`, `docs/erstgespraech/schnittstelle.md`.
+- **V67 wartet auf Gabriel** (drei All-Inkl-Schritte im Hub), dann Upload aus
+  `C:\Projekte\Stilprobe-Automatik` und Deploy in einem Zug. **V68** (Anthropic-Vertrag) muss
+  stehen, bevor der erste fremde Text durch Claude läuft. Verträge:
+  `docs/stilprobe/schnittstelle.md`, `docs/erstgespraech/schnittstelle.md`.
 - Offene Befunde: **V59** (Googles Wissensbasis, wichtig), **V60**, **V66** (acht tote
-  Skripte, braucht Freigabe), **V47** (Knöpfe unter 362/380 px), **V14** (LinkedIn-URL).
-  Ideen: **I3** (Kosten-FAQ, braucht Wortlaut-Freigabe), **I4** (Wortmarke aufs Vorschaubild).
+  Skripte, braucht Freigabe), **V47** (Knöpfe unter 362/380 px), **V14** (LinkedIn-URL),
+  **V71–V75** aus dem Feedback (Wörter bzw. Fakten von Gabriel). Ideen: **I3** (Kosten-FAQ,
+  braucht Wortlaut-Freigabe), **I4** (Wortmarke aufs Vorschaubild), **I9–I14** aus dem Feedback.
 - **Gabriel (Hub, Karte „Website"):** juristische Prüfung des Datenschutzes, Testmail an
   kontakt@, Postfach stilprobe@ klären, USt-IdNr., LinkedIn-URL, Profilbild ins Google-Profil,
   Search Console, „fremde Skills versionieren?", Blick in Settings→Pages falls V60 hängt.
@@ -44,9 +62,13 @@ Tag `live-2026-09-05`, gepusht.
    (Hub-Punkt) oder GitHub-Support.
 2. V59 auf Zuruf umsetzen (braucht LinkedIn-URL und Google-Profil-Link); V47, V14, V66 nur auf
    Zuruf; I3 als Wortlaut-Vorschlag vorlegen, nichts ohne Ok einsetzen.
-3. **In den `scroll-world`-Skill zurückgeben** — Liste in `docs/der-weg.md`, Abschnitt „Offen";
+3. **Feedback-Paket ohne Wortlaut-Entscheidung**, sobald Gabriel freigibt: I10 (Vorbereitungsliste,
+   Wortlaut vorschlagen), I11 (Quelle-Feld + Zähler, beide Repos), I9 (Porträt, danach Textzone
+   hochkant nachmessen). V71–V75 erst mit Gabriels Wörtern bzw. Fakten (USt, juristische Prüfung).
+4. **In den `scroll-world`-Skill zurückgeben** — Liste in `docs/der-weg.md`, Abschnitt „Offen";
    neu dazugekommen: „Formular-Overlay: verschieben statt klonen", „`scroll` braucht die
-   Bildanzahl bei ungleich langen Clips" und die Sprungmarken über die Engine-Reiter.
+   Bildanzahl bei ungleich langen Clips", die Sprungmarken über die Engine-Reiter, das `h1` der
+   ersten Station (Punkt 12) und der Kopfzeilen-Knopf mit Schmalzustand (Punkt 13).
 
 ## Stolperfallen (sofort wichtig)
 - **Die Domain hat eine Quelle:** der `canonical` der Reise. `baue-site.mjs` und

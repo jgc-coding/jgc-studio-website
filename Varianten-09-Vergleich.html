@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Variante 09 — 6 Skill-Redesigns im Vergleich</title>
+<style>
+  :root{
+    --tinte:#1F2A44; --pergament:#FEFCF7; --kupfer:#C97B3F; --salbei:#8FA98A;
+    --anthrazit:#2D2D2D; --holzsand:#D9C7A8; --quellwasser:#6FA3B5;
+    --line:rgba(31,42,68,.14);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--pergament); color:var(--tinte);
+    font-family:"Inter",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:clamp(2rem,5vw,4.5rem) clamp(1.2rem,4vw,2.5rem)}
+  header{margin-bottom:2.8rem; max-width:46rem}
+  .eyebrow{font-size:.72rem; letter-spacing:.28em; text-transform:uppercase; color:var(--kupfer); font-weight:600; display:flex; align-items:center; gap:.7rem; margin-bottom:1rem}
+  .eyebrow::before{content:""; width:34px; height:2px; background:var(--kupfer); display:inline-block}
+  h1{font-family:Georgia,"Times New Roman",serif; font-weight:600; letter-spacing:-.02em; font-size:clamp(2rem,4.5vw,3.1rem); line-height:1.08; margin:0 0 .7rem}
+  header p{font-size:1.02rem; color:rgba(31,42,68,.74); margin:0}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.4rem}
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:14px; padding:1.5rem 1.5rem 1.35rem;
+    display:flex; flex-direction:column; gap:.55rem; text-decoration:none; color:inherit;
+    transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s, border-color .28s;
+    position:relative; overflow:hidden;
+  }
+  .card::before{content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--accent,var(--kupfer)); opacity:.0; transition:opacity .28s}
+  .card:hover{transform:translateY(-4px); box-shadow:0 18px 40px -22px rgba(31,42,68,.4); border-color:rgba(31,42,68,.22)}
+  .card:hover::before{opacity:1}
+  .card.base{background:linear-gradient(180deg,#fff, #fbf7ef); border-style:dashed}
+  .tag{font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:rgba(31,42,68,.5); font-weight:600}
+  .card h2{font-family:Georgia,serif; font-weight:600; font-size:1.35rem; letter-spacing:-.01em; margin:.1rem 0 .15rem}
+  .skill{font-size:.82rem; color:var(--kupfer); font-weight:600; font-family:ui-monospace,"SFMono-Regular",Menlo,monospace}
+  .desc{font-size:.92rem; color:rgba(31,42,68,.72); margin:.25rem 0 .2rem}
+  .meta{margin-top:auto; padding-top:.9rem; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:1rem}
+  .scale{display:flex; align-items:center; gap:.5rem; font-size:.72rem; color:rgba(31,42,68,.55)}
+  .bar{width:78px; height:6px; border-radius:3px; background:linear-gradient(90deg,var(--salbei),var(--holzsand),var(--kupfer)); position:relative}
+  .bar i{position:absolute; top:-3px; width:2px; height:12px; background:var(--tinte); border-radius:2px; transform:translateX(-1px)}
+  .open{font-size:.82rem; font-weight:600; color:var(--tinte); display:inline-flex; align-items:center; gap:.35rem}
+  .open::after{content:"→"; transition:transform .25s}
+  .card:hover .open::after{transform:translateX(4px)}
+  footer{margin-top:3rem; font-size:.82rem; color:rgba(31,42,68,.5); border-top:1px solid var(--line); padding-top:1.2rem; max-width:46rem}
+  code{font-family:ui-monospace,Menlo,monospace; background:rgba(31,42,68,.06); padding:.1em .4em; border-radius:4px; font-size:.85em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Design-Exploration</div>
+    <h1>Variante 09 — sechs Skill-Redesigns</h1>
+    <p>Jede Unter-Variante basiert auf Variante&nbsp;09 und wurde von genau einem Design-Skill umgestaltet. Inhalt &amp; Grundfarben blieben erhalten, Layout/Motion durften frei. Die Skala zeigt das Maß an technischer Spielerei (0–10).</p>
+  </header>
+
+  <div class="grid">
+
+    <a class="card base" href="JGC-Studio-Variante-09.html" target="_blank" rel="noopener" style="--accent:var(--anthrazit)">
+      <span class="tag">Basis · unverändert</span>
+      <h2>Variante 09</h2>
+      <div class="skill">cinematic-bausteine</div>
+      <p class="desc">Die Ausgangsbasis, exakt wie sie ist. Referenz für den Vergleich.</p>
+      <div class="meta"><span class="scale">Referenz</span><span class="open">Öffnen</span></div>
+    </a>
+
+    <a class="card" href="JGC-Studio-Variante-09a.html" target="_blank" rel="noopener" style="--accent:var(--kupfer)">
+      <span class="tag">09a</span>
+      <h2>Crafted Calm</h2>
+      <div class="skill">emil-design-eng</div>
+      <p class="desc">Emil Kowalskis Detail-Obsession: spring-magnetische CTAs, WAAPI-Hero-Reveal, Cursor-Spotlight, taktile Press-States. Alles im Dienst des „Feels".</p>
+      <div class="meta"><span class="scale">Tech <span class="bar"><i style="left:65%"></i></span> 6.5</span><span class="open">Öffnen</span></div>
+    </a>
+
+    <a class="card" href="JGC-Studio-Variante-09b.html" target="_blank" rel="noopener" style="--accent:var(--tinte)">
+      <span class="tag">09b</span>
+      <h2>Editorial Manuscript</h2>
+      <div class="skill">design-taste-frontend</div>
+      <p class="desc">Anti-Slop-Taste: Fraunces mit optischer Größe, gespenstische Lese-Numerale 01–06, ein full-bleed Tinte-Manifest als editoriales Scharnier.</p>
+      <div class="meta"><span class="scale">Tech <span class="bar"><i style="left:40%"></i></span> 4</span><span class="open">Öffnen</span></div>
+    </a>
+
+    <a class="card" href="JGC-Studio-Variante-09c.html" target="_blank" rel="noopener" style="--accent:var(--kupfer)">
+      <span class="tag">09c</span>
+      <h2>Audit &amp; Ledger</h2>
+      <div class="skill">impeccable</div>
+      <p class="desc">Craft/Critique/Polish: Eyebrow-„Ledger"-System, Flächen-Rhythmus statt Pergament-Wand, ein sich selbst zeichnender Kupfer-Faden unter „Wesentliche".</p>
+      <div class="meta"><span class="scale">Tech <span class="bar"><i style="left:60%"></i></span> 6</span><span class="open">Öffnen</span></div>
+    </a>
+
+    <a class="card" href="JGC-Studio-Variante-09d.html" target="_blank" rel="noopener" style="--accent:var(--quellwasser)">
+      <span class="tag">09d</span>
+      <h2>Editorial Luxury</h2>
+      <div class="skill">high-end-visual-design</div>
+      <p class="desc">Agentur-Niveau: Fraunces dominant, Double-Bezel-Cards, schwebende Glas-Nav-Insel, feiner Film-Grain &amp; Vignette. Sieht teuer art-directed aus.</p>
+      <div class="meta"><span class="scale">Tech <span class="bar"><i style="left:50%"></i></span> 5</span><span class="open">Öffnen</span></div>
+    </a>
+
+    <a class="card" href="JGC-Studio-Variante-09e.html" target="_blank" rel="noopener" style="--accent:var(--salbei)">
+      <span class="tag">09e</span>
+      <h2>Quiet Handcraft</h2>
+      <div class="skill">minimalist-ui</div>
+      <p class="desc">Editoriale Reduktion: alle Farbflächen zu einem warmen Pergament-Canvas vereint, flache Hairline-Surfaces, Kupfer als einziger Akzent. Das ruhige Ende.</p>
+      <div class="meta"><span class="scale">Tech <span class="bar"><i style="left:30%"></i></span> 3</span><span class="open">Öffnen</span></div>
+    </a>
+
+    <a class="card" href="JGC-Studio-Variante-09f.html" target="_blank" rel="noopener" style="--accent:var(--kupfer)">
+      <span class="tag">09f</span>
+      <h2>Premium-Upgrade</h2>
+      <div class="skill">redesign-existing-projects</div>
+      <p class="desc">Sichtbarer Before→After-Lift: Ghost-Numerale, Mask-Rise-Hero (~97px), Cursor-Spotlight, Kupfer-Scroll-Progress, Grain. Ambitioniert, aber warm.</p>
+      <div class="meta"><span class="scale">Tech <span class="bar"><i style="left:60%"></i></span> 6</span><span class="open">Öffnen</span></div>
+    </a>
+
+  </div>
+
+  <footer>
+    Alle Dateien liegen self-contained neben dieser Seite (<code>JGC-Studio-Variante-09a…f.html</code>). Doppelklick öffnet sie direkt im Browser — kein Server nötig. Variante&nbsp;09 bleibt unangetastet.
+  </footer>
+</div>
+</body>
+</html>

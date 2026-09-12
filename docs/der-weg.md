@@ -762,4 +762,14 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
      greift nie, weil der Kasten selbst mitwächst. Trifft jedes Projekt mit einem Logo, das
      nicht quadratisch ist. Abhilfe im Skill: die Kastenhöhe fest setzen und die Breite aus
      dem Bildverhältnis ableiten, statt beides über Prozent zu führen.
+  12. **Die Reise hat für Hilfstechnik keine Hauptüberschrift** (F13 des externen Feedbacks vom
+     12.09.2026): der Skill legt das `h1` in den statischen `data-sw-seo`-Block und baut jede
+     Station als `h2`. Beim Mounten setzt die Engine den Block auf `hidden`, und damit fällt das
+     `h1` aus dem Baum, den ein Screenreader vorliest — die Gliederung beginnt bei Ebene 2. Diese
+     Fassung rendert den Titel der ersten Station als `h1` (je Station über `heading`
+     überschreibbar). Gehört als Default in den Skill, trifft jede Scroll-Welt.
+  13. **Der Knopf in der Kopfzeile** (`config.cta`) ist der billigste Weg zu einer Handlung auf
+     jeder Station, weil er hochkant keine Textzone kostet. Der Skill hat ihn, aber ohne Hover,
+     Fokus und Schmalzustand; diese Seite ergänzt alle drei (Stilblock `.sw-topcta`, Wortteilung
+     unter 360 px, damit die Wortmarke nicht umbricht). Lohnt sich als Skill-Default.
 - Die Seite ist noch nicht auf einem echten Telefon geprüft.

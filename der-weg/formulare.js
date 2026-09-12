@@ -30,11 +30,12 @@
 
    AUSLOESER: jedes Element mit data-formular-oeffner="stilprobe|erstgespraech"
    (delegiert auf document — funktioniert damit auch in den GEKLONTEN
-   Vertiefungs-Artikeln). Die zwei Engine-Knoepfe der Schluss-Station bekommen
-   das Attribut hier nachtraeglich; ihre href bleiben stehen und sind der Weg
-   ohne JavaScript (mailto bzw. /stilprobe/). Die Engine baut ihre Knoepfe
-   genau EINMAL beim Mount (scrub-engine.js, buildDOM) — ein Resize erzeugt
-   keine neuen, das Attribut haelt.
+   Vertiefungs-Artikeln). Die zwei Engine-Knoepfe der Schluss-Station und der
+   Knopf in der Kopfzeile (config.cta) bekommen das Attribut hier nachtraeglich;
+   ihre href bleiben stehen und sind der Weg ohne JavaScript (mailto bzw.
+   /stilprobe/). Die Engine baut ihre Knoepfe genau EINMAL beim Mount
+   (scrub-engine.js, buildDOM) — ein Resize erzeugt keine neuen, das Attribut
+   haelt.
 
    DIE FORMULAR-LOGIK SELBST steht seit dem 05.09.2026 in formular-kern.js
    (Zaehler, Entwurfsspeicher, Absenden, Fehlerpfad, Kontingent-Badge) — dieselbe
@@ -222,6 +223,10 @@ function mountFormulare(optionen) {
   var cta2 = document.querySelector('.sw-copy__cta .sw-btn--ghost');
   if (cta1) { cta1.setAttribute('data-formular-oeffner', 'erstgespraech'); cta1.setAttribute('aria-haspopup', 'dialog'); }
   if (cta2) { cta2.setAttribute('data-formular-oeffner', 'stilprobe'); cta2.setAttribute('aria-haspopup', 'dialog'); }
+  // Dazu der Knopf in der Kopfzeile (config.cta der Engine, seit 12.09.2026):
+  // derselbe Oeffner, nur auf jeder Station sichtbar. href bleibt mailto.
+  var ctaKopf = document.querySelector('.sw-topcta');
+  if (ctaKopf) { ctaKopf.setAttribute('data-formular-oeffner', 'erstgespraech'); ctaKopf.setAttribute('aria-haspopup', 'dialog'); }
 
   /* ==================================================================
      Verdrahtung: welches Formular welche Wortlaute und Schluessel bekommt.

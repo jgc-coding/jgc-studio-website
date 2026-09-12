@@ -13,6 +13,9 @@
        connScroll: 0.9,   // ...per connector clip
        hint: 'scroll to fly in',
        nav: true,         // show the top section nav
+       cta: { label, href },  // optional persistent button in the top bar, right of the
+                              // nav — visible on every section, phones included (the
+                              // nav itself hides ≤860px). Costs no copy-zone height.
        atmosphere: true,  // subtle gradient + drifting particles behind the clips
        scrollMobileFactor: 1.2,  // extra scroll distance per segment on mobile (small
                                  // viewports read the same flight as faster; industry
@@ -42,6 +45,9 @@
                           // (exactly where the copy peaks) and moves quicker at the
                           // edges. 0 = linear (default). Keep ≤ 0.6; 1 = full pause.
            eyebrow, title, body, tags:[…],
+           heading: 'h2',  // optional h1–h6 for the title. Default: h1 on the FIRST
+                           // section (the static SEO h1 is hidden on mount and so
+                           // invisible to assistive tech), h2 on all others.
            cta:{ primary:{label,href}, secondary:{label,href} } }, // last section only
          …
        ],
@@ -294,10 +300,17 @@ function mountScrollWorld(container, config) {
   const copies = [], dots = [];
   SECTIONS.forEach((s, i) => {
     const c = el('article', 'sw-copy'); c.style.setProperty('--sw-accent', s.accent || '');
+    // Heading level: the first section's title is the page's H1, the rest are H2.
+    // The static `data-sw-seo` block carries its own H1 for crawlers and no-JS
+    // visitors, but the engine hides that block on mount (`hidden` = display:none),
+    // which removes it from the accessibility tree — so assistive tech used to see
+    // a page whose outline starts at level 2. Override per section with
+    // `heading: 'h2'` when the flight sits below a page that already has an H1.
+    const tag = /^h[1-6]$/.test(s.heading || '') ? s.heading : (i === 0 ? 'h1' : 'h2');
     c.innerHTML =
       `<span class="sw-copy__num">${pad(i + 1)} / ${pad(N)}</span>` +
       (s.eyebrow ? `<span class="sw-copy__eyebrow">${esc(s.eyebrow)}</span>` : '') +
-      (s.title ? `<h2 class="sw-copy__title">${esc(s.title)}</h2>` : '') +
+      (s.title ? `<${tag} class="sw-copy__title">${esc(s.title)}</${tag}>` : '') +
       (s.body ? `<p class="sw-copy__body">${esc(s.body)}</p>` : '') +
       (s.tags && s.tags.length ? `<ul class="sw-copy__tags">${s.tags.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '') +
       (s.cta ? `<div class="sw-copy__cta">${ctaBtns(s.cta)}</div>` : '');
