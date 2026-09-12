@@ -2,6 +2,30 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-12 — Das hängende Zertifikat: die `CNAME`-Datei fehlte im Ergebnis (V60)
+
+Zehn Tage stand der Zertifikatsantrag für `jgc-lumen.de` und `www.jgc-lumen.de` auf „wird gleich
+bearbeitet". Gabriels Blick in Settings→Pages zeigte den Grund, den die Schnittstelle verschweigt:
+neben der Domain stand **„DNS Check in Progress"**. Die Messung danach war eindeutig —
+`https://jgc-lumen.de/CNAME` antwortete mit 404, und weder das Build-Skript noch das Repo
+erzeugten die Datei je.
+
+- **Wer per Action deployt, muss die `CNAME`-Datei selbst mitliefern.** GitHub legt sie nur an,
+  wenn aus einem Branch veröffentlicht wird. Ohne sie widersprechen sich Einstellung und
+  ausgeliefertes Ergebnis, und die Domainprüfung kommt nicht durch — damit auch das Zertifikat
+  nicht. Der Fehler lag also bei uns, nicht bei GitHub.
+- `baue-site.mjs` schreibt sie jetzt aus derselben einen Quelle wie robots.txt und Sitemap: dem
+  `canonical` der Reise. Sie steht zusätzlich in der Artefakt-Liste, ein stiller Teil-Deploy ohne
+  sie bricht also ab.
+- `pruefe-seiten.mjs` prüft im `_site`, dass die Datei da ist und die Soll-Adresse trägt. Beide
+  Gegenproben schlagen an (Datei gelöscht, falsche Adresse eingetragen).
+- Ausgeschlossen wurde alles andere: A- und AAAA-Einträge stimmen, `www` ist ein CNAME auf
+  `jgc-coding.github.io`, kein CAA-Eintrag sperrt Let's Encrypt, und der Prüfpfad
+  `/.well-known/acme-challenge/` antwortet auf beiden Namen mit GitHubs 404 — dort fängt nichts ab.
+- Nebenbefund: Der Wildcard-Eintrag `*` fängt auch `_github-pages-challenge-jgc-coding.jgc-lumen.de`
+  ab und verweist auf All-Inkl statt „gibt es nicht" zu antworten. Das bricht die optionale
+  Domain-Verifizierung bei GitHub; Abhilfe wäre ein ausdrücklicher TXT-Eintrag.
+
 ## 2026-09-12 — Die Formulare bekommen einen Empfänger (V67, V68)
 
 Bis heute lief eine Stilprobe-Einreichung ins Leere: GitHub Pages führt kein PHP aus, und die

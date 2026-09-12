@@ -377,6 +377,17 @@ if (SITE) {
   const robots = lies(SITE + 'robots.txt');
   if (!robots) meldeFehler('robots.txt', 'robots.txt fehlt.');
   else if (ADRESSE && !robots.includes(`Sitemap: ${ADRESSE}/sitemap.xml`)) meldeFehler('robots.txt', 'nennt die Sitemap nicht unter der Soll-Adresse.');
+
+  // Die CNAME-Datei muss im Ergebnis liegen und die eigene Adresse tragen. Bei
+  // einem Deploy per Action legt GitHub sie NICHT selbst an; fehlt sie, haengt
+  // die Domainpruefung und damit das Zertifikat (V60, zehn Tage lang).
+  geprueft.push('CNAME liegt im Ergebnis und nennt die eigene Adresse');
+  const cname = lies(SITE + 'CNAME');
+  if (!cname) {
+    meldeFehler('CNAME', 'CNAME fehlt im Ergebnis — GitHub Pages legt sie bei einem Action-Deploy nicht selbst an.');
+  } else if (ADRESSE && cname.trim() !== ADRESSE.replace(/^https:\/\//, '')) {
+    meldeFehler('CNAME', `CNAME enthaelt "${cname.trim()}", erwartet "${ADRESSE.replace(/^https:\/\//, '')}".`);
+  }
 }
 
 // ---------------------------------------------------------------------------

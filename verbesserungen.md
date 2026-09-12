@@ -239,6 +239,27 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Gabriels Schritt (Hub). Wichtig: **nicht erneut anstoßen** — jeder Neuanstoß setzt den Antrag
       wieder an den Anfang der Warteschlange. Erst nach ein, zwei weiteren Tagen `new` wird der
       Browser-Blick bzw. der GitHub-Support zur einzigen Spur.
+      **URSACHE GEFUNDEN am 12.09.2026 — sie lag bei uns, nicht bei GitHub.** Gabriels Blick in
+      Settings→Pages zeigte, was die Schnittstelle verschweigt: neben der Domain steht
+      **„DNS Check in Progress"**, und daran hängt die Zertifikatsausstellung. Die Messung
+      danach: `https://jgc-lumen.de/CNAME` → **404**, `grep -i cname scripts/deploy/baue-site.mjs
+      .github/workflows/deploy.yml` → **kein Treffer**, keine `CNAME`-Datei im Repo. Wer über eine
+      Action deployt statt aus einem Branch, muss diese Datei SELBST ins Ergebnis legen — GitHub
+      legt sie dann nicht an. Ohne sie widersprechen sich Einstellung und ausgeliefertes Ergebnis,
+      und die Domainprüfung kommt nie durch.
+      Ausgeschlossen wurde dabei alles andere: A (185.199.108–111.153) und AAAA
+      (2606:50c0:8000–8003::153) stimmen, `www` ist ein CNAME auf `jgc-coding.github.io`, es gibt
+      keinen CAA-Eintrag auf der Domain (die CAA-Antwort für `www` stammt von github.io und
+      erlaubt Let's Encrypt), und der Prüfpfad `http://…/.well-known/acme-challenge/…` antwortet
+      auf beiden Namen sauber mit GitHubs 404 — dort fängt also nichts die Prüfung ab.
+      **Behoben:** `baue-site.mjs` schreibt die `CNAME`-Datei jetzt aus derselben einen Quelle wie
+      robots.txt und Sitemap (dem canonical der Reise); `pruefe-seiten.mjs` prüft im `_site`, dass
+      sie da ist und die richtige Adresse trägt. Beide Gegenproben (Datei fehlt, falsche Adresse
+      darin) schlagen an. Fehlt danach noch etwas, bleibt als zweite Spur der **Wildcard-Eintrag
+      `*`**: er fängt auch `_github-pages-challenge-jgc-coding.jgc-lumen.de` ab und beantwortet
+      ihn mit einem Verweis auf All-Inkl statt mit „gibt es nicht" — das bricht die optionale
+      Domain-Verifizierung bei GitHub (Hub-Punkt) und ließe sich mit einem ausdrücklichen
+      TXT-Eintrag heilen.
 
 - [ ] **V66** (D) Vier Skripte in `scripts/stilprobe/` laufen seit dem Neubau ins Leere
       Gefahr: Wer sie zur Hand nimmt, arbeitet an einer Datei, die es so nicht mehr gibt — die

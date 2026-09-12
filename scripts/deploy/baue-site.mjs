@@ -18,6 +18,8 @@
  *   /404.html         eigene Fehlerseite (GitHub Pages liefert sie bei unbekannten Pfaden)
  *   /robots.txt       erzeugt
  *   /sitemap.xml      erzeugt aus den indexierbaren Seiten im Ergebnis
+ *   /CNAME            erzeugt — GitHub Pages erwartet die eigene Adresse im Ergebnis,
+ *                     wenn per Action deployt wird (sonst haengt die Domainpruefung)
  *
  * Die Domain steht nirgends hier im Skript: sie wird aus dem canonical der Reise
  * gelesen, damit sie im Repo nur in den Seiten selbst steht.
@@ -104,13 +106,22 @@ const sitemap = [
 writeFileSync(ZIEL + 'sitemap.xml', sitemap, 'utf8');
 writeFileSync(ZIEL + 'robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${adresse}/sitemap.xml\n`, 'utf8');
 
+// --- CNAME: die eigene Adresse, wie GitHub Pages sie im Ergebnis erwartet.
+//
+// Wer ueber eine Action deployt (statt aus einem Branch), muss diese Datei SELBST
+// mitliefern — GitHub legt sie dann nicht an. Fehlt sie, stimmen Einstellung und
+// ausgeliefertes Ergebnis nicht ueberein; die Domainpruefung bleibt haengen und
+// damit auch das Zertifikat. Genau das war der Grund, warum der Antrag vom
+// 02.09.2026 zehn Tage lang auf "wird gleich bearbeitet" stand (V60).
+writeFileSync(ZIEL + 'CNAME', adresse.replace(/^https:\/\//, '') + '\n', 'utf8');
+
 // --- Kernartefakte muessen da sein, sonst laut scheitern (kein stiller Teil-Deploy).
 const ARTEFAKTE = [
   'index.html', 'scrub-engine.js', 'vertiefung.js', 'formulare.js', 'formular-kern.js',
   'assets/anflug.mp4', 'assets/schriften.css', 'assets/seiten.css', 'assets/favicon.svg',
   'assets/formular.css', 'assets/stilprobe.css',
   'stilprobe/index.html', 'impressum/index.html', 'datenschutz/index.html',
-  'der-weg/index.html', '404.html', 'og-bild.jpg', 'robots.txt', 'sitemap.xml',
+  'der-weg/index.html', '404.html', 'og-bild.jpg', 'robots.txt', 'sitemap.xml', 'CNAME',
 ];
 const fehlend = ARTEFAKTE.filter((a) => !existsSync(ZIEL + a));
 if (fehlend.length) abbruch(`Deploy-Artefakt(e) fehlen: ${fehlend.join(', ')}`);
