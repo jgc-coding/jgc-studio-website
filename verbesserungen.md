@@ -1,6 +1,19 @@
 # Verbesserungen
-Stand: 2026-09-05 (Runde 4, Fokus: alles — Teil 1 bis 3, kein Design-Teil;
-**alle Befunde und alle vier Ideen am selben Tag umgesetzt**, Details im CHANGELOG)
+Stand: 2026-09-12 (Feedback-Runde: externe Durchsicht der Live-Seite, 14 Punkte; **V69 und V70
+am selben Tag umgesetzt**, die übrigen Punkte stehen als V71–V75 unter „Offen" und I9–I14 unter
+„Ideen", Details im CHANGELOG)
+
+**Feedback-Runde 12.09.2026:** Ein externer Reviewer hat die Live-Seite durchgesehen — Startseite
+mit Vertiefungen, Stilprobe, Formulare, Rechtsseiten und den ausgelieferten Code; am Desktop,
+mobil nur aus dem Code. Die Datei liegt bei Gabriel (`Feedback JGC Lumen.md`, nicht im Repo).
+Bewertung: fachlich solide. Der größte Befund (tote Formulare) war seit dem Vormittag **V67**;
+Fallstudie, echtes Stilprobe-Beispiel, juristische Prüfung, Videos, SEO-Seiten und Erfolgsmessung
+standen schon im Hub bzw. in `weitermachen.md`. Bewusst NICHT übernommen: Weiterscrollen schließt
+„Mehr dazu" (Gabriels Entscheidung, Kompromiss als I14), Standbild-Schalter im Abspann (die Seite
+misst die Leitung selbst), Adresse in den strukturierten Daten (der Reviewer stimmt unserer
+Begründung zu), „Preise versteckt" (die Chips der Station „Der Weg" zeigen sie ohne Klick).
+Positionierung (Zielgruppe zu breit, Website-Erstellung verwässert) ist Gabriels strategisches
+Thema, kein Befund hier. Gabriels Freigabe „F13, F3" → **V69**, **V70**, siehe Erledigt.
 
 **Umsetzung am 05.09.2026 (Gabriels Freigabe „V60-65 und I5-8"):** V61–V65 und I5–I8 sind
 erledigt und stehen unten. **V60 bleibt offen** — der Zertifikatsantrag wurde neu angestoßen
@@ -95,7 +108,8 @@ darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind 
    Titel und `canonical` stimmen · zuletzt: läuft (2026-09-05 nach dem Runde-4-Deploy: live
    HTTP 200 mit 120.748 Bytes, byte-gleich mit dem Repo — kleiner als vorher, weil der
    Feld-CSS-Block nach `formular.css` gewandert ist; lokal 7 Szenen, 7 Stationen,
-   7 „Mehr dazu"-Knöpfe, genau ein `h1`)
+   7 „Mehr dazu"-Knöpfe, genau ein `h1`; seit 12.09. zwei `h1` im DOM, davon genau eines
+   gerendert — der Auftakt-Titel der Engine — und das SEO-`h1` `hidden`, V69)
 2. **Navigation und Anker** — erwartet: Reiter und Punktleiste, jeder Anker hat ein Ziel,
    `/#station` springt zur Station · zuletzt: Reiter und Anker laufen (2026-09-05, 7 Reiter,
    `pruefe-seiten.mjs` grün); der Sprung per Hash ist im versteckten Pane **nicht prüfbar**
@@ -157,6 +171,10 @@ darauf fortgeschrieben, die Nummern bleiben (6 ist gegenstandslos, 17–19 sind 
     Seite mit Wegen zurück, `noindex`, nicht in der Sitemap · zuletzt: läuft (2026-09-05
     **live** nach dem Runde-4-Deploy: unbekannter Pfad antwortet HTTP 404 mit der eigenen
     Seite „Seite nicht gefunden", Sitemap unverändert vier Adressen).
+21. **Kopfzeilen-Knopf „Erstgespräch anfragen"** (neu seit 12.09., V70) — erwartet: auf jeder
+    Station sichtbar, auch unter 861 px; öffnet das Anfrage-Overlay, `mailto` ohne JavaScript;
+    unter 360 px nur „Erstgespräch", Wortmarke einzeilig · zuletzt: läuft (2026-09-12 im
+    Vorschau-Pane bei 1280/393/360/359/320 px gemessen, Klick, Escape und Fokus-Rückkehr geprüft).
 
 ## Offen
 
@@ -168,6 +186,72 @@ DSGVO-Linie außerhalb der Reise.
 Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielort ist GitHub
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
+
+- [ ] **V71** (B) Das Menü der Stilprobe-Unterseite passt nicht zur Reise (Feedback F5)
+      Gefahr: Wer von `/stilprobe/` zurück in die Reise springt, findet dieselben Stationen unter
+      anderen Namen („Angebote" → „Der Weg", „Grundwerte" → „Haltung", „Wer mit dir arbeitet" →
+      „Über mich") und verliert die Orientierung. Dazu der Einwand des Reviewers: „Der Weg" und
+      „Weitblick" verraten nicht, dass dort Preise und Kontakt liegen — beides sollte keine
+      Suchaufgabe sein.
+      Beleg: `stilprobe/index.html:51–54` gegen die `label`-Felder der `sections` in
+      `der-weg/index.html`.
+      Aufwand: S · Risiko: gering. Braucht Gabriels Wörter (er überarbeitet alle Formulierungen).
+      Empfehlung: „Der Weg" und „Weitblick" nach Aufgabe benennen, „Auftakt" und „Haltung"
+      dürfen poetisch bleiben. Die Labels stehen an genau einer Stelle, das Menü der Unterseite
+      zieht dann mit.
+
+- [ ] **V72** (B) Der Hero-Chip „TÜV-geprüft" steht ohne Bezug (Feedback F9)
+      Gefahr: Allein im Hero liest er sich als „die Website oder das System ist geprüft"; gemeint
+      ist die persönliche Qualifikation. Werbung mit einem Prüfzeichen, bei der offenbleibt, was
+      geprüft wurde, kann wettbewerbsrechtlich als irreführend gelten (UWG) — keine juristische
+      Bewertung, gehört in Gabriels Prüfung.
+      Beleg: `tags` der Station `anflug` in `der-weg/index.html`; die Erklärung steht erst in der
+      Vertiefung („Wofür die drei Zusagen stehen"). Auf „Über mich" heißt derselbe Chip
+      „TÜV-zertifiziert".
+      Aufwand: S · Risiko: gering (Textzone hochkant nachmessen — ein längerer Chip hat schon einmal
+      eine Zeile gekostet, V32). Empfehlung: „TÜV-geprüfte Qualifikation" oder den Chip in die
+      Station „Über mich" verschieben.
+
+- [ ] **V73** (A) Vier Zusagen im Wortlaut widersprechen sich oder versprechen zu viel (Feedback
+      F7, F11) — **Gabriel überarbeitet die Texte ohnehin; hier nur die Stellen, die mehr als
+      Stil sind**
+      1. „Fertig eingerichtet, falls sinnvoll DSGVO-konform" (Schritt 3, Vertiefung `weg`): klingt
+         nach Wahlfreiheit und widerspricht Chip, FAQ 04 und Grundwerten. Unbedingt.
+      2. Hero-Chip „EU-gehostet": die Website läuft bei GitHub (USA), die Stilprobe bei Anthropic
+         (USA); der Chip verspricht pauschal, was nur für Kunden-Umsetzungen gilt (Spannungsfeld
+         aus V32/V54). Empfehlung: an die Daten binden („Klientendaten in der EU") oder streichen —
+         „Deine Daten DSGVO-konform" trägt die Zusage schon richtig.
+      3. „Das Nachfassen geht raus, in deiner Sprache" (Vertiefung `schreibtisch`) gegen „Nichts
+         geht raus, ohne dass du es gesehen hast" (Vertiefung `werkzeug`): Entwurf zur Freigabe
+         statt Versand.
+      4. „Ohne diese Anbindung bleibt deine Umsetzung trotzdem stabil" (Vertiefung `weg`, FAQ 09):
+         bei jährlich wechselnden KI-Diensten zu absolut; Grenzen benennen.
+      Kleiner, ebenfalls vom Reviewer: die Hero-Unterzeile sagt nicht, was man kauft (die Einordnung
+      „KI-Implementierung für …" steht erst im Footer); „Resonanzraum" braucht ein sachliches Wort
+      daneben; 48 Stunden mit oder ohne Wochenende; welche Eingabe die Sitzungszusammenfassung braucht.
+      Aufwand: S je Stelle · Drei-Orte-Regel beachten, danach Stationshöhen hochkant nachmessen.
+
+- [ ] **V74** (B) An den Preisen fehlt, ob netto oder brutto (Feedback F8)
+      Gefahr: Gegenüber Verbrauchern müssen Preise Endpreise mit Umsatzsteuer sein (PAngV); Coaches
+      sind meist Unternehmer, dann reicht ein Zusatz — ohne Zusatz weiß aber niemand, was 600 €
+      bedeutet. Ist Gabriel Kleinunternehmer (§ 19 UStG), muss genau das dastehen.
+      Beleg: Vertiefung `weg` (600 €, ab 1.000 €, ab 300 €/Monat), FAQ 01 und 09, Chips der
+      Station `weg` in `der-weg/index.html`.
+      Aufwand: S · hängt am Hub-Punkt „USt-IdNr. klären". Der Reviewer fragt außerdem nach
+      laufenden Kosten (Modelle, Hosting), Dauer, Betreuung in den ersten Monaten und Eigentum an
+      Konten und Konfigurationen — Inhalt von Gabriel, Ort dafür: die Kosten-FAQ I3.
+
+- [ ] **V75** (C) Zwei Sätze der Datenschutz-Texte für die juristische Prüfung (Feedback F11)
+      1. „Personenbezogene Daten verarbeite ich nur, wenn du sie mir selbst gibst"
+         (`datenschutz/index.html`, „Das Wichtigste vorweg") stößt sich am Hosting-Absatz direkt
+         darunter, der die IP-Verarbeitung durch GitHub beschreibt. Ein Halbsatz („was beim
+         Aufruf technisch anfällt, steht unter Hosting") löst es.
+      2. FAQ 04 in `der-weg/index.html`: „Bei Doppelqualifikationen wie Heilpraktikerin oder
+         Therapeutin greift zusätzlich Paragraf 203 StGB" — nach herrschender Meinung fallen
+         Heilpraktiker gerade nicht unter § 203 StGB (keine staatlich geregelte Ausbildung),
+         approbierte Psychotherapeuten schon; „Therapeutin" ist mehrdeutig. Keine juristische
+         Bewertung, aber die Stelle gehört zum Hub-Punkt „Datenschutzerklärung juristisch prüfen".
+      Aufwand: S · Risiko: gering.
 
 - [ ] **V67** (A) Eine Stilprobe einzureichen war unmöglich — Hauptweg UND Ausweichweg tot
       Gefahr: Wer die drei Texte abschickt, sieht die Fehlermeldung und schreibt an die dort
@@ -271,6 +355,10 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Aufwand: S · Risiko: gering (Text + Kopf-Metadaten; `pruefe-seiten.mjs` läuft danach)
       Flankierend, liegt bei Gabriel und steht schon im Hub: Search Console + Sitemap anmelden,
       Profilbild hochladen, Profil vervollständigen und verifizieren.
+      **Nachtrag 12.09.2026 (Feedback F14):** Der Reviewer stimmt zu, die c/o-Anschrift nicht in
+      die strukturierten Daten zu nehmen. Ein Ortsdatensatz nur mit `addressLocality` „Freiburg im
+      Breisgau" (ohne Straße) wäre trotzdem möglich und gäbe Google den Standort — zusammen mit
+      `sameAs` umsetzen.
 
 - [ ] **V47** (C) Auf **schmalen** Telefonen stapeln die zwei Handlungsknöpfe der
       Schluss-Station und heben damit den Textstreifen für jede Station an
@@ -369,11 +457,67 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
       Unterseite — darum „Später" und seine Entscheidung.
       Abgrenzung: Formular-Vertrag, Feldnamen und Wortlaute bleiben exakt (`docs/stilprobe/schnittstelle.md`).
 
+- **I9** (Abrundung) Porträt in der Station „Über mich" sichtbar (Feedback F6/F9) — Aufwand: S
+      Bedarf: Bei einer persönlichen Dienstleistung sieht niemand den Menschen, ohne „Mehr dazu" zu
+      öffnen; das Bild steht nur in der Vertiefung `lichtung` (`der-weg/index.html`). Ein kleines
+      rundes Porträt neben Kleintext und Titel der Station würde das lösen.
+      Abgrenzung: Textzone hochkant nachmessen — „Über mich" ist auf breiten Telefonen schon die
+      höchste Station. Gabriels Entscheidung (Gestaltung).
+
+- **I10** (Abrundung) Vorbereitungsliste vor dem Stilprobe-Formular (Feedback F10) — Aufwand: S
+      Bedarf: Drei Texte mit je mindestens 200 Zeichen sind echte Vorarbeit; der Hinweis „Wähle
+      möglichst drei Texte …" steht erst zwischen den Feldern (`stilprobe/index.html:143`) bzw. im
+      Vorspann des Overlays. Drei Zeilen „Das brauchst du" vor dem ersten Feld, auf beiden Seiten.
+      Abgrenzung: kein neues Feld, kein Eingriff in den Vertrag. Wortlaut von Gabriel.
+
+- **I11** (Abrundung) Erfolgsmessung ohne Tracking: Quelle-Feld auch im Erstgespräch, Monatszähler
+      in der Empfangsschicht (Feedback F14) — Aufwand: S
+      Bedarf: Das Stilprobe-Formular fragt „Wie bist du auf die Stilprobe gestoßen?", das
+      Erstgespräch nicht. Ohne Rückmeldung bleibt unklar, ob und woher Anfragen kommen. Dazu ein
+      Zähler je Monat (Stilproben, Erstgespräche, Fehlschläge) in `stilprobe-automatik`.
+      Abgrenzung: keine Analyse-Werkzeuge, keine Cookies (Hub-Punkt „Cookie-Thema" bleibt getrennt).
+      Vertrag `docs/erstgespraech/schnittstelle.md`, Änderung in beiden Repos.
+
+- **I12** (Später) Schalter „Als Text lesen" (Feedback F13) — Aufwand: M
+      Bedarf: Wer Bewegung schlecht verträgt oder es eilig hat, hat keinen sichtbaren Weg zu einer
+      ruhigen Textfassung; ohne JavaScript ist sie die Seite (`#vertiefungen`). Ein Schalter im
+      Abspann, der die Reise abschaltet und die Vertiefungen als Lesetext zeigt.
+      Abgrenzung: Gabriel hat V18 als Lesefassung bewusst abgeschafft — seine Entscheidung.
+
+- **I13** (Erweiterung) Arbeitsbeispiele in der Bildwelt (Feedback F4) — Aufwand: M, Material
+      von Gabriel
+      Bedarf: Man sieht Haus, Wald und Landschaft, aber nie, wie die technische Arbeit aussieht.
+      Eine anonymisierte Sitzungszusammenfassung oder ein Ablauf (Knoten-Graph) als Vertiefung.
+      Abgrenzung: Die Bildwelt bleibt (Reviewer und Gabriel einig). Braucht ein echtes Beispiel.
+
+- **I14** (Später) Schwelle fürs Schließen des „Mehr dazu"-Feldes (Feedback F6) — Aufwand: S
+      Bedarf: Weiterscrollen am Textende schließt das Feld nach 60 px Rad- oder Wischweg
+      (`der-weg/vertiefung.js`); ein kleines Überscrollen klappt es ungewollt zu. Rund 150 px würden
+      nur eine deutliche Geste durchlassen, ohne das Konzept zu ändern.
+      Abgrenzung: Gabriels Entscheidung „weiterscrollen = weiter auf der Reise" bleibt.
+
 ## Abgelehnt
 
 *(noch keine Einträge — Gabriel hat bisher keinen Punkt ausdrücklich abgelehnt)*
 
 ## Erledigt
+
+### Am 2026-09-12 umgesetzt (Feedback-Runde — Gabriels Freigabe „F13, F3")
+
+- **V69** (B) Die sichtbare Hauptüberschrift ist ein `h1` — die Engine baute jede Station als
+  `h2`, das einzige `h1` stand im SEO-Block, den sie beim Mounten per `hidden` ausblendet; für
+  Hilfstechnik begann die Gliederung damit bei Ebene 2 (Feedback F13). `scrub-engine.js` rendert
+  den Titel der ersten Station als `h1`, je Station über `heading` überschreibbar. Nachgemessen:
+  Titel `H1, H2 × 6`, zwei `h1` im DOM, eines gerendert, SEO-Block `hidden`. Skill-Rückgabe:
+  `docs/der-weg.md` Punkt 12.
+- **V70** (B) „Erstgespräch anfragen" steht in der Kopfzeile, auf jeder Station und am Telefon
+  (Feedback F3) — vorher erst auf der Schluss-Station. Gabriels Wahl: Kopfzeile statt
+  Auftakt-Station, weil ein Knopf dort hochkant die Textzone aller Stationen um rund 60 px
+  angehoben hätte. Über `config.cta` der Engine; `formulare.js` macht ihn zum Öffner des
+  Anfrage-Overlays, `mailto` bleibt der Weg ohne JavaScript; Hover, Fokus, kleinere Stufe unter
+  400 px, unter 360 px nur „Erstgespräch" (sonst bricht die Wortmarke in zwei Zeilen). Messwerte
+  im CHANGELOG; Klick, Escape und Fokus-Rückkehr geprüft. Skill-Rückgabe: `docs/der-weg.md`
+  Punkt 13.
 
 ### Am 2026-09-05 umgesetzt (Runde 4 — Gabriels Freigabe für das ganze Paket)
 
