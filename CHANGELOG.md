@@ -26,6 +26,25 @@ erzeugten die Datei je.
   ab und verweist auf All-Inkl statt „gibt es nicht" zu antworten. Das bricht die optionale
   Domain-Verifizierung bei GitHub; Abhilfe wäre ein ausdrücklicher TXT-Eintrag.
 
+### Deploy am selben Tag (Gabriels Freigabe „beides zusammen")
+
+Push `ceb742b` auf `main`, Action grün in 29 s, Tag **`live-2026-09-12`**. Live nachgeprüft:
+
+- `https://jgc-lumen.de/CNAME` → 200 mit `jgc-lumen.de` (vorher 404).
+- Alle sieben Formular-Adressen zeigen live auf `https://formular.jgc-lumen.de/…`.
+- Regressionscheck: Reise, Stilprobe, Impressum, Datenschutz, Sitemap, robots.txt,
+  Vorschaubild, `formular-kern.js` und die Weiterleitung `/der-weg/` antworten mit 200,
+  ein unbekannter Pfad mit 404.
+- **Ende-zu-Ende aus einem echten Browser auf der Live-Seite:** Der Kontingent-Satz wird
+  dynamisch ersetzt („Im September sind noch 15 von 15 Proben frei"), eine ausgefüllte
+  Einreichung geht durch und die Seite zeigt die Erfolgsmeldung „Danke. Deine Texte sind
+  angekommen …" — die Freigabe über die Adressgrenze hinweg funktioniert also im Browser,
+  nicht nur im Werkzeug. Der Testplatz wurde danach über den Verwaltungsschalter
+  zurückgegeben, der Zähler steht wieder auf 15 von 15.
+- **Noch offen:** Das GitHub-Zertifikat steht unmittelbar nach dem Deploy weiter auf `new`.
+  Die Domainprüfung läuft in Abständen; ob die `CNAME`-Datei sie löst, zeigt sich in den
+  nächsten Stunden. Belegt ist bisher nur, dass der eine gefundene Defekt behoben ist.
+
 ## 2026-09-12 — Die Formulare bekommen einen Empfänger (V67, V68)
 
 Bis heute lief eine Stilprobe-Einreichung ins Leere: GitHub Pages führt kein PHP aus, und die

@@ -180,14 +180,15 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       alias table`, dieselbe Antwort wie auf eine frei erfundene Adresse; `kontakt@jgc-lumen.de`
       kommt an dieser Prüfung vorbei und existiert damit.
       Aufwand: M · Risiko: mittel (neuer Rechner im Spiel, aber die Website bleibt unberührt)
-      **Stand 12.09.2026:** Die Empfangsschicht ist gebaut und geprüft — privates Repo
-      `stilprobe-automatik` (`C:\Projekte\Stilprobe-Automatik`), 43 Ende-zu-Ende-Fälle grün gegen
-      einen örtlichen PHP-Container. Die Website zeigt im Repo bereits auf
-      `https://formular.jgc-lumen.de`, ist aber **bewusst noch nicht deployt**: solange die
-      Unteradresse nicht existiert, bricht ihr Zertifikat (`curl` → Fehler 60), und das wäre
-      schlechter als der heutige Zustand. Es fehlen drei Schritte von Gabriel in der
-      All-Inkl-Verwaltung: Postfach `stilprobe@` anlegen, Unteradresse `formular.jgc-lumen.de`
-      mit PHP und SSL anlegen, FTP-Zugang dafür. Danach: hochladen, deployen, live nachprüfen.
+      **ERLEDIGT am 12.09.2026, live nachgeprüft.** Gabriel hat Postfach, Unteradresse und
+      FTP-Zugang angelegt; die Empfangsschicht liegt auf `https://formular.jgc-lumen.de`
+      (privates Repo `stilprobe-automatik`), die Website ist mit `ceb742b` deployt, Tag
+      `live-2026-09-12`. Belege: Zähler antwortet, vertrauliche Dateien liefern 403, eine echte
+      Einreichung aus einem Browser auf der Live-Seite zeigt die Erfolgsmeldung, Testplatz
+      zurückgegeben. Das Postfach `stilprobe@` existiert jetzt (derselbe SMTP-Dialog wie oben
+      antwortet nicht mehr mit „User unknown"). **Nicht von außen prüfbar und deshalb offen:
+      ob die Mails tatsächlich zugestellt werden** — `mail()` meldet nur die Annahme durch den
+      Server. Gabriel sieht in beide Postfächer. Details im CHANGELOG.
 
 - [ ] **V68** (B) Die Datenschutzerklärung sagt einen Anthropic-Vertrag zu, den es noch nicht gibt
       Gefahr: Auf der Seite steht, die Texte der Coaches lägen bei Anthropic unter einem Vertrag
