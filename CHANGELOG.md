@@ -44,6 +44,42 @@ Push `ceb742b` auf `main`, Action grün in 29 s, Tag **`live-2026-09-12`**. Live
 - **Noch offen:** Das GitHub-Zertifikat steht unmittelbar nach dem Deploy weiter auf `new`.
   Die Domainprüfung läuft in Abständen; ob die `CNAME`-Datei sie löst, zeigt sich in den
   nächsten Stunden. Belegt ist bisher nur, dass der eine gefundene Defekt behoben ist.
+## 2026-09-12 — Externes Feedback: Hauptüberschrift für Hilfstechnik, Knopf in der Kopfzeile (V69, V70)
+
+Ein externer Reviewer hat die Live-Seite am 12.09.2026 durchgesehen (14 Punkte; Bewertung und
+die offenen Punkte V71–V75, I9–I14 in `verbesserungen.md` unter „Feedback-Runde"). Gabriels
+Freigabe für zwei Punkte, F13 und F3, mit seiner Wahl „Kopfzeile statt Auftakt-Station":
+
+- **V69 — Die sichtbare Hauptüberschrift ist ein `h1`.** Die Engine baute jede Station als `h2`;
+  das einzige `h1` stand im SEO-Block, den sie beim Mounten per `hidden` ausblendet — für einen
+  Screenreader begann die Gliederung damit bei Ebene 2. `scrub-engine.js` rendert den Titel der
+  ersten Station jetzt als `h1` (je Station über `heading` überschreibbar). Nachgemessen im
+  Vorschau-Pane: Titel-Reihenfolge `H1, H2 × 6`, zwei `h1` im DOM, genau eines gerendert,
+  SEO-Block `hidden`. Skill-Rückgabe notiert (`docs/der-weg.md`, Punkt 12).
+- **V70 — „Erstgespräch anfragen" steht in der Kopfzeile**, auf jeder Station und auch am Telefon,
+  wo das Reitermenü ausgeblendet ist. Vorher gab es den Weg zum Gespräch erst auf der
+  Schluss-Station. Umgesetzt über den eingebauten Platz der Engine (`config.cta`) — bewusst NICHT
+  in der Auftakt-Station, weil ein Knopf dort hochkant die Textzone aller Stationen um rund 60 px
+  angehoben hätte. `formulare.js` macht ihn zum Öffner des Anfrage-Overlays (`mailto` bleibt der
+  Weg ohne JavaScript); Hover, Fokus und Schmalzustand im Stilblock der Reise.
+  Gemessen (Marke rechts / Knopf links / Luft dazwischen): 1280 px: 193 / 1002 px, Menü mittig
+  dazwischen · 393 px: 149 / 197 / 48 px · 360 px: 147 / 165 / 18 px · unter 360 px weicht das
+  zweite Wort (`.sw-topcta__zusatz`, gleiches Muster wie „Mehr dazu"), bei 320 px bleiben 40 px
+  Luft und die Wortmarke einzeilig — mit vollem Wortlaut brach sie dort in zwei Zeilen
+  (129 + 16 + 177 + 2 × 18 = 358 px nötig). Kein seitlicher Überlauf auf keiner Breite.
+  Bedienung geprüft: Klick öffnet das Erstgespräch-Overlay mit Fokus im Feld und
+  `aria-expanded="true"`, Escape schließt es, der Fokus kehrt auf den Knopf zurück.
+
+**Belege:** Done-Gate grün (`pruefe-seiten.mjs`, 13 Regeln auf den Quellen), Deploy-Nachbau
+`_site` grün (65 Dateien, 45,7 MB), Syntaxprüfung der Skripte. **Nicht deployt:** der Branch trägt
+auch V67 (Formulare zeigen auf `formular.jgc-lumen.de`), und das darf erst live, wenn die
+Unteradresse existiert. Soll V69/V70 früher live, lässt sich der Commit per Cherry-Pick auf
+`main` setzen — er berührt andere Zeilen als V67.
+
+> **Nachtrag am selben Abend:** Die Wartestellung hat sich erledigt. Die Unteradresse
+> steht, V67 ist deployt, und dieser Stand wurde im `save-state clean` nach `main`
+> zusammengeführt — V69 und V70 gehen mit demselben Push live. Der einzige Konflikt
+> war diese Datei: zwei Abschnitte, beide oben eingefügt, beide behalten.
 
 ## 2026-09-12 — Die Formulare bekommen einen Empfänger (V67, V68)
 

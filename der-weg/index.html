@@ -169,6 +169,26 @@
   .sw-root .sw-brand__sigil::before { inset: -7px -9px; }
   .sw-root .sw-brand__logo { width: 18px; height: 26px; }
 
+  /* Der Kopfzeilen-Knopf "Erstgespraech anfragen" (config.cta, F3 des externen
+     Feedbacks vom 12.09.2026). Fuellung und Form setzt die Engine (Tinte, Pille);
+     hier kommen Hover und Fokus dazu — dieselbe Hover-Mischung wie beim Ruf im
+     Kopf der Stilprobe-Seite (stilprobe.css, .sp-menue__ruf), damit beide
+     Koepfe sich gleich anfuehlen. Auf schmalen Telefonen teilt er sich die
+     Zeile mit Sigel und Wortmarke; eine Stufe kleiner, damit er bis 360 px
+     neben der Marke bleibt (Messwerte im CHANGELOG, 12.09.2026). */
+  .sw-root .sw-topcta { transition: background 0.2s; }
+  .sw-root .sw-topcta:hover { background: color-mix(in srgb, var(--sw-ink) 88%, var(--sw-accent)); }
+  .sw-root .sw-topcta:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 3px; }
+  @media (max-width: 400px) {
+    .sw-root .sw-topcta { font-size: 0.84rem; padding: 9px 14px; }
+  }
+  /* Unter 360 px muesste die Wortmarke sonst in zwei Zeilen brechen (Rechnung
+     im Skript unten beim Knopf): dann faellt das zweite Wort weg, und
+     "Erstgespraech" allein traegt den Knopf. */
+  @media (max-width: 359px) {
+    .sw-root .sw-topcta__zusatz { display: none; }
+  }
+
   /* Dasselbe bei den Schlagwort-Chips: die Textfarbe mischt die Szenenfarbe
      mit Schwarz, und auf der Salbei-Station blieben 4,34:1 uebrig. Eine Stufe
      dunkler gemischt liegen alle drei Szenenfarben ueber 4,5:1 (Salbei 5,8). */
@@ -1052,7 +1072,12 @@
        ausgeblendet, bleibt aber im ausgelieferten HTML stehen.
        SPIEGEL von wegKonfig.sections (eyebrow/title/body) — wer dort Texte
        aendert, zieht diesen Block mit, sonst erzaehlen Suchmaschinen und
-       Browser Verschiedenes. -->
+       Browser Verschiedenes.
+       Das h1 hier gilt fuer Suchmaschinen und den Weg ohne JavaScript. Mit
+       JavaScript baut die Engine den Auftakt-Titel selbst als h1 (seit
+       12.09.2026, F13 des externen Feedbacks): dieser Block ist dann per
+       `hidden` ausgeblendet und damit auch fuer Hilfstechnik weg — vorher fing
+       die Gliederung fuer einen Screenreader bei Ebene 2 an. -->
   <section data-sw-seo>
     <h1>Mehr Raum für das Wesentliche.</h1>
     <p>KI, die deine Handschrift trägt. Ich verstärke, was dich auszeichnet —
@@ -1740,6 +1765,21 @@
      dazustehen — sonst laufen die beiden Reihenfolgen irgendwann auseinander. */
   var wegKonfig = {
     brand: { name: 'JGC Lumen', href: '/', logo: 'assets/sigel.png' },
+
+    /* Der Knopf in der Kopfzeile (F3 des externen Feedbacks vom 12.09.2026):
+       "Erstgespraech anfragen" steht damit auf jeder Station, auch am Telefon,
+       wo das Reitermenue ausgeblendet ist. Vorher gab es den Weg zum Gespraech
+       erst auf der Schluss-Station — wer sofort reden wollte, musste die ganze
+       Reise scrollen oder das Menue durchsuchen. Die Engine hat den Platz dafuer
+       eingebaut (`config.cta`, rechts neben Marke und Menue). Bewusst hier und
+       nicht in der Auftakt-Station: dort wuerde ein Knopf den Auftakt zur
+       hoechsten Station machen und hochkant die Textzone ALLER Stationen um
+       rund 60 px anheben (siehe die Rechnung an --weg-textzone). In der
+       Kopfzeile kostet er keine Bildhoehe. formulare.js macht ihn zum Oeffner
+       des Anfrage-Overlays; das href bleibt der Weg ohne JavaScript. Hover,
+       Fokus und Handybreite stehen im Stilblock oben (.sw-topcta). */
+    cta: { label: 'Erstgespräch anfragen', href: 'mailto:kontakt@jgc-lumen.de' },
+
     hint: 'scrollen und mitfliegen',
     nav: true,
     atmosphere: true,
@@ -1978,6 +2018,27 @@
   };
 
   var welt = mountScrollWorld(document.getElementById('world'), wegKonfig);
+
+  /* Der Kopfzeilen-Knopf teilt sein zweites Wort ab, damit es auf schmalen
+     Telefonen weichen kann (Stilblock: .sw-topcta__zusatz unter 360 px) —
+     dasselbe Muster wie beim "Mehr dazu"-Knopf (weg-mehr__zusatz).
+     Gemessen am 12.09.2026: mit vollem Wortlaut braucht die Kopfzeile
+     Marke 129 + Luft 16 + Knopf 177 + Rand 2 x 18 = 358 px; darunter bricht
+     die Wortmarke "JGC Lumen" in zwei Zeilen. Mit "Erstgespraech" allein
+     bleibt bei 320 px Luft. Die Engine schreibt den Wortlaut als reinen
+     Text, deshalb die Teilung hier nachtraeglich. */
+  (function () {
+    var knopf = document.querySelector('#world .sw-topcta');
+    if (!knopf || knopf.querySelector('span')) return;
+    var worte = knopf.textContent.trim().split(' ');
+    if (worte.length < 2) return;
+    knopf.textContent = '';
+    knopf.appendChild(document.createTextNode(worte[0]));
+    var rest = document.createElement('span');
+    rest.className = 'sw-topcta__zusatz';
+    rest.textContent = ' ' + worte.slice(1).join(' ');
+    knopf.appendChild(rest);
+  })();
 
   /* Sprungmarken auf Stationen: /#weg, /#lichtung, /#aussicht … (seit 02.09.2026).
      Die Stilprobe-Unterseite verlinkt so in die Reise (ihr Menue stammt aus der
