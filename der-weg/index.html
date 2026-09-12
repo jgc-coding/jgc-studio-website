@@ -1344,15 +1344,17 @@
 
          Feldnamen sind Vertrag: docs/stilprobe/schnittstelle.md bzw.
          docs/erstgespraech/schnittstelle.md — nicht umbenennen. Die
-         action-/Badge-Pfade stehen ABSOLUT und wurzel-relativ im HTML
-         (formulare.js bleibt pfadfrei). GitHub Pages fuehrt kein PHP aus:
-         bis zum Umzug auf einen PHP-Host antworten die Endpoints nicht
-         (404) — dann greift by design der Fehlerpfad mit dem Mail-Ausweichweg.
+         action-/Badge-Adressen stehen VOLLSTAENDIG im HTML (formulare.js
+         bleibt pfadfrei): GitHub Pages fuehrt kein PHP aus, die Empfangs-
+         schicht liegt darum auf der Unteradresse formular.jgc-lumen.de
+         (Repo stilprobe-automatik). Alle vier Adressen teilen denselben
+         Rechnernamen — pruefe-seiten.mjs bewacht das, damit keine
+         einzelne Stelle bei einem Wechsel zurueckbleibt.
          ============================================================== -->
 
     <article class="vertiefung weg-formular" id="formular-stilprobe"
              data-formular="stilprobe" data-mail="stilprobe@jgc-lumen.de"
-             data-kontingent="/stilprobe/kontingent.php">
+             data-kontingent="https://formular.jgc-lumen.de/stilprobe/kontingent.php">
       <p class="vertiefung-auge">Die Stilprobe</p>
       <h2>Schick mir deine Stilprobe.</h2>
       <p>Wähle möglichst drei Texte aus einem Ton, geschrieben für dieselbe Zielgruppe — zum
@@ -1363,7 +1365,7 @@
          die Handarbeit nicht her.</p>
 
       <div data-rolle="normal">
-        <form method="post" action="/stilprobe/senden.php"
+        <form method="post" action="https://formular.jgc-lumen.de/stilprobe/senden.php"
               accept-charset="UTF-8">
           <div class="weg-formular__gruppe" data-rolle="entwurf-hinweis" hidden role="status">
             <p class="weg-formular__hilfe">Dein angefangener Entwurf ist wieder da – gespeichert
@@ -1465,7 +1467,7 @@
         <p>15 Proben sind vergeben – mehr gibt die Handarbeit nicht her. Trag dich ein, und du
            bekommst den ersten freien Platz im <span data-rolle="wl-folgemonat">nächsten
            Monat</span>, bevor er auf der Website erscheint.</p>
-        <form method="post" action="/stilprobe/senden.php"
+        <form method="post" action="https://formular.jgc-lumen.de/stilprobe/senden.php"
               accept-charset="UTF-8">
           <input type="hidden" name="warteliste" value="ja">
           <div class="weg-formular__gruppe">
@@ -1510,7 +1512,7 @@
          <a href="mailto:kontakt@jgc-lumen.de">kontakt@jgc-lumen.de</a>.</p>
 
       <div data-rolle="normal">
-        <form method="post" action="/erstgespraech/senden.php"
+        <form method="post" action="https://formular.jgc-lumen.de/erstgespraech/senden.php"
               accept-charset="UTF-8">
           <div class="weg-formular__gruppe" data-rolle="entwurf-hinweis" hidden role="status">
             <p class="weg-formular__hilfe">Dein angefangener Entwurf ist wieder da – gespeichert

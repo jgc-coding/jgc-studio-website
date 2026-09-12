@@ -1,6 +1,12 @@
 # Stilprobe — Schnittstelle Website ↔ PHP-Empfangsschicht
 
-Stand: 2026-07-11. Die Website-Seite (`stilprobe/index.html`, deployt nach `/stilprobe/`) ist gebaut; die PHP-Empfangsschicht (`senden.php`, `kontingent.php`) entsteht später im Repo `stilprobe-automatik` und wird per FTP in denselben `/stilprobe/`-Ordner auf All-Inkl gelegt. Bis dahin laufen beide Endpoints auf 404 — die Seite fängt das ab (statischer Kontingent-Satz, Fehlermeldung mit Mail-Ausweichweg beim Formular). Konzept: siehe `stilprobe-automatisierung-konzept_v1.md` in diesem Ordner.
+Stand: 2026-09-12. Die Website-Seite (`stilprobe/index.html`, deployt nach `/stilprobe/`) ist gebaut; die PHP-Empfangsschicht (`senden.php`, `kontingent.php`) liegt im **privaten Repo `stilprobe-automatik`** (`C:\Projekte\Stilprobe-Automatik`) und wird per FTP auf den All-Inkl-Webspace gelegt. Konzept: siehe `stilprobe-automatisierung-konzept_v1.md` in diesem Ordner.
+
+**Der Empfänger hat eine eigene Adresse:** `https://formular.jgc-lumen.de`. GitHub Pages führt kein PHP aus, und die Website soll wegen ihrer sieben Videoetappen (46 MB) auf GitHubs Netz bleiben — deshalb nur die Endpunkte bei All-Inkl, nicht die ganze Seite. Folgen für diesen Vertrag:
+
+- Alle `action`- und Badge-Adressen stehen **vollständig** im HTML (nicht mehr relativ, nicht mehr wurzel-relativ). Ein Formular ohne JavaScript braucht sein Ziel im `action`-Attribut, also lässt sich das nicht in eine Variable ziehen. `scripts/pruefe-seiten.mjs` (Regel 13) prüft, dass alle sieben Stellen denselben Rechnernamen tragen.
+- Die Antwort muss den Kopf `Access-Control-Allow-Origin` tragen, sonst gibt der Browser sie nicht an die Seite weiter. Die erlaubten Adressen stehen in `konfig.php` der Empfangsschicht.
+- Ohne JavaScript landet der Absender auf einer Bestätigungsseite **unter `formular.jgc-lumen.de`** — eine andere Adresse als die Website. Das ist der bewusst in Kauf genommene Preis dafür, dass die Reise schnell bleibt.
 
 ## POST senden.php (Formular, application/x-www-form-urlencoded bzw. multipart via FormData)
 
@@ -44,11 +50,11 @@ Anzeige-Wortlaute (in beiden Seiten identisch implementiert):
 - pause: „Die Stilprobe macht gerade eine kurze Pause – schau bald wieder vorbei." + Unterseite blendet Pause-Hinweis statt Formular ein
 - {folgemonat} wird clientseitig berechnet (deutscher Monatsname nach {monat}).
 
-## Platzhalter (beim Umzug auf den PHP-Host scharf schalten)
+## Adressen
 
-- `STILPROBE_MAIL` = aktuell `stilprobe@jgc-lumen.de` (Postfach unbestätigt) — steht seit dem 05.09.2026 auf beiden Seiten als `data-mail`-Attribut am Formular-Artikel, nicht mehr als Konstante im Skript; Suchbegriff: `stilprobe@`.
+- `STILPROBE_MAIL` = `stilprobe@jgc-lumen.de` — steht seit dem 05.09.2026 auf beiden Seiten als `data-mail`-Attribut am Formular-Artikel, nicht mehr als Konstante im Skript; Suchbegriff: `stilprobe@`. Das Postfach war bis zum 12.09.2026 **nicht angelegt** (per SMTP nachgewiesen: `550 User unknown`), womit auch der Ausweichweg ins Leere lief.
 - Interne Links sind seit 02.09.2026 wurzel-relativ (`/stilprobe/`, `/impressum/`, `/datenschutz/`); der frühere GitHub-Pages-Präfix ist weg, `scripts/pruefe-seiten.mjs` verbietet ihn. Impressum und Datenschutz sind eigene HTML-Seiten unter `/impressum/` und `/datenschutz/`, nicht mehr der Astro-Build.
-- Formular-`action` und Badge-`fetch` der Unterseite sind RELATIV (`senden.php`, `kontingent.php`); die Scroll-Reise ruft absolut (`/stilprobe/kontingent.php`, `/stilprobe/senden.php`, dazu `/erstgespraech/senden.php`, siehe `docs/erstgespraech/schnittstelle.md`). GitHub Pages führt kein PHP aus: die Endpunkte brauchen einen PHP-Host unter derselben Domain (All-Inkl) — oder einen eigenen API-Host, dann CORS und die Pfade bedenken.
+- Die sieben Formular-Adressen (drei `action`, zwei `data-kontingent` auf zwei Seiten) zeigen seit 12.09.2026 vollständig auf `https://formular.jgc-lumen.de/…`. Der Pfad **hinter** dem Rechnernamen bleibt derselbe wie zuvor (`/stilprobe/senden.php`, `/stilprobe/kontingent.php`, `/erstgespraech/senden.php`) — zöge die Website später doch nach All-Inkl, genügt das Streichen des Rechnernamens.
 
 ## Spam-Schutz (serverseitig zu prüfen)
 

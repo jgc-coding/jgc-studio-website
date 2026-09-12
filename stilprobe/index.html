@@ -14,8 +14,10 @@
      formular-kern.js (Zaehler, Entwurfsspeicher, Absenden, Kontingent).
 
      Alle Wortlaute sind unveraendert aus der Altfassung uebernommen.
-     Feldnamen und Endpunkte folgen docs/stilprobe/schnittstelle.md: die
-     Unterseite ruft RELATIV (senden.php, kontingent.php), die Reise absolut. -->
+     Feldnamen und Endpunkte folgen docs/stilprobe/schnittstelle.md. Beide
+     Adressen zeigen VOLLSTAENDIG auf formular.jgc-lumen.de: GitHub Pages
+     fuehrt kein PHP aus, die Empfangsschicht liegt darum auf einer eigenen
+     Unteradresse bei All-Inkl (Repo stilprobe-automatik). -->
 <title>Die Stilprobe — JGC Lumen</title>
 <meta name="description" content="Drei eigene Texte rein, binnen 48 Stunden ein neuer Entwurf in zwei Fassungen zurück – einmal generisch, einmal in deiner Handschrift. Kostenlos, 15 Proben im Monat.">
 <meta name="robots" content="index, follow">
@@ -111,7 +113,7 @@
            Skript darunter bleibt damit pfadfrei (schnittstelle.md). -->
       <article class="weg-formular" data-formular="stilprobe"
                data-mail="stilprobe@jgc-lumen.de"
-               data-kontingent="kontingent.php">
+               data-kontingent="https://formular.jgc-lumen.de/stilprobe/kontingent.php">
 
         <div data-rolle="normal">
           <div class="sp-mitte" style="margin: 2.6rem 0 1.6rem;">
@@ -125,7 +127,7 @@
               <button type="button" class="weg-formular__leise" data-rolle="entwurf-verwerfen">Entwurf verwerfen und neu anfangen</button>
             </p>
 
-            <form method="post" action="senden.php" accept-charset="UTF-8">
+            <form method="post" action="https://formular.jgc-lumen.de/stilprobe/senden.php" accept-charset="UTF-8">
               <div class="weg-formular__gruppe">
                 <label class="weg-formular__label" for="name">Wie heißt du?</label>
                 <input type="text" id="name" name="name" required autocomplete="name">
@@ -217,7 +219,7 @@
           <p>15 Proben sind vergeben – mehr gibt die Handarbeit nicht her. Trag dich ein, und du bekommst den ersten freien Platz im <span data-rolle="wl-folgemonat">nächsten Monat</span>, bevor er auf der Website erscheint.</p>
 
           <div class="sp-karte sp-karte--formular">
-            <form method="post" action="senden.php" accept-charset="UTF-8">
+            <form method="post" action="https://formular.jgc-lumen.de/stilprobe/senden.php" accept-charset="UTF-8">
               <input type="hidden" name="warteliste" value="ja">
 
               <div class="weg-formular__gruppe">

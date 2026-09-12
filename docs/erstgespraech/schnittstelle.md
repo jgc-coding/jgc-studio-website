@@ -1,15 +1,18 @@
 # Erstgespräch — Schnittstelle Website ↔ PHP-Empfangsschicht
 
-Stand: 2026-08-26. Das Formular lebt in der Scroll-Reise (`der-weg/index.html`, deployt an die Wurzel `/`) als Overlay hinter dem Knopf „Erstgespräch anfragen" und dem Button in der
+Stand: 2026-09-12. Das Formular lebt in der Scroll-Reise (`der-weg/index.html`, deployt an die Wurzel `/`) als Overlay hinter dem Knopf „Erstgespräch anfragen" und dem Button in der
 Vertiefung „Wie geht es weiter?"; ohne JavaScript steht es als Lesetext mit nativem POST.
-Die PHP-Empfangsschicht (`senden.php`) entsteht später (gleicher Baukasten wie die Stilprobe,
-Repo `stilprobe-automatik`) und wird per FTP in einen eigenen Ordner `/erstgespraech/` auf
-All-Inkl gelegt. Bis dahin läuft der Endpoint auf 404 — die Seite fängt das ab (Fehlermeldung
-mit Mail-Ausweichweg `kontakt@jgc-lumen.de`). Konzept und Begründung („umgedrehte Terminfrage",
-bewusst kein Buchungswerkzeug): `buchung-konzept.md` in diesem Ordner.
+Die PHP-Empfangsschicht (`senden.php`) liegt im privaten Repo `stilprobe-automatik`
+(gleicher Baukasten wie die Stilprobe) und wird per FTP auf den All-Inkl-Webspace gelegt.
+Konzept und Begründung („umgedrehte Terminfrage", bewusst kein Buchungswerkzeug):
+`buchung-konzept.md` in diesem Ordner.
 
-Der Endpoint ist mit Absicht ein EIGENER Ordner an der Wurzel und nicht `/stilprobe/`:
+Der Endpoint ist mit Absicht ein EIGENER Ordner und nicht `/stilprobe/`:
 so bleibt die Stilprobe-Strecke unangetastet (deren Vertrag: `docs/stilprobe/schnittstelle.md`).
+
+**Adresse seit 12.09.2026:** `https://formular.jgc-lumen.de/erstgespraech/senden.php`, vollständig
+im `action`-Attribut. Begründung, Freigabe der rufenden Adresse und die Folgen für den Weg ohne
+JavaScript stehen im Stilprobe-Vertrag und gelten hier gleichlautend.
 
 ## POST /erstgespraech/senden.php (application/x-www-form-urlencoded bzw. multipart via FormData)
 
@@ -46,15 +49,15 @@ Empfänger der Anfrage-Mail: `kontakt@jgc-lumen.de` (bestätigt empfangsfähig).
 - Antwortversprechen OHNE Frist (bewusst, Punkt 2 des Konzepts): „Du bekommst eine Antwort
   mit zwei Terminvorschlägen."
 
-## Platzhalter (beim Umzug auf den PHP-Host scharf schalten)
+## Adressen
 
-- Formular-`action` steht ABSOLUT und wurzel-relativ im HTML: `/erstgespraech/senden.php`
+- Formular-`action` steht VOLLSTÄNDIG im HTML: `https://formular.jgc-lumen.de/erstgespraech/senden.php`
   (`der-weg/index.html`; `der-weg/formulare.js` ist pfadfrei). Der frühere GitHub-Präfix ist
-  seit 02.09.2026 weg.
+  seit 02.09.2026 weg, der wurzel-relative Pfad seit 12.09.2026.
 - Die Mail-Ausweichadresse steht als `data-mail`-Attribut am Formular-Artikel in
-  `der-weg/index.html`.
-- `/erstgespraech/`-Ordner auf dem PHP-Host anlegen und `senden.php` dorthin legen (FTP-Schritt,
-  zusätzlich zur Stilprobe). GitHub Pages selbst führt kein PHP aus.
+  `der-weg/index.html`: `kontakt@jgc-lumen.de` (bestätigt empfangsfähig).
+- Der Ordner `erstgespraech/` gehört zum Upload der Empfangsschicht und entsteht dabei
+  automatisch (`werkzeug\hochladen.ps1` im Repo `stilprobe-automatik`).
 
 ## Spam-Schutz (serverseitig zu prüfen)
 

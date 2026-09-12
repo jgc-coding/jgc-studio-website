@@ -169,6 +169,40 @@ Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielor
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
 
+- [ ] **V67** (A) Eine Stilprobe einzureichen war unmöglich — Hauptweg UND Ausweichweg tot
+      Gefahr: Wer die drei Texte abschickt, sieht die Fehlermeldung und schreibt an die dort
+      genannte Adresse `stilprobe@jgc-lumen.de`. Die Mail kommt zurück. Die Anfrage ist damit
+      zweimal verloren, und der Absender hält sie für abgeschickt — die schlechteste aller
+      Varianten für eine Seite, die genau diese Handlung bewirbt.
+      Beleg (2026-09-12): `POST https://jgc-lumen.de/stilprobe/senden.php` → 405 (GitHub Pages
+      nimmt keine Formularsendung an), `GET …/kontingent.php` → 404. SMTP-Dialog gegen den MX
+      `w01ec3ef.kasserver.com`: `stilprobe@jgc-lumen.de` → `550 5.1.1 … User unknown in virtual
+      alias table`, dieselbe Antwort wie auf eine frei erfundene Adresse; `kontakt@jgc-lumen.de`
+      kommt an dieser Prüfung vorbei und existiert damit.
+      Aufwand: M · Risiko: mittel (neuer Rechner im Spiel, aber die Website bleibt unberührt)
+      **Stand 12.09.2026:** Die Empfangsschicht ist gebaut und geprüft — privates Repo
+      `stilprobe-automatik` (`C:\Projekte\Stilprobe-Automatik`), 43 Ende-zu-Ende-Fälle grün gegen
+      einen örtlichen PHP-Container. Die Website zeigt im Repo bereits auf
+      `https://formular.jgc-lumen.de`, ist aber **bewusst noch nicht deployt**: solange die
+      Unteradresse nicht existiert, bricht ihr Zertifikat (`curl` → Fehler 60), und das wäre
+      schlechter als der heutige Zustand. Es fehlen drei Schritte von Gabriel in der
+      All-Inkl-Verwaltung: Postfach `stilprobe@` anlegen, Unteradresse `formular.jgc-lumen.de`
+      mit PHP und SSL anlegen, FTP-Zugang dafür. Danach: hochladen, deployen, live nachprüfen.
+
+- [ ] **V68** (B) Die Datenschutzerklärung sagt einen Anthropic-Vertrag zu, den es noch nicht gibt
+      Gefahr: Auf der Seite steht, die Texte der Coaches lägen bei Anthropic unter einem Vertrag
+      zur Auftragsverarbeitung mit EU-Standardvertragsklauseln und seien vom KI-Training
+      ausgenommen. Ein gewöhnliches Pro-Abo leistet das nicht. Wer seine Texte im Vertrauen
+      darauf einreicht und es später anders erfährt, hat einen berechtigten Vorwurf — und die
+      Zusage steht öffentlich.
+      Beleg: `datenschutz/index.html:104–109` (Empfängerliste „Die Stilprobe"), ebenso im
+      Klartext-Kasten `stilprobe/index.html:107`.
+      Aufwand: S · Risiko: mittel (rechtlich, nicht technisch)
+      Empfehlung: Vor der ersten echten Stilprobe, die durch Claude läuft, bei Anthropic die
+      geschäftlichen Bedingungen aktivieren (Konsole → Auftragsverarbeitung, Training aus).
+      Solange das nicht steht, dürfen fremde Texte nicht durch Claude laufen — Gabriels Hand
+      allein verletzt die Zusage nicht. Hängt an Gabriels Punkt „Datenschutz juristisch prüfen".
+
 - [ ] **V60** (A) Zertifikat für `www` hängt seit dem 02.09. im Zustand `new`, der https-Zwang ist aus
       Gefahr: `http://jgc-lumen.de/` wird unverschlüsselt ausgeliefert und leitet nicht auf https um —
       in einem fremden WLAN könnte jemand die Seite unterwegs verändern (etwa die Mailadresse im

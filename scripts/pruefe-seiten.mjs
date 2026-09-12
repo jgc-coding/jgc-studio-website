@@ -276,6 +276,46 @@ for (const s of seiten) {
 }
 
 // ---------------------------------------------------------------------------
+// Regel 13 — Die Formulare zeigen alle auf DENSELBEN Empfaenger.
+//
+// GitHub Pages fuehrt kein PHP aus; die Empfangsschicht liegt darum auf einer
+// eigenen Unteradresse bei All-Inkl (Repo stilprobe-automatik). Die Adresse
+// steht an sieben Stellen im HTML — zwei Seiten, drei Formulare, zwei Badges —
+// weil ein Formular ohne JavaScript sein Ziel im action-Attribut braucht.
+// Sieben Kopien einer Adresse driften; diese Regel ist ihr Waechter: eine
+// vergessene Stelle bricht genau die Strecke, die niemand taeglich testet.
+// ---------------------------------------------------------------------------
+geprueft.push('alle Formulare zeigen auf denselben Empfaenger');
+{
+  const ziele = [];
+  for (const s of seiten) {
+    for (const m of s.inhalt.matchAll(/\b(?:action|data-kontingent)="([^"]*\.php[^"]*)"/g)) {
+      ziele.push({ seite: s.name, adresse: m[1] });
+    }
+  }
+
+  if (ziele.length === 0) {
+    meldeFehler('Formular-Empfaenger', 'keine Formular-Adresse gefunden — steht das action-Attribut noch drin?');
+  }
+
+  const rechner = new Set();
+  for (const z of ziele) {
+    const treffer = z.adresse.match(/^https:\/\/([^/]+)\//);
+    if (!treffer) {
+      meldeFehler('Formular-Empfaenger',
+        `${z.seite}: "${z.adresse}" ist keine vollstaendige https-Adresse. Ohne sie laeuft das Formular gegen die Website selbst, und die kann kein PHP.`);
+      continue;
+    }
+    rechner.add(treffer[1]);
+  }
+
+  if (rechner.size > 1) {
+    meldeFehler('Formular-Empfaenger',
+      `die Formulare zeigen auf ${rechner.size} verschiedene Rechner (${[...rechner].join(', ')}) — eine Stelle ist beim Wechsel zurueckgeblieben.`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Regel 12 — Die Texte der Reise stehen an DREI Orten und muessen dort gleich
 // lauten: in der Engine-Konfiguration (`sections`), im SEO-Spiegel
 // (<section data-sw-seo>, den Suchmaschinen und Browser ohne JavaScript lesen)

@@ -34,13 +34,23 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   mehr. Nichts davon löschen ohne Gabriels Ok.
 
 ## Formulare (Besonderheiten)
-- Drei Strecken zeigen auf Endpoints, die GitHub Pages nicht ausführen kann (kein PHP): Stilprobe-Formular
-  (`/stilprobe/senden.php`), Kontingent-Badge (`/stilprobe/kontingent.php`), Erstgespräch
-  (`/erstgespraech/senden.php`). Bis zum Umzug auf einen PHP-Host (All-Inkl) greifen by design die
-  Fallbacks (statischer Kontingent-Satz, Fehlermeldung mit Mail-Ausweichweg). Feldnamen/JSON-Verträge
-  nicht ändern ohne die `schnittstelle.md`-Dateien.
-- Mailadressen: `kontakt@jgc-lumen.de` empfängt bestätigt. Ob das Postfach `stilprobe@jgc-lumen.de`
-  existiert, ist ungeprüft — es steht als `data-mail`-Attribut am Formular-Artikel beider Seiten.
+- **Die Empfangsschicht liegt in einem anderen Repo und auf einem anderen Rechner.** GitHub Pages
+  führt kein PHP aus; die drei Endpunkte laufen deshalb unter `https://formular.jgc-lumen.de`
+  auf dem All-Inkl-Webspace. Code, Runbook und Upload-Werkzeug: privates Repo `stilprobe-automatik`
+  (`C:\Projekte\Stilprobe-Automatik`). Die Website bleibt bewusst bei GitHub Pages — dort werden
+  ihre sieben Videoetappen (46 MB) schneller ausgeliefert. Feldnamen und Antwortformat sind
+  Vertrag: `docs/stilprobe/schnittstelle.md` und `docs/erstgespraech/schnittstelle.md`, Änderungen
+  immer in beiden Repos zusammen.
+- **Die Adresse des Empfängers steht an sieben Stellen im HTML** (drei `action`, zwei
+  `data-kontingent`, zwei Seiten) — ein Formular ohne JavaScript braucht sein Ziel im Attribut,
+  also lässt sie sich nicht zusammenführen. `pruefe-seiten.mjs` (Regel 13) bewacht, dass alle
+  sieben denselben Rechnernamen tragen und keine relativ zurückbleibt.
+- Mailadressen: `kontakt@jgc-lumen.de` empfängt bestätigt (Erstgespräch, Ausweichweg der Reise).
+  `stilprobe@jgc-lumen.de` ist der Empfänger der Einreichungen und zugleich Absender aller Mails
+  der Empfangsschicht — All-Inkl verwirft Mails mit fremder Absenderadresse. Beide stehen als
+  `data-mail`-Attribut am jeweiligen Formular-Artikel. **Ob ein Postfach existiert, lässt sich
+  nachprüfen**, statt es anzunehmen: ein SMTP-Dialog gegen den MX (`w01ec3ef.kasserver.com`)
+  antwortet auf eine unbekannte Adresse mit `550 … User unknown in virtual alias table`.
 - **Die Formular-Logik steht einmal**, in `der-weg/formular-kern.js`; beide Seiten liefern nur Markup
   (Rollen `data-rolle="fehler|normal|warteliste|pause|kontingent|…"`) und Wortlaute. Beim Fehlschlag:
   menschlicher Satz, Knopf „Angaben kopieren", Diagnosezeile mit Fehler-ID (auch im Browser-Log).

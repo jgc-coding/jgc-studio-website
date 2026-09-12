@@ -2,6 +2,35 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-12 — Die Formulare bekommen einen Empfänger (V67, V68)
+
+Bis heute lief eine Stilprobe-Einreichung ins Leere: GitHub Pages führt kein PHP aus, und die
+im Fehlerfall angebotene Ausweichadresse `stilprobe@jgc-lumen.de` existierte nicht (per
+SMTP-Dialog nachgewiesen, `550 … User unknown`). Beide Wege tot — der Hauptweg und der
+Notfallweg.
+
+- **Neues privates Repo `stilprobe-automatik`** (`C:\Projekte\Stilprobe-Automatik`, Stufe
+  Produkt): die PHP-Empfangsschicht mit `senden.php` (Stilprobe), `kontingent.php` und
+  `senden.php` (Erstgespräch). Sie prüft Pflichtfelder, verstecktes Feld und Ausfüllzeit,
+  bremst Massenanfragen je Absender, führt den Monatszähler samt Warteliste, schickt die
+  Einreichung als strukturierte Mail mit maschinenlesbarem Block, bestätigt dem Coach den
+  Eingang und pingt Telegram. 43 Ende-zu-Ende-Fälle grün gegen einen örtlichen PHP-Container,
+  inklusive mitgelesener Mails (`werkzeug/teste-strecke.mjs`).
+- **Entscheidung: nur die Endpunkte ziehen um, nicht die Website.** Sie liegen unter
+  `https://formular.jgc-lumen.de` auf dem vorhandenen All-Inkl-Webspace; die Reise bleibt bei
+  GitHub Pages, wo ihre sieben Videoetappen (46 MB) schneller ausgeliefert werden. Ein Umzug der
+  ganzen Seite hätte Deploy-Kette und Zertifikat angefasst — viel Risiko für drei kleine Dateien.
+- **Sieben Adressen im HTML umgestellt** (drei `action`, zwei `data-kontingent`, zwei Seiten),
+  dazu eine neue **Regel 13** in `pruefe-seiten.mjs`: alle Formular-Adressen müssen denselben
+  Rechnernamen tragen und vollständig sein. Gegenprobe gemacht — eine zurückgelassene relative
+  Adresse lässt die Prüfung rot werden.
+- **Noch nicht deployt, mit Absicht.** Die Unteradresse existiert erst, wenn Gabriel sie in der
+  All-Inkl-Verwaltung anlegt; bis dahin bräche ihr Zertifikat, und das wäre schlechter als der
+  heutige Zustand. Offen sind drei Schritte von ihm (Postfach, Unteradresse, FTP-Zugang), danach
+  Upload und Deploy in einem Zug.
+- **V68 neu:** Die Datenschutzerklärung sagt für Anthropic einen Auftragsverarbeitungsvertrag mit
+  Trainings-Ausschluss zu. Der muss stehen, bevor der erste fremde Text durch Claude läuft.
+
 ## 2026-09-05 — Runde 4 ist live; Hauptbaum wieder auf `main` (V64 abgeschlossen)
 
 Gabriels Freigabe („mach das, was am besten ist"): Push `042122a` auf `main`, Action grün.
