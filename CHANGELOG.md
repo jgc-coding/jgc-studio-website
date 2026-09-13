@@ -2,6 +2,30 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-13 — „Über mich": Gabriels Portrait auf der Staffelei
+
+Gabriel hat Etappe 6 mit seinem eigenen Foto in der Staffelei geliefert. Bis heute stand dort ein
+generiertes Papierschnitt-Gesicht, das Besucher neben seinem Namen für ihn halten mussten.
+
+- **Etappe `lichtung` neu kodiert** aus `leg 6 - Gabriel Portrait v2.mp4` (1112 × 834, 24 Bilder/s,
+  193 Bilder, also dasselbe Format wie das Original). Desktop 3,9 → 4,1 MB, Handy 1,6 MB; Poster und
+  Standbild neu erzeugt.
+- **Verändert ist nur die Staffelei.** Bild für Bild gegen das Original liegt die Ähnlichkeit (SSIM)
+  zwischen 0,961 und 0,994, am ersten Bild bei 0,994 und am letzten bei 0,990. Das Differenzbild
+  zeigt die Abweichung allein im Bilderrahmen.
+- **Beide Nähte tragen weiter:** Der Weg → Über mich 0,851 / 0,696 = 1,22 (vorher 1,23), Über mich →
+  Weitblick 0,829 / 0,835 = 0,99 (vorher 1,00). Bildbewegung 5,1 → 5,2; `scroll` bleibt beim Boden
+  0,85.
+- **Die Rohdatei ist getauscht, das Original gesichert:** `Scroll World\legs\leg 6.mp4` ist jetzt die
+  Portrait-Fassung, das Original liegt mit gleicher Prüfsumme unter `legs\vor-portrait-2026-09-13\`.
+  Damit baut auch ein späteres `kodiere.mjs --alles` das Portrait wieder ein.
+- **Im Browser nachgeprüft:** Der Vorschau-Server liefert die neue Datei (SHA-256 gleich dem
+  Repo-Stand), und in echtem Chrome (headless, 1440 × 900 und 393 × 852) ist das Portrait beim Anflug
+  auf „Über mich" zu sehen. Gleichzeitig mit dem Stationstext steht es allerdings nie im Bild — neuer
+  Befund **V78**.
+- `pruefe-seiten.mjs` (Quellen und `_site`) und alle Zeilen aus `.claude/pruefen.txt` sind grün;
+  `pruefe-naehte.mjs` meldet unverändert nur die bekannte Naht Haltung → Deine Woche.
+
 ## 2026-09-13 — Stilprobe: „zeitnah" statt 48 Stunden, keine sichtbare Monatsgrenze
 
 Gabriels Vorgabe: Die Seite verspricht keine feste Frist mehr und nennt keinen Deckel.

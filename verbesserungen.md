@@ -1,5 +1,5 @@
 # Verbesserungen
-Stand: 2026-09-13 (Stilprobe „zeitnah" live und Werkstatt gebaut: **V76** und **V77** neu unter
+Stand: 2026-09-13 (Portrait in Etappe 6 eingebaut, **V78** neu; davor Stilprobe „zeitnah" live und Werkstatt gebaut: **V76** und **V77** neu unter
 „Offen", Nachträge an **V60** und **V68**). Davor 2026-09-12 (Feedback-Runde: externe Durchsicht der Live-Seite, 14 Punkte; **V69 und V70
 am selben Tag umgesetzt**, die übrigen Punkte stehen als V71–V75 unter „Offen" und I9–I14 unter
 „Ideen", Details im CHANGELOG)
@@ -187,6 +187,29 @@ DSGVO-Linie außerhalb der Reise.
 Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielort ist GitHub
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
+
+- [ ] **V78** (B) „Über mich": Portrait und Stationstext stehen nie gleichzeitig im Bild
+      Gefahr: Seit dem 13.09.2026 trägt die Staffelei der Etappe 6 Gabriels echtes Foto. Die
+      Kamera fährt aber an ihr vorbei. Wer bei „Über mich" anhält, um den Text zu lesen, oder
+      die Station im Menü anklickt, sieht nur noch Hügel und Fluss. Am PC schiebt sich schon
+      vorher die Textspalte mit dem hellen Verlauf über das Foto. Wer Bewegung reduziert hat
+      oder langsam surft, bekommt das Standbild der Etappe — deren erstes Bild, ohne Staffelei.
+      Beleg: Bildschirmfotos aus Chrome (headless, 1440 × 900 und 393 × 852) an den Bildern
+      64 bis 192 der Etappe, Deckkraft des Stationstexts dabei 0 / 0,07 / 0,34 / 0,57 / 0,78 /
+      0,94 / 1. Am PC ist das Foto bis etwa Bild 115 frei, danach liegt der Text darüber.
+      Hochkant bleibt der Text im Streifen darunter; das Foto ist bis etwa Bild 145 zu sehen
+      und wandert dann links aus dem Ausschnitt (sichtbar sind dort nur die Pixel 229–883 der
+      Bildbreite). Ab Bild 176 ist es auf beiden Schirmen weg; das Menü landet bei 98 % der
+      Etappe. Standbild: `kodiere.mjs` nimmt für `lichtung-still.jpg` das erste Bild.
+      Aufwand: S (Standbild) bis M (Neuschnitt) · Risiko: gering bis mittel (Nähte)
+      Empfehlung: Zuerst selbst am Handy und am PC durchscrollen. Stört es, ist der stärkste
+      Hebel ein Neuschnitt wie bei Etappe 3 und 4: Etappe 6 und 7 zu einem Clip verbinden und
+      so teilen, dass „Über mich" bei etwa Bild 128 ankommt, wo die Staffelei groß im Bild
+      steht. Hochkant stünden Foto und Text dann zusammen da, am PC bliebe der Text darüber.
+      Unabhängig davon kann das Standbild aus einem Bild mit Portrait kommen (S) — anders als
+      das Poster muss es nicht das erste Bild sein. I9, ein kleines Portrait neben dem
+      Stationstext, bleibt die einzige Lösung, die auf allen Schirmen Gesicht und Text
+      zugleich zeigt.
 
 - [ ] **V76** (B) Die Kopien im Postfach werden nicht nach 30 Tagen gelöscht
       Gefahr: Die Datenschutzerklärung sagt zu, Texte und Zwischenergebnisse 30 Tage nach der

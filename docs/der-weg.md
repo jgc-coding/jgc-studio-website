@@ -27,8 +27,15 @@ keine Verbindungsclips). Grundlage: `scroll-world-briefing.md` von Gabriel, 2026
 
 ## Eine Etappe austauschen
 
-Der häufigste Fall: Gabriel liefert ein neues Video für eine Szene nach, etwa Etappe 6
-mit seinem eigenen Porträt auf der Staffelei.
+Der häufigste Fall: Gabriel liefert ein neues Video für eine Szene nach, so geschehen am
+13.09.2026 mit Etappe 6 und seinem eigenen Portrait auf der Staffelei.
+
+**Zuerst die Rohdatei ersetzen**, denn `kodiere.mjs` liest immer
+`Scroll World\legs\leg <Nummer>.mp4`. Liegt die neue Fassung nur woanders, baut ein späteres
+`--alles` still wieder die alte. Das Original kommt vorher in einen datierten Ordner daneben
+(`legs\vor-portrait-2026-09-13\leg 6.mp4`, ebenso `legs\vor-schnitt-2026-08-28\`). Gabriels
+Arbeitsdateien zur Portrait-Etappe (Composite und Einzelbilder) liegen unter
+`C:\Projekte\Experimente und Verschiedenes\Hintergrund Video JGC Lumen Website\Materialien\`.
 
 ```bash
 node scripts/der-weg/kodiere.mjs 6
@@ -59,7 +66,7 @@ die `teile-verbunden.mjs` in zwei zerlegt (Abschnitt unten). Wer eine der beiden
 muss beide zusammen denken — und die alten Einzeldateien liegen unter
 `Scroll World\legs\vor-schnitt-2026-08-28\`.
 
-## Stand der Übergänge (Messung 28.08.2026)
+## Stand der Übergänge (Messung 28.08.2026, Etappe 6 nachgemessen am 13.09.2026)
 
 Fünf von sechs Übergängen tragen, einer springt sichtbar:
 
@@ -68,8 +75,8 @@ anflug -> werkzeug          0.742 / Eigenwert 0.656 = 1.13   trägt
 werkzeug -> schreibtisch    0.432 / 0.962 = 0.45             SPRUNG
 schreibtisch -> stilprobe   0.905 / 0.810 = 1.12             trägt   (war 0.281 = SPRUNG)
 stilprobe -> weg            0.821 / 0.638 = 1.29             trägt   (war 0.620)
-weg -> lichtung             0.855 / 0.696 = 1.23             trägt
-lichtung -> aussicht        0.833 / 0.837 = 1.00             trägt
+weg -> lichtung             0.851 / 0.696 = 1.22             trägt   (vor dem Portrait 0.855)
+lichtung -> aussicht        0.829 / 0.835 = 0.99             trägt   (vor dem Portrait 0.833)
 ```
 
 Abgefangen wird der verbliebene Sprung durch eine breitere Überblendung (`crossfade: 0.38`
@@ -699,17 +706,7 @@ Die ausführlichen Begründungen stehen in `docs/scroll-world-lessons.md`.
 
 ## Offen
 
-- **Porträt in Etappe 6.** Auf der Staffelei steht ein generiertes Papierschnitt-Gesicht.
-  Gabriel will es durch sein eigenes ersetzen und liefert die Etappe nach. Solange das
-  aussteht, zeigt eine Seite mit dem Titel „Wer mit dir arbeitet" ein Gesicht, das die
-  Besucherin für den Gründer halten wird. Das ist die gleiche Ehrlichkeitsfrage wie bei
-  den Platzhalter-Kundenstimmen (V13) und sollte vor dem Veröffentlichen geklärt sein.
-  **Seit dem „Mehr dazu"-Feld schärfer:** dort steht jetzt Gabriels Name, sein Werdegang und
-  seine TÜV-Prüfzeichen-ID neben dem erfundenen Gesicht. Was vorher eine Andeutung war, ist damit
-  eine ausdrückliche Zuschreibung.
-  Eine Notiz vom 24.07. behauptete, das Portrait sei bereits einkomponiert; die dort
-  genannten Dateien (`leg 6 original.mp4`, Werkzeugordner) existieren nicht mehr.
-- Die zwei springenden Übergänge (siehe oben).
+- Der springende Übergang Haltung → Deine Woche (siehe oben).
 - **In den Skill zurückgeben**, sobald sie sich bewährt haben:
   1. `clipStart: 'gated'` + `prefetch` + Rückgabewert, die `visibility`-Kopplung der
      Stationstexte (V21), der Nachlade-Deckel (V28) und die überarbeitete Scrub-Nachführung
