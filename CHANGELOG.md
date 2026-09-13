@@ -18,7 +18,8 @@ generiertes Papierschnitt-Gesicht, das Besucher neben seinem Namen für ihn halt
   0,85.
 - **Die Rohdatei ist getauscht, das Original gesichert:** `Scroll World\legs\leg 6.mp4` ist jetzt die
   Portrait-Fassung, das Original liegt mit gleicher Prüfsumme unter `legs\vor-portrait-2026-09-13\`.
-  Damit baut auch ein späteres `kodiere.mjs --alles` das Portrait wieder ein.
+  Damit baut auch ein späteres `kodiere.mjs --alles` das Portrait wieder ein. Weil das Rohmaterial
+  seit dem 12.09. versioniert ist, sind beide Dateien auch committet (V79).
 - **Im Browser nachgeprüft:** Der Vorschau-Server liefert die neue Datei (SHA-256 gleich dem
   Repo-Stand), und in echtem Chrome (headless, 1440 × 900 und 393 × 852) ist das Portrait beim Anflug
   auf „Über mich" zu sehen. Gleichzeitig mit dem Stationstext steht es allerdings nie im Bild — neuer

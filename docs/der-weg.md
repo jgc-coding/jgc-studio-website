@@ -23,7 +23,7 @@ keine Verbindungsclips). Grundlage: `scroll-world-briefing.md` von Gabriel, 2026
 | `scripts/der-weg/hole-schriften.mjs` | löst Fraunces und Inter aus V18 heraus |
 | `scripts/der-weg/server.mjs` | lokaler Server zum Ansehen (Port 4330) |
 | `scripts/v18/transform-weg-umschalter.mjs` | setzt die Verweise von V18 hierher |
-| **Rohmaterial** | `C:\Projekte\JGC Studio\Scroll World\legs\` — **nicht im Repo** (100 MB) |
+| **Rohmaterial** | `C:\Projekte\JGC Studio\Scroll World\legs\` — seit dem 12.09.2026 mit im Repo (rund 150 MB), entgegen der ursprünglichen Absicht (V79). `kodiere.mjs` liest den absoluten Pfad im Hauptordner, auch aus einem Worktree heraus |
 
 ## Eine Etappe austauschen
 

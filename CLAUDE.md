@@ -13,7 +13,8 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 - `der-weg/` — **die Seite**: Scroll-Reise (Kamerafahrt durch eine Papierwelt, 7 Videoetappen,
   ~46 MB). Wird im Deploy komplett an die Wurzel kopiert (`/`, `/assets/`, vier Skripte). Nimmt
   Stilprobe- und Erstgespräch-Anfragen selbst entgegen (`formulare.js`). Werkzeuge in
-  `scripts/der-weg/`, Rohvideos außerhalb des Repos. **Details und Austauschweg: `docs/der-weg.md`.**
+  `scripts/der-weg/`, Rohvideos unter `Scroll World/legs/` im Hauptordner (`kodiere.mjs` liest diesen
+  absoluten Pfad auch aus einem Worktree — ein Rohdatei-Tausch ändert also immer den Hauptordner). **Details und Austauschweg: `docs/der-weg.md`.**
 - `stilprobe/index.html`, `impressum/`, `datenschutz/` — die drei Unterseiten im Design der Reise.
   Die Stilprobe ist seit 05.09.2026 eine gewöhnliche, direkt editierbare HTML-Datei (~20 KB statt
   724 KB aus dem V18-Bau).
@@ -143,8 +144,12 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 - **Headless Chrome misst falsch, wenn man nicht nachrechnet.** `--window-size` ist nicht der
   CSS-Viewport (26 px Breite und 156 px Höhe gehen fürs Fensterwerk ab), und unter **526 CSS-px
   Breite klemmt Chrome auf ein Minimum** — ein angefordertes 393er Handyfenster rendert als 526 px
-  und schneidet Text ab, der real passt. Für echte Handybreiten taugt der Weg nicht; dort nur
-  DOM-Geometrie messen.
+  und schneidet Text ab, der real passt. Für echte Handybreiten taugt der Weg nicht. **Was geht:
+  Chrome headless über das DevTools-Protokoll steuern** (`--remote-debugging-port`,
+  `Emulation.setDeviceMetricsOverride`) — dann stimmen auch 393 × 852, und die Reise läuft
+  wirklich: Video-Scrubbing, Textdeckkraft, Screenshot je Scrollposition (erprobt 13.09.2026).
+  `--user-data-dir` absolut angeben, mit relativem Pfad antwortet der Debug-Port nie. Die Engine
+  lädt Clips als `blob:`-Adresse, am Dateinamen ist das Video also nicht zu erkennen.
 - **Hochkant-Layouts in `svh` rechnen, nicht in `vh` oder `%`.** Chrome auf Android misst
   `position: fixed` am GROSSEN Fenster (ohne Adressleiste); steht die Leiste, liegen rund 110 px
   davon unter dem sichtbaren Rand, und alles, was dort unten verankert ist, wird abgeschnitten.
