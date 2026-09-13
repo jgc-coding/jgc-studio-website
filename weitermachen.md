@@ -18,24 +18,29 @@ Station „Über mich" einbauen, sodass es dauerhaft drin bleibt.
 - Vorher am selben Tag: „zeitnah" live (`54e2a13`) und die Werkstatt gebaut
   (`C:\Projekte\Stilprobe-Automatik\werkstatt`, Runbook `docs/werkstatt.md`); sie wartet auf
   Zugangsdaten.
+- **Stilprobe am Abend:** Gabriels Entscheidungen umgesetzt — kein Monatsdeckel mehr
+  (Empfangsschicht 0.3.0 live), Werkstatt 0.3.0 im Abo-Betrieb. Sie wartet auf das
+  Postfach-Passwort und das Abo-Token.
 
 ## Offen (wartet auf Gabriel)
-- **Zugangsdaten in `werkstatt\.env`:** Postfach-Passwort, Entscheidung api oder abo, bei api
-  der Schlüssel aus der Anthropic-Konsole; danach `docker compose up -d`. Vorher läuft nichts
-  durch Claude.
+- **Werkstatt scharf schalten** (sechs Schritte im Hub-Eintrag): Training im Claude-Konto
+  ausschalten, Datenschutz-Sätze freigeben (Vorschlag liegt vor, V68), `claude setup-token`,
+  Postfach-Passwort und Token in `werkstatt\.env`, dann `docker compose up -d`. Betriebsart ist
+  `abo` — Gabriels Entscheidung: nur Monatskontingent, keine API.
 - **Der erste echte Durchlauf** gegen das All-Inkl-Postfach ist nicht belegt. Nach dem Eintragen
   eine eigene Test-Einreichung auf der Live-Seite machen und Entwurf und Prüfnotiz ansehen.
-- **V77** (Deckel wirkt unsichtbar weiter) und **V76** (Postfach-Kopien werden nicht nach 30
-  Tagen gelöscht) — beides Gabriels Entscheidung.
+- **V77 erledigt:** kein Monatsdeckel mehr (Empfangsschicht 0.3.0). **V76:** vorerst Handarbeit —
+  einmal im Monat alte Stilprobe-Mails im Postfach löschen (Hub).
 - **V79** (Rohvideos im Repo lassen oder herausnehmen) — Gabriels Entscheidung, Frage steht im
   Hub-Sammelpunkt.
 - **V60** — Zertifikat weiter `new`, Stand vom 13.09. im Befund. Nicht erneut anstoßen.
 - **Mails zugestellt?** Offen seit dem 12.09.: `stilprobe@` und `kontakt@` ansehen.
-- **V68** — mit API-Schlüssel technisch gedeckt, die juristische Prüfung der Formulierung bleibt.
+- **V68** — der Abo-Betrieb deckt die Zusage nicht: Datenschutz-Sätze anpassen (Vorschlag liegt
+  Gabriel vor), Training im Claude-Konto ausschalten; die juristische Prüfung bleibt.
 - Offene Befunde: **V59** (wichtig), **V66**, **V47**, **V14**, **V71–V75**. Ideen: **I3**, **I4**, **I9–I14**.
 - **Gabriel (Hub, Karte „Website"):** juristische Prüfung des Datenschutzes, Testmail an
   kontakt@, Anthropic-Bedingungen, USt-IdNr., LinkedIn-URL, Profilbild ins Google-Profil,
-  Search Console, „fremde Skills versionieren?". Neu: Werkstatt-Zugangsdaten, V76, V77; seit
+  Search Console, „fremde Skills versionieren?". Neu: Werkstatt scharf schalten (sechs Schritte) und monatliches Löschen (V76); seit
   dem 13.09. abends außerdem die Portrait-Etappe am Handy durchscrollen und V79 im Sammelpunkt.
 - Projekt-CLAUDE.md liegt über dem Richtwert — Straffung nur als Vorschlag, nie eigenmächtig.
 - Nach dem Launch: Kundenstimmen mit echten Zitaten, Analytics ohne Cookies falls gewünscht,
