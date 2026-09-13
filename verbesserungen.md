@@ -188,6 +188,26 @@ Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielor
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
 
+- [ ] **V79** (B) Das Rohmaterial der Reise liegt seit dem 12.09. im öffentlichen Repo
+      Gefahr: Rund 150 MB Rohvideos und Standbilder aus `Scroll World/` sind beim Merge `53c9b71`
+      in die Versionsverwaltung gerutscht — in beiden Eltern-Commits fehlen sie, sie kamen erst
+      beim Zusammenführen dazu. Seitdem liegen sie öffentlich auf GitHub, jede neu gelieferte
+      Etappe macht das Repo dauerhaft größer, und jeder neue Worktree kopiert die 150 MB mit.
+      Gewollt war das Gegenteil: `kodiere.mjs` sagt „Rohmaterial liegt bewusst ausserhalb des
+      Repos", und bis zum 13.09. stand „nicht im Repo" in `docs/der-weg.md`.
+      Beleg: `git ls-files "Scroll World"` → 19 Dateien; `git diff --stat 53c9b71^1 53c9b71` und
+      dasselbe gegen `^2` zeigen alle 19 als neu; `gh repo view` → `PUBLIC`, 279 MB. Am 13.09.
+      kamen die Portrait-Fassung von `leg 6.mp4` (12 MB) und ihre Sicherung dazu — die Sicherung
+      ist dieselbe Datei wie der alte Stand und kostet keinen Platz. Ohne diesen Commit hätte der
+      geänderte Hauptordner das Nachziehen von `main` blockiert.
+      Aufwand: S · Risiko: mittel — beim Herausnehmen lauert eine Falle mit Datenverlust
+      Empfehlung: Herausnehmen, damit es nicht weiter wächst: im HAUPTORDNER auf `main`
+      `git rm -r --cached "Scroll World"`, `Scroll World/` in die `.gitignore`, committen, pushen.
+      Nie über einen Worktree-Zweig: zieht der Hauptordner einen Commit nach, der die Dateien
+      austrägt, löscht Git sie dort von der Platte. Aus dem Verlauf verschwinden die 150 MB
+      dadurch nicht; das ginge nur per Force-Push. Wer die Rohdaten bewusst versioniert haben
+      will, lässt es so und passt Doku und Kommentar in `kodiere.mjs` an. Gabriels Entscheidung.
+
 - [ ] **V78** (B) „Über mich": Portrait und Stationstext stehen nie gleichzeitig im Bild
       Gefahr: Seit dem 13.09.2026 trägt die Staffelei der Etappe 6 Gabriels echtes Foto. Die
       Kamera fährt aber an ihr vorbei. Wer bei „Über mich" anhält, um den Text zu lesen, oder
