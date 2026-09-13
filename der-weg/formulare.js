@@ -243,9 +243,9 @@ function mountFormulare(optionen) {
     var spWlForm = spWlBlock && spWlBlock.querySelector('form');
 
     var spErfolg = 'Danke. Deine Texte sind angekommen – du bekommst gleich eine Bestätigung ' +
-      'per Mail und binnen 48 Stunden deine zwei Fassungen. Absender: ' + spMail;
+      'per Mail und zeitnah deine zwei Fassungen. Absender: ' + spMail;
     var spErfolgWarteliste = 'Danke. Du stehst jetzt vorn auf der Liste: Sobald der nächste ' +
-      'Monat beginnt, bekommst du deinen Platz angeboten, bevor er auf der Website erscheint.';
+      'Monat beginnt, bekommst du deinen Platz angeboten.';
 
     var spEntwurf = kern.setupEntwurf(spArt, spNormalForm, 'stilprobe-entwurf-v1',
       ['name', 'email', 'text_1', 'text_2', 'text_3', 'wunschthema', 'quelle']);

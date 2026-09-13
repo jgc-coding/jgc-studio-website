@@ -2,6 +2,27 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-13 — Stilprobe: „zeitnah" statt 48 Stunden, keine sichtbare Monatsgrenze
+
+Gabriels Vorgabe: Die Seite verspricht keine feste Frist mehr und nennt keinen Deckel.
+
+- **„Binnen 48 Stunden" heißt überall „zeitnah"** — 13 Stellen: Scroll-Reise (Station, SEO-Spiegel,
+  Vertiefung, Formular, FAQ 02), Stilprobe-Seite (Vorspann, Ablauf, drei Vorschautexte) und die
+  Erfolgsmeldung nach dem Absenden auf beiden Seiten. Der Chip der Station heißt „Antwort zeitnah"
+  statt „innerhalb 48 h".
+- **Die Zahl 15 ist weg:** die Zählerzeile unter dem Formular auf beiden Seiten samt ihren
+  Stylesheet-Regeln, der Wartelisten-Satz und die Frage „Was kostet die Stilprobe?". Die Warteliste
+  sagt jetzt „Für diesen Monat sind alle Plätze vergeben", ohne Zahl und ohne „bevor er auf der
+  Website erscheint" — es erscheint ja keiner mehr.
+- Der Abruf des Monatszustands bleibt, denn er schaltet weiter Warteliste und Pause. Der technische
+  Deckel in der Empfangsschicht wirkt unverändert; deren Mails an den Coach nennen ebenfalls weder
+  Frist noch Zahl (Repo `stilprobe-automatik`, Version 0.2.0).
+- **Hochkant nachgemessen**, auf den neun Schirmen der Messtabelle vorher und nachher: Die Station
+  „Die Stilprobe" ist mit 201–234 px unverändert hoch und liegt überall deutlich unter der höchsten
+  Station (bis 313 px). `--weg-textzone` bleibt, wie sie ist. Die gemessenen Höchstwerte stimmen mit
+  der Tabelle vom 26.08.2026 überein.
+- Vertrag `docs/stilprobe/schnittstelle.md` nachgezogen; das Konzept trägt jetzt Stand 1.2.
+
 ## 2026-09-12 — Das hängende Zertifikat: die `CNAME`-Datei fehlte im Ergebnis (V60)
 
 Zehn Tage stand der Zertifikatsantrag für `jgc-lumen.de` und `www.jgc-lumen.de` auf „wird gleich
