@@ -1,5 +1,6 @@
 # Verbesserungen
-Stand: 2026-09-12 (Feedback-Runde: externe Durchsicht der Live-Seite, 14 Punkte; **V69 und V70
+Stand: 2026-09-13 (Stilprobe „zeitnah" live und Werkstatt gebaut: **V76** und **V77** neu unter
+„Offen", Nachträge an **V60** und **V68**). Davor 2026-09-12 (Feedback-Runde: externe Durchsicht der Live-Seite, 14 Punkte; **V69 und V70
 am selben Tag umgesetzt**, die übrigen Punkte stehen als V71–V75 unter „Offen" und I9–I14 unter
 „Ideen", Details im CHANGELOG)
 
@@ -187,6 +188,32 @@ Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielor
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
 
+- [ ] **V76** (B) Die Kopien im Postfach werden nicht nach 30 Tagen gelöscht
+      Gefahr: Die Datenschutzerklärung sagt zu, Texte und Zwischenergebnisse 30 Tage nach der
+      Rückgabe zu löschen. Die Werkstatt löscht ihre eigene Ablage pünktlich. Im Postfach
+      stilprobe@ bleiben aber die Einreichungs-Mail mit den drei Texten, die Prüfnotiz und die
+      gesendete Antwort liegen, bis jemand sie von Hand löscht. Fragt ein Coach nach Monaten
+      nach, stehen seine Texte noch da.
+      Beleg: `datenschutz/index.html` („Deine Texte und alle Zwischenergebnisse lösche ich 30 Tage
+      nach Versand der Rückgabe"); die Werkstatt löscht nur ihr Docker-Volume
+      (Repo `stilprobe-automatik`, `werkstatt/src/ablage.mjs`, `docs/werkstatt.md`).
+      Aufwand: S als Handarbeit, M als Automatik · Risiko: mittel (rechtlich)
+      Empfehlung: Bis zur Entscheidung einmal im Monat im Postfach alles zu Stilproben löschen,
+      was älter als 30 Tage ist. Die Werkstatt könnte Einreichungs-Mails und Prüfnotizen später
+      selbst löschen — das ist endgültiges Löschen in Gabriels Postfach und braucht sein Ok.
+
+- [ ] **V77** (C) Der Monatsdeckel ist unsichtbar, wirkt aber weiter
+      Gefahr: Seit dem 13.09.2026 nennt keine Seite und keine Mail mehr eine Zahl. Technisch
+      greift nach 15 Annahmen im Monat trotzdem die Warteliste. Der 16. Coach sieht dann „Der
+      September ist voll" ohne Vorwarnung — ehrlich, aber überraschend. Zugleich ist der Deckel
+      bei einer Spam-Welle die Bremse für Claude-Kosten und Gabriels Lesezeit.
+      Beleg: `deckel` 15 in `konfig.live.php` bzw. `konfig.php` auf dem Webspace;
+      `kontingent.php` liefert weiter `frei` und `deckel`, die Seiten werten nur noch den
+      Zustand für Warteliste und Pause aus.
+      Aufwand: S · Risiko: gering
+      Empfehlung: Entscheiden, ob der Deckel als stille Notbremse bleibt (15 oder zum Beispiel
+      30) oder fällt. Die Zahl steht an genau einer Stelle; danach mit `-MitKonfig` hochladen.
+
 - [ ] **V71** (B) Das Menü der Stilprobe-Unterseite passt nicht zur Reise (Feedback F5)
       Gefahr: Wer von `/stilprobe/` zurück in die Reise springt, findet dieselben Stationen unter
       anderen Namen („Angebote" → „Der Weg", „Grundwerte" → „Haltung", „Wer mit dir arbeitet" →
@@ -287,6 +314,11 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       geschäftlichen Bedingungen aktivieren (Konsole → Auftragsverarbeitung, Training aus).
       Solange das nicht steht, dürfen fremde Texte nicht durch Claude laufen — Gabriels Hand
       allein verletzt die Zusage nicht. Hängt an Gabriels Punkt „Datenschutz juristisch prüfen".
+      **Nachtrag 13.09.2026:** Die Werkstatt ist gebaut und auf `TEXTWERK=api` eingestellt. Mit
+      einem API-Schlüssel aus der Anthropic-Konsole gelten die kommerziellen Bedingungen samt
+      Vertrag zur Auftragsverarbeitung; ohne Schlüssel läuft nichts durch Claude, die Werkstatt
+      wartet. Der Abo-Betrieb deckt die Zusage NICHT und ist nur für eigene Texte gedacht
+      (Probelauf). Offen bleibt Gabriels juristische Prüfung der Formulierung.
 
 - [ ] **V60** (A) Zertifikat für `www` hängt seit dem 02.09. im Zustand `new`, der https-Zwang ist aus
       Gefahr: `http://jgc-lumen.de/` wird unverschlüsselt ausgeliefert und leitet nicht auf https um —
@@ -345,6 +377,15 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       ihn mit einem Verweis auf All-Inkl statt mit „gibt es nicht" — das bricht die optionale
       Domain-Verifizierung bei GitHub (Hub-Punkt) und ließe sich mit einem ausdrücklichen
       TXT-Eintrag heilen.
+      **Stand 13.09.2026, eine Nacht nach dem CNAME-Fix:** weiter `state: new`, Beschreibung
+      unverändert „The certificate request process will begin shortly", `https_enforced: false`.
+      `http://jgc-lumen.de/` liefert 200 ohne Umleitung, `www` zeigt GitHubs Sammelzertifikat.
+      Die `CNAME`-Datei ist live (200, `jgc-lumen.de`). Die Diagnose-Schnittstelle
+      `…/pages/health` antwortet zweimal leer. Die DNS-Abfrage bestätigt den Nebenbefund: Der
+      Wildcard-Eintrag beantwortet `_github-pages-challenge-jgc-coding` mit einem CNAME auf
+      `w01ec3ef.kasserver.com`. Ob das die Ursache ist, ist nicht bewiesen. Nächster Schritt
+      unverändert: ein, zwei Tage abwarten, dann Settings→Pages im Browser ansehen bzw. den
+      ausdrücklichen TXT-Eintrag setzen.
 
 - [ ] **V66** (D) Vier Skripte in `scripts/stilprobe/` laufen seit dem Neubau ins Leere
       Gefahr: Wer sie zur Hand nimmt, arbeitet an einer Datei, die es so nicht mehr gibt — die
