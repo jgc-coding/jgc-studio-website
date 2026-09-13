@@ -40,6 +40,7 @@ Formular-Overlays abgerufen. Der Entwurfsspeicher teilt den localStorage-Schlüs
 
 Antwort: `{"monat":"Juli","frei":9,"deckel":15,"status":"frei"}` mit `status` ∈ `frei` | `knapp` (≤3) | `voll` | `pause`. Cachebar bis 10 Minuten. Timeout clientseitig 2 s; jeder Fehler lässt das normale Formular stehen.
 
+**Seit dem 13.09.2026 abends gibt es keinen Monatsdeckel mehr** (Gabriels Entscheidung, Empfangsschicht 0.3.0). Die Antwort lautet dann `{"monat":"September","frei":null,"deckel":null,"status":"frei"}`: `frei` und `deckel` sind null, `voll` und `knapp` kommen nicht mehr vor, `pause` weiterhin. Setzt Gabriel in der Konfiguration wieder eine Zahl, gilt die Form darüber. Die Seiten brauchen dafür keine Änderung, weil sie nur `status` auswerten.
 **Seit dem 13.09.2026 zeigt keine Seite mehr eine Zahl** (Gabriels Entscheidung: kein sichtbarer Monatsdeckel, und statt „binnen 48 Stunden" nur noch „zeitnah"). Die Antwort bleibt unverändert, damit der Vertrag mit der Empfangsschicht stabil bleibt; die Seiten werten nur noch `status` aus:
 - `frei` und `knapp`: Nichts ändert sich, das Formular steht.
 - `voll`: Umschalten auf das Wartelisten-Formular mit der Überschrift „Der {monat} ist voll." und dem Satz „Für diesen Monat sind alle Plätze vergeben. Trag dich ein, und du bekommst den ersten freien Platz im {folgemonat}."

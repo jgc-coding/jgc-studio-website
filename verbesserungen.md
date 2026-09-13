@@ -221,8 +221,10 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Empfehlung: Bis zur Entscheidung einmal im Monat im Postfach alles zu Stilproben löschen,
       was älter als 30 Tage ist. Die Werkstatt könnte Einreichungs-Mails und Prüfnotizen später
       selbst löschen — das ist endgültiges Löschen in Gabriels Postfach und braucht sein Ok.
+      **Entschieden am 13.09.2026:** vorerst so lassen. Gabriel löscht von Hand, einmal im Monat
+      (Hub-Eintrag „Monatlich: Stilprobe-Mails im Postfach … löschen").
 
-- [ ] **V77** (C) Der Monatsdeckel ist unsichtbar, wirkt aber weiter
+- [x] **V77** (C) Der Monatsdeckel ist unsichtbar, wirkt aber weiter
       Gefahr: Seit dem 13.09.2026 nennt keine Seite und keine Mail mehr eine Zahl. Technisch
       greift nach 15 Annahmen im Monat trotzdem die Warteliste. Der 16. Coach sieht dann „Der
       September ist voll" ohne Vorwarnung — ehrlich, aber überraschend. Zugleich ist der Deckel
@@ -233,6 +235,10 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Aufwand: S · Risiko: gering
       Empfehlung: Entscheiden, ob der Deckel als stille Notbremse bleibt (15 oder zum Beispiel
       30) oder fällt. Die Zahl steht an genau einer Stelle; danach mit `-MitKonfig` hochladen.
+      **Entschieden und umgesetzt am 13.09.2026:** Gabriel will vorerst gar keinen Deckel
+      („Falls wirklich so viele Anfragen kommen, kann ich das ja immer noch machen"). Empfangsschicht
+      0.3.0: `deckel` => null, die Warteliste greift nur noch in der Pause, `kontingent.php` liefert
+      `frei` und `deckel` als null. Eine Zahl in `konfig.live.php` setzt die Grenze wieder in Kraft.
 
 - [ ] **V71** (B) Das Menü der Stilprobe-Unterseite passt nicht zur Reise (Feedback F5)
       Gefahr: Wer von `/stilprobe/` zurück in die Reise springt, findet dieselben Stationen unter
@@ -339,6 +345,11 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Vertrag zur Auftragsverarbeitung; ohne Schlüssel läuft nichts durch Claude, die Werkstatt
       wartet. Der Abo-Betrieb deckt die Zusage NICHT und ist nur für eigene Texte gedacht
       (Probelauf). Offen bleibt Gabriels juristische Prüfung der Formulierung.
+      **Entscheidung 13.09.2026 abends:** Gabriel will nur das Monatskontingent seines Abos nutzen,
+      keine API. Die Werkstatt steht auf `TEXTWERK=abo`. Damit ist die Zusage in
+      Datenschutzerklärung und Klartext NICHT gedeckt. Nötig vor der ersten fremden Probe: (1) im
+      Claude-Konto die Trainingsnutzung ausschalten, (2) die zwei Sätze anpassen — der Vorschlag
+      liegt Gabriel vor, (3) die juristische Prüfung (Hub).
 
 - [ ] **V60** (A) Zertifikat für `www` hängt seit dem 02.09. im Zustand `new`, der https-Zwang ist aus
       Gefahr: `http://jgc-lumen.de/` wird unverschlüsselt ausgeliefert und leitet nicht auf https um —

@@ -2,6 +2,20 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-13 (abends) — Stilprobe: kein Monatsdeckel, Werkstatt im Abo-Betrieb
+
+Gabriels Entscheidungen zu den offenen Punkten der Werkstatt. Die Website selbst ändert sich dabei
+nicht; betroffen sind Empfangsschicht und Werkstatt im Repo `stilprobe-automatik`.
+
+- **Kein Monatsdeckel mehr (V77):** Die Empfangsschicht 0.3.0 nimmt jede Einreichung an, die
+  Warteliste greift nur noch in der Pause. `kontingent.php` liefert `frei` und `deckel` dann als
+  null; die Seiten werten nur `status` aus. Der Vertrag `docs/stilprobe/schnittstelle.md` ist
+  nachgezogen.
+- **Werkstatt im Abo-Betrieb:** Claude läuft über Gabriels Abo, nicht über die API. Die
+  Datenschutz-Sätze zur Stilprobe versprechen noch einen Vertrag zur Auftragsverarbeitung — eine
+  Anpassung liegt Gabriel als Vorschlag vor (V68).
+- **Kopien im Postfach (V76):** bleiben Handarbeit, einmal im Monat.
+
 ## 2026-09-13 — „Über mich": Gabriels Portrait auf der Staffelei
 
 Gabriel hat Etappe 6 mit seinem eigenen Foto in der Staffelei geliefert. Bis heute stand dort ein
