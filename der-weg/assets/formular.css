@@ -46,10 +46,6 @@
   margin: 0.45rem 0 0; font-size: 0.85rem; font-weight: 600;
   color: var(--sw-ink, #1F2A44); max-width: none;
 }
-.weg-formular__kontingent {
-  margin: -0.3rem 0 1.2rem; font-size: 0.85rem;
-  color: var(--sw-accent, #C97B3F); font-weight: 600; max-width: none;
-}
 .weg-formular__zeile {
   display: grid; grid-template-columns: auto 1fr; gap: 0.6rem;
   align-items: start;

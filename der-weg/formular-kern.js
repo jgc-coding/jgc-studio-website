@@ -14,7 +14,7 @@
      setupZaehler   — Zeichenzaehler unter jeder Textflaeche
      setupEntwurf   — Entwurfsspeicher im Browser (Befund V5)
      setupFormular  — Absenden per fetch, Erfolg, Fehlerpfad mit Ausweichweg
-     ladeKontingent — Badge und Warteliste-/Pause-Zweig der Stilprobe
+     ladeKontingent — Warteliste-/Pause-Zweig der Stilprobe (ohne sichtbare Zahl)
      setzeGeladenZeit — Startzeit fuer den Spam-Check des Servers
 
    VERTRAG DER FELDER UND ANTWORTEN: docs/stilprobe/schnittstelle.md und
@@ -24,7 +24,7 @@
    rufen kann, so wie es der Vertrag vorsieht.
 
    DOM-ABSPRACHE: die Rollen im Markup heissen auf beiden Seiten gleich
-   (data-rolle="fehler|normal|warteliste|pause|kontingent|wl-monat|
+   (data-rolle="fehler|normal|warteliste|pause|wl-monat|
    wl-folgemonat|entwurf-hinweis|entwurf-zeit|entwurf-verwerfen").
    ========================================================================== */
 
@@ -369,11 +369,13 @@
   }
 
   /* ==================================================================
-     Kontingent-Badge (nur Stilprobe)
+     Monatszustand der Stilprobe (nur Stilprobe)
 
-     Fehler bleiben still: der statische Satz steht schon im HTML, und ein
-     fehlender Badge ist kein Grund, jemandem eine Fehlermeldung zu zeigen.
-     Wortlaute: docs/stilprobe/schnittstelle.md.
+     Seit dem 13.09.2026 nennt keine Seite mehr eine Zahl (Gabriels
+     Entscheidung). Der Abruf bleibt trotzdem, denn er schaltet zwei
+     Zustaende: "voll" blendet das Wartelisten-Formular ein, "pause" den
+     Pause-Hinweis. Fehler bleiben still, dann steht das normale Formular.
+     Vertrag: docs/stilprobe/schnittstelle.md.
      ================================================================== */
 
   function ladeKontingent(art) {
@@ -393,27 +395,6 @@
       .then(function (daten) {
         if (!daten) return;
         var folgemonat = folgemonatVon(daten.monat);
-        // Dokumentweit gesucht, nicht nur im Artikel: in der Reise steht der
-        // Badge im Formular-Overlay, auf der Unterseite oben im Vorspann.
-        var zeilen = document.querySelectorAll('[data-rolle="kontingent"]');
-        var text = '';
-
-        if (daten.status === 'frei') {
-          text = 'Im ' + daten.monat + ' sind noch ' + daten.frei + ' von ' + daten.deckel +
-            ' Proben frei – mehr gibt die Handarbeit nicht her.';
-        } else if (daten.status === 'knapp') {
-          text = daten.frei === 1
-            ? 'Im ' + daten.monat + ' ist noch 1 Probe frei. Danach beginnt die Warteliste für den ' + folgemonat + '.'
-            : 'Im ' + daten.monat + ' sind noch ' + daten.frei + ' Proben frei. Danach beginnt die Warteliste für den ' + folgemonat + '.';
-        } else if (daten.status === 'voll') {
-          text = 'Der ' + daten.monat + ' ist voll – ' + daten.deckel + ' Proben, mehr gibt die Handarbeit nicht her.';
-        } else if (daten.status === 'pause') {
-          text = 'Die Stilprobe macht gerade eine kurze Pause – schau bald wieder vorbei.';
-        }
-        if (text) {
-          Array.prototype.forEach.call(zeilen, function (z) { z.textContent = text; });
-        }
-
         var normal = art.querySelector('[data-rolle="normal"]');
         if (daten.status === 'voll') {
           var warteliste = art.querySelector('[data-rolle="warteliste"]');
@@ -431,7 +412,7 @@
       })
       .catch(function () {
         if (timeoutId) clearTimeout(timeoutId);
-        /* still: der statische Satz im HTML bleibt stehen */
+        /* still: das normale Formular bleibt stehen */
       });
   }
 

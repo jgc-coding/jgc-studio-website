@@ -1,6 +1,6 @@
 # Stilprobe — Schnittstelle Website ↔ PHP-Empfangsschicht
 
-Stand: 2026-09-12. Die Website-Seite (`stilprobe/index.html`, deployt nach `/stilprobe/`) ist gebaut; die PHP-Empfangsschicht (`senden.php`, `kontingent.php`) liegt im **privaten Repo `stilprobe-automatik`** (`C:\Projekte\Stilprobe-Automatik`) und wird per FTP auf den All-Inkl-Webspace gelegt. Konzept: siehe `stilprobe-automatisierung-konzept_v1.md` in diesem Ordner.
+Stand: 2026-09-13. Die Website-Seite (`stilprobe/index.html`, deployt nach `/stilprobe/`) ist gebaut; die PHP-Empfangsschicht (`senden.php`, `kontingent.php`) liegt im **privaten Repo `stilprobe-automatik`** (`C:\Projekte\Stilprobe-Automatik`) und wird per FTP auf den All-Inkl-Webspace gelegt. Konzept: siehe `stilprobe-automatisierung-konzept_v1.md` in diesem Ordner.
 
 **Der Empfänger hat eine eigene Adresse:** `https://formular.jgc-lumen.de`. GitHub Pages führt kein PHP aus, und die Website soll wegen ihrer sieben Videoetappen (46 MB) auf GitHubs Netz bleiben — deshalb nur die Endpunkte bei All-Inkl, nicht die ganze Seite. Folgen für diesen Vertrag:
 
@@ -30,25 +30,23 @@ Antwort-Vertrag (für den fetch-Pfad der Seite):
 - Alles andere (kein 2xx, kein JSON, Timeout 10 s) → Seite zeigt Fehlermeldung mit Mail-Ausweichweg
 - No-JS-Fallback: normales POST; senden.php muss dann eine HTML-Dankeseite liefern
 
-## GET kontingent.php (Badge — gerufen von Hauptseite, Unterseite UND der Scroll-Reise)
+## GET kontingent.php (Monatszustand, gerufen von der Unterseite UND der Scroll-Reise)
 
 Seit 26.08.2026 ruft auch die Scroll-Reise (`der-weg/index.html` + `der-weg/formulare.js`)
-Badge und `senden.php` — absolut, mit demselben Feld- und Antwort-Vertrag, inklusive
-Warteliste- und Pause-Zweig. Der Badge wird dort erst beim ersten Öffnen des
+den Monatszustand und `senden.php` — absolut, mit demselben Feld- und Antwort-Vertrag, inklusive
+Warteliste- und Pause-Zweig. Der Zustand wird dort erst beim ersten Öffnen des
 Formular-Overlays abgerufen. Der Entwurfsspeicher teilt den localStorage-Schlüssel
 `stilprobe-entwurf-v1` mit der Unterseite (gleiche Feldnamen, gleiche Origin).
 
-Antwort: `{"monat":"Juli","frei":9,"deckel":15,"status":"frei"}` mit `status` ∈ `frei` | `knapp` (≤3) | `voll` | `pause`. Cachebar bis 10 Minuten. Timeout clientseitig 2 s; jeder Fehler → statischer Satz bleibt stehen.
+Antwort: `{"monat":"Juli","frei":9,"deckel":15,"status":"frei"}` mit `status` ∈ `frei` | `knapp` (≤3) | `voll` | `pause`. Cachebar bis 10 Minuten. Timeout clientseitig 2 s; jeder Fehler lässt das normale Formular stehen.
 
-Anzeige-Wortlaute (in beiden Seiten identisch implementiert):
-- statisch/Fallback: „15 Proben im Monat – mehr gibt die Handarbeit nicht her."
-- frei: „Im {monat} sind noch {frei} von {deckel} Proben frei – mehr gibt die Handarbeit nicht her."
-- knapp (frei=1 Singular): „Im {monat} ist noch 1 Probe frei. Danach beginnt die Warteliste für den {folgemonat}."
-- knapp: „Im {monat} sind noch {frei} Proben frei. Danach beginnt die Warteliste für den {folgemonat}."
-- voll (Unterseite): „Der {monat} ist voll – {deckel} Proben, mehr gibt die Handarbeit nicht her." + Umschalten auf Wartelisten-Formular
-- voll (Hauptseite): „Der {monat} ist voll – {deckel} Proben, mehr gibt die Handarbeit nicht her. Auf der Stilprobe-Seite kannst du dich für den {folgemonat} eintragen."
-- pause: „Die Stilprobe macht gerade eine kurze Pause – schau bald wieder vorbei." + Unterseite blendet Pause-Hinweis statt Formular ein
+**Seit dem 13.09.2026 zeigt keine Seite mehr eine Zahl** (Gabriels Entscheidung: kein sichtbarer Monatsdeckel, und statt „binnen 48 Stunden" nur noch „zeitnah"). Die Antwort bleibt unverändert, damit der Vertrag mit der Empfangsschicht stabil bleibt; die Seiten werten nur noch `status` aus:
+- `frei` und `knapp`: Nichts ändert sich, das Formular steht.
+- `voll`: Umschalten auf das Wartelisten-Formular mit der Überschrift „Der {monat} ist voll." und dem Satz „Für diesen Monat sind alle Plätze vergeben. Trag dich ein, und du bekommst den ersten freien Platz im {folgemonat}."
+- `pause`: Der Pause-Hinweis erscheint statt des Formulars.
 - {folgemonat} wird clientseitig berechnet (deutscher Monatsname nach {monat}).
+
+Bis zum 12.09.2026 stand auf beiden Seiten zusätzlich eine Zählerzeile („Im {monat} sind noch {frei} von {deckel} Proben frei – mehr gibt die Handarbeit nicht her.", statischer Ersatz „15 Proben im Monat – …"). Sie ist samt ihren Stylesheet-Regeln entfernt.
 
 ## Adressen
 
