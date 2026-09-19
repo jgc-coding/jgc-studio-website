@@ -1,20 +1,17 @@
 # Meine To-dos — JGC Lumen Website
 
-**Deine Aufgaben stehen im To-do-Hub, Karte „Website".** Diese Datei ist nur ein Verweis und
-enthält bewusst keine Liste — zwei handgepflegte Kopien derselben Punkte driften garantiert
-auseinander.
+**Diese Datei ist nur noch ein Wegweiser und kann geloescht werden.**
 
-Stand anzeigen:
+Seit dem 19.09.2026 gilt: die Hub-Tafel gehoert Gabriel allein, Claude traegt dort
+nichts mehr unaufgefordert ein. Was er selbst tun muss, steht seitdem hier:
+
+- [weitermachen.md](./weitermachen.md) — Abschnitt „Was Gabriel selbst tun muss",
+  dazu Sessionstand und was Claude als Naechstes tut
+- [verbesserungen.md](./verbesserungen.md) — technische Befunde mit `V`-Nummern
+
+Auf der Hub-Tafel stehen nur noch Punkte, die Gabriel selbst angelegt oder
+ausdruecklich beauftragt hat. Stand anzeigen:
 
 ```powershell
 python "C:\Projekte\To Do Hub\werkzeug\hub.py" list --projekt "Website"
 ```
-
-Hier steht bewusst keine Aufzählung der Punkte — sonst wäre genau die zweite Kopie da, die
-diese Datei vermeiden soll. Der Hub ist die einzige Quelle; jeder von `save-state` angelegte
-Eintrag trägt dort die Markierung `[save-state]`.
-
-Verwandte Register im Repo:
-
-- [verbesserungen.md](./verbesserungen.md) — technische Befunde mit `V`-Nummern, offen und erledigt
-- [weitermachen.md](./weitermachen.md) — Sessionstand und was Claude als Nächstes tut
