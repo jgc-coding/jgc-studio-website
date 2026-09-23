@@ -38,3 +38,9 @@ _site/
 # Abhaengigkeit der Bild-Werkzeuge (scripts/package.json) — nur lokal, nie committen
 scripts/node_modules/
 scripts/package-lock.json
+
+# Rohmaterial der Scroll-Reise (Clips, Standbilder): bewusst NICHT versioniert.
+# kodiere.mjs liest es direkt aus dem Hauptordner. Es war vom 12. bis 23.09.2026
+# versehentlich im Repo und wurde aus dem Verlauf entfernt (V79). Die Sicherung
+# des Ordners ist Gabriels Sache (Backup-Laufwerk), nicht die von Git.
+Scroll World/
