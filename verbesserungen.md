@@ -331,6 +331,16 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Datenschutzerklärung und Klartext NICHT gedeckt. Nötig vor der ersten fremden Probe: (1) im
       Claude-Konto die Trainingsnutzung ausschalten, (2) die zwei Sätze anpassen — der Vorschlag
       liegt Gabriel vor, (3) die juristische Prüfung (Hub).
+      **Nachtrag 23.09.2026 — (2) erledigt, Gabriels Auftrag „nimm das raus":** Datenschutz-
+      erklärung und Klartext versprechen keinen Vertrag mehr. Sie sagen jetzt offen: Abo, kein
+      Vertrag zur Auftragsverarbeitung, keine Standardvertragsklauseln, USA ohne EU-Niveau, nur
+      Texte und Wunschthema gehen an Claude. Die Übermittlung stützt sich auf eine ausdrückliche
+      Einwilligung (Art. 49 Abs. 1 lit. a DSGVO); das Häkchen der Stilprobe nennt sie darum
+      wörtlich, auf beiden Seiten. Anthropic ist nach Auskunft einer Kanzlei (Heuking) nicht unter
+      dem Data Privacy Framework zertifiziert — die Texte stellen das bewusst nicht als Tatsache
+      hin. Offen bleiben (1) der Trainings-Schalter im Konto, denn die Seite behauptet ihn jetzt,
+      und (3) die juristische Prüfung. Die Bestätigungsmail der Empfangsschicht sagt noch „Keine
+      Weitergabe" (Repo `stilprobe-automatik`, `webspace/stilprobe/senden.php`).
 
 - [ ] **V60** (A) Zertifikat für `www` hängt seit dem 02.09. im Zustand `new`, der https-Zwang ist aus
       Gefahr: `http://jgc-lumen.de/` wird unverschlüsselt ausgeliefert und leitet nicht auf https um —
@@ -398,6 +408,16 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       `w01ec3ef.kasserver.com`. Ob das die Ursache ist, ist nicht bewiesen. Nächster Schritt
       unverändert: ein, zwei Tage abwarten, dann Settings→Pages im Browser ansehen bzw. den
       ausdrücklichen TXT-Eintrag setzen.
+      **Stand 23.09.2026 — Domainprüfung grün, Antrag neu gestellt (Gabriels Auftrag „kümmer
+      dich ums Zertifikat"):** `…/pages/health` antwortet erstmals mit Inhalt (beim ersten Abruf
+      202, nach 20 s das Ergebnis): beide Namen `is_valid: true`, `is_https_eligible: true`,
+      `caa_error: null`, `reason: null`; `www` hat nur `https_error: peer_failed_verification`
+      (das fehlende Zertifikat selbst). DNS ist also nicht die Ursache, der Antrag vom 05.09. hing
+      einfach. Nebenbei: GitHubs Doku sagt, bei Deploys per Action werde eine `CNAME`-Datei
+      ignoriert — dass sie die Ursache war, ist damit fraglich; sie schadet aber nicht.
+      Vorgehen: gleiche Domain erneut gespeichert (keine Wirkung), dann `cname` per API auf null
+      und nach rund einer Minute wieder auf `jgc-lumen.de`. Die Hauptadresse lieferte durchgehend
+      HTTP 200 mit dem alten Zertifikat (Serie `052F18…F01`, bis 01.12.). Ergebnis unten.
 
 - [ ] **V66** (D) Vier Skripte in `scripts/stilprobe/` laufen seit dem Neubau ins Leere
       Gefahr: Wer sie zur Hand nimmt, arbeitet an einer Datei, die es so nicht mehr gibt — die

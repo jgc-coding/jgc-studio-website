@@ -15,20 +15,24 @@ Gabriels Auftrag aus einer Sitzung zum Skill save-state: V79 umsetzen, samt Forc
   `claude/portrait-video-about-section-7c1719` ist gelöscht.
 - Weiter gültig vom 13.09.: Die Werkstatt der Stilprobe (0.3.0, Abo-Betrieb) wartet auf das
   Postfach-Passwort und das Abo-Token.
+- **Später am 23.09. (Sitzung „JGC Lumen Website"):** Werbereife-Überblick an Gabriel (Blocker,
+  Schreibstil, Reihenfolge — im Chat, neue Funde noch nicht als V-Nummern eingetragen). Danach
+  V68-Texte umgesetzt (kein Anthropic-Vertrag mehr versprochen, ausdrückliche Einwilligung) und
+  V60 neu angestoßen. Gabriel bestätigt: **die Mails kommen an.**
 
 ## Offen (wartet auf Gabriel)
-- **Werkstatt scharf schalten** (sechs Schritte unten unter „Was Gabriel selbst tun muss"): Training im Claude-Konto
-  ausschalten, Datenschutz-Sätze freigeben (Vorschlag liegt vor, V68), `claude setup-token`,
+- **Werkstatt scharf schalten** (Schritte unten unter „Was Gabriel selbst tun muss"): Training im Claude-Konto
+  ausschalten, `claude setup-token`,
   Postfach-Passwort und Token in `werkstatt\.env`, dann `docker compose up -d`. Betriebsart ist
   `abo` — Gabriels Entscheidung: nur Monatskontingent, keine API.
 - **Der erste echte Durchlauf** gegen das All-Inkl-Postfach ist nicht belegt. Nach dem Eintragen
   eine eigene Test-Einreichung auf der Live-Seite machen und Entwurf und Prüfnotiz ansehen.
 - **V77 erledigt:** kein Monatsdeckel mehr (Empfangsschicht 0.3.0). **V76:** vorerst Handarbeit —
   einmal im Monat alte Stilprobe-Mails im Postfach löschen (steht unten).
-- **V60** — Zertifikat weiter `new`, Stand vom 13.09. im Befund. Nicht erneut anstoßen.
-- **Mails zugestellt?** Offen seit dem 12.09.: `stilprobe@` und `kontakt@` ansehen.
-- **V68** — der Abo-Betrieb deckt die Zusage nicht: Datenschutz-Sätze anpassen (Vorschlag liegt
-  Gabriel vor), Training im Claude-Konto ausschalten; die juristische Prüfung bleibt.
+- **V60** — am 23.09. neu beantragt, nachdem GitHubs Domainprüfung erstmals grün war; Ergebnis
+  im Befund. Nicht öfter als einmal täglich anstoßen.
+- **V68** — Texte am 23.09. angepasst. Offen: Training im Claude-Konto ausschalten (die Seite
+  behauptet es jetzt), juristische Prüfung.
 - Offene Befunde: **V59** (wichtig), **V66**, **V47**, **V14**, **V71–V75**. Ideen: **I3**, **I4**, **I9–I14**.
 - **Gabriel (ausformuliert unten unter „Was Gabriel selbst tun muss"):** juristische Prüfung des Datenschutzes, Testmail an
   kontakt@, Anthropic-Bedingungen, USt-IdNr., LinkedIn-URL, Profilbild ins Google-Profil,
@@ -48,7 +52,8 @@ Gabriels Auftrag aus einer Sitzung zum Skill save-state: V79 umsetzen, samt Forc
    lesen, eine eigene Test-Einreichung (nur Gabriels Adresse) durchlaufen lassen, Entwurf und
    Prüfnotiz im Postfach prüfen, Ergebnis in beide CHANGELOGs.
 2. **V60:** wie im Befund beschrieben (`gh api …/pages`, bei `approved` https erzwingen).
-3. Auf Gabriels Mailbefund reagieren (Protokoll `daten/protokoll.log` auf dem Webspace).
+3. Bestätigungsmail der Stilprobe an die neuen Datenschutz-Texte angleichen („Keine Weitergabe",
+   Repo `stilprobe-automatik`) — zusammen mit Gabriels Textüberarbeitung.
 4. V59 auf Zuruf; V47, V14, V66 nur auf Zuruf; I3 als Wortlaut-Vorschlag vorlegen.
 5. Feedback-Paket ohne Wortlaut-Entscheidung, sobald freigegeben: I10, I11 (beide Repos), I9.
 6. Nach den ersten echten Proben die Aufträge in `werkstatt\vorlagen\` am Probelauf nachschärfen.
@@ -80,13 +85,8 @@ Punkte gemeint.
 - [ ] Verwaltungsschluessel der Stilprobe in den Passwortmanager (seit 2026-09-12)
   - Steht in C:\Projekte\Stilprobe-Automatik\konfig.live.php unter admin_schluessel
   - Damit schaltest du Pause und gibst Plaetze zurueck - Links in docs/betrieb.md
-- [ ] Postfaecher pruefen: kommen die Mails der Stilprobe wirklich an? (seit 2026-09-12)
-  - stilprobe@ - drei Einreichungen der Prueflaeufe, je mit drei Texten
-  - kontakt@ - die Eingangsbestaetigungen dazu
-  - Wenn nichts da ist: auch im Spam-Ordner nachsehen und Claude Bescheid geben
+- [ ] Claude-Konto: in den Datenschutz-Einstellungen die Nutzung fuer das Modelltraining ausschalten - die Datenschutzerklaerung sagt seit dem 23.09., dass es aus ist (V68)
 - [ ] Stilprobe-Werkstatt scharf schalten: Zugangsdaten in werkstatt\.env eintragen (seit 2026-09-13)
-  - Claude-Konto: in den Datenschutz-Einstellungen die Nutzung fuer das Modelltraining ausschalten
-  - Datenschutz-Texte fuer den Abo-Betrieb: Claudes Vorschlag freigeben (V68)
   - Token erzeugen: in PowerShell claude setup-token ausfuehren und das Token kopieren
   - In werkstatt\.env eintragen: POSTFACH_PASSWORT und CLAUDE_CODE_OAUTH_TOKEN
   - Werkstatt neu starten: cd C:\Projekte\Stilprobe-Automatik\werkstatt; docker compose up -d
@@ -104,7 +104,8 @@ Punkte gemeint.
   Einreichungs-Mail samt Unterschrift ist Vertrag mit der Werkstatt.
 - **Der Werkstatt-Schlüssel steht an zwei Stellen** (`konfig.live.php`, `werkstatt\.env`), der
   Telegram-Token an drei. Absicht, keine Drift — beim Ändern alle nachziehen.
-- **Der Abo-Betrieb deckt die Datenschutzerklärung nicht** — fremde Texte nur mit `TEXTWERK=api`.
+- **Die Datenschutzerklärung beschreibt seit dem 23.09. den Abo-Betrieb** und behauptet den
+  ausgeschalteten Trainings-Schalter. Fremde Texte erst durch Claude, wenn der Schalter aus ist.
 - **`Scroll World/` ist nicht versioniert** (`.gitignore`, V79): Ein Rohdatei-Tausch ändert nur
   den Hauptordner, Git merkt davon nichts — die Sicherung ist Handarbeit. Beim Mergen im
   Hauptordner nie `git add -A`, genau so war der Ordner am 12.09. hineingeraten.

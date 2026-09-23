@@ -2,6 +2,30 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-23 — Datenschutz: kein Anthropic-Vertrag mehr versprochen (V68), Zertifikat neu beantragt (V60)
+
+Gabriels Auftrag: „Muss ich einen Vertrag mit Anthropic haben? Ansonsten nimm das bitte raus."
+Die Stilprobe läuft über sein Claude-Abo, und das hat keinen Vertrag zur Auftragsverarbeitung.
+
+- **Datenschutzerklärung:** Der Anthropic-Eintrag sagt jetzt, was stimmt — Abo, kein Vertrag zur
+  Auftragsverarbeitung, keine Standardvertragsklauseln, in den USA nicht dasselbe Niveau wie in der
+  EU, Training im Konto ausgeschaltet, an Claude gehen nur die drei Texte und das Wunschthema. Die
+  Übermittlung in die USA stützt sich auf die ausdrückliche Einwilligung (Art. 49 Abs. 1 lit. a).
+  Nebenbei berichtigt: Die Warteliste greift seit dem 13.09. nur noch in der Pause, nicht bei
+  „Kontingent ausgeschöpft"; der Zustandsabruf der Stilprobe geht an All-Inkl, nicht an GitHub;
+  „die inhaltliche Arbeit findet auf meinem Gerät statt" stimmt mit Claude nicht mehr. Stand 23.09.
+- **Stilprobe:** Klartext-Kasten mit derselben Aussage, FAQ 03 statt „Keine Weitergabe" jetzt
+  „Außer an Claude für die Stilarbeit gebe ich sie nicht weiter".
+- **Einwilligungs-Häkchen der Stilprobe** (Unterseite und Overlay der Reise) nennt die
+  Übermittlung ausdrücklich: „… und meine Texte dafür an Claude in den USA gehen". Die Warteliste
+  schickt keine Texte und bleibt unverändert. Feldnamen unverändert, kein Eingriff in den Vertrag.
+- **V60:** GitHubs Domainprüfung meldet erstmals beide Namen gültig (`pages/health`: `is_valid`,
+  `is_https_eligible`, kein CAA-Fehler). Der Antrag vom 05.09. stand trotzdem noch auf `new`; darum
+  Domain per API ausgetragen und nach rund einer Minute wieder eingetragen. Die Hauptadresse lieferte
+  dabei durchgehend HTTP 200 mit ihrem alten Zertifikat.
+- Geprüft: `pruefe-seiten.mjs` auf Quellen und Deploy-Nachbau grün (66 Dateien); neue Wortlaute im
+  Browser gerendert, Umlaute sauber. Nicht geprüft: die juristische Tragfähigkeit (Gabriels Punkt).
+
 ## 2026-09-23 — V79: Rohmaterial der Scroll-Reise raus aus Repo und Verlauf
 
 `Scroll World/` (20 Dateien, 158 MB: Clips, Standbilder, das Portrait-Rohvideo) war am 12.09. beim
