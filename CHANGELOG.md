@@ -2,6 +2,49 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-09-23 — V79: Rohmaterial der Scroll-Reise raus aus Repo und Verlauf
+
+`Scroll World/` (20 Dateien, 158 MB: Clips, Standbilder, das Portrait-Rohvideo) war am 12.09. beim
+Merge `53c9b71` versehentlich ins öffentliche Repo gerutscht. Gabriel hat das Herausnehmen samt
+Umschreiben des Verlaufs freigegeben. Die Website selbst ändert sich dabei nicht.
+
+- **Ausgetragen:** im Hauptordner auf `main` per `git rm --cached`, der Ordner steht in der
+  `.gitignore`. Die Dateien liegen unverändert im Hauptordner, `kodiere.mjs` findet sie wie bisher.
+- **Aus dem Verlauf entfernt:** in einer frischen Kopie des GitHub-Repos per `git filter-branch`
+  (nur dieser Ordner), danach Force-Push mit Absicherung gegen fremde Zwischenstände. Geprüft:
+  Der Baum von `main` ist vorher und nachher identisch, jeder der 12 umgeschriebenen Commits
+  unterscheidet sich nur im Rohordner, die neun `variant/*`-Branches und alle älteren Tags sind
+  unberührt. Deploy grün; fünf Live-Adressen (Reise, Stilprobe, Impressum, Sitemap, Engine) vor
+  und nach dem Eingriff byteweise gleich.
+- **Größe:** Ein frischer Klon hat jetzt 142 statt 296 MB. GitHub zeigt die alten Commits unter
+  ihrer Nummer noch eine Weile an, bis es selbst aufräumt; ganz weg wären sie nur über einen
+  Antrag beim GitHub-Support (für Rohmaterial nicht nötig).
+- **Sicherung vorher:** `C:\Users\chime\Sicherungen\JGC Studio\` — Bundle aller Refs mit dem alten
+  Verlauf (293 MB, geprüft) und eine Kopie des Rohordners (Prüfsummen identisch).
+- **Aufgeräumt:** Branch `claude/portrait-video-about-section-7c1719` gelöscht (Inhalt vollständig
+  in `main`). Den Worktree `portrait-video-about-section-7c1719` benutzt die Sitzung „JGC Lumen
+  Website" (zuletzt aktiv am 23.09.). Er bleibt stehen, sein Branch
+  `claude/jgc-lumen-website-f451c1` ist auf den neuen Verlauf umgesetzt — sonst hätte das nächste
+  Nachziehen von `main` aus dieser Sitzung den alten Verlauf samt Rohordner zurückgebracht.
+
+**Commit-Nummern ab dem 12.09. haben sich geändert.** Ältere Einträge nennen noch die alten; die
+Zuordnung:
+
+| alt | neu | Commit |
+|---|---|---|
+| `53c9b71` | `26a9169` | Merge: Feedback-Runde V69/V70 in den Stand |
+| `fa6bf7f` | `7d3dca8` | save-state: Einreichen funktioniert live |
+| `4eed78c` | `8b40ebd` | save-state: Zahl der Prüfläufe korrigiert |
+| `54e2a13` | `9ac0980` | Stilprobe: „zeitnah" statt 48 Stunden (Tag `live-2026-09-13`) |
+| `1391bb2` | `9ab781a` | docs: Stand 13.09. |
+| `46ad4be` | `0887773` | Über mich: Gabriels Portrait (Tag `live-2026-09-13-2`) |
+| `0aef595` | `8049f31` | Rohmaterial: leg 6 auf die Portrait-Fassung |
+| `44e78f0` | `2ee3eb5` | save-state: Portrait-Etappe live |
+| `4f41275` | `738d9ad` | docs: Stilprobe – kein Deckel, Abo-Betrieb |
+| `506b25a` | `bfe22f8` | meine-todos.md: Wegweiser auf die weitermachen.md |
+| `b4e5288` | `b50953d` | Gabriel-Aufgaben von der Hub-Tafel geholt |
+| `8034e25` | `c1c9fc8` | V79: Rohmaterial nicht mehr versionieren |
+
 ## 2026-09-13 (abends) — Stilprobe: kein Monatsdeckel, Werkstatt im Abo-Betrieb
 
 Gabriels Entscheidungen zu den offenen Punkten der Werkstatt. Die Website selbst ändert sich dabei

@@ -1,5 +1,6 @@
 # Verbesserungen
-Stand: 2026-09-13 (Portrait in Etappe 6 live, **V79** neu, **V78** von Gabriel abgelehnt; davor Stilprobe „zeitnah" live und Werkstatt gebaut: **V76** und **V77** neu unter
+Stand: 2026-09-23 (**V79** erledigt: Rohmaterial aus Repo und Verlauf entfernt, siehe „Erledigt").
+Davor 2026-09-13 (Portrait in Etappe 6 live, **V79** neu, **V78** von Gabriel abgelehnt; davor Stilprobe „zeitnah" live und Werkstatt gebaut: **V76** und **V77** neu unter
 „Offen", Nachträge an **V60** und **V68**). Davor 2026-09-12 (Feedback-Runde: externe Durchsicht der Live-Seite, 14 Punkte; **V69 und V70
 am selben Tag umgesetzt**, die übrigen Punkte stehen als V71–V75 unter „Offen" und I9–I14 unter
 „Ideen", Details im CHANGELOG)
@@ -187,26 +188,6 @@ DSGVO-Linie außerhalb der Reise.
 Fassung; die Lesefassung V18 bleibt nur im Repo als Vergleich und Fundus. Zielort ist GitHub
 Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**, **V10** und
 **V18** gegenstandslos (sie betrafen nur V18 und den Astro-Build) — siehe „Erledigt".
-
-- [ ] **V79** (B) Das Rohmaterial der Reise liegt seit dem 12.09. im öffentlichen Repo
-      Gefahr: Rund 150 MB Rohvideos und Standbilder aus `Scroll World/` sind beim Merge `53c9b71`
-      in die Versionsverwaltung gerutscht — in beiden Eltern-Commits fehlen sie, sie kamen erst
-      beim Zusammenführen dazu. Seitdem liegen sie öffentlich auf GitHub, jede neu gelieferte
-      Etappe macht das Repo dauerhaft größer, und jeder neue Worktree kopiert die 150 MB mit.
-      Gewollt war das Gegenteil: `kodiere.mjs` sagt „Rohmaterial liegt bewusst ausserhalb des
-      Repos", und bis zum 13.09. stand „nicht im Repo" in `docs/der-weg.md`.
-      Beleg: `git ls-files "Scroll World"` → 19 Dateien; `git diff --stat 53c9b71^1 53c9b71` und
-      dasselbe gegen `^2` zeigen alle 19 als neu; `gh repo view` → `PUBLIC`, 279 MB. Am 13.09.
-      kamen die Portrait-Fassung von `leg 6.mp4` (12 MB) und ihre Sicherung dazu — die Sicherung
-      ist dieselbe Datei wie der alte Stand und kostet keinen Platz. Ohne diesen Commit hätte der
-      geänderte Hauptordner das Nachziehen von `main` blockiert.
-      Aufwand: S · Risiko: mittel — beim Herausnehmen lauert eine Falle mit Datenverlust
-      Empfehlung: Herausnehmen, damit es nicht weiter wächst: im HAUPTORDNER auf `main`
-      `git rm -r --cached "Scroll World"`, `Scroll World/` in die `.gitignore`, committen, pushen.
-      Nie über einen Worktree-Zweig: zieht der Hauptordner einen Commit nach, der die Dateien
-      austrägt, löscht Git sie dort von der Platte. Aus dem Verlauf verschwinden die 150 MB
-      dadurch nicht; das ginge nur per Force-Push. Wer die Rohdaten bewusst versioniert haben
-      will, lässt es so und passt Doku und Kommentar in `kodiere.mjs` an. Gabriels Entscheidung.
 
 - [ ] **V76** (B) Die Kopien im Postfach werden nicht nach 30 Tagen gelöscht
       Gefahr: Die Datenschutzerklärung sagt zu, Texte und Zwischenergebnisse 30 Tage nach der
@@ -602,6 +583,19 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
   13.09.2026.
 
 ## Erledigt
+
+### Am 2026-09-23 umgesetzt (Gabriels Freigabe „V79 ja", einschließlich Force-Push)
+
+- **V79** (B) Das Rohmaterial der Reise liegt nicht mehr im Repo und nicht mehr im Verlauf.
+  `Scroll World/` (20 Dateien, 158 MB) ist im Hauptordner ausgetragen und steht in der
+  `.gitignore`; die Dateien liegen unverändert auf der Platte. Danach ist der Verlauf in einer
+  frischen Kopie umgeschrieben worden: 12 Commits ab `53c9b71` und die Tags
+  `live-2026-09-13`/`live-2026-09-13-2` ohne den Ordner, Inhalt von `main` nachweislich
+  identisch (gleicher Baum), die neun `variant/*`-Branches unberührt. Force-Push mit
+  Absicherung gegen fremde Zwischenstände, Deploy grün, fünf Live-Adressen vor und nach dem
+  Eingriff byteweise gleich. Ein frischer Klon ist jetzt 142 statt 296 MB groß. Vollsicherung
+  vorher: `C:\Users\chime\Sicherungen\JGC Studio\` (Bundle aller Refs plus Ordnerkopie mit
+  geprüften Prüfsummen). Zuordnung alter zu neuer Commit-Nummern: CHANGELOG vom 23.09.2026.
 
 ### Am 2026-09-12 umgesetzt (Feedback-Runde — Gabriels Freigabe „F13, F3")
 

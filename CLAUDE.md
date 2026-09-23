@@ -14,7 +14,9 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   ~46 MB). Wird im Deploy komplett an die Wurzel kopiert (`/`, `/assets/`, vier Skripte). Nimmt
   Stilprobe- und Erstgespräch-Anfragen selbst entgegen (`formulare.js`). Werkzeuge in
   `scripts/der-weg/`, Rohvideos unter `Scroll World/legs/` im Hauptordner (`kodiere.mjs` liest diesen
-  absoluten Pfad auch aus einem Worktree — ein Rohdatei-Tausch ändert also immer den Hauptordner). **Details und Austauschweg: `docs/der-weg.md`.**
+  absoluten Pfad auch aus einem Worktree — ein Rohdatei-Tausch ändert also immer den Hauptordner).
+  `Scroll World/` ist **nicht versioniert** (`.gitignore`, V79): nie wieder ins Repo nehmen, auch
+  nicht per `git add -A` beim Mergen. **Details und Austauschweg: `docs/der-weg.md`.**
 - `stilprobe/index.html`, `impressum/`, `datenschutz/` — die drei Unterseiten im Design der Reise.
   Die Stilprobe ist seit 05.09.2026 eine gewöhnliche, direkt editierbare HTML-Datei (~20 KB statt
   724 KB aus dem V18-Bau).

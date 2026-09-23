@@ -1,25 +1,19 @@
 # Weitermachen — JGC Lumen Website
 
-## Stand (13.09.2026 abends — Portrait in „Über mich" live, aufgeräumt)
-Gabriels Auftrag: sein Video mit dem eigenen Portrait auf der Staffelei als Hintergrund der
-Station „Über mich" einbauen, sodass es dauerhaft drin bleibt.
+## Stand (23.09.2026 — V79 erledigt, Verlauf umgeschrieben)
+Gabriels Auftrag aus einer Sitzung zum Skill save-state: V79 umsetzen, samt Force-Push.
 
-- **Live** (`46ad4be`, Tag `live-2026-09-13-2`, Action grün): Etappe `lichtung` neu kodiert aus
-  `leg 6 - Gabriel Portrait v2.mp4`. Beide Nähte tragen (1,22 / 0,99), `scroll` bleibt 0,85.
-  Live-Videos per SHA-256 identisch mit dem Repo; Bildschirmfotos PC und Handy aus Chrome
-  headless (Methode in der CLAUDE.md, Abschnitt Headless Chrome).
-- **V78** (Portrait und Stationstext nie gleichzeitig im Bild): Gabriel findet es in Ordnung,
-  steht unter „Abgelehnt".
-- **Rohmaterial:** `Scroll World/legs/leg 6.mp4` ist die Portrait-Fassung, das Original liegt in
-  `vor-portrait-2026-09-13/`. Beides committet (`0aef595`), weil `Scroll World/` seit dem 12.09.
-  versehentlich versioniert ist — neuer Befund **V79**.
-- **Clean:** `main` per Fast-Forward auf `0aef595` und gepusht; Worktrees `cert-v60-cleanup` und
-  `stilprobe-setup` samt Branches entfernt. Deren leere Ordner hält Windows noch fest (Offen).
-- Vorher am selben Tag: „zeitnah" live (`54e2a13`) und die Werkstatt gebaut
-  (`C:\Projekte\Stilprobe-Automatik\werkstatt`, Runbook `docs/werkstatt.md`); sie wartet auf
-  Zugangsdaten.
-- **Stilprobe am Abend:** Gabriels Entscheidungen umgesetzt — kein Monatsdeckel mehr
-  (Empfangsschicht 0.3.0 live), Werkstatt 0.3.0 im Abo-Betrieb. Sie wartet auf das
+- **Rohmaterial raus:** `Scroll World/` ist ausgetragen und steht in der `.gitignore`; die 20
+  Dateien liegen weiter im Hauptordner. Aus dem Verlauf ist der Ordner per Force-Push entfernt.
+  Der Inhalt von `main` ist unverändert, die Live-Seite byteweise gleich, Deploy grün.
+- **Commit-Nummern ab dem 12.09. sind neu.** Zuordnung alt → neu im CHANGELOG vom 23.09. Live ist
+  weiter die Portrait-Etappe vom 13.09.; ihr Tag `live-2026-09-13-2` zeigt jetzt auf `0887773`.
+- **Sicherung:** `C:\Users\chime\Sicherungen\JGC Studio\` (Bundle mit altem Verlauf plus Kopie des
+  Rohordners).
+- **Sitzung „JGC Lumen Website"** läuft im Worktree `portrait-video-about-section-7c1719`; ihr
+  Branch ist auf den neuen Verlauf umgesetzt. Der alte Branch
+  `claude/portrait-video-about-section-7c1719` ist gelöscht.
+- Weiter gültig vom 13.09.: Die Werkstatt der Stilprobe (0.3.0, Abo-Betrieb) wartet auf das
   Postfach-Passwort und das Abo-Token.
 
 ## Offen (wartet auf Gabriel)
@@ -31,8 +25,6 @@ Station „Über mich" einbauen, sodass es dauerhaft drin bleibt.
   eine eigene Test-Einreichung auf der Live-Seite machen und Entwurf und Prüfnotiz ansehen.
 - **V77 erledigt:** kein Monatsdeckel mehr (Empfangsschicht 0.3.0). **V76:** vorerst Handarbeit —
   einmal im Monat alte Stilprobe-Mails im Postfach löschen (steht unten).
-- **V79** (Rohvideos im Repo lassen oder herausnehmen) — Gabriels Entscheidung, Frage steht
-  unten im Sammelpunkt „Claude Rueckmeldung geben".
 - **V60** — Zertifikat weiter `new`, Stand vom 13.09. im Befund. Nicht erneut anstoßen.
 - **Mails zugestellt?** Offen seit dem 12.09.: `stilprobe@` und `kontakt@` ansehen.
 - **V68** — der Abo-Betrieb deckt die Zusage nicht: Datenschutz-Sätze anpassen (Vorschlag liegt
@@ -41,7 +33,8 @@ Station „Über mich" einbauen, sodass es dauerhaft drin bleibt.
 - **Gabriel (ausformuliert unten unter „Was Gabriel selbst tun muss"):** juristische Prüfung des Datenschutzes, Testmail an
   kontakt@, Anthropic-Bedingungen, USt-IdNr., LinkedIn-URL, Profilbild ins Google-Profil,
   Search Console, „fremde Skills versionieren?". Neu: Werkstatt scharf schalten (sechs Schritte) und monatliches Löschen (V76); seit
-  dem 13.09. abends außerdem die Portrait-Etappe am Handy durchscrollen und V79 im Sammelpunkt.
+  dem 13.09. abends außerdem die Portrait-Etappe am Handy durchscrollen; seit dem 23.09. den
+  Rohordner aufs Backup-Laufwerk kopieren.
 - Projekt-CLAUDE.md liegt über dem Richtwert — Straffung nur als Vorschlag, nie eigenmächtig.
 - Nach dem Launch: Kundenstimmen mit echten Zitaten, Analytics ohne Cookies falls gewünscht,
   Videos neu komprimieren (14,6 MB Handy-Clips), SEO-Textarbeit.
@@ -60,10 +53,9 @@ Station „Über mich" einbauen, sodass es dauerhaft drin bleibt.
 5. Feedback-Paket ohne Wortlaut-Entscheidung, sobald freigegeben: I10, I11 (beide Repos), I9.
 6. Nach den ersten echten Proben die Aufträge in `werkstatt\vorlagen\` am Probelauf nachschärfen.
 7. In den `scroll-world`-Skill zurückgeben — Liste in `docs/der-weg.md`, Abschnitt „Offen".
-8. **Nächster clean-Lauf:** Worktree `portrait-video-about-section-7c1719` und seinen Branch
-   entfernen. Diese Sitzung lief darin; ihr Stand ist vollständig in `main`.
-9. **V79 nach Gabriels Entscheidung:** beim Herausnehmen nur im Hauptordner auf `main` austragen,
-   nie über einen Worktree-Zweig (Falle und Befehle im Befund).
+8. **Worktree `portrait-video-about-section-7c1719`** gehört der Sitzung „JGC Lumen Website"
+   (aktiv am 23.09.). Erst entfernen, wenn diese Sitzung abgeschlossen ist und ihr Stand in
+   `main` liegt — vorher nur melden.
 
 ## Was Gabriel selbst tun muss
 
@@ -99,10 +91,10 @@ Punkte gemeint.
   - In werkstatt\.env eintragen: POSTFACH_PASSWORT und CLAUDE_CODE_OAUTH_TOKEN
   - Werkstatt neu starten: cd C:\Projekte\Stilprobe-Automatik\werkstatt; docker compose up -d
   - Echte Test-Einreichung mit eigener Adresse auf jgc-lumen.de/stilprobe/ machen und Ergebnis im Postfach pruefen
-- [ ] Claude Rueckmeldung geben (3 Punkte) (seit 2026-09-13)
+- [ ] Claude Rueckmeldung geben (2 Punkte) (seit 2026-09-13)
   - Fremde Skills versionieren? (nur 6 von 27 im Git-Ordner)
   - Acht tote Skripte und das Manifest-Feld homepage loeschen? (Liste in weitermachen.md)
-  - Rohvideos der Scroll-Reise im Repo lassen oder herausnehmen? (V79)
+- [ ] Rohordner `Scroll World` auf dein Backup-Laufwerk kopieren — Git sichert ihn seit V79 nicht mehr; er liegt nur noch im Hauptordner und in `C:\Users\chime\Sicherungen\JGC Studio\` (seit 2026-09-23)
 - [ ] Ueber mich mit deinem Portrait am Handy durchscrollen (Gesicht gut erkennbar, kein Ruckeln?) (seit 2026-09-13)
 - [ ] Monatlich: Stilprobe-Mails im Postfach stilprobe@ loeschen, die aelter als 30 Tage sind (V76) (seit 2026-09-13)
 
@@ -113,9 +105,11 @@ Punkte gemeint.
 - **Der Werkstatt-Schlüssel steht an zwei Stellen** (`konfig.live.php`, `werkstatt\.env`), der
   Telegram-Token an drei. Absicht, keine Drift — beim Ändern alle nachziehen.
 - **Der Abo-Betrieb deckt die Datenschutzerklärung nicht** — fremde Texte nur mit `TEXTWERK=api`.
-- **`Scroll World/` ist versioniert, solange V79 offen ist:** ein Rohdatei-Tausch erscheint als
-  Änderung im Hauptordner. Sofort über den Session-Branch committen und im Hauptordner die
-  identischen Dateien stagen, sonst blockiert er das Nachziehen von `main`.
+- **`Scroll World/` ist nicht versioniert** (`.gitignore`, V79): Ein Rohdatei-Tausch ändert nur
+  den Hauptordner, Git merkt davon nichts — die Sicherung ist Handarbeit. Beim Mergen im
+  Hauptordner nie `git add -A`, genau so war der Ordner am 12.09. hineingeraten.
+- **Commit-Nummern ab dem 12.09. haben sich am 23.09. geändert.** Alte Nummern in Doku oder
+  Chat verweisen ins Leere; die Zuordnung steht im CHANGELOG vom 23.09.
 - **`--weg-textzone` 365/350/345/325** hängt an den höchsten Stationen („Über mich", „Der Weg",
   Schluss-Station); Messverfahren und Werte im CSS-Kommentar, am 13.09. bestätigt.
 - **`pruefen.txt` hat CRLF** — wer die Zeilen in Bash abarbeitet, muss `\r` abschneiden.
