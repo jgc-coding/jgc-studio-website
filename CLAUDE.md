@@ -18,17 +18,16 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   `Scroll World/` ist **nicht versioniert** (`.gitignore`, V79): nie wieder ins Repo nehmen, auch
   nicht per `git add -A` beim Mergen. **Details und Austauschweg: `docs/der-weg.md`.**
 - `stilprobe/index.html`, `impressum/`, `datenschutz/` — die drei Unterseiten im Design der Reise.
-  Die Stilprobe ist seit 05.09.2026 eine gewöhnliche, direkt editierbare HTML-Datei (~20 KB statt
-  724 KB aus dem V18-Bau).
+  Die Stilprobe ist eine gewöhnliche, direkt editierbare HTML-Datei.
 - **Gemeinsame Bausteine** (in `der-weg/`, weil der Ordner an die Wurzel zieht): `assets/seiten.css`
-  (Grundgerüst der Unterseiten, hieß bis 05.09.2026 `rechtliches.css`), `assets/formular.css`
+  (Grundgerüst der Unterseiten), `assets/formular.css`
   (Feld-Optik) und `formular-kern.js` (Formular-Logik). Reise und Stilprobe benutzen sie gemeinsam.
 - `deploy/der-weg-weiterleitung.html` — landet als `/der-weg/index.html` und leitet auf `/` um; der
   alte Link der Reise wurde verschickt. `deploy/404.html` landet als `/404.html` und ist die
   Fehlerseite für unbekannte Pfade (GitHub Pages liefert sie automatisch aus).
 - `scripts/deploy/baue-site.mjs` — setzt `_site/` zusammen (siehe Build / Deploy); `_site/` ist ignoriert.
 - `docs/stilprobe/`, `docs/erstgespraech/` — Konzepte und `schnittstelle.md` (Formular-/Badge-Verträge
-  für die spätere PHP-Empfangsschicht aus dem separaten Repo `stilprobe-automatik`).
+  für die PHP-Empfangsschicht im separaten Repo `stilprobe-automatik`).
 - **Archiv — wird nicht mehr ausgeliefert, bleibt aber im Repo (Gabriels Wunsch: Vergleich und Fundus):**
   `variants/standalone/<slug>/` (eingefrorene Single-File-Varianten; V18 war bis 02.09.2026 die
   Lesefassung; Register `manifest.json` + `VARIANTS.md`), `site/` (alte Astro-Quelle), `inhalt/lumen-inhalt.md`
@@ -44,10 +43,11 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   ihre sieben Videoetappen (46 MB) schneller ausgeliefert. Feldnamen und Antwortformat sind
   Vertrag: `docs/stilprobe/schnittstelle.md` und `docs/erstgespraech/schnittstelle.md`, Änderungen
   immer in beiden Repos zusammen.
-- **Die Adresse des Empfängers steht an sieben Stellen im HTML** (drei `action`, zwei
-  `data-kontingent`, zwei Seiten) — ein Formular ohne JavaScript braucht sein Ziel im Attribut,
-  also lässt sie sich nicht zusammenführen. `pruefe-seiten.mjs` (Regel 13) bewacht, dass alle
-  sieben denselben Rechnernamen tragen und keine relativ zurückbleibt.
+- **Die Adresse des Empfängers steht in jedem `action`- und `data-kontingent`-Attribut** von Reise
+  und Stilprobe (Stilprobe-, Wartelisten- und Erstgespräch-Formular, dazu die Kontingent-Badges) —
+  ein Formular ohne JavaScript braucht sein Ziel im Attribut, also lässt sie sich nicht
+  zusammenführen. `pruefe-seiten.mjs` (Regel 13) bewacht, dass alle denselben Rechnernamen tragen
+  und keine relativ zurückbleibt.
 - Mailadressen: `kontakt@jgc-lumen.de` empfängt bestätigt (Erstgespräch, Ausweichweg der Reise).
   `stilprobe@jgc-lumen.de` ist der Empfänger der Einreichungen und zugleich Absender aller Mails
   der Empfangsschicht — All-Inkl verwirft Mails mit fremder Absenderadresse. Beide stehen als
@@ -69,22 +69,23 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
 - Push auf `main` → GitHub Action (`.github/workflows/deploy.yml`): `node scripts/deploy/baue-site.mjs _site`
   (Reise an die Wurzel, Stilprobe, Rechtsseiten, Vorschaubild, Weiterleitung, 404-Seite, `robots.txt` +
   `sitemap.xml` + `CNAME` aus den indexierbaren Seiten), dann `node scripts/pruefe-seiten.mjs _site` → GitHub Pages. Kein npm,
-  kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`. Aus einem Worktree
-  deployt man mit `git push origin HEAD:main` — das funktioniert unabhängig davon, wo `main`
-  ausgecheckt ist, und ersetzt das frühere `git branch -f main HEAD`.
+  kein Astro. Lauf ~1 min, Check: `gh run list --workflow=deploy.yml --limit 1`.
+  **Deployt wird nur aus dem Hauptbaum** (`C:\Projekte\JGC Studio` auf `main`, globale Regel: der
+  Default-Branch ist der Stand). Arbeit aus einem Worktree kommt dort erst per
+  `git merge --ff-only <branch>` an, dann `git push origin main`. Kein `git push origin HEAD:main`
+  aus einem Worktree — das lokale `main` bliebe sonst hinter `origin/main` zurück.
 - **Domain:** `jgc-lumen.de` steht in den Pages-Einstellungen des Repos (`gh api repos/jgc-coding/jgc-studio-website/pages`),
   DNS liegt bei All-Inkl (A/AAAA auf GitHub Pages, `www` als CNAME auf `jgc-coding.github.io`). GitHub
   leitet `www` und die alte Adresse `jgc-coding.github.io/jgc-studio-website/` auf die Domain um.
   Die Mail-Einträge der Domain (MX, SPF, DKIM, DMARC) und der Wildcard-Eintrag `*` bleiben bei
   All-Inkl — nie anfassen, sonst bricht das Postfach.
-- **Wer per Action deployt, muss die `CNAME`-Datei selbst ins Ergebnis legen** — GitHub erzeugt sie nur
-  beim Veröffentlichen aus einem Branch. Fehlt sie, widersprechen sich Pages-Einstellung und Ergebnis,
-  die Domainprüfung bleibt auf „DNS Check in Progress" hängen und es kommt kein Zertifikat. `baue-site.mjs`
-  schreibt sie aus dem `canonical`, `pruefe-seiten.mjs` prüft sie im `_site` (Ursache von V60, zehn Tage).
+- **`baue-site.mjs` legt die `CNAME`-Datei ins Ergebnis** (aus dem `canonical`), `pruefe-seiten.mjs`
+  prüft sie im `_site`. Nach GitHubs Doku ignoriert ein Deploy per Action die Datei; sie schadet nicht
+  und bleibt drin.
 - **Zertifikat deckt nur ab, was beim Ausstellen im DNS stand.** Kommt `www` später dazu, stellt GitHub
-  von sich aus KEIN neues aus, und die Domain aus- und wieder einzutragen genügt nicht. Was wirkt: kurz
-  `www.<domain>` als Custom Domain setzen, sofort zurück auf die Hauptadresse — der Antrag über beide
-  Namen bleibt bestehen. **Dabei fällt `https_enforced` auf false**; nach `state: approved` wieder mit
+  von sich aus KEIN neues aus. Einen neuen Antrag über beide Namen stoßen zwei Wege an: kurz
+  `www.<domain>` als Custom Domain setzen und sofort zurück auf die Hauptadresse, oder die Domain aus-
+  und wieder eintragen. **Dabei fällt `https_enforced` auf false**; nach `state: approved` wieder mit
   `gh api -X PUT …/pages -F https_enforced=true` setzen.
 - `pruefe-seiten.mjs` bricht ab bei: Sprungmarke ohne Ziel, fehlendem Kontaktweg, `canonical` auf localhost
   oder abweichend von der Soll-Adresse, `noindex` auf einer echten Seite (nur Weiterleitung und 404-Seite
@@ -97,20 +98,21 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   NICHT — LinkedIn und Co. holen das Bild per HTTP.
 - Favicon aus dem Sigel: `node scripts/der-weg/baue-favicon.mjs` (aus `Logo/JGC Studio Logo final.svg`);
   die Stilprobe verlinkt es wie die Rechtsseiten unter `/assets/`.
-- **`sharp` liegt in `scripts/package.json`** (`cd scripts && npm install`), nicht mehr im Astro-Archiv
-  (V61). Die ausgelieferte Seite braucht weiterhin kein npm.
+- **`sharp` liegt in `scripts/package.json`** (`cd scripts && npm install`). Die ausgelieferte Seite
+  braucht kein npm.
 - Profilbild fürs Google-Unternehmensprofil (Logo-Feld, 1080 × 1080, vier Fassungen):
   `node scripts/google-profil/baue-profilbild.mjs` → `Bildmaterial/Google-Unternehmensprofil/`. Setzt Sigel,
   Fraunces und Farb-Tokens aus dem Repo per Chrome headless und prüft per Pixel, dass der Inhalt im runden
   Google-Beschnitt bleibt. Braucht `sharp` und Chrome unter dem Standardpfad (sonst Umgebungsvariable `CHROME`).
 
-## Stolperfallen (wichtig!)
-- **Minifizierte Single-File-HTML nicht direkt editieren/lesen** — das betrifft seit dem 05.09.2026 nur
-  noch die Archiv-Varianten unter `variants/standalone/`; die Stilprobe ist eine normale Datei. Die
+## Stolperfallen
+- **Minifizierte Single-File-HTML nicht direkt editieren/lesen** — das betrifft die Archiv-Varianten
+  unter `variants/standalone/` und die acht `JGC-Studio-Variante-*.html` im Hauptordner (je ~1 MB). Die
   Inline-base64-Blobs sprengen Read/Edit. Vorgehen: base64 per Regex (`data:[…];base64,[A-Za-z0-9+/=]+`)
   zu Platzhaltern strippen → Lesekopie; Änderungen über ein **assertion-guardetes Node-Transform-Skript**
   (jede Ersetzung mit erwarteter Trefferzahl prüfen, sonst werfen). Datei-I/O explizit UTF-8.
-  Die Skripte in `scripts/stilprobe/` gehörten zur alten Einzeldatei und laufen ins Leere (siehe V66).
+  Bis auf `extract-v18-assets.mjs` erwarten die Skripte in `scripts/stilprobe/` den Stand vor dem
+  Stilprobe-Neubau und laufen ins Leere (V66).
 - **Preview:** `node scripts/der-weg/server.mjs` (launch.json `der-weg`, Port 4330) liefert die
   Projektwurzel und löst Anfragen erst dort, dann in `der-weg/` auf — die Reise liegt damit wie live unter
   `/`, ihre Assets unter `/assets/`, die Rechtsseiten unter `/impressum/`, die Archiv-Varianten unter
@@ -118,10 +120,9 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   dann `node scripts/der-weg/server.mjs 4331 _site` (launch.json `site-vorschau`). Die Reise braucht
   zwingend einen Server: unter `file://` verbietet der Browser das Laden der Clips, die Seite bleibt leer.
   `npm run dev` (`jgc-site`) startet nur die archivierte Astro-Quelle.
-- **Preview-Messungen: der Pane meldet sich als versteckt** (`visibilityState === 'hidden'`).
-  Screenshots gelingen trotzdem (nachgeprüft 29.08.2026), taugen aber nur für Standbilder; jeder
-  Beweis über Maße und Zustände läuft über JavaScript (DOM-Geometrie, `getComputedStyle`).
-  Drei Fallen, jede hat schon einen Fehlbefund erzeugt:
+- **Preview-Messungen im Pane:** was allgemein gilt (versteckter Pane, Screenshots, belastbare
+  Messwege), steht global unter „UI-Verifikation". Dazu vier Fallen dieser Seite, jede hat schon
+  einen Fehlbefund erzeugt:
   (1) **Erst Viewport setzen, dann messen** — ein frischer Tab meldet `0×0`, jede Geometrie ist
   dann Müll. `resize_window` mit expliziter Breite/Höhe, `innerWidth` gegenprüfen. **Danach
   `resize` selbst auslösen:** die Engine rechnet ihre Bahnhöhe nur in `layout()` und schreibt sie
@@ -158,8 +159,7 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   `dvh` ist die falsche Abhilfe — es skaliert bei jedem Ein-/Ausfahren neu und lässt Bildbänder
   zucken. Fallback für alte Browser über `@supports (height: 100svh)`.
 - **Regeln, die Inhalt verstecken, brauchen den `.js`-Vorsatz** (`.js .reveal:not(.is-visible)`).
-  Ohne ihn ist die Seite ohne JavaScript leer. Gilt für die Reise UND `stilprobe/index.html` — die
-  Unterseite erbt ihr CSS aus V18.
+  Ohne ihn ist die Seite ohne JavaScript leer. Gilt für die Reise und jede Unterseite.
 - **Sektions-Aussehen nie über die Position steuern** (`:nth-child(N of .bg-pergament)`): eine
   eingeschobene Sektion verschiebt still alle Farbflächen. Immer IDs. `pruefe-seiten.mjs` bewacht das.
 - **Texte der Scroll-Reise stehen an DREI Orten** in `der-weg/index.html` (Konfiguration `sections`,
@@ -179,6 +179,8 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   rät und ein falsch eingestuftes Video beim Auschecken zeilenweise umgeschrieben und damit zerstört wird.
 
 ## Konventionen
-- Marken-/Palette-Tokens: `--color-tinte` #1F2A44, `--color-kupfer` #C97B3F, `--color-salbei` #8FA98A,
-  `--color-holzsand` #D9C7A8, `--color-quellwasser` #6FA3B5, Pergament #FEFCF7.
+- Markenfarben: Tinte #1F2A44, Kupfer #C97B3F, Salbei #8FA98A, Holzsand #D9C7A8, Quellwasser #6FA3B5,
+  Pergament #FEFCF7. Reise und Unterseiten führen sie als CSS-Variablen `--sw-bg` (Pergament),
+  `--sw-ink` (Tinte), `--sw-ink-soft` (#4A5568) und `--sw-accent` (Kupfer), definiert im Kopf von
+  `der-weg/index.html` und in `der-weg/assets/seiten.css`. `--color-tinte` usw. gibt es nur im Archiv.
 - Archiv-Variante 13 (`13-lumen`) trägt eine `#skin-impeccable`-Override-Schicht (Impeccable-Skill).
