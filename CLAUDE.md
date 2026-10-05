@@ -187,3 +187,7 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   `--sw-ink` (Tinte), `--sw-ink-soft` (#4A5568) und `--sw-accent` (Kupfer), definiert im Kopf von
   `der-weg/index.html` und in `der-weg/assets/seiten.css`. `--color-tinte` usw. gibt es nur im Archiv.
 - Archiv-Variante 13 (`13-lumen`) trägt eine `#skin-impeccable`-Override-Schicht (Impeccable-Skill).
+- **KI-Bilder (Art. 50 KI-VO, seit 02.08.2026):** Die Papierwelt ist erkennbar gestaltet, ihr Hinweis in
+  Abspann und Impressum ist freiwillig. Kommt ein fotoecht wirkendes KI-Bild dazu (Person, Ort, Produkt,
+  auch ein KI-verschönertes Portrait), muss der Hinweis direkt am Bild stehen, beim ersten Hinsehen.
+  Recherche und Quellen: CHANGELOG vom 05.10.2026.
