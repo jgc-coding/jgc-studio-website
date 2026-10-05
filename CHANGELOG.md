@@ -2,6 +2,26 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-10-05 — KI-Hinweis lesbar im Abspann und neu im Impressum
+
+Gabriels Frage: Muss die Seite kennzeichnen, dass Bilder und Videos mit KI erzeugt sind?
+Recherche zu Art. 50 KI-VO (gilt seit 02.08.2026, Leitlinien der Kommission vom 20.07.2026):
+Pflicht ist ein sichtbarer Hinweis nur bei täuschend echten Inhalten. Die Papierwelt ist
+erkennbar gestaltet, also freiwillig. Gabriels Wahl: „C mit Impressum".
+
+- **Abspann der Reise:** Der KI-Satz stand bisher im Kleingedruckten hinter dem Copyright.
+  Jetzt steht er als eigener Absatz in normaler Schrift unter der Kontaktzeile: „Die
+  Papierwelt dieser Reise habe ich mit KI erzeugt."
+- **Impressum:** neuer Abschnitt „Mit KI erzeugte Inhalte" (Videoszenen und Standbilder der
+  Papierwelt).
+- Bewusst nicht behauptet: dass Texte oder Portrait ohne KI entstanden sind — das war nicht
+  belegbar.
+- Nebenbefund: Die Rohvideos tragen einen Herkunftsnachweis des KI-Herstellers (C2PA,
+  „trainedAlgorithmicMedia", Etappen 1, 2, 5, 7); `kodiere.mjs` entfernt ihn beim Kodieren.
+  Das Vorschaubild beim Teilen wirkt fotoecht, Herkunft unklar → **V80**.
+- Geprüft: `pruefe-seiten.mjs` grün; beide Sätze in der Vorschau gerendert (Abspann gleiche
+  Schrift und Deckkraft wie die Kontaktzeile). Nicht geprüft: die Optik am Telefon.
+
 ## 2026-09-23 — Datenschutz: kein Anthropic-Vertrag mehr versprochen (V68), Zertifikat neu beantragt (V60)
 
 Gabriels Auftrag: „Muss ich einen Vertrag mit Anthropic haben? Ansonsten nimm das bitte raus."
