@@ -94,8 +94,11 @@ Seit 02.09.2026 ist die Scroll-Reise die einzige öffentliche Fassung, Adresse `
   **Stationstext, der zwischen Engine-Konfiguration und SEO-Spiegel abweicht**; im `_site` zusätzlich
   Sitemap und robots.txt. Ohne Argument prüft es die Repo-Quellen (so hängt es in `.claude/pruefen.txt`).
 - Das Vorschaubild (`og:image`) ist eine echte Datei: `assets/og-bild.jpg` → `/og-bild.jpg`. Neu bauen mit
-  `node scripts/v18/baue-og-bild.mjs` (nimmt Hero und Sigel aus V18). Ein `data:`-URI funktioniert hier
-  NICHT — LinkedIn und Co. holen das Bild per HTTP.
+  `node scripts/der-weg/baue-og-bild.mjs`: der erste Bildschirm der Reise (Eröffnungsszene, Texte der
+  Station `anflug` aus der Konfiguration, Sigel), gesetzt per Chrome headless wie das Google-Profilbild.
+  **Nach jeder Textänderung an der Station `anflug` neu bauen**, sonst zeigt das Bild den alten Wortlaut.
+  Das alte V18-Skript verweigert den Lauf. Ein `data:`-URI funktioniert hier NICHT — LinkedIn und Co.
+  holen das Bild per HTTP, und sie halten es tagelang im Zwischenspeicher.
 - Favicon aus dem Sigel: `node scripts/der-weg/baue-favicon.mjs` (aus `Logo/JGC Studio Logo final.svg`);
   die Stilprobe verlinkt es wie die Rechtsseiten unter `/assets/`.
 - **`sharp` liegt in `scripts/package.json`** (`cd scripts && npm install`). Die ausgelieferte Seite

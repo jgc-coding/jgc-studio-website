@@ -2,6 +2,22 @@
 
 Wird ab 2026-07-11 geführt (Repo bestand vorher ohne Changelog; Historie siehe Git-Log).
 
+## 2026-10-05 — Neues Vorschaubild: der erste Bildschirm der Reise (V80)
+
+Gabriels Auftrag: Das Vorschaubild beim Teilen soll die aktuelle Website zeigen. Es stammte
+noch aus der Lesefassung V18 (fotoechter Schreibtisch mit Laptop).
+
+- **Neu:** `scripts/der-weg/baue-og-bild.mjs` baut `assets/og-bild.jpg` (1200 × 630, 125 KB)
+  aus der Eröffnungsszene, dem Pergament-Schleier der Engine, Sigel und Wortmarke sowie
+  Augenzeile, Titel, erstem Satz und Chips der Station `anflug`. Die Texte liest es aus der
+  Konfiguration der Reise, damit das Bild nicht vom Wortlaut abweicht. Gesetzt per Chrome
+  headless mit den eigenen Schriften, wie das Google-Profilbild.
+- **Alt:** `scripts/v18/baue-og-bild.mjs` bricht jetzt mit Hinweis ab, statt das neue Bild mit
+  dem alten zu überschreiben. CLAUDE.md und `.claude/pruefen.txt` zeigen auf das neue Skript.
+- Geprüft: Bild angesehen (Titel steht frei neben dem Haus, Chips in einer Reihe),
+  Maße und Größe vom Skript geprüft, `pruefe-seiten.mjs` grün. Nicht geprüft: wie LinkedIn
+  und WhatsApp es beschneiden; beide halten das alte Bild noch tagelang im Zwischenspeicher.
+
 ## 2026-10-05 — KI-Hinweis lesbar im Abspann und neu im Impressum
 
 Gabriels Frage: Muss die Seite kennzeichnen, dass Bilder und Videos mit KI erzeugt sind?

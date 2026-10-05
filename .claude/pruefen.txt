@@ -23,6 +23,7 @@ node --check scripts/der-weg/hole-schriften.mjs
 node --check scripts/der-weg/server.mjs
 node --check scripts/der-weg/hole-logo.mjs
 node --check scripts/der-weg/baue-favicon.mjs
+node --check scripts/der-weg/baue-og-bild.mjs
 node --check scripts/stilprobe/setze-favicon.mjs
 node --check scripts/stilprobe/transform-domain.mjs
 node --check scripts/deploy/baue-site.mjs

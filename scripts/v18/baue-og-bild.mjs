@@ -19,6 +19,12 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
+// Abgeloest am 05.10.2026 durch scripts/der-weg/baue-og-bild.mjs (V80). Ein Lauf
+// wuerde das aktuelle Vorschaubild mit dem alten Schreibtisch-Foto aus V18 ueberschreiben.
+if (!process.argv.includes('--altes-bild')) {
+  throw new Error('Abgeloest: das Vorschaubild baut jetzt node scripts/der-weg/baue-og-bild.mjs.');
+}
+
 // sharp kommt aus scripts/node_modules (scripts/package.json, `cd scripts && npm install`).
 const require = createRequire(fileURLToPath(new URL('../package.json', import.meta.url)));
 const sharp = require('sharp');

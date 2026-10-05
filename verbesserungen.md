@@ -1,6 +1,6 @@
 # Verbesserungen
-Stand: 2026-10-05 (**V80** neu: Herkunft des Vorschaubilds klären, Folge der Recherche zur
-KI-Kennzeichnung). Davor 2026-09-23 (**V79** erledigt: Rohmaterial aus Repo und Verlauf entfernt,
+Stand: 2026-10-05 (**V80** neu und am selben Tag erledigt: neues Vorschaubild aus der Reise,
+Folge der Recherche zur KI-Kennzeichnung). Davor 2026-09-23 (**V79** erledigt: Rohmaterial aus Repo und Verlauf entfernt,
 siehe „Erledigt"). Davor 2026-09-13 (Portrait in Etappe 6 live, **V79** neu, **V78** von Gabriel abgelehnt; davor Stilprobe „zeitnah" live und Werkstatt gebaut: **V76** und **V77** neu unter
 „Offen", Nachträge an **V60** und **V68**). Davor 2026-09-12 (Feedback-Runde: externe Durchsicht der Live-Seite, 14 Punkte; **V69 und V70
 am selben Tag umgesetzt**, die übrigen Punkte stehen als V71–V75 unter „Offen" und I9–I14 unter
@@ -484,21 +484,6 @@ Pages mit der eigenen Domain jgc-lumen.de. Damit sind **V13**, **V20**, **V34**,
       Warum: Der Link zeigte auf die LinkedIn-Startseite. Bis die echte Profiladresse vorliegt,
       ist kein Link besser als ein toter. → steht in `meine-todos.md`.
 
-- [ ] **V80** (B) Vorschaubild beim Teilen wirkt wie ein echtes Foto — Herkunft unklar
-      Gefahr: Wer den Link auf LinkedIn oder per WhatsApp teilt, sieht einen fotoechten
-      Schreibtisch mit Laptop am Fenster. Ist das Bild mit KI erzeugt, kann es als täuschend
-      echt gelten (Deepfake nach Art. 50 Abs. 4 KI-VO, seit 02.08.2026). Dann reicht der Hinweis
-      im Impressum nicht, er müsste im Bild selbst stehen. Außerdem stammt das Bild noch aus V18
-      und passt nicht zur Papierwelt.
-      Beleg: `assets/og-bild.jpg` (gebaut von `scripts/v18/baue-og-bild.mjs` aus dem V18-Hero,
-      Vorlage vermutlich `Bildmaterial/Platzhalter Hero Section.png`); kein C2PA-Vermerk in der Datei.
-      Aufwand: S bis M · Risiko: gering bis mittel (rechtlich, nur wenn KI-erzeugt)
-      Empfehlung: Gabriel klärt die Herkunft. Am saubersten ist ein neues Vorschaubild aus einem
-      Standbild der Papierwelt mit Sigel — dann passt es zur Seite und die Frage entfällt.
-      Hintergrund: Recherche vom 05.10.2026 zur KI-Kennzeichnung; die Papierwelt selbst ist
-      erkennbar gestaltet und darum keine Pflicht, der Hinweis in Abspann und Impressum ist
-      freiwillig (CHANGELOG 05.10.2026).
-
 **Nicht löschen:** die neun `variant/*`-Branches und `variants/standalone/`. Seit 02.09.2026
 baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Repo.
 
@@ -619,6 +604,17 @@ baut der Deploy sie nicht mehr; sie bleiben auf Gabriels Wunsch als Archiv im Re
   13.09.2026.
 
 ## Erledigt
+
+### Am 2026-10-05 umgesetzt (Gabriels Auftrag: Vorschaubild soll die aktuelle Seite zeigen)
+
+- [x] **V80** (B) Vorschaubild beim Teilen zeigte noch die alte Fassung V18
+      Gefahr war: Wer den Link teilte, sah einen fotoechten Schreibtisch mit Laptop aus V18,
+      nicht die Papierwelt. Falls KI-erzeugt, hätte das Bild als täuschend echt gelten können
+      (Art. 50 Abs. 4 KI-VO), und dann hätte der Hinweis im Bild selbst stehen müssen.
+      Umgesetzt: neues Skript `scripts/der-weg/baue-og-bild.mjs` setzt den ersten Bildschirm der
+      Reise nach (Eröffnungsszene, Schleier, Marke, Texte der Station `anflug` aus der
+      Konfiguration). Die Papierwelt ist erkennbar gestaltet, also kein Kennzeichnungsfall.
+      Das alte V18-Skript verweigert jetzt den Lauf. Details im CHANGELOG.
 
 ### Am 2026-09-23 umgesetzt (Gabriels Freigabe „V79 ja", einschließlich Force-Push)
 
